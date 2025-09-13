@@ -5,23 +5,33 @@ This guide helps AI coding agents work productively in the Flagstone UI codebase
 ## Project Overview
 
 - **Flagstone UI** is a cross-platform, open-source UI kit and framework for .NET MAUI.
-- The repository is organized into modular subprojects for core controls, themes, blocks (app screens), samples, and tests.
-- The codebase is in early planning/WIP phase; structure may evolve.
+- The repo is organized into modular projects for core controls, themes, blocks (app screens), samples, and tests.
+- Status: early WIP; structure will evolve.
 
 ## Key Directories & Components
 
-- `src/FlagstoneUI.Core/`: Core UI controls, builders, handlers, styles, and themes. Controls (e.g., Button, Card) are in `Controls/`. Styles use token dictionaries (`Styles/Tokens.xaml`) and are wired via `DynamicResource`.
-- `src/FlagstoneUI.Themes.*`: Theme packages (e.g., Material, Modern) with theme dictionaries (`Theme.xaml`) referencing core style tokens.
-- `src/FlagstoneUI.Blocks/`: Reusable app screens (CRUD, auth, settings) in `Blocks/`.
-- `samples/`: Example apps for manual testing and showcasing controls/themes.
-- `tests/`: Unit and integration tests for each major component.
+- `src/FlagstoneUI.Core/`: Core UI library. Key areas:
+	- `Builders/FlagstoneUIBuilder.cs`: entry for configuring Flagstone features.
+	- `Controls/`: custom controls (to be added, e.g., `Card`, `Snackbar`).
+	- `Styles/Tokens.xaml`: token dictionary (colors, spacing, typography) used via `DynamicResource`.
+	- `Themes/ThemeLoader.cs`: merges core resource dictionaries into app resources.
+- `src/FlagstoneUI.Themes.*/`: Theme libraries (Material, Modern) exposing `Theme.xaml` which merge core tokens and define styles.
+- `src/FlagstoneUI.Blocks/`: Reusable app screens (CRUD, auth, settings) under `Blocks/`.
+- `samples/`: Sample apps for manual testing (`FlagstoneUI.SampleApp`, `FlagstoneUI.ThemePlayground`).
+- `tests/`: xUnit test projects per library.
 
 ## Developer Workflows
 
-- **Build**: Use standard .NET build commands (`dotnet build`, `dotnet restore`).
-- **Test**: Run tests with `dotnet test` in the `tests/` subdirectories.
-- **Sample Apps**: Launch sample apps in `samples/` for manual UI validation.
-- **CI/CD**: GitHub Actions workflows in `.github/workflows/ci.yml` and `release.yml` automate builds and releases.
+- **Prereqs**: Install .NET 9 SDK as per `global.json` and the MAUI workload.
+- **Restore/build** (root):
+	- `dotnet workload install maui`
+	- `dotnet restore`
+	- `dotnet build Microsoft.Maui.sln`
+- **Tests**:
+	- `dotnet test .\tests\FlagstoneUI.Core.Tests\FlagstoneUI.Core.Tests.csproj`
+	- `dotnet test .\tests\FlagstoneUI.Blocks.Tests\FlagstoneUI.Blocks.Tests.csproj`
+	- `dotnet test .\tests\FlagstoneUI.Themes.Material.Tests\FlagstoneUI.Themes.Material.Tests.csproj`
+- **CI/CD**: See `.github/workflows/ci.yml` (installs MAUI workload, builds solution, runs tests). `release.yml` is a scaffold for future packaging.
 
 ## Developer Environment Setup
 
@@ -30,37 +40,35 @@ This guide helps AI coding agents work productively in the Flagstone UI codebase
 
 ### Code Formatting
 
-Before committing any changes, format the codebase using the following command to ensure consistent code style:
+Run formatting before commits to keep style consistent:
 
-```bash
-dotnet format Microsoft.Maui.sln --no-restore --exclude Templates/src --exclude-diagnostics CA1822
+```powershell
+dotnet format Microsoft.Maui.sln --no-restore --exclude-diagnostics CA1822
 ```
 
-This command:
-- Formats all code files according to the repository's `.editorconfig` settings
-- Excludes the Templates/src directory from formatting
-- Excludes the CA1822 diagnostic (member can be marked as static)
-- Uses `--no-restore` for faster execution when dependencies are already restored
-
+- Uses `.editorconfig` settings; CA1822 is suppressed project-wide.
+- Avoid formatting-only commits; include functional changes.
 **IMPORTANT**: DO NOT commit code with formatting only changes. Ensure that all formatting changes are part of a meaningful commit that includes functional code changes.
 
 ## Project-Specific Conventions
 
-- **Component Structure**: Controls, themes, and blocks are separated for clarity and reusability. Theme resources use token-based styling for consistency.
-- **Naming**: Subprojects and files use `FlagstoneUI.*` prefixes for discoverability.
-- **Extensibility**: New controls/themes should follow the established directory and naming patterns.
-- **Resource Dictionaries**: Style tokens and theme dictionaries are central to UI customization; reference `Tokens.xaml` and `Theme.xaml` for examples.
+- **Token-first styling**: Add/modify tokens in `src/FlagstoneUI.Core/Styles/Tokens.xaml`. Themes consume tokens via `DynamicResource` in their `Theme.xaml`.
+- **Naming**: Projects/files start with `FlagstoneUI.*` for discoverability.
+- **Controls**: Live under `src/FlagstoneUI.Core/Controls`. Keep public API minimal and theme-agnostic.
+- **Themes**: Implement platform-agnostic styles in `Theme.xaml` and merge core tokens.
+- **Blocks**: High-level screens go in `src/FlagstoneUI.Blocks/Blocks` and depend on Core controls.
 
 ## Integration Points
 
-- **.NET MAUI**: All UI components are designed for .NET MAUI compatibility.
-- **DynamicResource**: Styles/themes leverage MAUI's dynamic resource system for runtime theme switching.
-- **Sample Apps**: Integrate new controls/themes into sample apps for demonstration and manual testing.
+- **.NET MAUI**: Libraries set `<UseMaui>true</UseMaui>` and target Android/iOS/Windows. No explicit MAUI package reference is needed.
+- **Resource dictionaries**: Merge tokens in apps or via `ThemeLoader.Register(app.Resources)` (see `src/FlagstoneUI.Core/Themes/ThemeLoader.cs`).
+- **DynamicResource**: Use token keys (e.g., `Color.Primary`) in theme styles: `<Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />`.
 
 ## References
-- See `README.md` for planned repository layout and component descriptions.
-- Review `.github/workflows/ci.yml` for CI/CD details.
-- Use sample apps in `samples/` to validate UI changes.
+- `README.md`: repository layout and component descriptions.
+- `Microsoft.Maui.sln`: open solution that includes all projects.
+- `.github/workflows/ci.yml`: CI pipeline steps and SDK setup.
+- `src/FlagstoneUI.Themes.Material/Theme.xaml`: example of a theme consuming tokens.
 
 ---
 
