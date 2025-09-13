@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net9.0-ios;net9.0-android;net9.0-windows10.0.19041.0</TargetFrameworks>
+    <UseMaui>true</UseMaui>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>FlagstoneUI.Themes.Material</AssemblyName>
+    <RootNamespace>FlagstoneUI.Themes.Material</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FlagstoneUI.Core\FlagstoneUI.Core.csproj" />
+  </ItemGroup>
+</Project>

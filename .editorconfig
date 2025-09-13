@@ -1,3 +1,14 @@
+root = true
+
+[*.cs]
+charset = utf-8-bom
+end_of_line = crlf
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+
+# Project-specific: ignore CA1822 per docs
+dotnet_diagnostic.CA1822.severity = none
 # https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
 # https://editorconfig.org
 
