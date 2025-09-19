@@ -7,18 +7,27 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AnalysisLevel>latest</AnalysisLevel>
+    <!-- Package metadata for NuGet packages -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/matt-goldman/flagstone-ui</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <!-- Common package references for all projects -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" PrivateAssets="all" Version="8.0.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" PrivateAssets="all" Version="*" />
+  </ItemGroup>
+
+  <!-- MAUI package references for projects using MAUI -->
+  <ItemGroup Condition="'$(UseMaui)' == 'true'">
+    <PackageReference Include="CommunityToolkit.Maui" Version="*" />
   </ItemGroup>
 
   <!-- Test project package references -->
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-    <PackageReference Include="xunit" Version="2.9.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
-    <PackageReference Include="FluentAssertions" Version="6.12.0" />
-    <PackageReference Include="coverlet.collector" Version="6.0.0" PrivateAssets="all" />
+    <PackageReference Include="xunit" Version="*" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="*" />
+    <PackageReference Include="FluentAssertions" Version="*" />
+    <PackageReference Include="coverlet.collector" Version="*" PrivateAssets="all" />
   </ItemGroup>
 </Project>
