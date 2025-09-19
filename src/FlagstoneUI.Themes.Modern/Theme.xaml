@@ -2,16 +2,18 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core">
   <ResourceDictionary.MergedDictionaries>
-    <ResourceDictionary Source="/FlagstoneUI.Core;component/Styles/Tokens.xaml" />
+    <!-- TODO: Fix resource reference to Tokens.xaml - see issue #12 -->
+    <!-- <ResourceDictionary Source="/FlagstoneUI.Core;component/Styles/Tokens.xaml" /> -->
   </ResourceDictionary.MergedDictionaries>
   <Style TargetType="Label">
     <Setter Property="TextColor" Value="#222222" />
   </Style>
 
   <Style TargetType="fs:Card">
-    <Setter Property="Padding" Value="{DynamicResource Space.12}" />
+    <!-- TODO: Use DynamicResource once Tokens.xaml is properly referenced - see issue #12 -->
+    <Setter Property="Padding" Value="12" />
     <Setter Property="BackgroundColor" Value="#FFFFFF" />
-    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
+    <Setter Property="CornerRadius" Value="12" />
     <Setter Property="BorderColor" Value="#E0E0E0" />
   </Style>
 </ResourceDictionary>

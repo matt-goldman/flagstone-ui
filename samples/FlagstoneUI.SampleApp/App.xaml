@@ -5,7 +5,8 @@
   <Application.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/FlagstoneUI.Themes.Material;component/Theme.xaml" />
+        <!-- TODO: Fix theme resource reference - see issue #12 -->
+        <!-- <ResourceDictionary Source="/FlagstoneUI.Themes.Material;component/Theme.xaml" /> -->
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>

@@ -31,7 +31,9 @@
 
   <!-- MAUI package references for projects using MAUI -->
   <ItemGroup Condition="'$(UseMaui)' == 'true'">
-    <PackageReference Include="CommunityToolkit.Maui" Version="$(CommunityToolkitMauiVersion)" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.82" />
+    <!-- TODO: Re-enable CommunityToolkit.Maui when properly configured - see issue #12 -->
+    <!-- <PackageReference Include="CommunityToolkit.Maui" Version="$(CommunityToolkitMauiVersion)" /> -->
   </ItemGroup>
 
   <!-- Test project package references -->

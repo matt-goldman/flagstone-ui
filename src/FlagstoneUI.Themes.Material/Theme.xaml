@@ -2,17 +2,20 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core">
   <ResourceDictionary.MergedDictionaries>
-    <ResourceDictionary Source="/FlagstoneUI.Core;component/Styles/Tokens.xaml" />
+    <!-- TODO: Fix resource reference to Tokens.xaml - see issue #12 -->
+    <!-- <ResourceDictionary Source="/FlagstoneUI.Core;component/Styles/Tokens.xaml" /> -->
   </ResourceDictionary.MergedDictionaries>
   <Style TargetType="Button">
-    <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />
-    <Setter Property="TextColor" Value="{DynamicResource Color.OnPrimary}" />
+    <!-- TODO: Use DynamicResource once Tokens.xaml is properly referenced - see issue #12 -->
+    <Setter Property="BackgroundColor" Value="#6750A4" />
+    <Setter Property="TextColor" Value="#FFFFFF" />
   </Style>
   
   <Style TargetType="fs:Card">
-    <Setter Property="Padding" Value="{DynamicResource Space.16}" />
-    <Setter Property="BackgroundColor" Value="{DynamicResource Color.Surface}" />
-    <Setter Property="BorderColor" Value="{DynamicResource Color.Outline}" />
-    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Medium}" />
+    <!-- TODO: Use DynamicResource once Tokens.xaml is properly referenced - see issue #12 -->
+    <Setter Property="Padding" Value="16" />
+    <Setter Property="BackgroundColor" Value="#FFFBFE" />
+    <Setter Property="BorderColor" Value="#79747E" />
+    <Setter Property="CornerRadius" Value="8" />
   </Style>
 </ResourceDictionary>
