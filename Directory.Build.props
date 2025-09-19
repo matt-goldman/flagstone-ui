@@ -13,21 +13,33 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
+  <!-- Package version variables -->
+  <PropertyGroup>
+    <MicrosoftCodeAnalysisNetAnalyzersVersion>9.0.0</MicrosoftCodeAnalysisNetAnalyzersVersion>
+    <CommunityToolkitMauiVersion>9.1.0</CommunityToolkitMauiVersion>
+    <XunitVersion>2.9.2</XunitVersion>
+    <XunitRunnerVisualStudioVersion>2.8.2</XunitRunnerVisualStudioVersion>
+    <FluentAssertionsVersion>6.12.1</FluentAssertionsVersion>
+    <CoverletCollectorVersion>6.0.2</CoverletCollectorVersion>
+    <MicrosoftNetTestSdkVersion>17.11.1</MicrosoftNetTestSdkVersion>
+  </PropertyGroup>
+
   <!-- Common package references for all projects -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" PrivateAssets="all" Version="*" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" PrivateAssets="all" Version="$(MicrosoftCodeAnalysisNetAnalyzersVersion)" />
   </ItemGroup>
 
   <!-- MAUI package references for projects using MAUI -->
   <ItemGroup Condition="'$(UseMaui)' == 'true'">
-    <PackageReference Include="CommunityToolkit.Maui" Version="*" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="$(CommunityToolkitMauiVersion)" />
   </ItemGroup>
 
   <!-- Test project package references -->
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-    <PackageReference Include="xunit" Version="*" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="*" />
-    <PackageReference Include="FluentAssertions" Version="*" />
-    <PackageReference Include="coverlet.collector" Version="*" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNetTestSdkVersion)" />
+    <PackageReference Include="xunit" Version="$(XunitVersion)" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="$(XunitRunnerVisualStudioVersion)" />
+    <PackageReference Include="FluentAssertions" Version="$(FluentAssertionsVersion)" />
+    <PackageReference Include="coverlet.collector" Version="$(CoverletCollectorVersion)" PrivateAssets="all" />
   </ItemGroup>
 </Project>
