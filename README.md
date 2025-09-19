@@ -2,7 +2,60 @@
 
 A cross-platform, open-source, community-driven, customisable UI kit and framework for .NET MAUI.
 
-## Suggested layout
+## Developer Setup
+
+### Prerequisites
+
+1. **.NET 9 SDK**: Install from [Microsoft's .NET download page](https://dotnet.microsoft.com/download/dotnet/9.0)
+2. **MAUI Workload**: After installing .NET 9, run:
+   ```bash
+   dotnet workload install maui
+   ```
+
+### Building the Solution
+
+1. Clone the repository
+2. Navigate to the repository root
+3. Restore dependencies:
+   ```bash
+   dotnet restore Microsoft.Maui.sln
+   ```
+4. Build the solution:
+   ```bash
+   dotnet build Microsoft.Maui.sln
+   ```
+5. Run tests:
+   ```bash
+   dotnet test Microsoft.Maui.sln
+   ```
+
+### Validation Scripts
+
+To quickly validate your development environment setup, you can run one of the provided validation scripts:
+
+**Linux/macOS:**
+```bash
+./scripts/validate-setup.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+.\scripts\validate-setup.ps1
+```
+
+These scripts will check for:
+- .NET 9 SDK installation
+- MAUI workload availability
+- Solution restore capability
+- Solution build capability
+
+### Important Notes
+
+- All projects in this solution target MAUI platform frameworks (`net9.0-ios`, `net9.0-android`, `net9.0-windows10.0.19041.0`)
+- The MAUI workload is required even for test projects to ensure TFM compatibility
+- Common dependencies and test packages are managed centrally in `Directory.Build.props`
+
+## Project Structure
 
 This is a WIP in the planning phase. Suggested layout for the repository is as follows.
 
