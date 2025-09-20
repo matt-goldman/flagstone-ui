@@ -33,7 +33,7 @@ Write-Host ""
 # Test restore
 Write-Host "3. Testing solution restore..." -ForegroundColor Yellow
 try {
-    dotnet restore Microsoft.Maui.sln --verbosity quiet
+    dotnet restore Flagstone.UI.sln --verbosity quiet
     if ($LASTEXITCODE -eq 0) {
         Write-Host "   ✓ Solution restore successful" -ForegroundColor Green
     } else {
@@ -50,7 +50,7 @@ Write-Host ""
 # Test build
 Write-Host "4. Testing solution build..." -ForegroundColor Yellow
 try {
-    dotnet build Microsoft.Maui.sln --no-restore --verbosity quiet
+    dotnet build Flagstone.UI.sln --no-restore --verbosity quiet
     if ($LASTEXITCODE -eq 0) {
         Write-Host "   ✓ Solution build successful" -ForegroundColor Green
     } else {

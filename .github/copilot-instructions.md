@@ -26,7 +26,7 @@ This guide helps AI coding agents work productively in the Flagstone UI codebase
 - **Restore/build** (root):
 	- `dotnet workload install maui`
 	- `dotnet restore`
-	- `dotnet build Microsoft.Maui.sln`
+	- `dotnet build Flagstone.UI.sln`
 - **Tests**:
 	- `dotnet test .\tests\FlagstoneUI.Core.Tests\FlagstoneUI.Core.Tests.csproj`
 	- `dotnet test .\tests\FlagstoneUI.Blocks.Tests\FlagstoneUI.Blocks.Tests.csproj`
@@ -45,7 +45,7 @@ This guide helps AI coding agents work productively in the Flagstone UI codebase
 Run formatting before commits to keep style consistent:
 
 ```powershell
-dotnet format Microsoft.Maui.sln --no-restore --exclude-diagnostics CA1822
+dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 ```
 
 - Uses `.editorconfig` settings; CA1822 is suppressed project-wide.
@@ -88,7 +88,7 @@ dotnet format Microsoft.Maui.sln --no-restore --exclude-diagnostics CA1822
 
 ## References
 - `README.md`: repository layout and component descriptions.
-- `Microsoft.Maui.sln`: open solution that includes all projects.
+- `Flagstone.UI.sln`: open solution that includes all projects.
 - `.github/workflows/ci.yml`: CI pipeline steps and SDK setup.
 - `src/FlagstoneUI.Themes.Material/Theme.xaml`: example of a theme consuming tokens.
 
