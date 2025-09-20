@@ -1,3 +1,19 @@
 <Project>
   <!-- Common targets hook -->
+
+  <!-- Suppress XML docs warning CS1591 only for generated files under obj -->
+  <ItemGroup>
+    <Compile Update="**\obj\**\*.g.cs">
+      <NoWarn>$(NoWarn);1591</NoWarn>
+    </Compile>
+    <Compile Update="**\obj\**\*.g.i.cs">
+      <NoWarn>$(NoWarn);1591</NoWarn>
+    </Compile>
+    <Compile Update="**\obj\**\*.sg.cs">
+      <NoWarn>$(NoWarn);1591</NoWarn>
+    </Compile>
+    <Compile Update="**\obj\**\XamlTypeInfo.g.cs">
+      <NoWarn>$(NoWarn);1591;RS0030</NoWarn>
+    </Compile>
+  </ItemGroup>
 </Project>
