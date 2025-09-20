@@ -15,30 +15,47 @@ This guide helps AI coding agents work productively in the Flagstone UI codebase
 	- `Controls/`: custom controls (to be added, e.g., `Card`, `Snackbar`).
 	- `Styles/Tokens.xaml`: token dictionary (colors, spacing, typography) used via `DynamicResource`.
 	- `Themes/ThemeLoader.cs`: merges core resource dictionaries into app resources.
-- `src/FlagstoneUI.Themes.*/`: Theme libraries (Material, Modern) exposing `Theme.xaml` which merge core tokens and define styles.
+- `src/FlagstoneUI.Themes.Material/`: Material theme library with `Theme.xaml`.
+- `src/FlagstoneUI.Themes.Modern/`: Modern theme library (planned).
 - `src/FlagstoneUI.Blocks/`: Reusable app screens (CRUD, auth, settings) under `Blocks/`.
-- `samples/`: Sample apps for manual testing (`FlagstoneUI.SampleApp`, `FlagstoneUI.ThemePlayground`).
-- `tests/`: xUnit test projects per library.
+- `samples/`: Sample apps for manual testing:
+	- `FlagstoneUI.SampleApp/`: Main sample application
+	- `FlagstoneUI.ThemePlayground/`: Theme testing and development
+- `tests/`: xUnit test projects per library:
+	- `FlagstoneUI.Core.Tests/`
+	- `FlagstoneUI.Blocks.Tests/`
+	- `FlagstoneUI.Themes.Material.Tests/`
+- `scripts/`: Development environment validation scripts
+- `docs/`: Technical documentation and planning files
 
 ## Developer Workflows
 
 - **Prereqs**: Install .NET 9 SDK as per `global.json` and the MAUI workload.
 - **Restore/build** (root):
 	- `dotnet workload install maui`
-	- `dotnet restore`
+	- `dotnet restore Microsoft.Maui.sln`
 	- `dotnet build Microsoft.Maui.sln`
 - **Tests**:
-	- `dotnet test .\tests\FlagstoneUI.Core.Tests\FlagstoneUI.Core.Tests.csproj`
-	- `dotnet test .\tests\FlagstoneUI.Blocks.Tests\FlagstoneUI.Blocks.Tests.csproj`
-	- `dotnet test .\tests\FlagstoneUI.Themes.Material.Tests\FlagstoneUI.Themes.Material.Tests.csproj`
+	- `dotnet test tests/FlagstoneUI.Core.Tests/FlagstoneUI.Core.Tests.csproj`
+	- `dotnet test tests/FlagstoneUI.Blocks.Tests/FlagstoneUI.Blocks.Tests.csproj`
+	- `dotnet test tests/FlagstoneUI.Themes.Material.Tests/FlagstoneUI.Themes.Material.Tests.csproj`
+	- Or run all tests: `dotnet test Microsoft.Maui.sln`
+- **Validation**: Use validation scripts to check environment setup:
+	- Linux/macOS: `./scripts/validate-setup.sh`
+	- Windows: `.\scripts\validate-setup.ps1`
 - **CI/CD**: See `.github/workflows/ci.yml` (installs MAUI workload, builds solution, runs tests). `release.yml` is a scaffold for future packaging.
+
+## Development Guidelines
+
+**Always search Microsoft documentation (MS Learn) when working with .NET, Windows, or Microsoft features, or APIs.** Use the `microsoft_docs_search` tool to find the most current information about capabilities, best practices, and implementation patterns before making changes.
+
+**This is a .NET MAUI UI library project**, not a .NET MAUI application. The MAUI documentation is critical for understanding how this library integrates with and extends .NET MAUI applications.
 
 ## Developer Environment Setup
 
 - Install .NET 9 SDK and MAUI workload.
-- _Never_ downgrade .NET SDK versions as this may cause compatibility issues. _Always_ update development environment to match minimum required SDK version specified in `global.json` (or if it is missing, the latest stable version).
-
-**Always search Microsoft documentation (MS Learn) when working with .NET, Windows, or Microsoft features, or APIs.** Use the `microsoft_docs_search` tool to find the most current information about capabilities, best practices, and implementation patterns before making changes.
+- _Never_ downgrade .NET SDK versions as this may cause compatibility issues. _Always_ update development environment to match minimum required SDK version specified in `global.json` (currently .NET 9.0.100).
+- Development environment must use .NET 9 SDK as the minimum - this is a hard requirement for the project.
 
 ### Code Formatting
 
@@ -48,9 +65,22 @@ Run formatting before commits to keep style consistent:
 dotnet format Microsoft.Maui.sln --no-restore --exclude-diagnostics CA1822
 ```
 
-- Uses `.editorconfig` settings; CA1822 is suppressed project-wide.
+- Uses comprehensive `.editorconfig` settings including:
+  - C# files use tab indentation, UTF-8 with BOM, CRLF line endings
+  - XAML files use 2-space indentation  
+  - File-scoped namespaces preferred
+  - CA1822 is suppressed project-wide
 - Avoid formatting-only commits; include functional changes.
-**IMPORTANT**: DO NOT commit code with formatting only changes. Ensure that all formatting changes are part of a meaningful commit that includes functional code changes.
+- **IMPORTANT**: DO NOT commit code with formatting only changes. Ensure that all formatting changes are part of a meaningful commit that includes functional code changes.
+
+## Build System & Target Frameworks
+
+- **Solution file**: `Microsoft.Maui.sln` (contains all UI library projects)
+- **Target frameworks**: Currently using `net9.0-ios`, `net9.0-android`, `net9.0-windows10.0.19041.0`
+- **Central package management**: `Directory.Build.props` defines common properties and package versions
+- **Global SDK version**: Specified in `global.json` - currently .NET 9.0.100
+- **MAUI workload required**: All library projects set `<UseMaui>true</UseMaui>` and require MAUI workload for building
+- **Package references**: CommunityToolkit.Maui included automatically for MAUI library projects
 
 ## Project-Specific Conventions
 
@@ -62,9 +92,10 @@ dotnet format Microsoft.Maui.sln --no-restore --exclude-diagnostics CA1822
 
 ## Integration Points
 
-- **.NET MAUI**: Libraries set `<UseMaui>true</UseMaui>` and target Android/iOS/Windows. No explicit MAUI package reference is needed.
+- **.NET MAUI**: This UI library targets .NET 9 frameworks (`net9.0-android`, `net9.0-ios`, `net9.0-windows10.0.19041.0`) and integrates with .NET MAUI applications. CommunityToolkit.Maui package is included automatically via Directory.Build.props.
 - **Resource dictionaries**: Merge tokens in apps or via `ThemeLoader.Register(app.Resources)` (see `src/FlagstoneUI.Core/Themes/ThemeLoader.cs`).
 - **DynamicResource**: Use token keys (e.g., `Color.Primary`) in theme styles: `<Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />`.
+- **Package management**: Central package version management via Directory.Build.props with consistent versioning across all library projects.
 
 ## Important Notes
 
@@ -88,9 +119,12 @@ dotnet format Microsoft.Maui.sln --no-restore --exclude-diagnostics CA1822
 
 ## References
 - `README.md`: repository layout and component descriptions.
-- `Microsoft.Maui.sln`: open solution that includes all projects.
+- `Microsoft.Maui.sln`: solution file that includes all UI library projects.
 - `.github/workflows/ci.yml`: CI pipeline steps and SDK setup.
 - `src/FlagstoneUI.Themes.Material/Theme.xaml`: example of a theme consuming tokens.
+- `global.json`: specifies required .NET SDK version (9.0.100).
+- `Directory.Build.props`: central package management and build properties.
+- `scripts/validate-setup.sh` and `scripts/validate-setup.ps1`: environment validation scripts.
 
 ---
 
