@@ -9,10 +9,17 @@
     <ApplicationTitle>Theme Playground</ApplicationTitle>
     <RootNamespace>FlagstoneUI.ThemePlayground</RootNamespace>
     <ApplicationId>com.flagstoneui.playground</ApplicationId>
+    
+    <!-- Windows Specific -->
+    <WindowsPackageType>None</WindowsPackageType>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\FlagstoneUI.Core\FlagstoneUI.Core.csproj" />
     <ProjectReference Include="..\..\src\FlagstoneUI.Themes.Material\FlagstoneUI.Themes.Material.csproj" />
     <ProjectReference Include="..\..\src\FlagstoneUI.Themes.Modern\FlagstoneUI.Themes.Modern.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <MauiFont Include="Resources\Fonts\*" />
   </ItemGroup>
 </Project>

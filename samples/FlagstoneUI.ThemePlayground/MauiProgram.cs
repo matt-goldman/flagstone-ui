@@ -1,6 +1,4 @@
-using Microsoft.Maui;
-using Microsoft.Maui.Controls.Hosting;
-using Microsoft.Maui.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace FlagstoneUI.ThemePlayground;
 
@@ -10,7 +8,16 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
         builder
-            .UseMauiApp<App>();
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+            });
+
+#if DEBUG
+        builder.Services.AddLogging(configure => configure.AddDebug());
+#endif
+
         return builder.Build();
     }
 }

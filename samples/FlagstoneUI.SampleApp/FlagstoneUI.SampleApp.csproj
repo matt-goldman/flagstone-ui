@@ -9,11 +9,18 @@
     <ApplicationTitle>Flagstone UI Sample</ApplicationTitle>
     <RootNamespace>FlagstoneUI.SampleApp</RootNamespace>
     <ApplicationId>com.flagstoneui.sample</ApplicationId>
+    
+    <!-- Windows Specific -->
+    <WindowsPackageType>None</WindowsPackageType>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\FlagstoneUI.Core\FlagstoneUI.Core.csproj" />
     <ProjectReference Include="..\..\src\FlagstoneUI.Themes.Material\FlagstoneUI.Themes.Material.csproj" />
     <ProjectReference Include="..\..\src\FlagstoneUI.Themes.Modern\FlagstoneUI.Themes.Modern.csproj" />
     <ProjectReference Include="..\..\src\FlagstoneUI.Blocks\FlagstoneUI.Blocks.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <MauiFont Include="Resources\Fonts\*" />
   </ItemGroup>
 </Project>
