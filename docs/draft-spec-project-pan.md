@@ -1,6 +1,13 @@
 # FlagstoneUI Spec & Project Plan (Draft)
 
-## Vision
+**Note**: This document contains the original project specification and planning. For current implementation status and updated plans, see:
+
+- [Implementation Status](implementation-status.md) - Current progress tracking
+- [Architecture](architecture.md) - Technical architecture and implementation details  
+- [Roadmap](roadmap.md) - Updated roadmap based on current progress
+- [Control Implementation Guide](control-implementation-guide.md) - Standards for implementing controls
+
+## Original Vision
 
 Deliver an open-source, themeable UI kit for .NET MAUI apps that:
 
