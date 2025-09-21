@@ -1,12 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net9.0-ios;net9.0-android;net9.0-maccatalyst;net9.0-windows10.0.19041.0</TargetFrameworks>
+    <TargetFrameworks>net9.0-ios;net9.0-android;net9.0-maccatalyst;net9.0-windows10.0.19041.0;net9.0</TargetFrameworks>
     <UseMaui>true</UseMaui>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>FlagstoneUI.Blocks</AssemblyName>
     <RootNamespace>FlagstoneUI.Blocks</RootNamespace>
+    <OutputType>Library</OutputType>
+    <WindowsPackageType Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">None</WindowsPackageType>
   </PropertyGroup>
+	
   <ItemGroup>
     <ProjectReference Include="..\FlagstoneUI.Core\FlagstoneUI.Core.csproj" />
   </ItemGroup>
