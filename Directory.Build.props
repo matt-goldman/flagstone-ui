@@ -6,6 +6,7 @@
     <Deterministic>true</Deterministic>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
     <AnalysisLevel>latest</AnalysisLevel>
     <!-- Package metadata for NuGet packages -->
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -27,11 +28,14 @@
   <!-- Common package references for all projects -->
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" PrivateAssets="all" Version="$(MicrosoftCodeAnalysisNetAnalyzersVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.5" />
   </ItemGroup>
 
   <!-- MAUI package references for projects using MAUI -->
   <ItemGroup Condition="'$(UseMaui)' == 'true'">
-    <PackageReference Include="CommunityToolkit.Maui" Version="$(CommunityToolkitMauiVersion)" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <!-- TODO: Re-enable CommunityToolkit.Maui when properly configured - see issue #12 -->
+    <!-- <PackageReference Include="CommunityToolkit.Maui" Version="$(CommunityToolkitMauiVersion)" /> -->
   </ItemGroup>
 
   <!-- Test project package references -->

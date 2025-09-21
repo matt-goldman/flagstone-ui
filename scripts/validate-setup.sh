@@ -34,7 +34,7 @@ echo ""
 
 # Test restore
 echo "3. Testing solution restore..."
-if dotnet restore Microsoft.Maui.sln --verbosity quiet; then
+if dotnet restore Flagstone.UI.sln --verbosity quiet; then
     echo "   ✓ Solution restore successful"
 else
     echo "   ✗ Solution restore failed"
@@ -45,7 +45,7 @@ echo ""
 
 # Test build
 echo "4. Testing solution build..."
-if dotnet build Microsoft.Maui.sln --no-restore --verbosity quiet; then
+if dotnet build Flagstone.UI.sln --no-restore --verbosity quiet; then
     echo "   ✓ Solution build successful"
 else
     echo "   ✗ Solution build failed"

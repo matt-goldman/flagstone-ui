@@ -18,15 +18,15 @@ A cross-platform, open-source, community-driven, customisable UI kit and framewo
 2. Navigate to the repository root
 3. Restore dependencies:
    ```bash
-   dotnet restore Microsoft.Maui.sln
+   dotnet restore Flagstone.UI.sln
    ```
 4. Build the solution:
    ```bash
-   dotnet build Microsoft.Maui.sln
+   dotnet build Flagstone.UI.sln
    ```
 5. Run tests:
    ```bash
-   dotnet test Microsoft.Maui.sln
+   dotnet test Flagstone.UI.sln
    ```
 
 ### Validation Scripts

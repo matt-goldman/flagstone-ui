@@ -33,8 +33,9 @@ This guide helps AI coding agents work productively in the Flagstone UI codebase
 - **Prereqs**: Install .NET 9 SDK as per `global.json` and the MAUI workload.
 - **Restore/build** (root):
 	- `dotnet workload install maui`
-	- `dotnet restore Microsoft.Maui.sln`
-	- `dotnet build Microsoft.Maui.sln`
+	- `dotnet restore`
+	- `dotnet build Flagstone.UI.sln`
+
 - **Tests**:
 	- `dotnet test tests/FlagstoneUI.Core.Tests/FlagstoneUI.Core.Tests.csproj`
 	- `dotnet test tests/FlagstoneUI.Blocks.Tests/FlagstoneUI.Blocks.Tests.csproj`
@@ -62,7 +63,7 @@ This guide helps AI coding agents work productively in the Flagstone UI codebase
 Run formatting before commits to keep style consistent:
 
 ```powershell
-dotnet format Microsoft.Maui.sln --no-restore --exclude-diagnostics CA1822
+dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 ```
 
 - Uses comprehensive `.editorconfig` settings including:
@@ -119,7 +120,7 @@ dotnet format Microsoft.Maui.sln --no-restore --exclude-diagnostics CA1822
 
 ## References
 - `README.md`: repository layout and component descriptions.
-- `Microsoft.Maui.sln`: solution file that includes all UI library projects.
+- `Flagstone.UI.sln`: open solution that includes all projects.
 - `.github/workflows/ci.yml`: CI pipeline steps and SDK setup.
 - `src/FlagstoneUI.Themes.Material/Theme.xaml`: example of a theme consuming tokens.
 - `global.json`: specifies required .NET SDK version (9.0.100).
