@@ -1,6 +1,8 @@
 # Technical plan
 
-This file contains some notes for the technical plan for this solution.
+This file contains the technical plan for Flagstone UI implementation.
+
+**Note**: This document reflects the original planning. See [implementation-status.md](implementation-status.md) and [architecture.md](architecture.md) for current state and implementation details.
 
 ## Technology
 
