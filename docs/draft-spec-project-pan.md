@@ -1,4 +1,4 @@
-# CommunityUI Spec & Project Plan (Draft)
+# FlagstoneUI Spec & Project Plan (Draft)
 
 ## Vision
 
@@ -6,7 +6,7 @@ Deliver an open-source, themeable UI kit for .NET MAUI apps that:
 
 * Provides neutral, cross-platform controls with native styling stripped out.
 * Applies themes purely at the MAUI layer (via Theme.xaml + design tokens).
-* Ships with starter themes (Material + Tailwind-inspired) and a builder extension (UseCommunityUI) for easy adoption.
+* Ships with starter themes (Material + Tailwind-inspired) and a builder extension (UseFlagstoneUI) for easy adoption.
 * Encourages community-contributed themes and blocks.
 
 ## Architecture
@@ -21,7 +21,7 @@ Deliver an open-source, themeable UI kit for .NET MAUI apps that:
 ### API surface
 
 ```csharp
-builder.UseCommunityUI(ui =>
+builder.UseFlagstoneUI(ui =>
 {
     ui.Theme("Themes/Material.xaml");
     ui.Density = Density.Compact;
@@ -31,10 +31,10 @@ builder.UseCommunityUI(ui =>
 
 ### Packages
 
-* CommunityUI.Core – base controls, tokens, builder.
-* CommunityUI.Themes.Material – Material theme.
-* CommunityUI.Themes.Modern – Tailwind-inspired theme.
-* CommunityUI.Blocks – optional blocks/templates.
+* FlagstoneUI.Core – base controls, tokens, builder.
+* FlagstoneUI.Themes.Material – Material theme.
+* FlagstoneUI.Themes.Modern – Tailwind-inspired theme.
+* FlagstoneUI.Blocks – optional blocks/templates.
 
 ## Roadmap
 
@@ -44,7 +44,7 @@ builder.UseCommunityUI(ui =>
 
 * Controls: Button, Entry, Card, Snackbar, Switch
 * Theme system with Material light/dark.
-* Builder extension method (UseCommunityUI).
+* Builder extension method (UseFlagstoneUI).
 * Docs: quickstart + “build your own theme” guide.
 #### Deliverables
 
