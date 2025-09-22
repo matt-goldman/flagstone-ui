@@ -74,8 +74,8 @@ mkdir -p $HOME/android-sdk
 export ANDROID_HOME=$HOME/android-sdk
 echo 'export ANDROID_HOME=$HOME/android-sdk' >> ~/.bashrc
 
-# Use InstallAndroidDependencies target to automatically install Android SDK
-dotnet build -t:InstallAndroidDependencies --framework net9.0-android \
+# Use InstallAndroidDependencies target with a specific Android-capable project
+dotnet build src/FlagstoneUI.Core/FlagstoneUI.Core.csproj -t:InstallAndroidDependencies --framework net9.0-android \
   -p:AndroidSdkDirectory=$HOME/android-sdk \
   -p:JavaSdkDirectory=$JAVA_HOME \
   -p:AcceptAndroidSdkLicenses=True
@@ -198,6 +198,7 @@ For full cross-platform development environments:
 2. **JAVA_HOME Not Found**: Ensure path `/usr/lib/jvm/java-17-openjdk-amd64` exists after OpenJDK installation
 3. **Android SDK License**: The InstallAndroidDependencies target handles license acceptance automatically
 4. **Workload Installation Fails**: Use `--ignore-failed-sources` flag with workload install commands
+5. **Windows Targeting Error**: Use specific Android-capable projects (e.g., `src/FlagstoneUI.Core/FlagstoneUI.Core.csproj`) for InstallAndroidDependencies target to avoid Windows-specific test projects
 
 ### Solution File Structure
 
