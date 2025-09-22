@@ -55,6 +55,10 @@ These scripts will check for:
 - The MAUI workload is required even for test projects to ensure TFM compatibility
 - Common dependencies and test packages are managed centrally in `Directory.Build.props`
 
+### GitHub Copilot Setup
+
+For AI coding agents and GitHub Copilot setup, see [COPILOT_SETUP.md](COPILOT_SETUP.md) for specific environment configuration and platform targeting guidance.
+
 ## Project Structure
 
 This is a WIP in the planning phase. Suggested layout for the repository is as follows.
