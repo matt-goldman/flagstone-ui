@@ -161,11 +161,27 @@ ThemeLoader.Register(app.Resources);
 
 ## Known Issues & Technical Debt
 
-### 1. Resource Loading
-**Issue**: Cross-component XAML resource references not working  
-**Impact**: Themes cannot consume core tokens  
-**Workaround**: Local token definitions in theme files  
-**Solution**: Investigate MAUI resource loading patterns  
+### 1. Resource Loading ✅ RESOLVED
+**Previous Issue**: Cross-component XAML resource references not working  
+**Previous Impact**: Themes cannot consume core tokens properly  
+**Previous Workaround**: Temporary local token definitions  
+
+**Resolution**: Implemented proper cross-assembly ResourceDictionary referencing using Microsoft's recommended approach:
+- Added x:Class attributes and code-behind files to all ResourceDictionary files that need cross-assembly consumption
+- Use `MergedDictionaries` collection with typed references (e.g., `<tokens:Tokens />`) instead of `Source` property
+- Added proper XAML namespace definitions via GlobalXmlns.cs files
+- All themes now properly inherit design tokens from FlagstoneUI.Core
+
+**For Consumers**: When using Flagstone UI themes in your applications, reference them using the typed syntax:
+```xml
+<Application.Resources>
+    <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+            <material:Theme />
+        </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+</Application.Resources>
+```  
 
 ### 2. Missing Platform Handlers
 **Issue**: No platform handlers for neutral styling  
