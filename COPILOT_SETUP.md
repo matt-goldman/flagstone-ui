@@ -61,6 +61,8 @@ sudo apt-get install git-lfs
 git lfs install
 ```
 
+**Note**: The repository includes `.gitattributes` configuration for LFS support, but existing sample files are excluded from LFS to avoid conflicts. LFS will be used for new binary assets added to the repository.
+
 ### 4. Platform-Specific Build Instructions
 
 #### For GitHub Copilot (Automatic)
@@ -143,7 +145,7 @@ For full cross-platform development environments:
 - **Automatic Environment Setup**: GitHub Copilot uses `.github/workflows/copilot-setup-steps.yml` to automatically configure the development environment
 - **Target Framework Selection**: When building manually in ubuntu-latest, always specify `--framework net9.0-android` to avoid platform compatibility issues
 - **Windows/iOS Development**: Full Windows and iOS development requires Windows/macOS hosts respectively
-- **Git LFS**: Essential for any binary assets, icons, or large files that may be added to the repository
+- **Git LFS**: Configured for new binary assets; existing sample files are excluded from LFS to maintain compatibility
 - **MAUI Workload**: Required even for test projects due to target framework compatibility
 - **Setup Workflow Testing**: The copilot-setup-steps workflow can be manually tested via the repository's Actions tab
 
