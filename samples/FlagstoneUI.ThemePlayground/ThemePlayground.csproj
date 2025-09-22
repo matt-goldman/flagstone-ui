@@ -17,7 +17,7 @@
 
 
 		<!-- Always present -->
-		<TargetFrameworks>net9.0;net9.0-android</TargetFrameworks>
+		<TargetFrameworks>net9.0-android</TargetFrameworks>
 
 		<!-- Only add Windows TFM on Windows runners -->
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">
