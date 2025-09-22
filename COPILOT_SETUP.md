@@ -18,7 +18,23 @@ This document provides setup instructions for GitHub Copilot to work effectively
 
 ## Setup Steps
 
-### 1. Install .NET 9 SDK
+### Automatic Setup (Recommended)
+
+This repository includes a GitHub Actions workflow (`.github/workflows/copilot-setup-steps.yml`) that **automatically configures the Copilot environment**. When GitHub Copilot starts working, it will:
+
+1. Install .NET 9 SDK using the version specified in `global.json`
+2. Install the MAUI workload
+3. Enable Git LFS support
+4. Restore project dependencies
+5. Verify Android build capability
+
+**No manual setup is required** when using GitHub Copilot - the environment will be configured automatically.
+
+### Manual Setup (For Reference)
+
+If you need to set up the environment manually for development or testing:
+
+#### 1. Install .NET 9 SDK
 
 ```bash
 # Download and install .NET 9 SDK
@@ -28,13 +44,13 @@ chmod +x dotnet-install.sh
 export PATH="$HOME/.dotnet:$PATH"
 ```
 
-### 2. Install MAUI Workload
+#### 2. Install MAUI Workload
 
 ```bash
 dotnet workload install maui --ignore-failed-sources
 ```
 
-### 3. Configure Git LFS
+#### 3. Configure Git LFS
 
 ```bash
 # Install Git LFS
@@ -47,9 +63,17 @@ git lfs install
 
 ### 4. Platform-Specific Build Instructions
 
-#### For Ubuntu-Latest (Copilot Environment)
+#### For GitHub Copilot (Automatic)
 
-Since Copilot runs on `ubuntu-latest` which doesn't support iOS/Windows targets, use Android-specific commands:
+When using GitHub Copilot, the environment is **automatically configured** via the setup workflow. Copilot will use Android-specific commands by default:
+
+- Dependencies are pre-restored
+- Android TFM is validated during setup
+- All builds target `net9.0-android` framework
+
+#### For Ubuntu-Latest (Manual Development)
+
+If working manually in ubuntu-latest environments:
 
 ```bash
 # Restore packages
@@ -116,10 +140,12 @@ For full cross-platform development environments:
 
 ## Important Notes
 
-- **Target Framework Selection**: When building in Copilot (ubuntu-latest), always specify `--framework net9.0-android` to avoid platform compatibility issues
+- **Automatic Environment Setup**: GitHub Copilot uses `.github/workflows/copilot-setup-steps.yml` to automatically configure the development environment
+- **Target Framework Selection**: When building manually in ubuntu-latest, always specify `--framework net9.0-android` to avoid platform compatibility issues
 - **Windows/iOS Development**: Full Windows and iOS development requires Windows/macOS hosts respectively
 - **Git LFS**: Essential for any binary assets, icons, or large files that may be added to the repository
 - **MAUI Workload**: Required even for test projects due to target framework compatibility
+- **Setup Workflow Testing**: The copilot-setup-steps workflow can be manually tested via the repository's Actions tab
 
 ## Troubleshooting
 
@@ -141,4 +167,6 @@ For full cross-platform development environments:
 
 - [Repository README](README.md) - Full developer setup instructions
 - [Copilot Instructions](.github/copilot-instructions.md) - AI agent guidance
+- [Setup Workflow](.github/workflows/copilot-setup-steps.yml) - Automated environment configuration
 - [Technical Documentation](docs/) - Architecture and implementation details
+- [GitHub Copilot Environment Customization](https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment) - Official GitHub documentation
