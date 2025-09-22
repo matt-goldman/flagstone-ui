@@ -68,5 +68,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\FlagstoneUI.Core\FlagstoneUI.Core.csproj" />
+		<ProjectReference Include="..\..\src\FlagstoneUI.Themes.Material\FlagstoneUI.Themes.Material.csproj" />
+		<ProjectReference Include="..\..\src\FlagstoneUI.Themes.Modern\FlagstoneUI.Themes.Modern.csproj" />
 	</ItemGroup>
 </Project>
