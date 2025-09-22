@@ -35,8 +35,28 @@ jobs:
         with:
           global-json-file: global.json
 
-      - name: Install MAUI Workload
-        run: dotnet workload install maui --ignore-failed-sources
+      - name: Install Linux dependencies for .NET MAUI
+        run: |
+          # Install OpenJDK 17 (required for Android development)
+          sudo apt-get update
+          sudo apt-get install -y openjdk-17-jdk
+          
+          # Set JAVA_HOME environment variable
+          echo "JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64" >> $GITHUB_ENV
+          export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+
+      - name: Install MAUI Android Workload
+        run: dotnet workload install maui-android --ignore-failed-sources
+
+      - name: Install Android SDK dependencies
+        run: |
+          # Create directory for Android SDK
+          mkdir -p $HOME/android-sdk
+          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+          export ANDROID_HOME=$HOME/android-sdk
+          
+          # Use InstallAndroidDependencies target to install Android SDK
+          dotnet build -t:InstallAndroidDependencies --framework net9.0-android -p:AndroidSdkDirectory=$HOME/android-sdk -p:JavaSdkDirectory=$JAVA_HOME -p:AcceptAndroidSdkLicenses=True
 
       - name: Restore dependencies
         run: dotnet restore

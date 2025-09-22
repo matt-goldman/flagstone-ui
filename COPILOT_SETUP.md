@@ -23,10 +23,12 @@ This document provides setup instructions for GitHub Copilot to work effectively
 This repository includes a GitHub Actions workflow (`.github/workflows/copilot-setup-steps.yml`) that **automatically configures the Copilot environment**. When GitHub Copilot starts working, it will:
 
 1. Install .NET 9 SDK using the version specified in `global.json`
-2. Install the MAUI workload
-3. Enable Git LFS support
-4. Restore project dependencies
-5. Verify Android build capability
+2. Install Linux dependencies (OpenJDK 17, set JAVA_HOME)
+3. Install the MAUI Android workload (Linux-specific)
+4. Install Android SDK dependencies automatically
+5. Enable Git LFS support
+6. Restore project dependencies
+7. Verify Android build capability
 
 **No manual setup is required** when using GitHub Copilot - the environment will be configured automatically.
 
@@ -44,13 +46,42 @@ chmod +x dotnet-install.sh
 export PATH="$HOME/.dotnet:$PATH"
 ```
 
-#### 2. Install MAUI Workload
+#### 2. Install Linux Dependencies for .NET MAUI
 
+**Java SDK (OpenJDK 17):**
 ```bash
-dotnet workload install maui --ignore-failed-sources
+# Install OpenJDK 17 (required for Android development)
+sudo apt-get update
+sudo apt-get install -y openjdk-17-jdk
+
+# Set JAVA_HOME environment variable
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+echo 'export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64' >> ~/.bashrc
 ```
 
-#### 3. Configure Git LFS
+#### 3. Install MAUI Android Workload
+
+```bash
+# Linux uses maui-android workload (not the full maui workload)
+dotnet workload install maui-android --ignore-failed-sources
+```
+
+#### 4. Install Android SDK Dependencies
+
+```bash
+# Create directory for Android SDK
+mkdir -p $HOME/android-sdk
+export ANDROID_HOME=$HOME/android-sdk
+echo 'export ANDROID_HOME=$HOME/android-sdk' >> ~/.bashrc
+
+# Use InstallAndroidDependencies target to automatically install Android SDK
+dotnet build -t:InstallAndroidDependencies --framework net9.0-android \
+  -p:AndroidSdkDirectory=$HOME/android-sdk \
+  -p:JavaSdkDirectory=$JAVA_HOME \
+  -p:AcceptAndroidSdkLicenses=True
+```
+
+#### 5. Configure Git LFS
 
 ```bash
 # Install Git LFS
@@ -143,6 +174,7 @@ For full cross-platform development environments:
 ## Important Notes
 
 - **Automatic Environment Setup**: GitHub Copilot uses `.github/workflows/copilot-setup-steps.yml` to automatically configure the development environment
+- **Linux-Specific Requirements**: Ubuntu-latest requires OpenJDK 17, Android SDK, and `maui-android` workload (not full `maui`)
 - **Target Framework Selection**: When building manually in ubuntu-latest, always specify `--framework net9.0-android` to avoid platform compatibility issues
 - **Windows/iOS Development**: Full Windows and iOS development requires Windows/macOS hosts respectively
 - **Git LFS**: Configured for new binary assets; existing sample files are excluded from LFS to maintain compatibility
@@ -154,9 +186,18 @@ For full cross-platform development environments:
 ### Common Issues
 
 1. **SDK Version Mismatch**: Ensure .NET 9.0.100 or later is installed
-2. **MAUI Workload Missing**: Run `dotnet workload install maui` if build fails
-3. **Platform Target Errors**: Use `--framework net9.0-android` for ubuntu-latest builds
-4. **Git LFS Not Configured**: Run `git lfs install` in the repository
+2. **MAUI Workload Missing**: Run `dotnet workload install maui-android` (not `maui`) on Linux
+3. **Java SDK Missing**: Install OpenJDK 17 and set JAVA_HOME environment variable
+4. **Android SDK Issues**: Use InstallAndroidDependencies target for automatic setup
+5. **Platform Target Errors**: Use `--framework net9.0-android` for ubuntu-latest builds
+6. **Git LFS Not Configured**: Run `git lfs install` in the repository
+
+### Linux-Specific Issues
+
+1. **Permission Errors**: Use `sudo` for package installations but not for dotnet commands
+2. **JAVA_HOME Not Found**: Ensure path `/usr/lib/jvm/java-17-openjdk-amd64` exists after OpenJDK installation
+3. **Android SDK License**: The InstallAndroidDependencies target handles license acceptance automatically
+4. **Workload Installation Fails**: Use `--ignore-failed-sources` flag with workload install commands
 
 ### Solution File Structure
 
@@ -172,3 +213,5 @@ For full cross-platform development environments:
 - [Setup Workflow](.github/workflows/copilot-setup-steps.yml) - Automated environment configuration
 - [Technical Documentation](docs/) - Architecture and implementation details
 - [GitHub Copilot Environment Customization](https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment) - Official GitHub documentation
+- [.NET MAUI Installation on Linux](https://learn.microsoft.com/en-us/dotnet/maui/get-started/installation?view=net-maui-9.0&tabs=visual-studio-code) - Microsoft documentation
+- [.NET Core Installation on Linux](https://learn.microsoft.com/en-us/dotnet/core/install/linux) - Linux-specific .NET setup guidance
