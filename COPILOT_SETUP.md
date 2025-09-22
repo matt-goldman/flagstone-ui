@@ -1,0 +1,144 @@
+# GitHub Copilot Setup Instructions
+
+This document provides setup instructions for GitHub Copilot to work effectively with the Flagstone UI repository.
+
+## Prerequisites
+
+### Environment Limitations
+
+- **GitHub Copilot only supports `ubuntu-latest`** runners
+- This project targets multiple .NET MAUI platforms including Windows-specific targets
+- For full compatibility, focus on **Android target framework** (`net9.0-android`) when building/testing in Copilot workflows
+
+### Required Software
+
+1. **.NET 9 SDK** (minimum version 9.0.100 as specified in `global.json`)
+2. **MAUI workload** for .NET MAUI development
+3. **Git LFS** for large file support
+
+## Setup Steps
+
+### 1. Install .NET 9 SDK
+
+```bash
+# Download and install .NET 9 SDK
+wget https://dot.net/v1/dotnet-install.sh
+chmod +x dotnet-install.sh
+./dotnet-install.sh --version 9.0.100
+export PATH="$HOME/.dotnet:$PATH"
+```
+
+### 2. Install MAUI Workload
+
+```bash
+dotnet workload install maui --ignore-failed-sources
+```
+
+### 3. Configure Git LFS
+
+```bash
+# Install Git LFS
+sudo apt-get update
+sudo apt-get install git-lfs
+
+# Initialize LFS in the repository
+git lfs install
+```
+
+### 4. Platform-Specific Build Instructions
+
+#### For Ubuntu-Latest (Copilot Environment)
+
+Since Copilot runs on `ubuntu-latest` which doesn't support iOS/Windows targets, use Android-specific commands:
+
+```bash
+# Restore packages
+dotnet restore
+
+# Build Android target only
+dotnet build --framework net9.0-android --no-restore
+
+# Test Android target only
+dotnet test --framework net9.0-android --no-build
+```
+
+#### For Cross-Platform Development
+
+When working locally with full platform support:
+
+```bash
+# Full restore and build
+dotnet restore Flagstone.UI.sln
+dotnet build Flagstone.UI.sln
+
+# Run all tests
+dotnet test Flagstone.UI.sln
+```
+
+## Validation
+
+### Quick Environment Check
+
+```bash
+# Verify .NET version
+dotnet --version
+
+# Verify MAUI workload
+dotnet workload list | grep maui
+
+# Verify Git LFS
+git lfs version
+
+# Test project restore
+dotnet restore
+
+# Test Android build
+dotnet build --framework net9.0-android
+```
+
+### Using Validation Scripts
+
+The repository includes a Copilot-specific validation script for ubuntu-latest environments:
+
+```bash
+# Copilot/ubuntu-latest specific validation
+./scripts/validate-copilot-setup.sh
+```
+
+For full cross-platform development environments:
+
+```bash
+# Linux/macOS (full platform support)
+./scripts/validate-setup.sh
+
+# Note: Standard validation scripts may fail on ubuntu-latest due to platform limitations
+```
+
+## Important Notes
+
+- **Target Framework Selection**: When building in Copilot (ubuntu-latest), always specify `--framework net9.0-android` to avoid platform compatibility issues
+- **Windows/iOS Development**: Full Windows and iOS development requires Windows/macOS hosts respectively
+- **Git LFS**: Essential for any binary assets, icons, or large files that may be added to the repository
+- **MAUI Workload**: Required even for test projects due to target framework compatibility
+
+## Troubleshooting
+
+### Common Issues
+
+1. **SDK Version Mismatch**: Ensure .NET 9.0.100 or later is installed
+2. **MAUI Workload Missing**: Run `dotnet workload install maui` if build fails
+3. **Platform Target Errors**: Use `--framework net9.0-android` for ubuntu-latest builds
+4. **Git LFS Not Configured**: Run `git lfs install` in the repository
+
+### Solution File Structure
+
+- **Main Solution**: `Flagstone.UI.sln` (contains all projects)
+- **Target Frameworks**: `net9.0-android`, `net9.0-ios`, `net9.0-maccatalyst`, `net9.0-windows10.0.19041.0`
+- **Test Projects**: Located in `tests/` directory
+- **Source Projects**: Located in `src/` directory
+
+## References
+
+- [Repository README](README.md) - Full developer setup instructions
+- [Copilot Instructions](.github/copilot-instructions.md) - AI agent guidance
+- [Technical Documentation](docs/) - Architecture and implementation details

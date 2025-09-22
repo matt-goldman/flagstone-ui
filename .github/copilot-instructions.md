@@ -58,6 +58,15 @@ This guide helps AI coding agents work productively in the Flagstone UI codebase
 - _Never_ downgrade .NET SDK versions as this may cause compatibility issues. _Always_ update development environment to match minimum required SDK version specified in `global.json` (currently .NET 9.0.100).
 - Development environment must use .NET 9 SDK as the minimum - this is a hard requirement for the project.
 
+### GitHub Copilot Setup
+
+**Important**: GitHub Copilot only supports `ubuntu-latest` runners, but this project targets multiple platforms including Windows. For detailed setup instructions specific to Copilot environments, see [COPILOT_SETUP.md](../COPILOT_SETUP.md).
+
+**Key Copilot Considerations**:
+- Use Android target framework (`net9.0-android`) for builds and tests in Copilot workflows
+- Example: `dotnet build --framework net9.0-android` instead of building all target frameworks
+- Git LFS support is configured in `.gitattributes` for binary assets
+
 ### Code Formatting
 
 Run formatting before commits to keep style consistent:
