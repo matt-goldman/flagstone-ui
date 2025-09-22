@@ -59,7 +59,7 @@ jobs:
           dotnet build src/FlagstoneUI.Core/FlagstoneUI.Core.csproj -t:InstallAndroidDependencies --framework net9.0-android -p:AndroidSdkDirectory=$HOME/android-sdk -p:JavaSdkDirectory=$JAVA_HOME -p:AcceptAndroidSdkLicenses=True
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore --framework net9.0-android
 
       - name: Verify Android build capability
         run: dotnet build --framework net9.0-android --no-restore --verbosity minimal
