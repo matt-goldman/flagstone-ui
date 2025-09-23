@@ -39,4 +39,14 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <Compile Update="Platforms\iOS\Controls\BorderlessEntry.cs">
+	    <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Platforms\Windows\Controls\BorderlessEntry.cs" />
+	</ItemGroup>
+
 </Project>

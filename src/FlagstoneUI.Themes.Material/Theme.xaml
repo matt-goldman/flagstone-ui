@@ -13,7 +13,7 @@
     <Setter Property="TextColor" Value="{DynamicResource Color.OnPrimary}" />
   </Style>
   
-  <Style TargetType="fs:Card">
+  <Style TargetType="fs:FsCard">
     <Setter Property="Padding" Value="{DynamicResource Space.16}" />
     <Setter Property="BackgroundColor" Value="{DynamicResource Color.Surface}" />
     <Setter Property="BorderColor" Value="{DynamicResource Color.Outline}" />
