@@ -5,10 +5,18 @@
              x:Class="FlagstoneUI.Core.Controls.FsEntry"
              x:DataType="fs:FsEntry"
              x:Name="ViewWrapper">
-    <!-- TOTO: Add global XML usings -->
+    <!-- TODO: Add global XML usings -->
   <Border x:Name="WrapperBorder">
     <Grid>
-      <fs:BorderlessEntry Text="{Binding Value}" />
+      <fs:BorderlessEntry Text="{Binding Text}"
+                          Placeholder="{Binding Placeholder}"
+                          TextColor="{Binding TextColor}"
+                          TextChanged="OnTextChanged"
+                          FontSize="{Binding FontSize}"
+                          HorizontalTextAlignment="{Binding HorizontalTextAlignment}"
+                          VerticalTextAlignment="{Binding VerticalTextAlignment}"
+                          IsPassword="{Binding IsPassword}"
+                          Keyboard="{Binding Keyboard}"/>
     </Grid>
   </Border>
 </ContentView>
