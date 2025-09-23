@@ -16,7 +16,7 @@
 		<ApplicationVersion>1</ApplicationVersion>
 
 		<!-- Always present -->
-		<TargetFrameworks>net9.0;net9.0-android</TargetFrameworks>
+		<TargetFrameworks>net9.0-android</TargetFrameworks>
 
 		<!-- Only add Windows TFM on Windows runners -->
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">
@@ -68,6 +68,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\FlagstoneUI.Core\FlagstoneUI.Core.csproj" />
 		<ProjectReference Include="..\..\src\FlagstoneUI.Blocks\FlagstoneUI.Blocks.csproj" />
+		<ProjectReference Include="..\..\src\FlagstoneUI.Themes.Material\FlagstoneUI.Themes.Material.csproj" />
 	</ItemGroup>
 
 </Project>
