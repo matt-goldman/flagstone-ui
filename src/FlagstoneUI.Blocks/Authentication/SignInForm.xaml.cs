@@ -1,11 +1,14 @@
 ﻿namespace FlagstoneUI.Blocks.Authentication;
 
-public partial class SignInForm : ContentView
+public partial class SigninForm : ContentView
 {
-	public SignInForm()
+	public SigninForm()
 	{
 		InitializeComponent();
 	}
 
-    // TODO: Add Bindable Properties for Username, Password, SignInCommand, etc.
+	public void OnSigninClicked(object sender, EventArgs e)
+	{
+		
+    }
 }

@@ -25,4 +25,9 @@
 
   <x:Double x:Key="FontSize.Body">14</x:Double>
   <x:Double x:Key="FontSize.Title">20</x:Double>
+
+    <x:Double x:Key="BorderWidth.None">0</x:Double>
+    <x:Double x:Key="BorderWidth.Thin">1</x:Double>
+    <x:Double x:Key="BorderWidth.Thick">2</x:Double>
+    <x:Double x:Key="BorderWidth.Heavy">4</x:Double>
 </ResourceDictionary>

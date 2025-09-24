@@ -16,7 +16,8 @@ public partial class FsEntry : ContentView
 	{
 		InitializeComponent();
 		ViewWrapper.BindingContext = this;
-	}
+		_borderShape = new RoundRectangle { CornerRadius = CornerRadius };
+    }
 
     #region Events
 	public event EventHandler? Completed;
@@ -41,16 +42,7 @@ public partial class FsEntry : ContentView
 		nameof(BorderColor),
 		typeof(Color),
 		typeof(FsEntry),
-		Colors.Transparent,
-		propertyChanged: OnBorderColorChanged);
-
-	static void OnBorderColorChanged(BindableObject bindable, object oldValue, object newValue)
-	{
-		if (bindable is FsEntry entry && newValue is Color borderColor)
-		{
-			entry.WrapperBorder.Stroke = borderColor;
-		}
-	}
+		Colors.Transparent);
 
 	/// <summary>
 	/// Gets or sets the color of the border.
@@ -73,17 +65,8 @@ public partial class FsEntry : ContentView
 		nameof(BorderWidth),
 		typeof(double),
 		typeof(FsEntry),
-		0,
-		BindingMode.OneWay,
-		propertyChanged: OnBorderWidthChanged);
-
-	static void OnBorderWidthChanged(BindableObject bindable, object oldValue, object newValue)
-	{
-		if (bindable is FsEntry entry && newValue is double value)
-		{
-			entry.WrapperBorder.StrokeThickness = value;
-		}
-	}
+		0d,
+		BindingMode.OneWay);
 
 	/// <summary>
 	/// Gets or sets the width of the border, in device-independent units (1/96th inch per unit).
@@ -105,7 +88,7 @@ public partial class FsEntry : ContentView
 		nameof(CornerRadius),
 		typeof(double),
 		typeof(FsEntry),
-		0,
+		0d,
 		BindingMode.OneWay,
 		propertyChanged: OnCornerRadiusChanged);
 
@@ -124,22 +107,33 @@ public partial class FsEntry : ContentView
 	{
 		if (bindable is FsEntry entry && newValue is double value)
 		{
-			var shape = new RoundRectangle
+			entry.BorderShape = new RoundRectangle
 			{
 				CornerRadius = value
 			};
-			entry.WrapperBorder.StrokeShape = shape;
 		}
 	}
-	#endregion
 
-	#region TextProperty
-	/// <summary>
-	/// Identifies the bindable property for the <see cref="Text"/> property.
-	/// </summary>
-	/// <remarks>This property is used to enable data binding for the <see cref="Text"/> property of the <see
-	/// cref="FsEntry"/> class. The default value is an empty string (<see cref="string.Empty"/>).</remarks>
-	public static readonly BindableProperty TextProperty = BindableProperty.Create(
+	private RoundRectangle _borderShape;
+	public RoundRectangle BorderShape
+	{
+		get => _borderShape;
+		
+		set
+		{
+			_borderShape = value;
+			OnParentChanged();
+		}
+	}
+    #endregion
+
+    #region TextProperty
+    /// <summary>
+    /// Identifies the bindable property for the <see cref="Text"/> property.
+    /// </summary>
+    /// <remarks>This property is used to enable data binding for the <see cref="Text"/> property of the <see
+    /// cref="FsEntry"/> class. The default value is an empty string (<see cref="string.Empty"/>).</remarks>
+    public static readonly BindableProperty TextProperty = BindableProperty.Create(
 		nameof(Text),
 		typeof(string),
 		typeof(FsEntry),
@@ -214,16 +208,7 @@ public partial class FsEntry : ContentView
 		typeof(Color),
 		typeof(FsEntry),
 		Colors.Transparent,
-		BindingMode.OneWay,
-		propertyChanged: OnBackgroundColorChanged);
-
-	private static void OnBackgroundColorChanged(BindableObject bindable, object oldValue, object newValue)
-	{
-		if (bindable is FsEntry entry && newValue is Color color)
-		{
-			entry.WrapperBorder.BackgroundColor = color;
-		}
-    }
+		BindingMode.OneWay);
 
 	/// <summary>
 	/// Gets or sets the background color of the element.
@@ -341,7 +326,7 @@ public partial class FsEntry : ContentView
 		nameof(FontSize),
 		typeof(double),
 		typeof(FsEntry),
-		14.0,
+		14.0d,
 		BindingMode.OneWay);
 	
 	/// <summary>

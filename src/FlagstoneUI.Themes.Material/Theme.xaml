@@ -27,5 +27,7 @@
         <Setter Property="TextColor" Value="{DynamicResource Color.OnSurface}" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
         <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
+        <Setter Property="BorderColor" Value="{DynamicResource Color.Outline}" />
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
     </Style>
 </ResourceDictionary>
