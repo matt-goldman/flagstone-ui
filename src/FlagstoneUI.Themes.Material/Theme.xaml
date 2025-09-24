@@ -29,5 +29,6 @@
         <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
         <Setter Property="BorderColor" Value="{DynamicResource Color.Outline}" />
         <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+        <Setter Property="Padding" Value="{DynamicResource Padding.Small}" />
     </Style>
 </ResourceDictionary>

@@ -11,7 +11,7 @@
           Stroke="{Binding BorderColor}"
           StrokeThickness="{Binding BorderWidth}"
           StrokeShape="{Binding BorderShape}">
-    <Grid>
+    <Grid Padding="{Binding Padding}">
       <fs:BorderlessEntry Text="{Binding Text}"
                           Placeholder="{Binding Placeholder}"
                           TextColor="{Binding TextColor}"

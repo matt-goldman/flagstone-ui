@@ -3,31 +3,41 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="FlagstoneUI.Core.Styles.Tokens">
-    
-  <!-- Color, spacing, typography tokens -->
-  <Color x:Key="Color.Primary">#6750A4</Color>
-  <Color x:Key="Color.OnPrimary">#FFFFFF</Color>
-  <Color x:Key="Color.Surface">#FFFBFE</Color>
-  <Color x:Key="Color.OnSurface">#1C1B1F</Color>
-  <Color x:Key="Color.SurfaceVariant">#E7E0EC</Color>
-  <Color x:Key="Color.Outline">#79747E</Color>
+    <!-- Color, spacing, typography tokens -->
+    <Color x:Key="Color.Primary">#6750A4</Color>
+    <Color x:Key="Color.OnPrimary">#FFFFFF</Color>
+    <Color x:Key="Color.Surface">#FFFBFE</Color>
+    <Color x:Key="Color.OnSurface">#1C1B1F</Color>
+    <Color x:Key="Color.SurfaceVariant">#E7E0EC</Color>
+    <Color x:Key="Color.Outline">#79747E</Color>
 
-  <x:Double x:Key="Radius.Small">4</x:Double>
-  <x:Double x:Key="Radius.Medium">8</x:Double>
-  <x:Double x:Key="Radius.Large">12</x:Double>
+    <x:Double x:Key="Radius.Small">4</x:Double>
+    <x:Double x:Key="Radius.Medium">8</x:Double>
+    <x:Double x:Key="Radius.Large">12</x:Double>
 
-  <x:Double x:Key="Space.2">2</x:Double>
-  <x:Double x:Key="Space.4">4</x:Double>
-  <x:Double x:Key="Space.8">8</x:Double>
-  <x:Double x:Key="Space.12">12</x:Double>
-  <x:Double x:Key="Space.16">16</x:Double>
-  <x:Double x:Key="Space.24">24</x:Double>
+    <x:Double x:Key="Space.2">2</x:Double>
+    <x:Double x:Key="Space.4">4</x:Double>
+    <x:Double x:Key="Space.8">8</x:Double>
+    <x:Double x:Key="Space.12">12</x:Double>
+    <x:Double x:Key="Space.16">16</x:Double>
+    <x:Double x:Key="Space.24">24</x:Double>
 
-  <x:Double x:Key="FontSize.Body">14</x:Double>
-  <x:Double x:Key="FontSize.Title">20</x:Double>
+    <x:Double x:Key="FontSize.Body">14</x:Double>
+    <x:Double x:Key="FontSize.Title">20</x:Double>
 
     <x:Double x:Key="BorderWidth.None">0</x:Double>
     <x:Double x:Key="BorderWidth.Thin">1</x:Double>
     <x:Double x:Key="BorderWidth.Thick">2</x:Double>
     <x:Double x:Key="BorderWidth.Heavy">4</x:Double>
+
+    <x:Double x:Key="Elevation.Level0">0</x:Double>
+    <x:Double x:Key="Elevation.Level1">2</x:Double>
+    <x:Double x:Key="Elevation.Level2">4</x:Double>
+    <x:Double x:Key="Elevation.Level3">8</x:Double>
+    <x:Double x:Key="Elevation.Level4">12</x:Double>
+
+    <x:Double x:Key="Padding.None">0</x:Double>
+    <x:Double x:Key="Padding.Small">4</x:Double>
+    <x:Double x:Key="Padding.Medium">8</x:Double>
+    <x:Double x:Key="Padding.Large">16</x:Double>
 </ResourceDictionary>

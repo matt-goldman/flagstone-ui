@@ -340,5 +340,30 @@ public partial class FsEntry : ContentView
 		set => SetValue(FontSizeProperty, value);
 	}
     #endregion
+
+    #region PaddingProperty
+	/// <summary>
+	/// Identifies the <see cref="Padding"/> bindable property.
+	/// </summary>
+	/// <remarks>This property represents the padding applied to the <see cref="FsEntry"/> control.  The default
+	/// value is a <see cref="Thickness"/> of 5. The property supports one-way binding.</remarks>
+	public new static readonly BindableProperty PaddingProperty = BindableProperty.Create(
+		nameof(Padding),
+		typeof(Thickness),
+		typeof(FsEntry),
+		new Thickness(5),
+		BindingMode.OneWay);
+
+	/// <summary>
+	/// Gets or sets the padding inside the element.
+	/// </summary>
+	/// <remarks>The padding determines the spacing between the content of the element and its border. This property
+	/// is typically used to adjust the layout of the element's content.</remarks>
+	public new Thickness Padding
+	{
+		get => (Thickness)GetValue(PaddingProperty);
+		set => SetValue(PaddingProperty, value);
+	}
+    #endregion
 }
 
