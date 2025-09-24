@@ -12,6 +12,10 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/matt-goldman/flagstone-ui</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+
+    <!-- Enable MAUI preview features and global XML namespaces -->
+    <DefineConstants Condition="'$(UseMaui)' == 'true'">$(DefineConstants);MauiAllowImplicitXmlnsDeclaration</DefineConstants>
+    <EnablePreviewFeatures Condition="'$(UseMaui)' == 'true'">true</EnablePreviewFeatures>
   </PropertyGroup>
 
   <!-- Package version variables -->

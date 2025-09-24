@@ -8,7 +8,7 @@ This document provides setup instructions for GitHub Copilot to work effectively
 
 - **GitHub Copilot only supports `ubuntu-latest`** runners
 - This project targets multiple .NET MAUI platforms including Windows-specific targets
-- For full compatibility, focus on **Android target framework** (`net9.0-android`) when building/testing in Copilot workflows
+- For full compatibility, focus on **Android target framework** (`net10.0-android`) when building/testing in Copilot workflows
 
 ### Required Software
 
@@ -75,7 +75,7 @@ export ANDROID_HOME=$HOME/android-sdk
 echo 'export ANDROID_HOME=$HOME/android-sdk' >> ~/.bashrc
 
 # Use InstallAndroidDependencies target with a specific Android-capable project
-dotnet build src/FlagstoneUI.Core/FlagstoneUI.Core.csproj -t:InstallAndroidDependencies --framework net9.0-android \
+dotnet build src/FlagstoneUI.Core/FlagstoneUI.Core.csproj -t:InstallAndroidDependencies --framework net10.0-android \
   -p:AndroidSdkDirectory=$HOME/android-sdk \
   -p:JavaSdkDirectory=$JAVA_HOME \
   -p:AcceptAndroidSdkLicenses=True
@@ -102,7 +102,7 @@ When using GitHub Copilot, the environment is **automatically configured** via t
 
 - Dependencies are pre-restored
 - Android TFM is validated during setup
-- All builds target `net9.0-android` framework
+- All builds target `net10.0-android` framework
 
 #### For Ubuntu-Latest (Manual Development)
 
@@ -113,10 +113,10 @@ If working manually in ubuntu-latest environments:
 dotnet restore
 
 # Build Android target only
-dotnet build --framework net9.0-android --no-restore
+dotnet build --framework net10.0-android --no-restore
 
 # Test Android target only
-dotnet test --framework net9.0-android --no-build
+dotnet test --framework net10.0-android --no-build
 ```
 
 #### For Cross-Platform Development
@@ -150,7 +150,7 @@ git lfs version
 dotnet restore
 
 # Test Android build
-dotnet build --framework net9.0-android
+dotnet build --framework net10.0-android
 ```
 
 ### Using Validation Scripts
@@ -175,7 +175,7 @@ For full cross-platform development environments:
 
 - **Automatic Environment Setup**: GitHub Copilot uses `.github/workflows/copilot-setup-steps.yml` to automatically configure the development environment
 - **Linux-Specific Requirements**: Ubuntu-latest requires OpenJDK 17, Android SDK, and `maui-android` workload (not full `maui`)
-- **Target Framework Selection**: When building manually in ubuntu-latest, always specify `--framework net9.0-android` to avoid platform compatibility issues
+- **Target Framework Selection**: When building manually in ubuntu-latest, always specify `--framework net10.0-android` to avoid platform compatibility issues
 - **Windows/iOS Development**: Full Windows and iOS development requires Windows/macOS hosts respectively
 - **Git LFS**: Configured for new binary assets; existing sample files are excluded from LFS to maintain compatibility
 - **MAUI Workload**: Required even for test projects due to target framework compatibility
@@ -189,7 +189,7 @@ For full cross-platform development environments:
 2. **MAUI Workload Missing**: Run `dotnet workload install maui-android` (not `maui`) on Linux
 3. **Java SDK Missing**: Install OpenJDK 17 and set JAVA_HOME environment variable
 4. **Android SDK Issues**: Use InstallAndroidDependencies target for automatic setup
-5. **Platform Target Errors**: Use `--framework net9.0-android` for ubuntu-latest builds
+5. **Platform Target Errors**: Use `--framework net10.0-android` for ubuntu-latest builds
 6. **Git LFS Not Configured**: Run `git lfs install` in the repository
 
 ### Linux-Specific Issues
@@ -203,7 +203,7 @@ For full cross-platform development environments:
 ### Solution File Structure
 
 - **Main Solution**: `Flagstone.UI.sln` (contains all projects)
-- **Target Frameworks**: `net9.0-android`, `net9.0-ios`, `net9.0-maccatalyst`, `net9.0-windows10.0.19041.0`
+- **Target Frameworks**: `net10.0-android`, `net10.0-ios`, `net10.0-maccatalyst`, `net10.0-windows10.0.19041.0`
 - **Test Projects**: Located in `tests/` directory
 - **Source Projects**: Located in `src/` directory
 
