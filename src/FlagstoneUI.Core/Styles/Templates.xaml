@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls"
+                    x:Class="FlagstoneUI.Core.Styles.Templates">
+    <!-- Control templates and styles for FlagstoneUI controls -->
+
+    <ControlTemplate x:Key="CardTemplate" x:DataType="fs:FsCard">
+        <Border
+            BackgroundColor="{Binding BackgroundColor}"
+            Stroke="{Binding BorderColor}"
+            StrokeThickness="{Binding BorderWidth}"
+            Padding="{Binding Padding}">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="{Binding CornerRadius}" />
+            </Border.StrokeShape>
+            <ContentPresenter />
+        </Border>
+    </ControlTemplate>
+
+    <Style TargetType="fs:FsCard">
+        <Setter Property="ControlTemplate" Value="{StaticResource CardTemplate}" />
+    </Style>
+</ResourceDictionary>

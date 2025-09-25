@@ -4,9 +4,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
                     xmlns:tokens="clr-namespace:FlagstoneUI.Core.Styles;assembly=FlagstoneUI.Core"
+                    xmlns:styles="clr-namespace:FlagstoneUI.Core.Styles;assembly=FlagstoneUI.Core"
                     x:Class="FlagstoneUI.Themes.Material.Theme">
     <ResourceDictionary.MergedDictionaries>
         <tokens:Tokens />
+        <styles:Templates />
     </ResourceDictionary.MergedDictionaries>
     
     <Style TargetType="Button">
@@ -18,6 +20,7 @@
         <Setter Property="Padding" Value="{DynamicResource Space.16}" />
         <Setter Property="BackgroundColor" Value="{DynamicResource Color.Surface}" />
         <Setter Property="BorderColor" Value="{DynamicResource Color.Outline}" />
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
         <Setter Property="CornerRadius" Value="{DynamicResource Radius.Medium}" />
     </Style>
 

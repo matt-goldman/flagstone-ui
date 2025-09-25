@@ -19,10 +19,5 @@
     <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
     <Setter Property="BorderColor" Value="#E0E0E0" />
   </Style>
-  
-  <Style TargetType="fs:FsEntry">
-    <Setter Property="Border">
-      
-    </Setter>
-  </Style>
+ 
 </ResourceDictionary>
