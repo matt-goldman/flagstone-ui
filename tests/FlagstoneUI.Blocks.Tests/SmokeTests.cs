@@ -1,4 +1,4 @@
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 namespace FlagstoneUI.Blocks.Tests;
@@ -10,6 +10,6 @@ public class SmokeTests
     {
         // This is a basic smoke test to verify the library can be loaded
         var assembly = typeof(SmokeTests).Assembly;
-        assembly.Should().NotBeNull();
+        assembly.ShouldNotBeNull();
     }
 }

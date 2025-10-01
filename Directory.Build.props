@@ -20,7 +20,7 @@
     <CommunityToolkitMauiVersion>9.1.0</CommunityToolkitMauiVersion>
     <XunitVersion>2.9.2</XunitVersion>
     <XunitRunnerVisualStudioVersion>2.8.2</XunitRunnerVisualStudioVersion>
-    <FluentAssertionsVersion>6.12.1</FluentAssertionsVersion>
+    <ShouldlyVersion>4.2.1</ShouldlyVersion>
     <CoverletCollectorVersion>6.0.2</CoverletCollectorVersion>
     <MicrosoftNetTestSdkVersion>17.11.1</MicrosoftNetTestSdkVersion>
   </PropertyGroup>
@@ -43,7 +43,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNetTestSdkVersion)" />
     <PackageReference Include="xunit" Version="$(XunitVersion)" />
     <PackageReference Include="xunit.runner.visualstudio" Version="$(XunitRunnerVisualStudioVersion)" />
-    <PackageReference Include="FluentAssertions" Version="$(FluentAssertionsVersion)" />
+    <PackageReference Include="Shouldly" Version="$(ShouldlyVersion)" />
     <PackageReference Include="coverlet.collector" Version="$(CoverletCollectorVersion)" PrivateAssets="all" />
   </ItemGroup>
 </Project>
