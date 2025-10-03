@@ -9,7 +9,9 @@
     <ResourceDictionary.MergedDictionaries>
         <tokens:Tokens />
     </ResourceDictionary.MergedDictionaries>
-    
+
+    <Color x:Key="Color.Primary">#56ef54</Color>
+
     <Style TargetType="Button">
         <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />
         <Setter Property="TextColor" Value="{DynamicResource Color.OnPrimary}" />

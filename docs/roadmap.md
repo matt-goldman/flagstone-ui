@@ -20,6 +20,7 @@ This document provides an updated roadmap based on current implementation progre
 2. **Sample App**: No working demonstration application
 
 **Previously Resolved**:
+
 - ✅ **Resource Loading**: Cross-component XAML resource references now fully functional
 
 ## Updated Phase 1: MVP (Priority: Critical)
@@ -27,11 +28,19 @@ This document provides an updated roadmap based on current implementation progre
 **Target**: Functional UI kit with essential controls and theme system
 
 ### Critical Path Items
+
 1. **Fix Resource System** ✅ COMPLETED (Estimated: 1-2 days)
    - ✅ Resolved cross-component XAML resource loading
    - ✅ Enabled themes to properly consume core tokens
    - ✅ Removed temporary workarounds
    - ✅ Implemented proper cross-assembly ResourceDictionary pattern
+
+**Note:** May not be necessary. As per [the docs](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/resource-dictionaries?view=net-maui-9.0&viewFallbackFrom=net-maui-8.0#merge-resource-dictionaries-from-other-assemblies):
+
+> When merged ResourceDictionary resources share identical x:Key attribute values, .NET MAUI uses the following resource precedence:
+> 
+> 1. The resources local to the resource dictionary.
+> 3. The resources contained in the resource dictionaries that were merged via the MergedDictionaries collection, in the > reverse order they are listed in the MergedDictionaries property.
 
 2. **Implement FsButton** (Estimated: 2-3 days)
    - Create Button subclass with neutral styling
@@ -40,10 +49,11 @@ This document provides an updated roadmap based on current implementation progre
    - Create unit tests
 
 3. **Implement FsEntry** (Estimated: 2-3 days)
-   - Create Entry subclass with validation states
-   - Add error, disabled, focused visual states
-   - Implement platform handlers
-   - Add theme styles and validation indicators
+   - [x] Create Entry subclass
+   - [ ] with validation states
+   - [ ] Add error, disabled, focused visual states
+   - [x] Implement platform handlers
+   - [-] WIP: Add theme styles and validation indicators
 
 4. **Create Functional Sample App** (Estimated: 1-2 days)
    - Basic controls gallery showing FsButton, FsEntry, Card
@@ -56,6 +66,7 @@ This document provides an updated roadmap based on current implementation progre
    - Sample code examples
 
 ### Optional MVP Items
+
 - **FsSwitch**: Enhanced switch control (can defer to Phase 1.5)
 - **Snackbar**: Service-based overlay messaging (can defer to Phase 1.5)
 - **Release Pipeline**: Automated NuGet publishing (can defer)
@@ -67,6 +78,7 @@ This document provides an updated roadmap based on current implementation progre
 **Target**: Complete MVP feature set and polish
 
 ### Core Items
+
 - [ ] **FsSwitch**: Enhanced switch with improved theming
 - [ ] **Snackbar**: Complete service implementation with overlay
 - [ ] **Enhanced Builder API**: Full configuration options
@@ -74,6 +86,7 @@ This document provides an updated roadmap based on current implementation progre
 - [ ] **Release Pipeline**: Automated versioning and NuGet publishing
 
 ### Quality Improvements
+
 - [ ] **Expanded Testing**: Comprehensive unit and integration tests
 - [ ] **Accessibility**: Screen reader support and high contrast themes
 - [ ] **Performance**: Optimize resource loading and theme switching
@@ -86,6 +99,7 @@ This document provides an updated roadmap based on current implementation progre
 **Target**: Comprehensive control library for common scenarios
 
 ### Form Controls
+
 - [ ] **FsCheckBox**: Themed checkbox with indeterminate state
 - [ ] **FsRadioButton**: Radio button with group management
 - [ ] **FsPicker**: Enhanced picker with token-driven styling
@@ -94,6 +108,7 @@ This document provides an updated roadmap based on current implementation progre
 - [ ] **FormField**: Wrapper with label, helper text, validation
 
 ### Display Controls
+
 - [ ] **Badge**: Notification and status indicators
 - [ ] **Avatar**: User profile image container
 - [ ] **ProgressBar**: Progress indication with theming
@@ -101,15 +116,18 @@ This document provides an updated roadmap based on current implementation progre
 - [ ] **Tooltip**: Contextual help overlay
 
 ### Navigation Controls
+
 - [ ] **AppBar**: Top navigation bar with actions
 - [ ] **TabBar**: Bottom navigation tabs
 - [ ] **Drawer**: Side navigation panel
 
 ### Feedback Controls
+
 - [ ] **Dialog**: Modal dialog service
 - [ ] **Toast**: Lightweight notification system
 
 ### Additional Features
+
 - [ ] **Modern Theme**: Tailwind-inspired theme alternative
 - [ ] **Theme Density**: Compact, default, spacious variants
 - [ ] **Motion System**: Animation and transition guidelines
@@ -121,29 +139,34 @@ This document provides an updated roadmap based on current implementation progre
 **Target**: Reusable page and section templates
 
 ### Authentication Blocks
-- [ ] **Sign In Form**: Login with validation
+
+- [-] **Sign In Form**: WIP: Login with validation
 - [ ] **Sign Up Form**: Registration with terms
 - [ ] **Forgot Password**: Password reset flow
 - [ ] **Onboarding Carousel**: Welcome screens
 
 ### CRUD Blocks
+
 - [ ] **List View**: Data listing with search and filters
 - [ ] **Detail View**: Item display with actions
 - [ ] **Create/Edit Form**: Data entry with validation
 - [ ] **Master-Detail**: Combined list and detail layout
 
 ### App Chrome Blocks
+
 - [ ] **Settings Page**: Application preferences
 - [ ] **About Page**: App information and credits
 - [ ] **Profile Page**: User account management
 
 ### Content Blocks
+
 - [ ] **Product Grid**: E-commerce product display
 - [ ] **Pricing Table**: Feature comparison
 - [ ] **Testimonials**: Customer feedback display
 - [ ] **FAQ Section**: Expandable question list
 
 ### Utility Blocks
+
 - [ ] **Skeleton Loader**: Loading state placeholder
 - [ ] **Error Page**: Error handling with retry
 - [ ] **Empty State**: No content placeholder
@@ -155,18 +178,21 @@ This document provides an updated roadmap based on current implementation progre
 **Target**: Advanced theming and community features
 
 ### Advanced Theming
+
 - [ ] **Theme Editor**: Visual theme creation tool
 - [ ] **Dynamic Theming**: Runtime theme switching
 - [ ] **Color Generation**: Automatic palette creation
 - [ ] **Custom Font Support**: Typography system expansion
 
 ### Community Features
+
 - [ ] **Theme Gallery**: Community theme sharing
 - [ ] **Theme Templates**: Starter templates for common brands
 - [ ] **Contribution Guidelines**: Community development docs
 - [ ] **Plugin System**: Extensibility for third-party controls
 
 ### Developer Experience
+
 - [ ] **Visual Studio Templates**: Project templates
 - [ ] **Live Preview**: Hot reload for theme development
 - [ ] **Documentation Site**: Comprehensive docs with examples
@@ -175,6 +201,7 @@ This document provides an updated roadmap based on current implementation progre
 ## Risk Assessment and Mitigation
 
 ### Technical Risks
+
 | Risk | Impact | Likelihood | Mitigation |
 |------|--------|------------|------------|
 | Resource loading continues to fail | High | Medium | Investigate MAUI resource patterns, consider alternative approaches |
@@ -182,6 +209,7 @@ This document provides an updated roadmap based on current implementation progre
 | Performance with many controls | Medium | Low | Profile early, optimize resource loading, consider virtualization |
 
 ### Project Risks
+
 | Risk | Impact | Likelihood | Mitigation |
 |------|--------|------------|------------|
 | Scope creep beyond MVP | High | Medium | Strict MVP definition, defer non-critical features |
@@ -191,18 +219,21 @@ This document provides an updated roadmap based on current implementation progre
 ## Success Metrics
 
 ### Phase 1 (MVP)
+
 - [ ] All core controls functional with theming
 - [ ] Sample app demonstrates capabilities
 - [ ] Basic documentation available
 - [ ] CI/CD pipeline building and testing
 
 ### Phase 2
+
 - [ ] 15+ controls available
 - [ ] 2+ complete themes (Material, Modern)
 - [ ] Community feedback and adoption
 - [ ] Performance benchmarks met
 
 ### Phase 3
+
 - [ ] 10+ reusable blocks available
 - [ ] Sample apps using blocks
 - [ ] Community contributions
@@ -211,11 +242,13 @@ This document provides an updated roadmap based on current implementation progre
 ## Resource Requirements
 
 ### Current Team
+
 - Primary developer: Available for implementation
 - Documentation: Need technical writing support
 - Design: Consider design system consultation
 
 ### Community
+
 - Early adopters for feedback
 - Contributors for theme development
 - Maintainers for long-term sustainability
@@ -223,16 +256,19 @@ This document provides an updated roadmap based on current implementation progre
 ## Decision Points
 
 ### Short Term (Next 2 weeks)
+
 1. **Resource Loading**: Decide on approach for cross-component resources
 2. **Handler Strategy**: Confirm platform handler implementation approach
 3. **Testing Strategy**: Define testing standards and tools
 
 ### Medium Term (Next 2 months)
+
 1. **Modern Theme**: Scope and design decisions
 2. **Block Architecture**: Define block patterns and standards
 3. **Community Strategy**: Contribution guidelines and governance
 
 ### Long Term (6+ months)
+
 1. **Advanced Features**: Prioritize based on community feedback
 2. **Maintenance Model**: Sustainable development approach
 3. **Commercial Considerations**: Support and enterprise features
