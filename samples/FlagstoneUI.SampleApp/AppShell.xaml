@@ -21,7 +21,7 @@
                 Title="SignIn"
                 ContentTemplate="{DataTemplate page:SignInPage}"
                 Route="SignInPage"
-                Icon="singin_icon.png"/>
+                Icon="signin_icon.png"/>
         </Tab>
     </FlyoutItem>
 

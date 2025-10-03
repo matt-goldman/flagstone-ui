@@ -28,7 +28,7 @@ public partial class FsEntry : ContentView
 	/// </summary>
 	/// <remarks>This event is raised whenever the text value is modified. Subscribers can use this event  to
 	/// respond to changes in the text, such as updating the UI or performing validation.</remarks>
-	public event EventHandler? TextChanged;
+	public event EventHandler<TextChangedEventArgs>? TextChanged;
 	void OnTextChanged(object? sender, TextChangedEventArgs e) => TextChanged?.Invoke(this, e);
     #endregion
 
