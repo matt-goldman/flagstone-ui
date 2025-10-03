@@ -201,8 +201,7 @@ public partial class FsEntry : ContentView
 	/// Identifies the <see cref="BackgroundColor"/> bindable property.
 	/// </summary>
 	/// <remarks>This property allows binding to the background color of the <see cref="FsEntry"/> control. The
-	/// default value is <see cref="Colors.Transparent"/>. Changes to this property will trigger the
-	/// <c>OnBackgroundColorChanged</c> callback.</remarks>
+	/// default value is <see cref="Colors.Transparent"/>.</remarks>
 	public new static readonly BindableProperty BackgroundColorProperty = BindableProperty.Create(
 		nameof(BackgroundColor),
 		typeof(Color),
