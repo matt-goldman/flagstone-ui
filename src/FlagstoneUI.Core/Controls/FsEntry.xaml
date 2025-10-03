@@ -16,6 +16,7 @@
                           Placeholder="{Binding Placeholder}"
                           TextColor="{Binding TextColor}"
                           TextChanged="OnTextChanged"
+                          Completed="OnCompleted"
                           FontSize="{Binding FontSize}"
                           HorizontalTextAlignment="{Binding HorizontalTextAlignment}"
                           VerticalTextAlignment="{Binding VerticalTextAlignment}"
