@@ -22,7 +22,7 @@ This document summarizes the review of open issues and documentation for the Fla
 #### Issue #5: "Card control"
 
 - **Status**: ✅ COMPLETED  
-- **Evidence**: `src/FlagstoneUI.Core/Controls/Card.cs` fully implemented
+- **Evidence**: `src/FlagstoneUI.Core/Controls/FsCard.xaml` and `src/FlagstoneUI.Core/Controls/FsCard.xaml.cs` fully implemented as the Card control
 - **Features**: Elevation, corner radius, border color properties
 - **Theme Integration**: Styled in Material theme
 - **Recommendation**: Close immediately
