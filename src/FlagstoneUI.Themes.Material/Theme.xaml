@@ -26,7 +26,6 @@
     </Style>
 
     <Style TargetType="fs:FsEntry">
-        <Setter Property="Padding" Value="{DynamicResource Space.8}" />
         <Setter Property="BackgroundColor" Value="{DynamicResource Color.SurfaceVariant}" />
         <Setter Property="TextColor" Value="{DynamicResource Color.OnSurface}" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
