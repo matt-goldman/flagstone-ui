@@ -7,13 +7,19 @@
 /// It supports elevation for shadow effects, rounded corners, and a configurable border color.</remarks>
 public partial class FsCard : ContentView
 {
-    #region Elevation Property
-    /// <summary>
-    /// Identifies the bindable property for the <see cref="Elevation"/> property.
-    /// </summary>
-    /// <remarks>This property is used to define the elevation level of the <see cref="FsCard"/>.  The default
-    /// value is <c>0</c>.</remarks>
-    public static readonly BindableProperty ElevationProperty = BindableProperty.Create(
+	public FsCard()
+	{
+		InitializeComponent();
+        BindingContext = this;
+    }
+
+	#region Elevation Property
+	/// <summary>
+	/// Identifies the bindable property for the <see cref="Elevation"/> property.
+	/// </summary>
+	/// <remarks>This property is used to define the elevation level of the <see cref="FsCard"/>.  The default
+	/// value is <c>0</c>.</remarks>
+	public static readonly BindableProperty ElevationProperty = BindableProperty.Create(
         nameof(Elevation), typeof(int), typeof(FsCard), 0);
 
     /// <summary>

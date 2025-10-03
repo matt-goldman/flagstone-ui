@@ -50,7 +50,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Styles\Templates.xaml">
+	  <MauiXaml Update="Controls\FsCard.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

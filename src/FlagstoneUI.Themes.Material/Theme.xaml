@@ -8,7 +8,6 @@
                     x:Class="FlagstoneUI.Themes.Material.Theme">
     <ResourceDictionary.MergedDictionaries>
         <tokens:Tokens />
-        <styles:Templates />
     </ResourceDictionary.MergedDictionaries>
     
     <Style TargetType="Button">

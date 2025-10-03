@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:FlagstoneUI.Core.Controls"
+             x:DataType="controls:FsCard"
+             x:Class="FlagstoneUI.Core.Controls.FsCard">
+    <ContentView.ControlTemplate>
+        <ControlTemplate>
+            <Border BackgroundColor="{Binding BackgroundColor}"
+                    Stroke="{Binding BorderColor}"
+                    StrokeThickness="{Binding BorderWidth}"
+                    Padding="{Binding Padding}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="{Binding CornerRadius}" />
+                </Border.StrokeShape>
+                <ContentPresenter />
+            </Border>
+
+        </ControlTemplate>
+    </ContentView.ControlTemplate>
+</ContentView>
