@@ -178,7 +178,7 @@ public partial class FsEntry : ContentView
 	/// Identifies the bindable property for the text color of the entry.
 	/// </summary>
 	/// <remarks>This property allows binding to the text color of the entry. The default value is <see
-	/// cref="Colors.Black"/>. Changes to this property trigger the <c>OnTextColorChanged</c> callback.</remarks>
+	/// cref="Colors.Black"/>.</remarks>
 	public static readonly BindableProperty TextColorProperty = BindableProperty.Create(
 		nameof(TextColor),
 		typeof(Color),
