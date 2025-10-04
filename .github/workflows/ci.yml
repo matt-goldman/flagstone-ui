@@ -11,7 +11,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - name: Set up .NET 9 SDK
+        uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
       - name: Install MAUI Workload

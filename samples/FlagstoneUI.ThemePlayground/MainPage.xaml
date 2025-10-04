@@ -20,13 +20,13 @@
                 SemanticProperties.HeadingLevel="Level2" />
 
             <!-- Demonstrate Flagstone UI Card control with Material theme -->
-            <fs:Card>
+            <fs:FsCard>
                 <VerticalStackLayout Spacing="10">
                     <Label Text="Flagstone UI Card" FontAttributes="Bold" />
                     <Label Text="This card is styled using the Material Design theme and consumes design tokens from the Core library." />
                     <Button Text="Themed Button" HorizontalOptions="Start" />
                 </VerticalStackLayout>
-            </fs:Card>
+            </fs:FsCard>
 
             <!-- Standard MAUI controls with theme styles -->
             <Button
@@ -36,14 +36,14 @@
                 Clicked="OnCounterClicked"
                 HorizontalOptions="Fill" />
 
-            <fs:Card>
+            <fs:FsCard>
                 <VerticalStackLayout Spacing="10">
                     <Label Text="Theme Information" FontAttributes="Bold" />
                     <Label Text="• Uses tokens from FlagstoneUI.Core" />
                     <Label Text="• Material Design color scheme" />
                     <Label Text="• Cross-assembly resource loading working!" />
                 </VerticalStackLayout>
-            </fs:Card>
+            </fs:FsCard>
         </VerticalStackLayout>
     </ScrollView>
 

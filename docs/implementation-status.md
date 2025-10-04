@@ -15,19 +15,19 @@ This document tracks the current implementation status of Flagstone UI component
 | **Solution Structure** | ✅ Complete | Projects, directories, and build files properly structured |
 | **ThemeLoader** | ✅ Complete | Basic theme loading functionality implemented |
 | **FlagstoneUIBuilder** | ✅ Partially Complete | Basic builder pattern, needs expansion |
+| **Resource References** | ✅ Complete | Resource loading, but may not be necessary |
 
 ### In Progress 🚧
 
 | Component | Status | Blocking Issues | Next Steps |
 |-----------|--------|-----------------|------------|
-| **Resource References** | 🚧 Blocked | Cross-component resource loading issues | Fix XAML resource paths in themes |
+| **FsEntry** | 🚧 Partially complete | None | Complete styling, add validation, add second theme |
 
 ### Not Started ❌
 
 | Component | Status | Required for MVP | Priority |
 |-----------|--------|------------------|----------|
 | **FsButton** | ❌ Not Started | Yes | High |
-| **FsEntry** | ❌ Not Started | Yes | High |
 | **FsSwitch** | ❌ Not Started | Yes | Medium |
 | **Snackbar** | ❌ Not Started | Yes | Medium |
 | **Sample App** | ❌ Not Started | Yes | High |
@@ -62,11 +62,13 @@ This document tracks the current implementation status of Flagstone UI component
 ## Milestone Progress
 
 ### Milestone 0.1.0 (MVP)
+
 - **Target**: Basic themeable UI kit with core controls
 - **Current Progress**: ~40% complete
 - **Estimated Completion**: 2-3 more iterations needed
 
 ### Next Priority Items
+
 1. Fix resource loading issues
 2. Implement FsButton with handlers
 3. Implement FsEntry with handlers

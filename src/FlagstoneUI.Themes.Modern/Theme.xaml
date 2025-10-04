@@ -13,10 +13,11 @@
     <Setter Property="TextColor" Value="#222222" />
   </Style>
 
-  <Style TargetType="fs:Card">
+  <Style TargetType="fs:FsCard">
     <Setter Property="Padding" Value="{DynamicResource Space.12}" />
     <Setter Property="BackgroundColor" Value="#FFFFFF" />
     <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
     <Setter Property="BorderColor" Value="#E0E0E0" />
   </Style>
+ 
 </ResourceDictionary>
