@@ -11,6 +11,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Color x:Key="Color.Primary">#56ef54</Color>
+    <Color x:Key="Color.Surface">#a96a9e</Color>
 
     <Style TargetType="Button">
         <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />

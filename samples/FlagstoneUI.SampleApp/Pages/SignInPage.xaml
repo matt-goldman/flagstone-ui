@@ -8,6 +8,7 @@
                 AlignItems="Center"
                 JustifyContent="Center"
                 Padding="20">
-        <fs:SigninForm x:Name="SignInForm"/>
+        <fs:SigninForm x:Name="SignInForm"
+                       UsernamePlaceholder="Please enter a username"/>
     </FlexLayout>
 </ContentPage>

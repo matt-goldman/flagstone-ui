@@ -3,19 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:FlagstoneUI.Core.Controls"
              x:DataType="controls:FsCard"
-             x:Class="FlagstoneUI.Core.Controls.FsCard">
+             x:Class="FlagstoneUI.Core.Controls.FsCard"
+             x:Name="CardControl">
     <ContentView.ControlTemplate>
-        <ControlTemplate>
-            <Border BackgroundColor="{Binding BackgroundColor}"
-                    Stroke="{Binding BorderColor}"
-                    StrokeThickness="{Binding BorderWidth}"
-                    Padding="{Binding Padding}">
+        <ControlTemplate x:Name="CardTemplate">
+            <Border BackgroundColor="{Binding Source={x:Reference CardControl}, Path=BackgroundColor}"
+                    Stroke="{Binding Source={x:Reference CardControl}, Path=BorderColor}"
+                    StrokeThickness="{Binding Source={x:Reference CardControl}, Path=BorderWidth}"
+                    Padding="{Binding Source={x:Reference CardControl}, Path=Padding}"
+                    x:Name="CardBorder">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="{Binding CornerRadius}" />
+                    <RoundRectangle CornerRadius="{Binding Source={x:Reference CardControl}, Path=CornerRadius}"
+                                    x:Name="CardBorderShape"/>
                 </Border.StrokeShape>
-                <ContentPresenter />
+                <ContentPresenter  />
             </Border>
-
         </ControlTemplate>
     </ContentView.ControlTemplate>
 </ContentView>

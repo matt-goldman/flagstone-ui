@@ -1,4 +1,5 @@
-﻿namespace FlagstoneUI.Core.Controls;
+﻿
+namespace FlagstoneUI.Core.Controls;
 
 /// <summary>
 /// Represents a customizable card view with support for elevation, corner radius, and border color.
@@ -10,7 +11,6 @@ public partial class FsCard : ContentView
 	public FsCard()
 	{
 		InitializeComponent();
-        BindingContext = this;
     }
 
 	#region Elevation Property
@@ -32,6 +32,8 @@ public partial class FsCard : ContentView
         get => (int)GetValue(ElevationProperty);
         set => SetValue(ElevationProperty, value);
     }
+
+    // TODO: add propertyChanged handler when Shadow implementation is available
     #endregion
 
     #region CornerRadius Property
@@ -43,12 +45,12 @@ public partial class FsCard : ContentView
     public static readonly BindableProperty CornerRadiusProperty = BindableProperty.Create(
         nameof(CornerRadius), typeof(double), typeof(FsCard), 0.0);
 
-    /// <summary>
-    /// Gets or sets the corner radius of the element.
-    /// </summary>
-    /// <remarks>A larger value results in more rounded corners. Negative values are not allowed and will
-    /// throw an exception.</remarks>
-    public double CornerRadius
+	/// <summary>
+	/// Gets or sets the corner radius of the element.
+	/// </summary>
+	/// <remarks>A larger value results in more rounded corners. Negative values are not allowed and will
+	/// throw an exception.</remarks>
+	public double CornerRadius
     {
         get => (double)GetValue(CornerRadiusProperty);
         set => SetValue(CornerRadiusProperty, value);
