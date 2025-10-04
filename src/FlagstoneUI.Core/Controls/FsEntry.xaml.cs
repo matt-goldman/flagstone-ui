@@ -122,7 +122,7 @@ public partial class FsEntry : ContentView
 		set
 		{
 			_borderShape = value;
-			OnParentChanged();
+			OnPropertyChanged();
 		}
 	}
     #endregion
