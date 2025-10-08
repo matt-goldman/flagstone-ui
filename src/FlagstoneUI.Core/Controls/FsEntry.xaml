@@ -5,12 +5,34 @@
              x:Class="FlagstoneUI.Core.Controls.FsEntry"
              x:DataType="fs:FsEntry"
              x:Name="ViewWrapper">
-    <!-- TODO: Add global XML usings -->
+  <ContentView.Resources>
+    <Style TargetType="Border">
+      <Setter Property="VisualStateManager.VisualStateGroups">
+        <VisualStateGroupList>
+          <VisualStateGroup>
+            <VisualState x:Name="Focused">
+              <VisualState.Setters>
+                <Setter Property="Stroke" Value="{Binding BorderFocused}" />
+              </VisualState.Setters>
+            </VisualState>
+          </VisualStateGroup>
+        </VisualStateGroupList>
+      </Setter>
+    </Style>
+  </ContentView.Resources>
+  <!-- TODO: Add global XML usings -->
   <Border x:Name="WrapperBorder"
           BackgroundColor="{Binding BackgroundColor}"
           Stroke="{Binding BorderColor}"
           StrokeThickness="{Binding BorderWidth}"
           StrokeShape="{Binding BorderShape}">
+    <Border.Triggers>
+        <DataTrigger Binding="{Binding Source={x:Reference InnerEntry}, Path=IsFocused}"
+                      TargetType="Border"
+                      Value="True">
+            <Setter Property="Stroke" Value="{Binding BorderFocused}" />
+        </DataTrigger>
+    </Border.Triggers>
     <Grid Padding="{Binding Padding}">
       <fs:BorderlessEntry Text="{Binding Text}"
                           Placeholder="{Binding Placeholder}"
@@ -21,7 +43,8 @@
                           HorizontalTextAlignment="{Binding HorizontalTextAlignment}"
                           VerticalTextAlignment="{Binding VerticalTextAlignment}"
                           IsPassword="{Binding IsPassword}"
-                          Keyboard="{Binding Keyboard}"/>
+                          Keyboard="{Binding Keyboard}"
+                          x:Name="InnerEntry"/>
     </Grid>
   </Border>
 </ContentView>
