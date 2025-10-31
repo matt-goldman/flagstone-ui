@@ -39,14 +39,12 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <Compile Update="Platforms\iOS\Controls\BorderlessEntry.cs">
-	    <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
-	  </Compile>
-	</ItemGroup>
+	<!-- Removed custom item overrides for platform files to allow MAUI default handling -->
 
 	<ItemGroup>
-	  <None Include="Platforms\Windows\Controls\BorderlessEntry.cs" />
+	  <MauiXaml Update="Controls\FsCard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>

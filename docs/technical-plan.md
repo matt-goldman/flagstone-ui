@@ -110,6 +110,26 @@ var opts = Services.GetRequiredService<FlagstoneUIOptions>();
 ThemeLoader.Apply(Current!.Resources, opts.ThemeResourcePath ?? "Themes/Material.xaml");
 ```
 
+### Windows Gotcha
+
+You can't remove the underline and border from the Entry control on Windows in a handler. This is because the `PlatformView` on Windows is subclassed from a base view that is used for other things in WinUI too. So you have to disable the underline and background for the whole `TextControl`. Add this to `App.xaml` in the `Windows` platform folder:
+
+```xml
+<maui:MauiWinUIApplication
+    x:Class="FlagstoneUI.SampleApp.WinUI.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:maui="using:Microsoft.Maui"
+    xmlns:local="using:FlagstoneUI.SampleApp.WinUI">
+    <!-- Add from here: -->
+    <maui:MauiWinUIApplication.Resources>
+        <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+        <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+    </maui:MauiWinUIApplication.Resources>
+    <!-- to here -->
+</maui:MauiWinUIApplication>
+```
+
 ## Build settings
 
 `Directory.Build.props`

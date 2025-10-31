@@ -16,7 +16,8 @@ public partial class FsEntry : ContentView
 	{
 		InitializeComponent();
 		ViewWrapper.BindingContext = this;
-	}
+		_borderShape = new RoundRectangle { CornerRadius = CornerRadius };
+    }
 
     #region Events
 	public event EventHandler? Completed;
@@ -27,7 +28,7 @@ public partial class FsEntry : ContentView
 	/// </summary>
 	/// <remarks>This event is raised whenever the text value is modified. Subscribers can use this event  to
 	/// respond to changes in the text, such as updating the UI or performing validation.</remarks>
-	public event EventHandler? TextChanged;
+	public event EventHandler<TextChangedEventArgs>? TextChanged;
 	void OnTextChanged(object? sender, TextChangedEventArgs e) => TextChanged?.Invoke(this, e);
     #endregion
 
@@ -41,16 +42,7 @@ public partial class FsEntry : ContentView
 		nameof(BorderColor),
 		typeof(Color),
 		typeof(FsEntry),
-		Colors.Transparent,
-		propertyChanged: OnBorderColorChanged);
-
-	static void OnBorderColorChanged(BindableObject bindable, object oldValue, object newValue)
-	{
-		if (bindable is FsEntry entry && newValue is Color borderColor)
-		{
-			entry.WrapperBorder.Stroke = borderColor;
-		}
-	}
+		Colors.Transparent);
 
 	/// <summary>
 	/// Gets or sets the color of the border.
@@ -73,17 +65,8 @@ public partial class FsEntry : ContentView
 		nameof(BorderWidth),
 		typeof(double),
 		typeof(FsEntry),
-		0,
-		BindingMode.OneWay,
-		propertyChanged: OnBorderWidthChanged);
-
-	static void OnBorderWidthChanged(BindableObject bindable, object oldValue, object newValue)
-	{
-		if (bindable is FsEntry entry && newValue is double value)
-		{
-			entry.WrapperBorder.StrokeThickness = value;
-		}
-	}
+		0d,
+		BindingMode.OneWay);
 
 	/// <summary>
 	/// Gets or sets the width of the border, in device-independent units (1/96th inch per unit).
@@ -105,7 +88,7 @@ public partial class FsEntry : ContentView
 		nameof(CornerRadius),
 		typeof(double),
 		typeof(FsEntry),
-		0,
+		0d,
 		BindingMode.OneWay,
 		propertyChanged: OnCornerRadiusChanged);
 
@@ -124,22 +107,33 @@ public partial class FsEntry : ContentView
 	{
 		if (bindable is FsEntry entry && newValue is double value)
 		{
-			var shape = new RoundRectangle
+			entry.BorderShape = new RoundRectangle
 			{
 				CornerRadius = value
 			};
-			entry.WrapperBorder.StrokeShape = shape;
 		}
 	}
-	#endregion
 
-	#region TextProperty
-	/// <summary>
-	/// Identifies the bindable property for the <see cref="Text"/> property.
-	/// </summary>
-	/// <remarks>This property is used to enable data binding for the <see cref="Text"/> property of the <see
-	/// cref="FsEntry"/> class. The default value is an empty string (<see cref="string.Empty"/>).</remarks>
-	public static readonly BindableProperty TextProperty = BindableProperty.Create(
+	private RoundRectangle _borderShape;
+	public RoundRectangle BorderShape
+	{
+		get => _borderShape;
+		
+		set
+		{
+			_borderShape = value;
+			OnPropertyChanged();
+		}
+	}
+    #endregion
+
+    #region TextProperty
+    /// <summary>
+    /// Identifies the bindable property for the <see cref="Text"/> property.
+    /// </summary>
+    /// <remarks>This property is used to enable data binding for the <see cref="Text"/> property of the <see
+    /// cref="FsEntry"/> class. The default value is an empty string (<see cref="string.Empty"/>).</remarks>
+    public static readonly BindableProperty TextProperty = BindableProperty.Create(
 		nameof(Text),
 		typeof(string),
 		typeof(FsEntry),
@@ -184,7 +178,7 @@ public partial class FsEntry : ContentView
 	/// Identifies the bindable property for the text color of the entry.
 	/// </summary>
 	/// <remarks>This property allows binding to the text color of the entry. The default value is <see
-	/// cref="Colors.Black"/>. Changes to this property trigger the <c>OnTextColorChanged</c> callback.</remarks>
+	/// cref="Colors.Black"/>.</remarks>
 	public static readonly BindableProperty TextColorProperty = BindableProperty.Create(
 		nameof(TextColor),
 		typeof(Color),
@@ -207,23 +201,13 @@ public partial class FsEntry : ContentView
 	/// Identifies the <see cref="BackgroundColor"/> bindable property.
 	/// </summary>
 	/// <remarks>This property allows binding to the background color of the <see cref="FsEntry"/> control. The
-	/// default value is <see cref="Colors.Transparent"/>. Changes to this property will trigger the
-	/// <c>OnBackgroundColorChanged</c> callback.</remarks>
+	/// default value is <see cref="Colors.Transparent"/>.</remarks>
 	public new static readonly BindableProperty BackgroundColorProperty = BindableProperty.Create(
 		nameof(BackgroundColor),
 		typeof(Color),
 		typeof(FsEntry),
 		Colors.Transparent,
-		BindingMode.OneWay,
-		propertyChanged: OnBackgroundColorChanged);
-
-	private static void OnBackgroundColorChanged(BindableObject bindable, object oldValue, object newValue)
-	{
-		if (bindable is FsEntry entry && newValue is Color color)
-		{
-			entry.WrapperBorder.BackgroundColor = color;
-		}
-    }
+		BindingMode.OneWay);
 
 	/// <summary>
 	/// Gets or sets the background color of the element.
@@ -341,7 +325,7 @@ public partial class FsEntry : ContentView
 		nameof(FontSize),
 		typeof(double),
 		typeof(FsEntry),
-		14.0,
+		14.0d,
 		BindingMode.OneWay);
 	
 	/// <summary>
@@ -353,6 +337,31 @@ public partial class FsEntry : ContentView
 	{
 		get => (double)GetValue(FontSizeProperty);
 		set => SetValue(FontSizeProperty, value);
+	}
+    #endregion
+
+    #region PaddingProperty
+	/// <summary>
+	/// Identifies the <see cref="Padding"/> bindable property.
+	/// </summary>
+	/// <remarks>This property represents the padding applied to the <see cref="FsEntry"/> control.  The default
+	/// value is a <see cref="Thickness"/> of 5. The property supports one-way binding.</remarks>
+	public new static readonly BindableProperty PaddingProperty = BindableProperty.Create(
+		nameof(Padding),
+		typeof(Thickness),
+		typeof(FsEntry),
+		new Thickness(5),
+		BindingMode.OneWay);
+
+	/// <summary>
+	/// Gets or sets the padding inside the element.
+	/// </summary>
+	/// <remarks>The padding determines the spacing between the content of the element and its border. This property
+	/// is typically used to adjust the layout of the element's content.</remarks>
+	public new Thickness Padding
+	{
+		get => (Thickness)GetValue(PaddingProperty);
+		set => SetValue(PaddingProperty, value);
 	}
     #endregion
 }

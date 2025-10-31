@@ -4,11 +4,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
                     xmlns:tokens="clr-namespace:FlagstoneUI.Core.Styles;assembly=FlagstoneUI.Core"
+                    xmlns:styles="clr-namespace:FlagstoneUI.Core.Styles;assembly=FlagstoneUI.Core"
                     x:Class="FlagstoneUI.Themes.Material.Theme">
     <ResourceDictionary.MergedDictionaries>
         <tokens:Tokens />
     </ResourceDictionary.MergedDictionaries>
-    
+
+    <Color x:Key="Color.Primary">#56ef54</Color>
+    <Color x:Key="Color.Surface">#a96a9e</Color>
+
     <Style TargetType="Button">
         <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />
         <Setter Property="TextColor" Value="{DynamicResource Color.OnPrimary}" />
@@ -18,14 +22,17 @@
         <Setter Property="Padding" Value="{DynamicResource Space.16}" />
         <Setter Property="BackgroundColor" Value="{DynamicResource Color.Surface}" />
         <Setter Property="BorderColor" Value="{DynamicResource Color.Outline}" />
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
         <Setter Property="CornerRadius" Value="{DynamicResource Radius.Medium}" />
     </Style>
 
     <Style TargetType="fs:FsEntry">
-        <Setter Property="Padding" Value="{DynamicResource Space.8}" />
         <Setter Property="BackgroundColor" Value="{DynamicResource Color.SurfaceVariant}" />
         <Setter Property="TextColor" Value="{DynamicResource Color.OnSurface}" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
         <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
+        <Setter Property="BorderColor" Value="{DynamicResource Color.Outline}" />
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+        <Setter Property="Padding" Value="{DynamicResource Padding.Small}" />
     </Style>
 </ResourceDictionary>
