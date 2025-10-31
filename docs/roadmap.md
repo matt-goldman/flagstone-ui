@@ -16,7 +16,7 @@ This document provides an updated roadmap based on current implementation progre
 - [x] Test project structure
 
 ### Current Blockers 🚫
-1. **Missing Core Controls**: FsButton and FsEntry needed for MVP
+1. **Missing Core Controls**: FsButton needed for MVP (FsEntry ✅ complete)
 2. **Sample App**: No working demonstration application
 
 **Previously Resolved**:
@@ -48,12 +48,11 @@ This document provides an updated roadmap based on current implementation progre
    - Add theme styles to Material theme
    - Create unit tests
 
-3. **Implement FsEntry** (Estimated: 2-3 days)
+3. **Implement FsEntry** ✅ COMPLETE
    - [x] Create Entry subclass
-   - [ ] with validation states
-   - [ ] Add error, disabled, focused visual states
-   - [x] Implement platform handlers
-   - [-] WIP: Add theme styles and validation indicators
+   - [x] Implement platform handlers to strip native styling
+   - [x] Add theme styles in Material theme
+   - Note: Per ADR001, validation states are NOT included - consumers attach MCT ValidationBehavior
 
 4. **Create Functional Sample App** (Estimated: 1-2 days)
    - Basic controls gallery showing FsButton, FsEntry, Card

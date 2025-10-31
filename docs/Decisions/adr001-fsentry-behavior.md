@@ -2,7 +2,7 @@
 
 ## Context
 
-`FsEntry` is a core FlagstoneUI control designed to wrap the native `Entry` control, removing platform styling and applying theme tokens through `DynamicResource`. The control aims to provide a consistent, theme-driven experience while maintaining compatibility with existing MAUI patterns.
+`FsEntry` is a core FlagstoneUI control designed to wrap the native `Entry` control, removing platform styling and applying theme tokens through `DynamicResource` . The control aims to provide a consistent, theme-driven experience while maintaining compatibility with existing MAUI patterns.
 
 The key design question was whether to include a **hard dependency on the MAUI Community Toolkit (MCT)** for validation and behavior support, and how to expose validation extensibility to consumers.
 
