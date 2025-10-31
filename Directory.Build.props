@@ -36,7 +36,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
-    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="Shouldly" />
     <PackageReference Include="coverlet.collector" PrivateAssets="all" />
   </ItemGroup>
 </Project>
