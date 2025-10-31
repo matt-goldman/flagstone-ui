@@ -35,7 +35,7 @@ This document provides an updated roadmap based on current implementation progre
    - ✅ Removed temporary workarounds
    - ✅ Implemented proper cross-assembly ResourceDictionary pattern
 
-**Note:** May not be necessary. As per [the docs](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/resource-dictionaries?view=net-maui-9.0&viewFallbackFrom=net-maui-8.0#merge-resource-dictionaries-from-other-assemblies):
+**Note:** May not be necessary. As per [the docs](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/resource-dictionaries?view=net-maui-10.0&viewFallbackFrom=net-maui-8.0#merge-resource-dictionaries-from-other-assemblies):
 
 > When merged ResourceDictionary resources share identical x:Key attribute values, .NET MAUI uses the following resource precedence:
 > 

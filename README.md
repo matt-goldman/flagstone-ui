@@ -6,8 +6,8 @@ A cross-platform, open-source, community-driven, customisable UI kit and framewo
 
 ### Prerequisites
 
-1. **.NET 9 SDK**: Install from [Microsoft's .NET download page](https://dotnet.microsoft.com/download/dotnet/9.0)
-2. **MAUI Workload**: After installing .NET 9, run:
+1. **.NET 10 SDK**: Install from [Microsoft's .NET download page](https://dotnet.microsoft.com/download/dotnet/10.0)
+2. **MAUI Workload**: After installing .NET 10, run:
    ```bash
    dotnet workload install maui
    ```
@@ -44,7 +44,8 @@ To quickly validate your development environment setup, you can run one of the p
 ```
 
 These scripts will check for:
-- .NET 9 SDK installation
+
+- .NET 10 SDK installation
 - MAUI workload availability
 - Solution restore capability
 - Solution build capability

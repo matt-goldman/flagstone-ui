@@ -6,7 +6,7 @@ This file contains the technical plan for Flagstone UI implementation.
 
 ## Technology
 
-1. Based on .NET 9 _minimum_.
+1. Based on .NET 10 _minimum_.
 2. Include MAUI Community Toolkit
 
 ## Solution files
@@ -173,7 +173,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '10.0.x'
       - name: Restore
         run: dotnet restore FlagstoneUI.sln
       - name: Build
@@ -198,7 +198,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '10.0.x'
       - name: Build solution
         run: dotnet build FlagstoneUI.sln -c Release
       - name: Pack all

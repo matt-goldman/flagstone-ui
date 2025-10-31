@@ -33,8 +33,8 @@ This document summarizes the review of open issues and documentation for the Fla
 
 - **Current State**: Basic CI workflow exists at `.github/workflows/ci.yml`
 - **Working**: MAUI workload installation, restore, build, test
-- **Gap**: Requires .NET 9 SDK (not mentioned in issue)
-- **Recommendation**: Update issue to note .NET 9 requirement, consider if complete enough to close
+- **Gap**: Requires .NET 10 SDK (not mentioned in issue)
+- **Recommendation**: Update issue to note .NET 10 requirement, consider if complete enough to close
 
 #### Issue #3: "Add neutral FsButton with handlers" - Status: NOT STARTED
 

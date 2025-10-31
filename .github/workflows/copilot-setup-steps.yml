@@ -30,10 +30,12 @@ jobs:
         with:
           lfs: true  # Enable Git LFS support
 
-      - name: Set up .NET 9 SDK
+      - name: Set up .NET 10 SDK
         uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
+          # Allow preview versions until .NET 10 RTM (November 14, 2025)
+          dotnet-quality: 'preview'
 
       - name: Install Linux dependencies for .NET MAUI
         run: |
@@ -46,7 +48,7 @@ jobs:
           export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 
       - name: Install MAUI Android Workload
-        run: dotnet workload install maui-android --ignore-failed-sources
+        run: dotnet workload install maui-android --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-public/nuget/v3/index.json --ignore-failed-sources
 
       - name: Install Android SDK dependencies
         run: |
