@@ -1,6 +1,6 @@
 using FlagstoneUI.Core.Builders;
 using Xunit;
-using FluentAssertions;
+using Shouldly;
 
 namespace FlagstoneUI.Core.Tests;
 
@@ -10,6 +10,6 @@ public class SmokeTests
     public void Builder_can_be_instantiated()
     {
         var builder = new FlagstoneUIBuilder();
-        builder.Should().NotBeNull();
+        builder.ShouldNotBeNull();
     }
 }

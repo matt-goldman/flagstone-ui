@@ -13,7 +13,7 @@ public partial class SigninForm : ContentView
 	/// </summary>
 	/// <remarks>This property defines the placeholder text displayed in the username input field of the sign-in
 	/// form. The default value is "Username".</remarks>
-    public static BindableProperty UsernamePlaceholderProperty = BindableProperty.Create(
+    public static readonly BindableProperty UsernamePlaceholderProperty = BindableProperty.Create(
 		nameof(UsernamePlaceholder), typeof(string), typeof(SigninForm), "Username", propertyChanged: UsernamePlaceholderPropertyChanged);
 	/// <summary>
 	/// Gets or sets the placeholder text displayed in the username input field.
