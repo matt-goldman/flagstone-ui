@@ -18,36 +18,25 @@
     <EnablePreviewFeatures Condition="'$(UseMaui)' == 'true'">true</EnablePreviewFeatures>
   </PropertyGroup>
 
-  <!-- Package version variables -->
-  <PropertyGroup>
-    <MicrosoftCodeAnalysisNetAnalyzersVersion>9.0.0</MicrosoftCodeAnalysisNetAnalyzersVersion>
-    <CommunityToolkitMauiVersion>9.1.0</CommunityToolkitMauiVersion>
-    <XunitVersion>2.9.2</XunitVersion>
-    <XunitRunnerVisualStudioVersion>2.8.2</XunitRunnerVisualStudioVersion>
-    <FluentAssertionsVersion>6.12.1</FluentAssertionsVersion>
-    <CoverletCollectorVersion>6.0.2</CoverletCollectorVersion>
-    <MicrosoftNetTestSdkVersion>17.11.1</MicrosoftNetTestSdkVersion>
-  </PropertyGroup>
-
   <!-- Common package references for all projects -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" PrivateAssets="all" Version="$(MicrosoftCodeAnalysisNetAnalyzersVersion)" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.5" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
   </ItemGroup>
 
   <!-- MAUI package references for projects using MAUI -->
   <ItemGroup Condition="'$(UseMaui)' == 'true'">
-    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.Maui.Controls" />
     <!-- TODO: Re-enable CommunityToolkit.Maui when properly configured - see issue #12 -->
-    <!-- <PackageReference Include="CommunityToolkit.Maui" Version="$(CommunityToolkitMauiVersion)" /> -->
+    <!-- <PackageReference Include="CommunityToolkit.Maui" /> -->
   </ItemGroup>
 
   <!-- Test project package references -->
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNetTestSdkVersion)" />
-    <PackageReference Include="xunit" Version="$(XunitVersion)" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="$(XunitRunnerVisualStudioVersion)" />
-    <PackageReference Include="FluentAssertions" Version="$(FluentAssertionsVersion)" />
-    <PackageReference Include="coverlet.collector" Version="$(CoverletCollectorVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="coverlet.collector" PrivateAssets="all" />
   </ItemGroup>
 </Project>
