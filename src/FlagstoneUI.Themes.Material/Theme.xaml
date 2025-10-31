@@ -11,7 +11,8 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Color x:Key="Color.Primary">#56ef54</Color>
-    <Color x:Key="Color.Surface">#a96a9e</Color>
+    <Color x:Key="Color.Surface">#eeeeee</Color>
+    <Color x:Key="Color.Surface.Dark">#424242</Color>
 
     <Style TargetType="Button">
         <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />
@@ -20,7 +21,7 @@
   
     <Style TargetType="fs:FsCard">
         <Setter Property="Padding" Value="{DynamicResource Space.16}" />
-        <Setter Property="BackgroundColor" Value="{DynamicResource Color.Surface}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={DynamicResource Color.OnSurface}, Dark={DynamicResource Color.Surface.Dark}}" />
         <Setter Property="BorderColor" Value="{DynamicResource Color.Outline}" />
         <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
         <Setter Property="CornerRadius" Value="{DynamicResource Radius.Medium}" />

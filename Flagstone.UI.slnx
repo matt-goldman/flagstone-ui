@@ -1,0 +1,23 @@
+<Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/FlagstoneUI.SampleApp/FlagstoneUI.SampleApp.csproj" />
+    <Project Path="samples/FlagstoneUI.ThemePlayground/ThemePlayground.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/FlagstoneUI.Blocks/FlagstoneUI.Blocks.csproj" />
+    <Project Path="src/FlagstoneUI.Core/FlagstoneUI.Core.csproj" />
+    <Project Path="src/FlagstoneUI.Themes.Material/FlagstoneUI.Themes.Material.csproj" />
+    <Project Path="src/FlagstoneUI.Themes.Modern/FlagstoneUI.Themes.Modern.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FlagstoneUI.Blocks.Tests/FlagstoneUI.Blocks.Tests.csproj">
+      <Deploy />
+    </Project>
+    <Project Path="tests/FlagstoneUI.Core.Tests/FlagstoneUI.Core.Tests.csproj">
+      <Deploy />
+    </Project>
+    <Project Path="tests/FlagstoneUI.Themes.Material.Tests/FlagstoneUI.Themes.Material.Tests.csproj">
+      <Deploy />
+    </Project>
+  </Folder>
+</Solution>

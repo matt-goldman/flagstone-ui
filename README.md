@@ -51,7 +51,7 @@ These scripts will check for:
 
 ### Important Notes
 
-- All projects in this solution target MAUI platform frameworks (`net9.0-ios`, `net9.0-android`, `net9.0-windows10.0.19041.0`)
+- All projects in this solution target MAUI platform frameworks (`net10.0-ios`, `net10.0-android`, `net10.0-windows10.0.19041.0`)
 - The MAUI workload is required even for test projects to ensure TFM compatibility
 - Common dependencies and test packages are managed centrally in `Directory.Build.props`
 

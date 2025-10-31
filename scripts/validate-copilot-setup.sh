@@ -93,7 +93,7 @@ echo ""
 
 # Test Android build (specific to ubuntu-latest/Copilot)
 echo "7. Testing Android target build (ubuntu-latest compatible)..."
-if dotnet build --framework net9.0-android --no-restore --verbosity quiet; then
+if dotnet build --framework net10.0-android --no-restore --verbosity quiet; then
     echo "   ✓ Android target build successful"
 else
     echo "   ✗ Android target build failed"
@@ -104,4 +104,4 @@ fi
 echo ""
 echo "🎉 Copilot environment is properly configured!"
 echo "Note: For full cross-platform development, use Windows or macOS hosts."
-echo "In Copilot workflows, always use: dotnet build --framework net9.0-android"
+echo "In Copilot workflows, always use: dotnet build --framework net10.0-android"

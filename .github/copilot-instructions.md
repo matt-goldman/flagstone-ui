@@ -63,8 +63,8 @@ This guide helps AI coding agents work productively in the Flagstone UI codebase
 **Important**: GitHub Copilot only supports `ubuntu-latest` runners, but this project targets multiple platforms including Windows. For detailed setup instructions specific to Copilot environments, see [COPILOT_SETUP.md](../COPILOT_SETUP.md).
 
 **Key Copilot Considerations**:
-- Use Android target framework (`net9.0-android`) for builds and tests in Copilot workflows
-- Example: `dotnet build --framework net9.0-android` instead of building all target frameworks
+- Use Android target framework (`net10.0-android`) for builds and tests in Copilot workflows
+- Example: `dotnet build --framework net10.0-android` instead of building all target frameworks
 - Git LFS support is configured in `.gitattributes` for binary assets
 
 ### Code Formatting
@@ -86,7 +86,7 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 ## Build System & Target Frameworks
 
 - **Solution file**: `Microsoft.Maui.sln` (contains all UI library projects)
-- **Target frameworks**: Currently using `net9.0-ios`, `net9.0-android`, `net9.0-windows10.0.19041.0`
+- **Target frameworks**: Currently using `net10.0-ios`, `net10.0-android`, `net10.0-windows10.0.19041.0`
 - **Central package management**: `Directory.Build.props` defines common properties and package versions
 - **Global SDK version**: Specified in `global.json` - currently .NET 9.0.100
 - **MAUI workload required**: All library projects set `<UseMaui>true</UseMaui>` and require MAUI workload for building
@@ -102,7 +102,7 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 
 ## Integration Points
 
-- **.NET MAUI**: This UI library targets .NET 9 frameworks (`net9.0-android`, `net9.0-ios`, `net9.0-windows10.0.19041.0`) and integrates with .NET MAUI applications. CommunityToolkit.Maui package is included automatically via Directory.Build.props.
+- **.NET MAUI**: This UI library targets .NET 9 frameworks (`net10.0-android`, `net10.0-ios`, `net10.0-windows10.0.19041.0`) and integrates with .NET MAUI applications. CommunityToolkit.Maui package is included automatically via Directory.Build.props.
 - **Resource dictionaries**: Merge tokens in apps or via `ThemeLoader.Register(app.Resources)` (see `src/FlagstoneUI.Core/Themes/ThemeLoader.cs`).
 - **DynamicResource**: Use token keys (e.g., `Color.Primary`) in theme styles: `<Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />`.
 - **Package management**: Central package version management via Directory.Build.props with consistent versioning across all library projects.
