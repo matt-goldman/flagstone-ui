@@ -13,7 +13,7 @@ public partial class BorderlessEntry
 
 			handler.PlatformView.Background = null;
 			handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
-			handler.PlatformView.BackgroundTintList =
+			handler.PlatformView.BackgroundTintList = 
 				Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
 		});
 	}

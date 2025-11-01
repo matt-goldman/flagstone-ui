@@ -1,4 +1,4 @@
-﻿namespace FlagstoneUI.Themes.Material;
+namespace FlagstoneUI.Themes.Material;
 
 /// <summary>
 /// Material Design theme resource dictionary for Flagstone UI controls.

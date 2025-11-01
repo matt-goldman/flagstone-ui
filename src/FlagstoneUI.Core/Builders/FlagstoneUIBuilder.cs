@@ -7,9 +7,9 @@
 /// configurations.</remarks>
 public class FlagstoneUIBuilder
 {
-	/// <summary>
-	/// Configures the builder to use the default theme for the UI.
-	/// </summary>
-	/// <returns>The current <see cref="FlagstoneUIBuilder"/> instance, allowing for method chaining.</returns>
-	public FlagstoneUIBuilder UseDefaultTheme() => this;
+    /// <summary>
+    /// Configures the builder to use the default theme for the UI.
+    /// </summary>
+    /// <returns>The current <see cref="FlagstoneUIBuilder"/> instance, allowing for method chaining.</returns>
+    public FlagstoneUIBuilder UseDefaultTheme() => this;
 }
