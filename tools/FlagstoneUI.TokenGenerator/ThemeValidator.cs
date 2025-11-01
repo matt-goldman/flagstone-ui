@@ -119,7 +119,15 @@ public class ThemeValidator
 
 			result.IsValid = result.Errors.Count == 0;
 		}
-		catch (Exception ex)
+		catch (IOException ex)
+		{
+			result.AddError("parse_error", $"Failed to read XAML file: {ex.Message}");
+		}
+		catch (UnauthorizedAccessException ex)
+		{
+			result.AddError("parse_error", $"Access denied to XAML file: {ex.Message}");
+		}
+		catch (System.Xml.XmlException ex)
 		{
 			result.AddError("parse_error", $"Failed to parse XAML: {ex.Message}");
 		}
