@@ -8,8 +8,11 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - name: Set up .NET 10 SDK
+        uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
+          # Allow preview versions until .NET 10 RTM (November 14, 2025)
+          dotnet-quality: 'preview'
       - name: Build
         run: dotnet build -c Release

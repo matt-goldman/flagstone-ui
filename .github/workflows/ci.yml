@@ -11,12 +11,14 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up .NET 9 SDK
+      - name: Set up .NET 10 SDK
         uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
+          # Allow preview versions until .NET 10 RTM (November 14, 2025)
+          dotnet-quality: 'preview'
       - name: Install MAUI Workload
-        run: dotnet workload install maui --ignore-failed-sources
+        run: dotnet workload install maui --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-public/nuget/v3/index.json --ignore-failed-sources
       - name: Restore
         run: dotnet restore
       - name: Build

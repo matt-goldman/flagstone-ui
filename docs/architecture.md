@@ -227,7 +227,7 @@ ThemeLoader.Register(app.Resources);
 ## Dependencies
 
 ### Current Dependencies
-- **.NET 9**: Minimum version requirement
+- **.NET 10**: Minimum version requirement
 - **MAUI Workload**: Required for all projects
 - **CommunityToolkit.Maui**: Included via Directory.Build.props
 

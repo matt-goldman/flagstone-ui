@@ -30,7 +30,7 @@ This guide helps AI coding agents work productively in the Flagstone UI codebase
 
 ## Developer Workflows
 
-- **Prereqs**: Install .NET 9 SDK as per `global.json` and the MAUI workload.
+- **Prereqs**: Install .NET 10 SDK as per `global.json` and the MAUI workload.
 - **Restore/build** (root):
 	- `dotnet workload install maui`
 	- `dotnet restore`
@@ -54,9 +54,10 @@ This guide helps AI coding agents work productively in the Flagstone UI codebase
 
 ## Developer Environment Setup
 
-- Install .NET 9 SDK and MAUI workload.
-- _Never_ downgrade .NET SDK versions as this may cause compatibility issues. _Always_ update development environment to match minimum required SDK version specified in `global.json` (currently .NET 9.0.100).
-- Development environment must use .NET 9 SDK as the minimum - this is a hard requirement for the project.
+- Install .NET 10 SDK and MAUI workload.
+- _Never_ downgrade .NET SDK versions as this may cause compatibility issues. _Always_ update development environment to match minimum required SDK version specified in `global.json` (currently .NET 10.0.0).
+- Development environment must use .NET 10 SDK as the minimum - this is a hard requirement for the project.
+- Fail fast if this requirement cannot be met - do not attempt to work around it, or use other SDK versions.
 
 ### GitHub Copilot Setup
 
@@ -88,7 +89,7 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 - **Solution file**: `Microsoft.Maui.sln` (contains all UI library projects)
 - **Target frameworks**: Currently using `net10.0-ios`, `net10.0-android`, `net10.0-windows10.0.19041.0`
 - **Central package management**: `Directory.Build.props` defines common properties and package versions
-- **Global SDK version**: Specified in `global.json` - currently .NET 9.0.100
+- **Global SDK version**: Specified in `global.json` - currently .NET 10.0.0
 - **MAUI workload required**: All library projects set `<UseMaui>true</UseMaui>` and require MAUI workload for building
 - **Package references**: CommunityToolkit.Maui included automatically for MAUI library projects
 
@@ -102,7 +103,7 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 
 ## Integration Points
 
-- **.NET MAUI**: This UI library targets .NET 9 frameworks (`net10.0-android`, `net10.0-ios`, `net10.0-windows10.0.19041.0`) and integrates with .NET MAUI applications. CommunityToolkit.Maui package is included automatically via Directory.Build.props.
+- **.NET MAUI**: This UI library targets .NET 10 frameworks (`net10.0-android`, `net10.0-ios`, `net10.0-windows10.0.19041.0`) and integrates with .NET MAUI applications. CommunityToolkit.Maui package is included automatically via Directory.Build.props.
 - **Resource dictionaries**: Merge tokens in apps or via `ThemeLoader.Register(app.Resources)` (see `src/FlagstoneUI.Core/Themes/ThemeLoader.cs`).
 - **DynamicResource**: Use token keys (e.g., `Color.Primary`) in theme styles: `<Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />`.
 - **Package management**: Central package version management via Directory.Build.props with consistent versioning across all library projects.
@@ -132,7 +133,7 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 - `Flagstone.UI.sln`: open solution that includes all projects.
 - `.github/workflows/ci.yml`: CI pipeline steps and SDK setup.
 - `src/FlagstoneUI.Themes.Material/Theme.xaml`: example of a theme consuming tokens.
-- `global.json`: specifies required .NET SDK version (9.0.100).
+- `global.json`: specifies required .NET SDK version (10.0.0).
 - `Directory.Build.props`: central package management and build properties.
 - `scripts/validate-setup.sh` and `scripts/validate-setup.ps1`: environment validation scripts.
 

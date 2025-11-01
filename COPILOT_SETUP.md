@@ -12,7 +12,7 @@ This document provides setup instructions for GitHub Copilot to work effectively
 
 ### Required Software
 
-1. **.NET 9 SDK** (minimum version 9.0.100 as specified in `global.json`)
+1. **.NET 10 SDK** (minimum version 10.0.0 as specified in `global.json`)
 2. **MAUI workload** for .NET MAUI development
 3. **Git LFS** for large file support
 
@@ -22,9 +22,9 @@ This document provides setup instructions for GitHub Copilot to work effectively
 
 This repository includes a GitHub Actions workflow (`.github/workflows/copilot-setup-steps.yml`) that **automatically configures the Copilot environment**. When GitHub Copilot starts working, it will:
 
-1. Install .NET 9 SDK using the version specified in `global.json`
+1. Install .NET 10 SDK using the version specified in `global.json` (with preview support until RTM)
 2. Install Linux dependencies (OpenJDK 17, set JAVA_HOME)
-3. Install the MAUI Android workload (Linux-specific)
+3. Install the MAUI Android workload (Linux-specific) with preview package sources
 4. Install Android SDK dependencies automatically
 5. Enable Git LFS support
 6. Restore project dependencies
@@ -36,19 +36,22 @@ This repository includes a GitHub Actions workflow (`.github/workflows/copilot-s
 
 If you need to set up the environment manually for development or testing:
 
-#### 1. Install .NET 9 SDK
+#### 1. Install .NET 10 SDK
 
 ```bash
-# Download and install .NET 9 SDK
+# Download and install .NET 10 SDK
 wget https://dot.net/v1/dotnet-install.sh
 chmod +x dotnet-install.sh
-./dotnet-install.sh --version 9.0.100
+./dotnet-install.sh --version 10.0.0 --quality preview
 export PATH="$HOME/.dotnet:$PATH"
 ```
+
+> **Note**: The `--quality preview` flag is required until .NET 10 RTM (November 14, 2025).
 
 #### 2. Install Linux Dependencies for .NET MAUI
 
 **Java SDK (OpenJDK 17):**
+
 ```bash
 # Install OpenJDK 17 (required for Android development)
 sudo apt-get update
@@ -63,7 +66,8 @@ echo 'export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64' >> ~/.bashrc
 
 ```bash
 # Linux uses maui-android workload (not the full maui workload)
-dotnet workload install maui-android --ignore-failed-sources
+# Include preview package source until .NET 10 RTM (November 14, 2025)
+dotnet workload install maui-android --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-public/nuget/v3/index.json --ignore-failed-sources
 ```
 
 #### 4. Install Android SDK Dependencies
@@ -185,7 +189,7 @@ For full cross-platform development environments:
 
 ### Common Issues
 
-1. **SDK Version Mismatch**: Ensure .NET 9.0.100 or later is installed
+1. **SDK Version Mismatch**: Ensure .NET 10.0.0 or later is installed (use `--quality preview` until RTM)
 2. **MAUI Workload Missing**: Run `dotnet workload install maui-android` (not `maui`) on Linux
 3. **Java SDK Missing**: Install OpenJDK 17 and set JAVA_HOME environment variable
 4. **Android SDK Issues**: Use InstallAndroidDependencies target for automatic setup
@@ -214,5 +218,5 @@ For full cross-platform development environments:
 - [Setup Workflow](.github/workflows/copilot-setup-steps.yml) - Automated environment configuration
 - [Technical Documentation](docs/) - Architecture and implementation details
 - [GitHub Copilot Environment Customization](https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment) - Official GitHub documentation
-- [.NET MAUI Installation on Linux](https://learn.microsoft.com/en-us/dotnet/maui/get-started/installation?view=net-maui-9.0&tabs=visual-studio-code) - Microsoft documentation
+- [.NET MAUI Installation on Linux](https://learn.microsoft.com/en-us/dotnet/maui/get-started/installation?view=net-maui-10.0&tabs=visual-studio-code) - Microsoft documentation
 - [.NET Core Installation on Linux](https://learn.microsoft.com/en-us/dotnet/core/install/linux) - Linux-specific .NET setup guidance
