@@ -35,7 +35,15 @@ public class ThemeValidator
 
 			result.IsValid = result.Errors.Count == 0;
 		}
-		catch (Exception ex)
+		catch (IOException ex)
+		{
+			result.AddError("parse_error", $"Failed to read file: {ex.Message}");
+		}
+		catch (UnauthorizedAccessException ex)
+		{
+			result.AddError("parse_error", $"Access denied: {ex.Message}");
+		}
+		catch (JsonException ex)
 		{
 			result.AddError("parse_error", $"Failed to parse JSON: {ex.Message}");
 		}
