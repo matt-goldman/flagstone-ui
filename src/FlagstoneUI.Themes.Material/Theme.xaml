@@ -25,6 +25,7 @@
         <Setter Property="BorderColor" Value="{DynamicResource Color.Outline}" />
         <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
         <Setter Property="CornerRadius" Value="{DynamicResource Radius.Medium}" />
+        <Setter Property="Elevation" Value="1" />
     </Style>
 
     <Style TargetType="fs:FsEntry">

@@ -9,7 +9,7 @@ This document tracks the current implementation status of Flagstone UI component
 | Component | Status | Notes |
 |-----------|--------|-------|
 | **Tokens.xaml** | ✅ Complete | Core design tokens implemented with colors, spacing, radii, typography |
-| **Card Control** | ✅ Complete | Full implementation with elevation, corner radius, border color properties |
+| **Card Control** | ✅ Complete | Full implementation with elevation (shadow support), corner radius, border color, and all styling properties. Elevation property now functional with Material Design-compliant shadow implementation. |
 | **CI/CD Pipeline** | ✅ Partially Complete | Basic workflow exists, builds working (see known issues) |
 | **Material Theme** | ✅ Partially Complete | Basic Material theme with local token definitions |
 | **Solution Structure** | ✅ Complete | Projects, directories, and build files properly structured |
