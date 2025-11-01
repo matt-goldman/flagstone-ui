@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    
+    <!-- Tool packaging settings -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>flagstone-tokens</ToolCommandName>
+    <PackageId>FlagstoneUI.TokenGenerator</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Matt Goldman</Authors>
+    <Description>CLI tool for generating Flagstone UI token catalogs from XAML resource dictionaries</Description>
+    <PackageTags>flagstone-ui;maui;tokens;design-system;theme-generator</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" />
+  </ItemGroup>
+
+</Project>
