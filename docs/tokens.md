@@ -6,14 +6,35 @@ This document provides a comprehensive reference of all design tokens available 
 
 Design tokens are named entities that store visual design attributes. They provide a single source of truth for design decisions and make it easy to maintain consistency across an application. In Flagstone UI, tokens are defined as XAML resources that can be referenced throughout your application and overridden by themes.
 
+## Machine-Readable Token Catalog
+
+For AI agents, automated tooling, and programmatic access, a comprehensive machine-readable token catalog is available at [`tokens-catalog.json`](tokens-catalog.json). This JSON file includes:
+
+- All base design tokens with their values and semantic purposes
+- Control-specific styling properties and recommended token mappings
+- Common style patterns (e.g., PrimaryButton, OutlinedEntry)
+- Theme variant definitions
+- JSON Schema validation at [`tokens-schema.json`](tokens-schema.json)
+
+**Use the catalog for:**
+
+- 🤖 AI-assisted theme generation and customization
+- 🛠️ Building design tools and validators
+- 📊 Generating documentation and IntelliSense
+- ✅ Validating theme completeness and correctness
+- 🔄 Converting between design formats (Figma, Sketch, etc.)
+
 ## How to Use This Document
 
 This document is intended for:
+
 - **Designers** creating design language systems (DLS) or branding guidelines
 - **Developers** implementing custom themes based on design specifications
 - **Teams** ensuring design-development alignment
+- **AI Agents** looking for human-readable context (see [`tokens-catalog.json`](tokens-catalog.json) for structured data)
 
 Each token includes:
+
 - **Token name**: The XAML resource key used to reference the token
 - **Default value**: The value defined in the base token system
 - **Purpose**: What the token is used for
@@ -143,6 +164,7 @@ Spacing tokens define consistent spacing throughout the application.
 Typography tokens define font sizes following Material Design 3 type scale.
 
 ### Display Styles
+
 Large, expressive type for hero text and marketing content.
 
 | Token Name | Value | Purpose |
@@ -152,6 +174,7 @@ Large, expressive type for hero text and marketing content.
 | `FontSize.DisplaySmall` | `36` | Small display text |
 
 ### Headline Styles
+
 High-emphasis text for section headers.
 
 | Token Name | Value | Purpose |
@@ -161,6 +184,7 @@ High-emphasis text for section headers.
 | `FontSize.HeadlineSmall` | `24` | Small headline text |
 
 ### Title Styles
+
 Medium-emphasis text for section titles.
 
 | Token Name | Value | Purpose |
@@ -170,6 +194,7 @@ Medium-emphasis text for section titles.
 | `FontSize.TitleSmall` | `14` | Small title text (list headers) |
 
 ### Body Styles
+
 Default text styles for body content.
 
 | Token Name | Value | Purpose |
@@ -179,6 +204,7 @@ Default text styles for body content.
 | `FontSize.BodySmall` | `12` | Small body text (supporting text) |
 
 ### Label Styles
+
 Text styles for UI labels and button text.
 
 | Token Name | Value | Purpose |
@@ -188,6 +214,7 @@ Text styles for UI labels and button text.
 | `FontSize.LabelSmall` | `11` | Small label text (compact UI) |
 
 ### Legacy Typography
+
 Backward compatibility aliases.
 
 | Token Name | Value | Purpose |
@@ -257,11 +284,13 @@ General opacity tokens for various UI states and elements.
 Flagstone UI themes can override token values to support dark mode. The Material theme, for example, provides dark mode variants for all color tokens using the `.Dark` suffix pattern (e.g., `Color.Primary.Dark`).
 
 When implementing dark mode in your theme:
+
 1. Define dark mode color variants with `.Dark` suffix
 2. Use `AppThemeBinding` in styles to switch between light and dark values
 3. Ensure sufficient contrast ratios for accessibility
 
 Example:
+
 ```xml
 <Color x:Key="Color.Primary.Dark">#D0BCFF</Color>
 
@@ -283,6 +312,7 @@ To create a custom theme:
 5. **Test in both modes**: Verify appearance in light and dark modes
 
 Example theme structure:
+
 ```xml
 <ResourceDictionary>
     <ResourceDictionary.MergedDictionaries>

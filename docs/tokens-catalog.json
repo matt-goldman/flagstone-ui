@@ -1,0 +1,580 @@
+{
+  "schema": "./tokens-schema.json",
+  "version": "0.1.0",
+  "lastUpdated": "2025-11-01",
+  "baseTokens": {
+    "colors": {
+      "Color.Primary": {
+        "type": "color",
+        "defaultValue": "#6750A4",
+        "purpose": "Main brand color, used for primary actions and key UI elements",
+        "category": "primary",
+        "darkValue": "#D0BCFF"
+      },
+      "Color.OnPrimary": {
+        "type": "color",
+        "defaultValue": "#FFFFFF",
+        "purpose": "Text and icons displayed on primary color",
+        "category": "primary",
+        "darkValue": "#381E72"
+      },
+      "Color.PrimaryContainer": {
+        "type": "color",
+        "defaultValue": "#EADDFF",
+        "purpose": "Design token for Color.PrimaryContainer",
+        "category": "primary",
+        "darkValue": "#4F378B"
+      },
+      "Color.OnPrimaryContainer": {
+        "type": "color",
+        "defaultValue": "#21005D",
+        "purpose": "Design token for Color.OnPrimaryContainer",
+        "category": "primary",
+        "darkValue": "#EADDFF"
+      },
+      "Color.Secondary": {
+        "type": "color",
+        "defaultValue": "#625B71",
+        "purpose": "Design token for Color.Secondary",
+        "category": "secondary",
+        "darkValue": "#CCC2DC"
+      },
+      "Color.OnSecondary": {
+        "type": "color",
+        "defaultValue": "#FFFFFF",
+        "purpose": "Design token for Color.OnSecondary",
+        "category": "secondary",
+        "darkValue": "#332D41"
+      },
+      "Color.SecondaryContainer": {
+        "type": "color",
+        "defaultValue": "#E8DEF8",
+        "purpose": "Design token for Color.SecondaryContainer",
+        "category": "secondary",
+        "darkValue": "#4A4458"
+      },
+      "Color.OnSecondaryContainer": {
+        "type": "color",
+        "defaultValue": "#1D192B",
+        "purpose": "Design token for Color.OnSecondaryContainer",
+        "category": "secondary",
+        "darkValue": "#E8DEF8"
+      },
+      "Color.Tertiary": {
+        "type": "color",
+        "defaultValue": "#7D5260",
+        "purpose": "Design token for Color.Tertiary",
+        "category": "tertiary",
+        "darkValue": "#EFB8C8"
+      },
+      "Color.OnTertiary": {
+        "type": "color",
+        "defaultValue": "#FFFFFF",
+        "purpose": "Design token for Color.OnTertiary",
+        "category": "tertiary",
+        "darkValue": "#492532"
+      },
+      "Color.TertiaryContainer": {
+        "type": "color",
+        "defaultValue": "#FFD8E4",
+        "purpose": "Design token for Color.TertiaryContainer",
+        "category": "tertiary",
+        "darkValue": "#633B48"
+      },
+      "Color.OnTertiaryContainer": {
+        "type": "color",
+        "defaultValue": "#31111D",
+        "purpose": "Design token for Color.OnTertiaryContainer",
+        "category": "tertiary",
+        "darkValue": "#FFD8E4"
+      },
+      "Color.Error": {
+        "type": "color",
+        "defaultValue": "#B3261E",
+        "purpose": "Design token for Color.Error",
+        "category": "error",
+        "darkValue": "#F2B8B5"
+      },
+      "Color.OnError": {
+        "type": "color",
+        "defaultValue": "#FFFFFF",
+        "purpose": "Design token for Color.OnError",
+        "category": "error",
+        "darkValue": "#601410"
+      },
+      "Color.ErrorContainer": {
+        "type": "color",
+        "defaultValue": "#F9DEDC",
+        "purpose": "Design token for Color.ErrorContainer",
+        "category": "error",
+        "darkValue": "#8C1D18"
+      },
+      "Color.OnErrorContainer": {
+        "type": "color",
+        "defaultValue": "#410E0B",
+        "purpose": "Design token for Color.OnErrorContainer",
+        "category": "error",
+        "darkValue": "#F9DEDC"
+      },
+      "Color.Surface": {
+        "type": "color",
+        "defaultValue": "#FFFBFE",
+        "purpose": "Design token for Color.Surface",
+        "category": "surface",
+        "darkValue": "#1C1B1F"
+      },
+      "Color.OnSurface": {
+        "type": "color",
+        "defaultValue": "#1C1B1F",
+        "purpose": "Design token for Color.OnSurface",
+        "category": "surface",
+        "darkValue": "#E6E1E5"
+      },
+      "Color.SurfaceVariant": {
+        "type": "color",
+        "defaultValue": "#E7E0EC",
+        "purpose": "Design token for Color.SurfaceVariant",
+        "category": "surface",
+        "darkValue": "#49454F"
+      },
+      "Color.OnSurfaceVariant": {
+        "type": "color",
+        "defaultValue": "#49454F",
+        "purpose": "Design token for Color.OnSurfaceVariant",
+        "category": "surface",
+        "darkValue": "#CAC4D0"
+      },
+      "Color.Background": {
+        "type": "color",
+        "defaultValue": "#FFFBFE",
+        "purpose": "Design token for Color.Background",
+        "category": "background",
+        "darkValue": "#1C1B1F"
+      },
+      "Color.OnBackground": {
+        "type": "color",
+        "defaultValue": "#1C1B1F",
+        "purpose": "Design token for Color.OnBackground",
+        "category": "background",
+        "darkValue": "#E6E1E5"
+      },
+      "Color.Outline": {
+        "type": "color",
+        "defaultValue": "#79747E",
+        "purpose": "Design token for Color.Outline",
+        "category": "outline",
+        "darkValue": "#938F99"
+      },
+      "Color.OutlineVariant": {
+        "type": "color",
+        "defaultValue": "#CAC4D0",
+        "purpose": "Design token for Color.OutlineVariant",
+        "category": "outline",
+        "darkValue": "#49454F"
+      },
+      "Color.InverseSurface": {
+        "type": "color",
+        "defaultValue": "#313033",
+        "purpose": "Design token for Color.InverseSurface",
+        "category": "surface",
+        "darkValue": "#E6E1E5"
+      },
+      "Color.InverseOnSurface": {
+        "type": "color",
+        "defaultValue": "#F4EFF4",
+        "purpose": "Design token for Color.InverseOnSurface",
+        "category": "surface",
+        "darkValue": "#313033"
+      },
+      "Color.InversePrimary": {
+        "type": "color",
+        "defaultValue": "#D0BCFF",
+        "purpose": "Design token for Color.InversePrimary",
+        "category": "primary",
+        "darkValue": "#6750A4"
+      }
+    },
+    "spacing": {
+      "Space.0": {
+        "type": "spacing",
+        "value": 0,
+        "unit": "dip",
+        "purpose": "Design token for Space.0"
+      },
+      "Space.2": {
+        "type": "spacing",
+        "value": 2,
+        "unit": "dip",
+        "purpose": "Design token for Space.2"
+      },
+      "Space.4": {
+        "type": "spacing",
+        "value": 4,
+        "unit": "dip",
+        "purpose": "Design token for Space.4"
+      },
+      "Space.8": {
+        "type": "spacing",
+        "value": 8,
+        "unit": "dip",
+        "purpose": "Design token for Space.8"
+      },
+      "Space.12": {
+        "type": "spacing",
+        "value": 12,
+        "unit": "dip",
+        "purpose": "Design token for Space.12"
+      },
+      "Space.16": {
+        "type": "spacing",
+        "value": 16,
+        "unit": "dip",
+        "purpose": "Standard spacing (most common)"
+      },
+      "Space.20": {
+        "type": "spacing",
+        "value": 20,
+        "unit": "dip",
+        "purpose": "Design token for Space.20"
+      },
+      "Space.24": {
+        "type": "spacing",
+        "value": 24,
+        "unit": "dip",
+        "purpose": "Design token for Space.24"
+      },
+      "Space.32": {
+        "type": "spacing",
+        "value": 32,
+        "unit": "dip",
+        "purpose": "Design token for Space.32"
+      },
+      "Space.40": {
+        "type": "spacing",
+        "value": 40,
+        "unit": "dip",
+        "purpose": "Design token for Space.40"
+      },
+      "Space.48": {
+        "type": "spacing",
+        "value": 48,
+        "unit": "dip",
+        "purpose": "Design token for Space.48"
+      }
+    },
+    "typography": {
+      "FontSize.DisplayLarge": {
+        "type": "fontSize",
+        "value": 57,
+        "unit": "sp",
+        "purpose": "Design token for FontSize.DisplayLarge"
+      },
+      "FontSize.DisplayMedium": {
+        "type": "fontSize",
+        "value": 45,
+        "unit": "sp",
+        "purpose": "Design token for FontSize.DisplayMedium"
+      },
+      "FontSize.DisplaySmall": {
+        "type": "fontSize",
+        "value": 36,
+        "unit": "sp",
+        "purpose": "Design token for FontSize.DisplaySmall"
+      },
+      "FontSize.HeadlineLarge": {
+        "type": "fontSize",
+        "value": 32,
+        "unit": "sp",
+        "purpose": "Design token for FontSize.HeadlineLarge"
+      },
+      "FontSize.HeadlineMedium": {
+        "type": "fontSize",
+        "value": 28,
+        "unit": "sp",
+        "purpose": "Design token for FontSize.HeadlineMedium"
+      },
+      "FontSize.HeadlineSmall": {
+        "type": "fontSize",
+        "value": 24,
+        "unit": "sp",
+        "purpose": "Design token for FontSize.HeadlineSmall"
+      },
+      "FontSize.TitleLarge": {
+        "type": "fontSize",
+        "value": 22,
+        "unit": "sp",
+        "purpose": "Design token for FontSize.TitleLarge"
+      },
+      "FontSize.TitleMedium": {
+        "type": "fontSize",
+        "value": 16,
+        "unit": "sp",
+        "purpose": "Design token for FontSize.TitleMedium"
+      },
+      "FontSize.TitleSmall": {
+        "type": "fontSize",
+        "value": 14,
+        "unit": "sp",
+        "purpose": "Design token for FontSize.TitleSmall"
+      },
+      "FontSize.BodyLarge": {
+        "type": "fontSize",
+        "value": 16,
+        "unit": "sp",
+        "purpose": "Design token for FontSize.BodyLarge"
+      },
+      "FontSize.BodyMedium": {
+        "type": "fontSize",
+        "value": 14,
+        "unit": "sp",
+        "purpose": "Medium body text (standard content)"
+      },
+      "FontSize.BodySmall": {
+        "type": "fontSize",
+        "value": 12,
+        "unit": "sp",
+        "purpose": "Design token for FontSize.BodySmall"
+      },
+      "FontSize.LabelLarge": {
+        "type": "fontSize",
+        "value": 14,
+        "unit": "sp",
+        "purpose": "Design token for FontSize.LabelLarge"
+      },
+      "FontSize.LabelMedium": {
+        "type": "fontSize",
+        "value": 12,
+        "unit": "sp",
+        "purpose": "Design token for FontSize.LabelMedium"
+      },
+      "FontSize.LabelSmall": {
+        "type": "fontSize",
+        "value": 11,
+        "unit": "sp",
+        "purpose": "Design token for FontSize.LabelSmall"
+      },
+      "FontSize.Body": {
+        "type": "fontSize",
+        "value": 14,
+        "unit": "sp",
+        "purpose": "Design token for FontSize.Body"
+      },
+      "FontSize.Title": {
+        "type": "fontSize",
+        "value": 20,
+        "unit": "sp",
+        "purpose": "Design token for FontSize.Title"
+      }
+    },
+    "borderRadius": {
+      "Radius.None": {
+        "type": "cornerRadius",
+        "value": 0,
+        "unit": "dip",
+        "purpose": "Design token for Radius.None"
+      },
+      "Radius.ExtraSmall": {
+        "type": "cornerRadius",
+        "value": 4,
+        "unit": "dip",
+        "purpose": "Design token for Radius.ExtraSmall"
+      },
+      "Radius.Small": {
+        "type": "cornerRadius",
+        "value": 8,
+        "unit": "dip",
+        "purpose": "Small rounding for buttons and inputs"
+      },
+      "Radius.Medium": {
+        "type": "cornerRadius",
+        "value": 12,
+        "unit": "dip",
+        "purpose": "Design token for Radius.Medium"
+      },
+      "Radius.Large": {
+        "type": "cornerRadius",
+        "value": 16,
+        "unit": "dip",
+        "purpose": "Design token for Radius.Large"
+      },
+      "Radius.ExtraLarge": {
+        "type": "cornerRadius",
+        "value": 28,
+        "unit": "dip",
+        "purpose": "Design token for Radius.ExtraLarge"
+      },
+      "Radius.Full": {
+        "type": "cornerRadius",
+        "value": 9999,
+        "unit": "dip",
+        "purpose": "Design token for Radius.Full"
+      }
+    },
+    "borderWidth": {
+      "BorderWidth.None": {
+        "type": "borderWidth",
+        "value": 0,
+        "unit": "dip",
+        "purpose": "Design token for BorderWidth.None"
+      },
+      "BorderWidth.Thin": {
+        "type": "borderWidth",
+        "value": 1,
+        "unit": "dip",
+        "purpose": "Design token for BorderWidth.Thin"
+      },
+      "BorderWidth.Thick": {
+        "type": "borderWidth",
+        "value": 2,
+        "unit": "dip",
+        "purpose": "Design token for BorderWidth.Thick"
+      },
+      "BorderWidth.Heavy": {
+        "type": "borderWidth",
+        "value": 4,
+        "unit": "dip",
+        "purpose": "Design token for BorderWidth.Heavy"
+      }
+    },
+    "elevation": {
+      "Elevation.Level0": {
+        "type": "elevation",
+        "value": 0,
+        "unit": "dip",
+        "purpose": "Design token for Elevation.Level0"
+      },
+      "Elevation.Level1": {
+        "type": "elevation",
+        "value": 2,
+        "unit": "dip",
+        "purpose": "Design token for Elevation.Level1"
+      },
+      "Elevation.Level2": {
+        "type": "elevation",
+        "value": 4,
+        "unit": "dip",
+        "purpose": "Design token for Elevation.Level2"
+      },
+      "Elevation.Level3": {
+        "type": "elevation",
+        "value": 8,
+        "unit": "dip",
+        "purpose": "Design token for Elevation.Level3"
+      },
+      "Elevation.Level4": {
+        "type": "elevation",
+        "value": 12,
+        "unit": "dip",
+        "purpose": "Design token for Elevation.Level4"
+      }
+    },
+    "padding": {
+      "Padding.None": {
+        "type": "padding",
+        "value": 0,
+        "unit": "dip",
+        "purpose": "Design token for Padding.None"
+      },
+      "Padding.Small": {
+        "type": "padding",
+        "value": 4,
+        "unit": "dip",
+        "purpose": "Design token for Padding.Small"
+      },
+      "Padding.Medium": {
+        "type": "padding",
+        "value": 8,
+        "unit": "dip",
+        "purpose": "Design token for Padding.Medium"
+      },
+      "Padding.Large": {
+        "type": "padding",
+        "value": 16,
+        "unit": "dip",
+        "purpose": "Design token for Padding.Large"
+      },
+      "Padding.ExtraLarge": {
+        "type": "padding",
+        "value": 24,
+        "unit": "dip",
+        "purpose": "Design token for Padding.ExtraLarge"
+      }
+    },
+    "opacity": {
+      "StateLayer.Hover": {
+        "type": "opacity",
+        "value": 0.08,
+        "unit": "unitless",
+        "purpose": "Design token for StateLayer.Hover"
+      },
+      "StateLayer.Focus": {
+        "type": "opacity",
+        "value": 0.12,
+        "unit": "unitless",
+        "purpose": "Design token for StateLayer.Focus"
+      },
+      "StateLayer.Pressed": {
+        "type": "opacity",
+        "value": 0.12,
+        "unit": "unitless",
+        "purpose": "Design token for StateLayer.Pressed"
+      },
+      "StateLayer.Dragged": {
+        "type": "opacity",
+        "value": 0.16,
+        "unit": "unitless",
+        "purpose": "Design token for StateLayer.Dragged"
+      },
+      "Opacity.Disabled": {
+        "type": "opacity",
+        "value": 0.38,
+        "unit": "unitless",
+        "purpose": "Design token for Opacity.Disabled"
+      },
+      "Opacity.Medium": {
+        "type": "opacity",
+        "value": 0.74,
+        "unit": "unitless",
+        "purpose": "Design token for Opacity.Medium"
+      },
+      "Opacity.High": {
+        "type": "opacity",
+        "value": 0.87,
+        "unit": "unitless",
+        "purpose": "Design token for Opacity.High"
+      },
+      "Opacity.Full": {
+        "type": "opacity",
+        "value": 1,
+        "unit": "unitless",
+        "purpose": "Design token for Opacity.Full"
+      }
+    }
+  },
+  "controls": {
+    "FsButton": {
+      "inheritsFrom": "Microsoft.Maui.Controls.Button",
+      "architecture": "subclass",
+      "styledProperties": [],
+      "commonStyles": []
+    },
+    "FsCard.xaml": {
+      "inheritsFrom": "Microsoft.Maui.Controls.ContentView",
+      "architecture": "subclass",
+      "styledProperties": [],
+      "commonStyles": []
+    },
+    "FsEntry.xaml": {
+      "inheritsFrom": "Microsoft.Maui.Controls.ContentView",
+      "architecture": "subclass",
+      "styledProperties": [],
+      "commonStyles": []
+    }
+  },
+  "themeVariants": {
+    "material": {
+      "description": "Material Design 3 theme implementation",
+      "tokenOverrides": {}
+    }
+  }
+}

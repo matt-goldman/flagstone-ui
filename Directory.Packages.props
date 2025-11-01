@@ -22,5 +22,8 @@
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    
+    <!-- Tooling -->
+    <PackageVersion Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
   </ItemGroup>
 </Project>
