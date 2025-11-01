@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
+             x:Class="FlagstoneUI.SampleApp.Pages.ControlsShowcasePage"
+             Title="Controls Showcase"
+             BackgroundColor="{AppThemeBinding Light={DynamicResource Color.Background}, Dark={DynamicResource Color.Background.Dark}}">
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="24">
+            
+            <!-- Page Header -->
+            <Label Text="Flagstone UI Controls"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}" />
+            
+            <Label Text="Material Design 3 themed controls with token-based styling"
+                   FontSize="16"
+                   TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
+                   Margin="0,0,0,16" />
+
+            <!-- ========== FsButton Section ========== -->
+            <Label Text="FsButton"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}" />
+            
+            <Label Text="Material Design 3 button variants"
+                   FontSize="14"
+                   TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
+                   Margin="0,0,0,8" />
+
+            <!-- Filled Button (Default) -->
+            <fs:FsButton Text="Filled Button (Default)"
+                         Clicked="OnButtonClicked" />
+
+            <!-- Outlined Button -->
+            <fs:FsButton Text="Outlined Button"
+                         Style="{StaticResource OutlinedButton}"
+                         Clicked="OnButtonClicked" />
+
+            <!-- Text Button -->
+            <fs:FsButton Text="Text Button"
+                         Style="{StaticResource TextButton}"
+                         Clicked="OnButtonClicked" />
+
+            <!-- Tonal Button -->
+            <fs:FsButton Text="Tonal Button"
+                         Style="{StaticResource TonalButton}"
+                         Clicked="OnButtonClicked" />
+
+            <!-- Disabled Button -->
+            <fs:FsButton Text="Disabled Button"
+                         IsEnabled="False" />
+
+            <!-- Button with Icon (using MAUI Button for comparison) -->
+            <HorizontalStackLayout Spacing="8">
+                <fs:FsButton Text="Primary Action" />
+                <fs:FsButton Text="Secondary"
+                             Style="{StaticResource OutlinedButton}" />
+            </HorizontalStackLayout>
+
+            <!-- Divider -->
+            <BoxView HeightRequest="1"
+                     BackgroundColor="{AppThemeBinding Light={DynamicResource Color.OutlineVariant}, Dark={DynamicResource Color.OutlineVariant.Dark}}"
+                     Margin="0,8" />
+
+            <!-- ========== FsCard Section ========== -->
+            <Label Text="FsCard"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}" />
+            
+            <Label Text="Container control with elevation and border options"
+                   FontSize="14"
+                   TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
+                   Margin="0,0,0,8" />
+
+            <!-- Filled Card (Default) -->
+            <fs:FsCard>
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Filled Card (Default)"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}" />
+                    <Label Text="This card uses the default filled style with subtle elevation."
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}" />
+                </VerticalStackLayout>
+            </fs:FsCard>
+
+            <!-- Outlined Card -->
+            <fs:FsCard Style="{StaticResource OutlinedCard}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Outlined Card"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurface}, Dark={DynamicResource Color.OnSurface.Dark}}" />
+                    <Label Text="This card has a border instead of elevation."
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}" />
+                </VerticalStackLayout>
+            </fs:FsCard>
+
+            <!-- Elevated Card -->
+            <fs:FsCard Style="{StaticResource ElevatedCard}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Elevated Card"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurface}, Dark={DynamicResource Color.OnSurface.Dark}}" />
+                    <Label Text="This card has increased elevation for emphasis."
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}" />
+                </VerticalStackLayout>
+            </fs:FsCard>
+
+            <!-- Card with Content Example -->
+            <fs:FsCard>
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Card with Action Buttons"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}" />
+                    <Label Text="Cards can contain any content, including buttons and other controls."
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}" />
+                    <HorizontalStackLayout Spacing="8" Margin="0,8,0,0">
+                        <fs:FsButton Text="Action"
+                                     Style="{StaticResource TextButton}"
+                                     Clicked="OnCardActionClicked" />
+                        <fs:FsButton Text="Learn More"
+                                     Style="{StaticResource TextButton}"
+                                     Clicked="OnCardActionClicked" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </fs:FsCard>
+
+            <!-- Divider -->
+            <BoxView HeightRequest="1"
+                     BackgroundColor="{AppThemeBinding Light={DynamicResource Color.OutlineVariant}, Dark={DynamicResource Color.OutlineVariant.Dark}}"
+                     Margin="0,8" />
+
+            <!-- ========== FsEntry Section ========== -->
+            <Label Text="FsEntry"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}" />
+            
+            <Label Text="Text input field with customizable border and styling"
+                   FontSize="14"
+                   TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
+                   Margin="0,0,0,8" />
+
+            <!-- Filled Entry (Default) -->
+            <fs:FsEntry Placeholder="Filled Entry (Default)"
+                        x:Name="FilledEntry"
+                        TextChanged="OnEntryTextChanged" />
+
+            <!-- Outlined Entry -->
+            <fs:FsEntry Placeholder="Outlined Entry"
+                        Style="{StaticResource OutlinedEntry}"
+                        x:Name="OutlinedEntry"
+                        TextChanged="OnEntryTextChanged" />
+
+            <!-- Entry with Text -->
+            <fs:FsEntry Placeholder="Entry with preset text"
+                        Text="Sample text content" />
+
+            <!-- Password Entry -->
+            <fs:FsEntry Placeholder="Password Entry"
+                        IsPassword="True" />
+
+            <!-- Disabled Entry -->
+            <fs:FsEntry Placeholder="Disabled Entry"
+                        IsEnabled="False"
+                        Text="This entry is disabled" />
+
+            <!-- Entry with Keyboard Types -->
+            <fs:FsEntry Placeholder="Email Entry"
+                        Keyboard="Email" />
+
+            <fs:FsEntry Placeholder="Numeric Entry"
+                        Keyboard="Numeric" />
+
+            <!-- Entry State Feedback -->
+            <Label x:Name="EntryFeedbackLabel"
+                   Text="Type in any entry to see feedback..."
+                   FontSize="12"
+                   TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
+                   Margin="0,8,0,0" />
+
+            <!-- Divider -->
+            <BoxView HeightRequest="1"
+                     BackgroundColor="{AppThemeBinding Light={DynamicResource Color.OutlineVariant}, Dark={DynamicResource Color.OutlineVariant.Dark}}"
+                     Margin="0,16" />
+
+            <!-- Footer Info -->
+            <fs:FsCard Style="{StaticResource OutlinedCard}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Token-Based Styling"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurface}, Dark={DynamicResource Color.OnSurface.Dark}}" />
+                    <Label TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
+                           FontSize="14">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="All controls use " />
+                                <Span Text="DynamicResource" FontAttributes="Bold" />
+                                <Span Text=" bindings to design tokens, enabling:" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label Text="• Automatic dark mode support"
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}" />
+                    <Label Text="• Consistent styling across the app"
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}" />
+                    <Label Text="• Easy theme customization"
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}" />
+                    <Label Text="• Material Design 3 compliance"
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}" />
+                </VerticalStackLayout>
+            </fs:FsCard>
+
+            <!-- Bottom Spacing -->
+            <BoxView HeightRequest="32" Color="Transparent" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

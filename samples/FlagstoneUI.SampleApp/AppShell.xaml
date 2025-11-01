@@ -15,6 +15,13 @@
             Route="MainPage" />
     </FlyoutItem>
 
+    <FlyoutItem Title="Controls" Icon="icon_home.png">
+        <ShellContent
+            Title="Showcase"
+            ContentTemplate="{DataTemplate page:ControlsShowcasePage}"
+            Route="ControlsShowcase" />
+    </FlyoutItem>
+
     <FlyoutItem Title="Auth" Icon="auth_icon.png">
         <Tab Title="Sign In">
             <ShellContent

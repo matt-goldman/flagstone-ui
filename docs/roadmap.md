@@ -7,6 +7,7 @@ This document provides an updated roadmap based on current implementation progre
 **Phase 1 (MVP) Progress**: ~40% Complete
 
 ### Recently Completed ✅
+
 - [x] Solution structure and build system
 - [x] Design token system (Tokens.xaml)
 - [x] Card control implementation
@@ -16,6 +17,7 @@ This document provides an updated roadmap based on current implementation progre
 - [x] Test project structure
 
 ### Current Blockers 🚫
+
 1. **Missing Core Controls**: FsButton needed for MVP (FsEntry ✅ complete)
 2. **Sample App**: No working demonstration application
 
@@ -38,7 +40,7 @@ This document provides an updated roadmap based on current implementation progre
 **Note:** May not be necessary. As per [the docs](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/resource-dictionaries?view=net-maui-10.0&viewFallbackFrom=net-maui-8.0#merge-resource-dictionaries-from-other-assemblies):
 
 > When merged ResourceDictionary resources share identical x:Key attribute values, .NET MAUI uses the following resource precedence:
-> 
+>
 > 1. The resources local to the resource dictionary.
 > 3. The resources contained in the resource dictionaries that were merged via the MergedDictionaries collection, in the > reverse order they are listed in the MergedDictionaries property.
 
