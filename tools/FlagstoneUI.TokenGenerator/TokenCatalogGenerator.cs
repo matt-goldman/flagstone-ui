@@ -176,22 +176,23 @@ public class TokenCatalogGenerator
         // TODO: Implement proper control analysis from .cs files
         var controlFiles = Directory.GetFiles(controlsPath, "Fs*.cs", SearchOption.TopDirectoryOnly);
         
-        foreach (var file in controlFiles)
-        {
-            var controlName = Path.GetFileNameWithoutExtension(file);
-            if (controlName.StartsWith("Fs", StringComparison.Ordinal) && !controlName.Contains("BorderlessEntry", StringComparison.Ordinal))
-            {
-                Console.WriteLine($"   → Analyzing {controlName}...");
-                // Placeholder - will be implemented with proper Roslyn analysis
-                controls[controlName] = new
+        controls = controlFiles
+            .Select(file => Path.GetFileNameWithoutExtension(file))
+            .Where(controlName => controlName.StartsWith("Fs", StringComparison.Ordinal) && !controlName.Contains("BorderlessEntry", StringComparison.Ordinal))
+            .ToDictionary(
+                controlName =>
+                {
+                    Console.WriteLine($"   → Analyzing {controlName}...");
+                    return controlName;
+                },
+                controlName => new
                 {
                     InheritsFrom = "Microsoft.Maui.Controls.Button", // TODO: Detect from code
                     Architecture = "subclass", // TODO: Detect from code
                     StyledProperties = new List<object>(),
                     CommonStyles = new List<object>()
-                };
-            }
-        }
+                }
+            );
 
         return controls;
     }
