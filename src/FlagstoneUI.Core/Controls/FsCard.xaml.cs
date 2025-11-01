@@ -20,20 +20,55 @@ public partial class FsCard : ContentView
 	/// <remarks>This property is used to define the elevation level of the <see cref="FsCard"/>.  The default
 	/// value is <c>0</c>.</remarks>
 	public static readonly BindableProperty ElevationProperty = BindableProperty.Create(
-        nameof(Elevation), typeof(int), typeof(FsCard), 0);
+        nameof(Elevation), typeof(int), typeof(FsCard), 0, propertyChanged: OnElevationChanged);
 
     /// <summary>
     /// Gets or sets the elevation value, typically representing the height or depth of an element.
     /// </summary>
     /// <remarks>This property is a dependency property, which means it supports data binding, styling, and
-    /// default values.</remarks>
+    /// default values. Higher elevation values create larger shadows for a greater sense of depth.</remarks>
     public int Elevation
     {
         get => (int)GetValue(ElevationProperty);
         set => SetValue(ElevationProperty, value);
     }
 
-    // TODO: add propertyChanged handler when Shadow implementation is available
+	private static void OnElevationChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is FsCard card)
+		{
+			card.UpdateShadow();
+		}
+	}
+
+	private void UpdateShadow()
+	{
+		// Map elevation levels to shadow parameters based on Material Design 3 specifications
+		// Elevation 0: No shadow
+		// Elevation 1-5: Progressively larger shadows
+		if (Elevation <= 0)
+		{
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type
+			Shadow = null;
+#pragma warning restore CS8625
+		}
+		else
+		{
+			// Calculate shadow parameters based on elevation level
+			// These values are based on Material Design 3 elevation specifications
+			var radius = Elevation * 2.0f;
+			var offsetY = Elevation * 1.0f;
+			var opacity = Math.Min(0.2f + (Elevation * 0.05f), 0.4f);
+
+			Shadow = new Shadow
+			{
+				Brush = new SolidColorBrush(Colors.Black),
+				Offset = new Point(0, offsetY),
+				Radius = radius,
+				Opacity = opacity
+			};
+		}
+	}
     #endregion
 
     #region CornerRadius Property

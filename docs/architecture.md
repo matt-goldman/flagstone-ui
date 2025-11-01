@@ -95,7 +95,7 @@ FlagstoneUI.Blocks/
 **Philosophy**: Create neutral controls that strip platform-specific styling and apply theme-based styling consistently.
 
 **Current Implementation**:
-- ✅ **Card**: Complete custom ContentView with elevation, radius, border properties
+- ✅ **Card**: Complete custom ContentView with elevation (shadow support), corner radius, and border properties. Elevation automatically applies Material Design-compliant shadows.
 - ❌ **FsButton**: Not implemented (planned: subclass Button, add platform handlers)
 - ❌ **FsEntry**: Not implemented (planned: subclass Entry, add validation states)
 - ❌ **Snackbar**: Not implemented (planned: overlay service pattern)
