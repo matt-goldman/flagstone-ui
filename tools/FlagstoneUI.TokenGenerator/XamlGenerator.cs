@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using System.Text.Json;
 using System.Xml.Linq;
@@ -138,7 +139,7 @@ public class XamlGenerator
 
 				var doubleElement = new XElement(xNs + "Double",
 					new XAttribute(xNs + "Key", key),
-					value.GetDouble().ToString()
+					value.GetDouble().ToString(CultureInfo.InvariantCulture)
 				);
 
 				root.Add(doubleElement);
