@@ -206,7 +206,7 @@ public class ThemeValidator
 		// Check for hex colors (#RGB, #RRGGBB, #AARRGGBB)
 		if (value.StartsWith('#'))
 		{
-			var hex = value.Substring(1);
+			var hex = value[1..];
 			return hex.Length == 3 || hex.Length == 6 || hex.Length == 8;
 		}
 
