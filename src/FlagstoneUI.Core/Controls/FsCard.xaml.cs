@@ -48,7 +48,9 @@ public partial class FsCard : ContentView
 		// Elevation 1-5: Progressively larger shadows
 		if (Elevation <= 0)
 		{
-			Shadow = null!;
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type
+			Shadow = null;
+#pragma warning restore CS8625
 		}
 		else
 		{
