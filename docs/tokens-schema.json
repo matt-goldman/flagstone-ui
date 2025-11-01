@@ -134,7 +134,7 @@
         },
         "category": {
           "type": "string",
-          "enum": ["primary", "secondary", "tertiary", "error", "surface", "background", "outline", "inverse"],
+          "enum": ["primary", "secondary", "tertiary", "error", "surface", "background", "outline", "inverse", "other"],
           "description": "Color role category"
         }
       }
