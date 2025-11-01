@@ -565,7 +565,7 @@
       "commonStyles": []
     },
     "FsEntry.xaml": {
-      "inheritsFrom": "Microsoft.Maui.Controls.Button",
+      "inheritsFrom": "Microsoft.Maui.Controls.ContentView",
       "architecture": "subclass",
       "styledProperties": [],
       "commonStyles": []
