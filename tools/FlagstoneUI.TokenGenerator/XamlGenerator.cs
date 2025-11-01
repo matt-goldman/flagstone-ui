@@ -113,7 +113,6 @@ public class XamlGenerator
 			return;
 		}
 
-		var mauiNs = root.Name.Namespace;
 		var xNs = root.GetNamespaceOfPrefix("x");
 
 		// Add category header
