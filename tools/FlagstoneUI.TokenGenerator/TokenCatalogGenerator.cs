@@ -198,7 +198,12 @@ public class TokenCatalogGenerator
 
     private string GetColorCategory(string key)
     {
-        return key.Split('.')[1].ToLowerInvariant() switch
+        var parts = key.Split('.');
+        if (parts.Length < 2 || string.IsNullOrWhiteSpace(parts[1]))
+        {
+            return "other";
+        }
+        return parts[1].ToLowerInvariant() switch
         {
             var s when s.Contains("primary", StringComparison.Ordinal) => "primary",
             var s when s.Contains("secondary", StringComparison.Ordinal) => "secondary",
