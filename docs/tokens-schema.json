@@ -1,0 +1,267 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://flagstoneui.dev/schemas/tokens-catalog.json",
+  "title": "Flagstone UI Token Catalog Schema",
+  "description": "Schema for Flagstone UI design token catalog, used for theme generation and AI-assisted development",
+  "type": "object",
+  "required": ["version", "lastUpdated", "baseTokens", "controls"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Reference to this schema file"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the token catalog"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date",
+      "description": "Date when catalog was last updated (ISO 8601)"
+    },
+    "baseTokens": {
+      "type": "object",
+      "description": "Core design tokens that form the foundation of the design system",
+      "properties": {
+        "colors": {
+          "type": "object",
+          "patternProperties": {
+            "^Color\\..+": {
+              "$ref": "#/definitions/colorToken"
+            }
+          }
+        },
+        "spacing": {
+          "type": "object",
+          "patternProperties": {
+            "^Space\\..+": {
+              "$ref": "#/definitions/numericToken"
+            }
+          }
+        },
+        "typography": {
+          "type": "object",
+          "patternProperties": {
+            "^FontSize\\..+": {
+              "$ref": "#/definitions/numericToken"
+            }
+          }
+        },
+        "borderRadius": {
+          "type": "object",
+          "patternProperties": {
+            "^Radius\\..+": {
+              "$ref": "#/definitions/numericToken"
+            }
+          }
+        },
+        "borderWidth": {
+          "type": "object",
+          "patternProperties": {
+            "^BorderWidth\\..+": {
+              "$ref": "#/definitions/numericToken"
+            }
+          }
+        },
+        "elevation": {
+          "type": "object",
+          "patternProperties": {
+            "^Elevation\\..+": {
+              "$ref": "#/definitions/numericToken"
+            }
+          }
+        },
+        "padding": {
+          "type": "object",
+          "patternProperties": {
+            "^Padding\\..+": {
+              "$ref": "#/definitions/numericToken"
+            }
+          }
+        },
+        "opacity": {
+          "type": "object",
+          "patternProperties": {
+            "^(Opacity|StateLayer)\\..+": {
+              "$ref": "#/definitions/numericToken"
+            }
+          }
+        }
+      }
+    },
+    "controls": {
+      "type": "object",
+      "description": "Control-specific styling information and recommended token mappings",
+      "patternProperties": {
+        "^Fs[A-Z][a-zA-Z]+$": {
+          "$ref": "#/definitions/control"
+        }
+      }
+    },
+    "themeVariants": {
+      "type": "object",
+      "description": "Available theme variants with their token overrides",
+      "patternProperties": {
+        "^[a-z][a-zA-Z0-9]*$": {
+          "$ref": "#/definitions/themeVariant"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "colorToken": {
+      "type": "object",
+      "required": ["type", "defaultValue", "purpose"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["color"]
+        },
+        "defaultValue": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "description": "Hex color value for light mode"
+        },
+        "darkValue": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "description": "Hex color value for dark mode (optional)"
+        },
+        "purpose": {
+          "type": "string",
+          "description": "Semantic description of token usage"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["primary", "secondary", "tertiary", "error", "surface", "background", "outline", "inverse"],
+          "description": "Color role category"
+        }
+      }
+    },
+    "numericToken": {
+      "type": "object",
+      "required": ["type", "value", "purpose"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["spacing", "fontSize", "cornerRadius", "borderWidth", "elevation", "padding", "opacity"]
+        },
+        "value": {
+          "type": "number",
+          "description": "Numeric value"
+        },
+        "unit": {
+          "type": "string",
+          "enum": ["dip", "sp", "unitless"],
+          "description": "Unit of measurement (device-independent pixels, scalable pixels, or unitless)"
+        },
+        "purpose": {
+          "type": "string",
+          "description": "Semantic description of token usage"
+        }
+      }
+    },
+    "control": {
+      "type": "object",
+      "required": ["inheritsFrom", "architecture", "styledProperties"],
+      "properties": {
+        "inheritsFrom": {
+          "type": "string",
+          "description": "Base .NET MAUI control this extends"
+        },
+        "architecture": {
+          "type": "string",
+          "enum": ["subclass", "wrapper"],
+          "description": "Implementation architecture (simple subclass or wrapper control)"
+        },
+        "wrapperReason": {
+          "type": "string",
+          "description": "Explanation for why wrapper architecture is used (if applicable)"
+        },
+        "styledProperties": {
+          "type": "array",
+          "description": "Properties that can be styled with tokens",
+          "items": {
+            "$ref": "#/definitions/styledProperty"
+          }
+        },
+        "commonStyles": {
+          "type": "array",
+          "description": "Common pre-defined styles for this control",
+          "items": {
+            "$ref": "#/definitions/commonStyle"
+          }
+        }
+      }
+    },
+    "styledProperty": {
+      "type": "object",
+      "required": ["name", "type", "bindable"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Property name"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["color", "spacing", "fontSize", "cornerRadius", "borderWidth", "elevation", "padding", "opacity", "thickness", "string", "boolean", "enum"],
+          "description": "Property value type"
+        },
+        "recommendedToken": {
+          "type": "string",
+          "description": "Recommended token to use for this property"
+        },
+        "bindable": {
+          "type": "boolean",
+          "description": "Whether property supports data binding"
+        },
+        "defaultValue": {
+          "description": "Default value if not styled"
+        }
+      }
+    },
+    "commonStyle": {
+      "type": "object",
+      "required": ["name", "tokens"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Style name (e.g., PrimaryButton, OutlinedEntry)"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of when to use this style"
+        },
+        "tokens": {
+          "type": "object",
+          "description": "Token mappings for this style",
+          "patternProperties": {
+            "^[A-Z][a-zA-Z]+$": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "themeVariant": {
+      "type": "object",
+      "required": ["description"],
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Description of this theme variant"
+        },
+        "tokenOverrides": {
+          "type": "object",
+          "description": "Tokens overridden by this theme variant",
+          "patternProperties": {
+            "^[A-Z][a-zA-Z.]+$": {
+              "description": "Overridden token value"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,834 @@
+{
+  "$schema": "./tokens-schema.json",
+  "version": "0.1.0",
+  "lastUpdated": "2025-11-01",
+  "baseTokens": {
+    "colors": {
+      "Color.Primary": {
+        "type": "color",
+        "defaultValue": "#6750A4",
+        "darkValue": "#D0BCFF",
+        "purpose": "Main brand color, used for primary actions and key UI elements",
+        "category": "primary"
+      },
+      "Color.OnPrimary": {
+        "type": "color",
+        "defaultValue": "#FFFFFF",
+        "darkValue": "#381E72",
+        "purpose": "Text and icons displayed on primary color",
+        "category": "primary"
+      },
+      "Color.PrimaryContainer": {
+        "type": "color",
+        "defaultValue": "#EADDFF",
+        "darkValue": "#4F378B",
+        "purpose": "Containers and backgrounds for primary-related elements",
+        "category": "primary"
+      },
+      "Color.OnPrimaryContainer": {
+        "type": "color",
+        "defaultValue": "#21005D",
+        "darkValue": "#EADDFF",
+        "purpose": "Text and icons on primary containers",
+        "category": "primary"
+      },
+      "Color.Secondary": {
+        "type": "color",
+        "defaultValue": "#625B71",
+        "darkValue": "#CCC2DC",
+        "purpose": "Secondary actions and less prominent UI elements",
+        "category": "secondary"
+      },
+      "Color.OnSecondary": {
+        "type": "color",
+        "defaultValue": "#FFFFFF",
+        "darkValue": "#332D41",
+        "purpose": "Text and icons on secondary color",
+        "category": "secondary"
+      },
+      "Color.SecondaryContainer": {
+        "type": "color",
+        "defaultValue": "#E8DEF8",
+        "darkValue": "#4A4458",
+        "purpose": "Containers for secondary-related elements",
+        "category": "secondary"
+      },
+      "Color.OnSecondaryContainer": {
+        "type": "color",
+        "defaultValue": "#1D192B",
+        "darkValue": "#E8DEF8",
+        "purpose": "Text and icons on secondary containers",
+        "category": "secondary"
+      },
+      "Color.Tertiary": {
+        "type": "color",
+        "defaultValue": "#7D5260",
+        "darkValue": "#EFB8C8",
+        "purpose": "Accent color for additional visual hierarchy",
+        "category": "tertiary"
+      },
+      "Color.OnTertiary": {
+        "type": "color",
+        "defaultValue": "#FFFFFF",
+        "darkValue": "#492532",
+        "purpose": "Text and icons on tertiary color",
+        "category": "tertiary"
+      },
+      "Color.TertiaryContainer": {
+        "type": "color",
+        "defaultValue": "#FFD8E4",
+        "darkValue": "#633B48",
+        "purpose": "Containers for tertiary-related elements",
+        "category": "tertiary"
+      },
+      "Color.OnTertiaryContainer": {
+        "type": "color",
+        "defaultValue": "#31111D",
+        "darkValue": "#FFD8E4",
+        "purpose": "Text and icons on tertiary containers",
+        "category": "tertiary"
+      },
+      "Color.Error": {
+        "type": "color",
+        "defaultValue": "#B3261E",
+        "darkValue": "#F2B8B5",
+        "purpose": "Error states, destructive actions, critical alerts",
+        "category": "error"
+      },
+      "Color.OnError": {
+        "type": "color",
+        "defaultValue": "#FFFFFF",
+        "darkValue": "#601410",
+        "purpose": "Text and icons on error color",
+        "category": "error"
+      },
+      "Color.ErrorContainer": {
+        "type": "color",
+        "defaultValue": "#F9DEDC",
+        "darkValue": "#8C1D18",
+        "purpose": "Containers for error-related messages",
+        "category": "error"
+      },
+      "Color.OnErrorContainer": {
+        "type": "color",
+        "defaultValue": "#410E0B",
+        "darkValue": "#F9DEDC",
+        "purpose": "Text and icons on error containers",
+        "category": "error"
+      },
+      "Color.Surface": {
+        "type": "color",
+        "defaultValue": "#FFFBFE",
+        "darkValue": "#1C1B1F",
+        "purpose": "Main background surface color",
+        "category": "surface"
+      },
+      "Color.OnSurface": {
+        "type": "color",
+        "defaultValue": "#1C1B1F",
+        "darkValue": "#E6E1E5",
+        "purpose": "Text and icons on surface",
+        "category": "surface"
+      },
+      "Color.SurfaceVariant": {
+        "type": "color",
+        "defaultValue": "#E7E0EC",
+        "darkValue": "#49454F",
+        "purpose": "Alternative surface color for emphasis",
+        "category": "surface"
+      },
+      "Color.OnSurfaceVariant": {
+        "type": "color",
+        "defaultValue": "#49454F",
+        "darkValue": "#CAC4D0",
+        "purpose": "Text and icons on surface variants",
+        "category": "surface"
+      },
+      "Color.Background": {
+        "type": "color",
+        "defaultValue": "#FFFBFE",
+        "darkValue": "#1C1B1F",
+        "purpose": "Main background color behind surfaces",
+        "category": "background"
+      },
+      "Color.OnBackground": {
+        "type": "color",
+        "defaultValue": "#1C1B1F",
+        "darkValue": "#E6E1E5",
+        "purpose": "Text and icons on background",
+        "category": "background"
+      },
+      "Color.Outline": {
+        "type": "color",
+        "defaultValue": "#79747E",
+        "darkValue": "#938F99",
+        "purpose": "Important borders and dividers",
+        "category": "outline"
+      },
+      "Color.OutlineVariant": {
+        "type": "color",
+        "defaultValue": "#CAC4D0",
+        "darkValue": "#49454F",
+        "purpose": "Subtle borders and dividers",
+        "category": "outline"
+      },
+      "Color.InverseSurface": {
+        "type": "color",
+        "defaultValue": "#313033",
+        "darkValue": "#E6E1E5",
+        "purpose": "Inverse surface (e.g., dark tooltips in light mode)",
+        "category": "inverse"
+      },
+      "Color.InverseOnSurface": {
+        "type": "color",
+        "defaultValue": "#F4EFF4",
+        "darkValue": "#313033",
+        "purpose": "Text and icons on inverse surface",
+        "category": "inverse"
+      },
+      "Color.InversePrimary": {
+        "type": "color",
+        "defaultValue": "#D0BCFF",
+        "darkValue": "#6750A4",
+        "purpose": "Primary color for inverse elements",
+        "category": "inverse"
+      }
+    },
+    "spacing": {
+      "Space.0": {
+        "type": "spacing",
+        "value": 0,
+        "unit": "dip",
+        "purpose": "No spacing"
+      },
+      "Space.2": {
+        "type": "spacing",
+        "value": 2,
+        "unit": "dip",
+        "purpose": "Minimal spacing between very tight elements"
+      },
+      "Space.4": {
+        "type": "spacing",
+        "value": 4,
+        "unit": "dip",
+        "purpose": "Tight spacing"
+      },
+      "Space.8": {
+        "type": "spacing",
+        "value": 8,
+        "unit": "dip",
+        "purpose": "Standard small spacing"
+      },
+      "Space.12": {
+        "type": "spacing",
+        "value": 12,
+        "unit": "dip",
+        "purpose": "Medium-small spacing"
+      },
+      "Space.16": {
+        "type": "spacing",
+        "value": 16,
+        "unit": "dip",
+        "purpose": "Standard spacing (most common)"
+      },
+      "Space.20": {
+        "type": "spacing",
+        "value": 20,
+        "unit": "dip",
+        "purpose": "Medium-large spacing"
+      },
+      "Space.24": {
+        "type": "spacing",
+        "value": 24,
+        "unit": "dip",
+        "purpose": "Large spacing"
+      },
+      "Space.32": {
+        "type": "spacing",
+        "value": 32,
+        "unit": "dip",
+        "purpose": "Extra large spacing"
+      },
+      "Space.40": {
+        "type": "spacing",
+        "value": 40,
+        "unit": "dip",
+        "purpose": "Section separation"
+      },
+      "Space.48": {
+        "type": "spacing",
+        "value": 48,
+        "unit": "dip",
+        "purpose": "Major section separation"
+      }
+    },
+    "typography": {
+      "FontSize.DisplayLarge": {
+        "type": "fontSize",
+        "value": 57,
+        "unit": "sp",
+        "purpose": "Largest display text (hero headlines)"
+      },
+      "FontSize.DisplayMedium": {
+        "type": "fontSize",
+        "value": 45,
+        "unit": "sp",
+        "purpose": "Medium display text"
+      },
+      "FontSize.DisplaySmall": {
+        "type": "fontSize",
+        "value": 36,
+        "unit": "sp",
+        "purpose": "Small display text"
+      },
+      "FontSize.HeadlineLarge": {
+        "type": "fontSize",
+        "value": 32,
+        "unit": "sp",
+        "purpose": "Large headline text"
+      },
+      "FontSize.HeadlineMedium": {
+        "type": "fontSize",
+        "value": 28,
+        "unit": "sp",
+        "purpose": "Medium headline text"
+      },
+      "FontSize.HeadlineSmall": {
+        "type": "fontSize",
+        "value": 24,
+        "unit": "sp",
+        "purpose": "Small headline text"
+      },
+      "FontSize.TitleLarge": {
+        "type": "fontSize",
+        "value": 22,
+        "unit": "sp",
+        "purpose": "Large title text (page titles)"
+      },
+      "FontSize.TitleMedium": {
+        "type": "fontSize",
+        "value": 16,
+        "unit": "sp",
+        "purpose": "Medium title text (card titles)"
+      },
+      "FontSize.TitleSmall": {
+        "type": "fontSize",
+        "value": 14,
+        "unit": "sp",
+        "purpose": "Small title text (list headers)"
+      },
+      "FontSize.BodyLarge": {
+        "type": "fontSize",
+        "value": 16,
+        "unit": "sp",
+        "purpose": "Large body text (emphasized content)"
+      },
+      "FontSize.BodyMedium": {
+        "type": "fontSize",
+        "value": 14,
+        "unit": "sp",
+        "purpose": "Medium body text (standard content)"
+      },
+      "FontSize.BodySmall": {
+        "type": "fontSize",
+        "value": 12,
+        "unit": "sp",
+        "purpose": "Small body text (supporting text)"
+      },
+      "FontSize.LabelLarge": {
+        "type": "fontSize",
+        "value": 14,
+        "unit": "sp",
+        "purpose": "Large label text (prominent buttons)"
+      },
+      "FontSize.LabelMedium": {
+        "type": "fontSize",
+        "value": 12,
+        "unit": "sp",
+        "purpose": "Medium label text (standard labels)"
+      },
+      "FontSize.LabelSmall": {
+        "type": "fontSize",
+        "value": 11,
+        "unit": "sp",
+        "purpose": "Small label text (compact UI)"
+      }
+    },
+    "borderRadius": {
+      "Radius.None": {
+        "type": "cornerRadius",
+        "value": 0,
+        "unit": "dip",
+        "purpose": "Sharp corners (no rounding)"
+      },
+      "Radius.ExtraSmall": {
+        "type": "cornerRadius",
+        "value": 4,
+        "unit": "dip",
+        "purpose": "Minimal rounding for compact elements"
+      },
+      "Radius.Small": {
+        "type": "cornerRadius",
+        "value": 8,
+        "unit": "dip",
+        "purpose": "Small rounding for buttons and inputs"
+      },
+      "Radius.Medium": {
+        "type": "cornerRadius",
+        "value": 12,
+        "unit": "dip",
+        "purpose": "Medium rounding for cards"
+      },
+      "Radius.Large": {
+        "type": "cornerRadius",
+        "value": 16,
+        "unit": "dip",
+        "purpose": "Large rounding for prominent containers"
+      },
+      "Radius.ExtraLarge": {
+        "type": "cornerRadius",
+        "value": 28,
+        "unit": "dip",
+        "purpose": "Extra large rounding for special emphasis"
+      },
+      "Radius.Full": {
+        "type": "cornerRadius",
+        "value": 9999,
+        "unit": "dip",
+        "purpose": "Fully rounded (circular/pill shape)"
+      }
+    },
+    "borderWidth": {
+      "BorderWidth.None": {
+        "type": "borderWidth",
+        "value": 0,
+        "unit": "dip",
+        "purpose": "No border"
+      },
+      "BorderWidth.Thin": {
+        "type": "borderWidth",
+        "value": 1,
+        "unit": "dip",
+        "purpose": "Thin border (standard)"
+      },
+      "BorderWidth.Thick": {
+        "type": "borderWidth",
+        "value": 2,
+        "unit": "dip",
+        "purpose": "Thick border (emphasis)"
+      },
+      "BorderWidth.Heavy": {
+        "type": "borderWidth",
+        "value": 4,
+        "unit": "dip",
+        "purpose": "Heavy border (strong emphasis)"
+      }
+    },
+    "elevation": {
+      "Elevation.Level0": {
+        "type": "elevation",
+        "value": 0,
+        "unit": "dip",
+        "purpose": "No elevation (flat on surface)"
+      },
+      "Elevation.Level1": {
+        "type": "elevation",
+        "value": 2,
+        "unit": "dip",
+        "purpose": "Minimal elevation (cards)"
+      },
+      "Elevation.Level2": {
+        "type": "elevation",
+        "value": 4,
+        "unit": "dip",
+        "purpose": "Low elevation (raised buttons)"
+      },
+      "Elevation.Level3": {
+        "type": "elevation",
+        "value": 8,
+        "unit": "dip",
+        "purpose": "Medium elevation (floating action buttons)"
+      },
+      "Elevation.Level4": {
+        "type": "elevation",
+        "value": 12,
+        "unit": "dip",
+        "purpose": "High elevation (dialogs, modal sheets)"
+      }
+    },
+    "padding": {
+      "Padding.None": {
+        "type": "padding",
+        "value": 0,
+        "unit": "dip",
+        "purpose": "No internal padding"
+      },
+      "Padding.Small": {
+        "type": "padding",
+        "value": 4,
+        "unit": "dip",
+        "purpose": "Minimal internal padding"
+      },
+      "Padding.Medium": {
+        "type": "padding",
+        "value": 8,
+        "unit": "dip",
+        "purpose": "Standard internal padding"
+      },
+      "Padding.Large": {
+        "type": "padding",
+        "value": 16,
+        "unit": "dip",
+        "purpose": "Large internal padding"
+      },
+      "Padding.ExtraLarge": {
+        "type": "padding",
+        "value": 24,
+        "unit": "dip",
+        "purpose": "Extra large internal padding"
+      }
+    },
+    "opacity": {
+      "StateLayer.Hover": {
+        "type": "opacity",
+        "value": 0.08,
+        "unit": "unitless",
+        "purpose": "Opacity for hover state overlays"
+      },
+      "StateLayer.Focus": {
+        "type": "opacity",
+        "value": 0.12,
+        "unit": "unitless",
+        "purpose": "Opacity for focus state overlays"
+      },
+      "StateLayer.Pressed": {
+        "type": "opacity",
+        "value": 0.12,
+        "unit": "unitless",
+        "purpose": "Opacity for pressed state overlays"
+      },
+      "StateLayer.Dragged": {
+        "type": "opacity",
+        "value": 0.16,
+        "unit": "unitless",
+        "purpose": "Opacity for drag state overlays"
+      },
+      "Opacity.Disabled": {
+        "type": "opacity",
+        "value": 0.38,
+        "unit": "unitless",
+        "purpose": "Opacity for disabled elements"
+      },
+      "Opacity.Medium": {
+        "type": "opacity",
+        "value": 0.74,
+        "unit": "unitless",
+        "purpose": "Medium emphasis opacity"
+      },
+      "Opacity.High": {
+        "type": "opacity",
+        "value": 0.87,
+        "unit": "unitless",
+        "purpose": "High emphasis opacity"
+      },
+      "Opacity.Full": {
+        "type": "opacity",
+        "value": 1.0,
+        "unit": "unitless",
+        "purpose": "Full opacity (no transparency)"
+      }
+    }
+  },
+  "controls": {
+    "FsButton": {
+      "inheritsFrom": "Microsoft.Maui.Controls.Button",
+      "architecture": "subclass",
+      "styledProperties": [
+        {
+          "name": "BackgroundColor",
+          "type": "color",
+          "recommendedToken": "Color.Primary",
+          "bindable": true,
+          "defaultValue": "Platform default"
+        },
+        {
+          "name": "TextColor",
+          "type": "color",
+          "recommendedToken": "Color.OnPrimary",
+          "bindable": true,
+          "defaultValue": "Platform default"
+        },
+        {
+          "name": "BorderColor",
+          "type": "color",
+          "recommendedToken": "Color.Outline",
+          "bindable": true,
+          "defaultValue": "Transparent"
+        },
+        {
+          "name": "BorderWidth",
+          "type": "borderWidth",
+          "recommendedToken": "BorderWidth.Thin",
+          "bindable": true,
+          "defaultValue": 0
+        },
+        {
+          "name": "CornerRadius",
+          "type": "cornerRadius",
+          "recommendedToken": "Radius.Small",
+          "bindable": true,
+          "defaultValue": "Platform default"
+        },
+        {
+          "name": "Padding",
+          "type": "thickness",
+          "recommendedToken": "Space.16",
+          "bindable": true,
+          "defaultValue": "Platform default"
+        },
+        {
+          "name": "FontSize",
+          "type": "fontSize",
+          "recommendedToken": "FontSize.LabelLarge",
+          "bindable": true,
+          "defaultValue": "Platform default"
+        }
+      ],
+      "commonStyles": [
+        {
+          "name": "PrimaryButton",
+          "description": "Filled button for primary actions",
+          "tokens": {
+            "BackgroundColor": "Color.Primary",
+            "TextColor": "Color.OnPrimary",
+            "CornerRadius": "Radius.Small",
+            "Padding": "Space.16",
+            "BorderWidth": "BorderWidth.None"
+          }
+        },
+        {
+          "name": "SecondaryButton",
+          "description": "Filled button for secondary actions",
+          "tokens": {
+            "BackgroundColor": "Color.Secondary",
+            "TextColor": "Color.OnSecondary",
+            "CornerRadius": "Radius.Small",
+            "Padding": "Space.16",
+            "BorderWidth": "BorderWidth.None"
+          }
+        },
+        {
+          "name": "OutlinedButton",
+          "description": "Outlined button for medium-emphasis actions",
+          "tokens": {
+            "BackgroundColor": "Transparent",
+            "TextColor": "Color.Primary",
+            "BorderColor": "Color.Outline",
+            "BorderWidth": "BorderWidth.Thin",
+            "CornerRadius": "Radius.Small",
+            "Padding": "Space.16"
+          }
+        },
+        {
+          "name": "TextButton",
+          "description": "Text-only button for low-emphasis actions",
+          "tokens": {
+            "BackgroundColor": "Transparent",
+            "TextColor": "Color.Primary",
+            "BorderWidth": "BorderWidth.None",
+            "Padding": "Space.12"
+          }
+        }
+      ]
+    },
+    "FsEntry": {
+      "inheritsFrom": "Microsoft.Maui.Controls.ContentView",
+      "architecture": "wrapper",
+      "wrapperReason": "Removes platform-specific native styling (underlines, borders, focus indicators) that cannot be controlled through XAML properties alone",
+      "styledProperties": [
+        {
+          "name": "Text",
+          "type": "string",
+          "bindable": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "Placeholder",
+          "type": "string",
+          "bindable": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "TextColor",
+          "type": "color",
+          "recommendedToken": "Color.OnSurface",
+          "bindable": true,
+          "defaultValue": "#000000"
+        },
+        {
+          "name": "BackgroundColor",
+          "type": "color",
+          "recommendedToken": "Color.SurfaceVariant",
+          "bindable": true,
+          "defaultValue": "Transparent"
+        },
+        {
+          "name": "BorderColor",
+          "type": "color",
+          "recommendedToken": "Color.Outline",
+          "bindable": true,
+          "defaultValue": "Transparent"
+        },
+        {
+          "name": "BorderWidth",
+          "type": "borderWidth",
+          "recommendedToken": "BorderWidth.Thin",
+          "bindable": true,
+          "defaultValue": 0
+        },
+        {
+          "name": "CornerRadius",
+          "type": "cornerRadius",
+          "recommendedToken": "Radius.Small",
+          "bindable": true,
+          "defaultValue": 0
+        },
+        {
+          "name": "Padding",
+          "type": "thickness",
+          "recommendedToken": "Space.12",
+          "bindable": true,
+          "defaultValue": 5
+        },
+        {
+          "name": "FontSize",
+          "type": "fontSize",
+          "recommendedToken": "FontSize.BodyMedium",
+          "bindable": true,
+          "defaultValue": 14
+        },
+        {
+          "name": "IsPassword",
+          "type": "boolean",
+          "bindable": true,
+          "defaultValue": false
+        }
+      ],
+      "commonStyles": [
+        {
+          "name": "FilledEntry",
+          "description": "Filled entry field with background color",
+          "tokens": {
+            "BackgroundColor": "Color.SurfaceVariant",
+            "BorderColor": "Transparent",
+            "BorderWidth": "BorderWidth.None",
+            "CornerRadius": "Radius.ExtraSmall",
+            "Padding": "Space.16",
+            "TextColor": "Color.OnSurface"
+          }
+        },
+        {
+          "name": "OutlinedEntry",
+          "description": "Outlined entry field with border",
+          "tokens": {
+            "BackgroundColor": "Transparent",
+            "BorderColor": "Color.Outline",
+            "BorderWidth": "BorderWidth.Thin",
+            "CornerRadius": "Radius.ExtraSmall",
+            "Padding": "Space.16",
+            "TextColor": "Color.OnSurface"
+          }
+        }
+      ]
+    },
+    "FsCard": {
+      "inheritsFrom": "Microsoft.Maui.Controls.Border",
+      "architecture": "subclass",
+      "styledProperties": [
+        {
+          "name": "BackgroundColor",
+          "type": "color",
+          "recommendedToken": "Color.Surface",
+          "bindable": true,
+          "defaultValue": "Transparent"
+        },
+        {
+          "name": "BorderColor",
+          "type": "color",
+          "recommendedToken": "Color.Outline",
+          "bindable": true,
+          "defaultValue": "Transparent"
+        },
+        {
+          "name": "BorderWidth",
+          "type": "borderWidth",
+          "recommendedToken": "BorderWidth.Thin",
+          "bindable": true,
+          "defaultValue": 1
+        },
+        {
+          "name": "CornerRadius",
+          "type": "cornerRadius",
+          "recommendedToken": "Radius.Medium",
+          "bindable": true,
+          "defaultValue": 0
+        },
+        {
+          "name": "Padding",
+          "type": "thickness",
+          "recommendedToken": "Space.16",
+          "bindable": true,
+          "defaultValue": 0
+        },
+        {
+          "name": "Elevation",
+          "type": "elevation",
+          "recommendedToken": "Elevation.Level1",
+          "bindable": true,
+          "defaultValue": 0
+        }
+      ],
+      "commonStyles": [
+        {
+          "name": "ElevatedCard",
+          "description": "Card with elevation shadow",
+          "tokens": {
+            "BackgroundColor": "Color.Surface",
+            "Elevation": "Elevation.Level2",
+            "CornerRadius": "Radius.Medium",
+            "Padding": "Space.16"
+          }
+        },
+        {
+          "name": "OutlinedCard",
+          "description": "Card with border, no elevation",
+          "tokens": {
+            "BackgroundColor": "Color.Surface",
+            "BorderColor": "Color.OutlineVariant",
+            "BorderWidth": "BorderWidth.Thin",
+            "CornerRadius": "Radius.Medium",
+            "Padding": "Space.16",
+            "Elevation": "Elevation.Level0"
+          }
+        },
+        {
+          "name": "FilledCard",
+          "description": "Card with filled background, no elevation",
+          "tokens": {
+            "BackgroundColor": "Color.SurfaceVariant",
+            "BorderWidth": "BorderWidth.None",
+            "CornerRadius": "Radius.Medium",
+            "Padding": "Space.16",
+            "Elevation": "Elevation.Level0"
+          }
+        }
+      ]
+    }
+  },
+  "themeVariants": {
+    "material": {
+      "description": "Material Design 3 theme implementation",
+      "tokenOverrides": {}
+    }
+  }
+}
