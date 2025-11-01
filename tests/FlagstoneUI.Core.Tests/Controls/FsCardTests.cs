@@ -1,6 +1,6 @@
-using FlagstoneUI.Core.Controls;
-using Xunit;
+﻿using FlagstoneUI.Core.Controls;
 using Shouldly;
+using Xunit;
 
 namespace FlagstoneUI.Core.Tests.Controls;
 
@@ -48,7 +48,7 @@ public class FsCardTests
 	public void Card_shadow_radius_increases_with_elevation()
 	{
 		var card = new FsCard();
-		
+
 		card.Elevation = 1;
 		var shadow1Radius = card.Shadow?.Radius ?? 0f;
 
