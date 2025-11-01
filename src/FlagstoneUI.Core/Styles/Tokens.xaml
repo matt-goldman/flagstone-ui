@@ -3,25 +3,90 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="FlagstoneUI.Core.Styles.Tokens">
-    <!-- Color, spacing, typography tokens -->
+    <!-- Color tokens - Base palette following Material Design 3 color system -->
+    <!-- Primary colors -->
     <Color x:Key="Color.Primary">#6750A4</Color>
     <Color x:Key="Color.OnPrimary">#FFFFFF</Color>
+    <Color x:Key="Color.PrimaryContainer">#EADDFF</Color>
+    <Color x:Key="Color.OnPrimaryContainer">#21005D</Color>
+
+    <!-- Secondary colors -->
+    <Color x:Key="Color.Secondary">#625B71</Color>
+    <Color x:Key="Color.OnSecondary">#FFFFFF</Color>
+    <Color x:Key="Color.SecondaryContainer">#E8DEF8</Color>
+    <Color x:Key="Color.OnSecondaryContainer">#1D192B</Color>
+
+    <!-- Tertiary colors -->
+    <Color x:Key="Color.Tertiary">#7D5260</Color>
+    <Color x:Key="Color.OnTertiary">#FFFFFF</Color>
+    <Color x:Key="Color.TertiaryContainer">#FFD8E4</Color>
+    <Color x:Key="Color.OnTertiaryContainer">#31111D</Color>
+
+    <!-- Error colors -->
+    <Color x:Key="Color.Error">#B3261E</Color>
+    <Color x:Key="Color.OnError">#FFFFFF</Color>
+    <Color x:Key="Color.ErrorContainer">#F9DEDC</Color>
+    <Color x:Key="Color.OnErrorContainer">#410E0B</Color>
+
+    <!-- Surface colors -->
     <Color x:Key="Color.Surface">#FFFBFE</Color>
     <Color x:Key="Color.OnSurface">#1C1B1F</Color>
     <Color x:Key="Color.SurfaceVariant">#E7E0EC</Color>
+    <Color x:Key="Color.OnSurfaceVariant">#49454F</Color>
+
+    <!-- Background colors -->
+    <Color x:Key="Color.Background">#FFFBFE</Color>
+    <Color x:Key="Color.OnBackground">#1C1B1F</Color>
+
+    <!-- Outline colors -->
     <Color x:Key="Color.Outline">#79747E</Color>
+    <Color x:Key="Color.OutlineVariant">#CAC4D0</Color>
 
-    <x:Double x:Key="Radius.Small">4</x:Double>
-    <x:Double x:Key="Radius.Medium">8</x:Double>
-    <x:Double x:Key="Radius.Large">12</x:Double>
+    <!-- Inverse colors -->
+    <Color x:Key="Color.InverseSurface">#313033</Color>
+    <Color x:Key="Color.InverseOnSurface">#F4EFF4</Color>
+    <Color x:Key="Color.InversePrimary">#D0BCFF</Color>
 
+    <!-- Border radius tokens -->
+    <x:Double x:Key="Radius.None">0</x:Double>
+    <x:Double x:Key="Radius.ExtraSmall">4</x:Double>
+    <x:Double x:Key="Radius.Small">8</x:Double>
+    <x:Double x:Key="Radius.Medium">12</x:Double>
+    <x:Double x:Key="Radius.Large">16</x:Double>
+    <x:Double x:Key="Radius.ExtraLarge">28</x:Double>
+    <x:Double x:Key="Radius.Full">9999</x:Double>
+
+    <!-- Spacing tokens -->
+    <x:Double x:Key="Space.0">0</x:Double>
     <x:Double x:Key="Space.2">2</x:Double>
     <x:Double x:Key="Space.4">4</x:Double>
     <x:Double x:Key="Space.8">8</x:Double>
     <x:Double x:Key="Space.12">12</x:Double>
     <x:Double x:Key="Space.16">16</x:Double>
+    <x:Double x:Key="Space.20">20</x:Double>
     <x:Double x:Key="Space.24">24</x:Double>
+    <x:Double x:Key="Space.32">32</x:Double>
+    <x:Double x:Key="Space.40">40</x:Double>
+    <x:Double x:Key="Space.48">48</x:Double>
 
+    <!-- Typography tokens -->
+    <x:Double x:Key="FontSize.DisplayLarge">57</x:Double>
+    <x:Double x:Key="FontSize.DisplayMedium">45</x:Double>
+    <x:Double x:Key="FontSize.DisplaySmall">36</x:Double>
+    <x:Double x:Key="FontSize.HeadlineLarge">32</x:Double>
+    <x:Double x:Key="FontSize.HeadlineMedium">28</x:Double>
+    <x:Double x:Key="FontSize.HeadlineSmall">24</x:Double>
+    <x:Double x:Key="FontSize.TitleLarge">22</x:Double>
+    <x:Double x:Key="FontSize.TitleMedium">16</x:Double>
+    <x:Double x:Key="FontSize.TitleSmall">14</x:Double>
+    <x:Double x:Key="FontSize.BodyLarge">16</x:Double>
+    <x:Double x:Key="FontSize.BodyMedium">14</x:Double>
+    <x:Double x:Key="FontSize.BodySmall">12</x:Double>
+    <x:Double x:Key="FontSize.LabelLarge">14</x:Double>
+    <x:Double x:Key="FontSize.LabelMedium">12</x:Double>
+    <x:Double x:Key="FontSize.LabelSmall">11</x:Double>
+    
+    <!-- Legacy aliases for backward compatibility -->
     <x:Double x:Key="FontSize.Body">14</x:Double>
     <x:Double x:Key="FontSize.Title">20</x:Double>
 
@@ -36,8 +101,22 @@
     <x:Double x:Key="Elevation.Level3">8</x:Double>
     <x:Double x:Key="Elevation.Level4">12</x:Double>
 
+    <!-- Padding tokens -->
     <x:Double x:Key="Padding.None">0</x:Double>
     <x:Double x:Key="Padding.Small">4</x:Double>
     <x:Double x:Key="Padding.Medium">8</x:Double>
     <x:Double x:Key="Padding.Large">16</x:Double>
+    <x:Double x:Key="Padding.ExtraLarge">24</x:Double>
+
+    <!-- State layer opacity tokens -->
+    <x:Double x:Key="StateLayer.Hover">0.08</x:Double>
+    <x:Double x:Key="StateLayer.Focus">0.12</x:Double>
+    <x:Double x:Key="StateLayer.Pressed">0.12</x:Double>
+    <x:Double x:Key="StateLayer.Dragged">0.16</x:Double>
+
+    <!-- Opacity tokens -->
+    <x:Double x:Key="Opacity.Disabled">0.38</x:Double>
+    <x:Double x:Key="Opacity.Medium">0.74</x:Double>
+    <x:Double x:Key="Opacity.High">0.87</x:Double>
+    <x:Double x:Key="Opacity.Full">1.0</x:Double>
 </ResourceDictionary>

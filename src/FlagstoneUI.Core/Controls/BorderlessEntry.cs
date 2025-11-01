@@ -6,21 +6,21 @@ public partial class BorderlessEntry : Entry
 	{
 		RegisterHandler();
 
-        var transparentBackgroundSetter = new Setter
-        {
-            Property	= BackgroundColorProperty,
-            Value		= Colors.Transparent
-        };
+		var transparentBackgroundSetter = new Setter
+		{
+			Property = BackgroundColorProperty,
+			Value = Colors.Transparent
+		};
 
 		var focusedTrigger = new Trigger(typeof(BorderlessEntry))
 		{
-			Property	= IsFocusedProperty,
-			Value		= true
+			Property = IsFocusedProperty,
+			Value = true
 		};
 		focusedTrigger.Setters.Add(transparentBackgroundSetter);
 
-        Triggers.Add(focusedTrigger);
-    }
-	
+		Triggers.Add(focusedTrigger);
+	}
+
 	partial void RegisterHandler();
 }

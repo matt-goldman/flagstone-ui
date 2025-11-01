@@ -6,6 +6,6 @@ public partial class FsButton : Button
 	{
 		RegisterHandler();
 	}
-	
+
 	partial void RegisterHandler();
 }

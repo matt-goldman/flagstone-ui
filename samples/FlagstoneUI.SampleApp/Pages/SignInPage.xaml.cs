@@ -1,4 +1,4 @@
-namespace FlagstoneUI.SampleApp.Pages;
+﻿namespace FlagstoneUI.SampleApp.Pages;
 
 public partial class SignInPage : ContentPage
 {
