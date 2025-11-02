@@ -596,61 +596,6 @@ Same as existing Flagstone UI CI:
 
 ## Packaging & Distribution
 
-### .NET Tool Configuration
-
-**`FlagstoneUI.BootstrapConverter.Cli.csproj`**:
-
-```xml
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net10.0</TargetFramework>
-    
-    <!-- .NET Tool packaging -->
-    <PackAsTool>true</PackAsTool>
-    <ToolCommandName>flagstone-bootstrap</ToolCommandName>
-    <PackageId>FlagstoneUI.BootstrapConverter</PackageId>
-    <Version>0.1.0</Version>
-    <Authors>Matt Goldman</Authors>
-    <Description>Convert Bootstrap themes to Flagstone UI themes and tokens</Description>
-    <PackageTags>maui;xaml;bootstrap;theme;converter;mcp</PackageTags>
-    <PackageProjectUrl>https://github.com/matt-goldman/flagstone-ui</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/matt-goldman/flagstone-ui</RepositoryUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\FlagstoneUI.BootstrapConverter\FlagstoneUI.BootstrapConverter.csproj" />
-  </ItemGroup>
-</Project>
-```
-
-### Publishing
-
-```bash
-# Build and pack
-dotnet pack tools/FlagstoneUI.BootstrapConverter.Cli -c Release -o ./nupkg
-
-# Publish to NuGet.org
-dotnet nuget push ./nupkg/FlagstoneUI.BootstrapConverter.0.1.0.nupkg --source https://api.nuget.org/v3/index.json --api-key <key>
-
-# Or test locally
-dotnet tool install --global --add-source ./nupkg FlagstoneUI.BootstrapConverter
-```
-
-### Installation & Updates
-
-```bash
-# Install globally
-dotnet tool install -g FlagstoneUI.BootstrapConverter
-
-# Update
-dotnet tool update -g FlagstoneUI.BootstrapConverter
-
-# Uninstall
-dotnet tool uninstall -g FlagstoneUI.BootstrapConverter
-```
-
 ## Error Handling
 
 ### Parser Errors
