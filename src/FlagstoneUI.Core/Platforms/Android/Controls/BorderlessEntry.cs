@@ -15,6 +15,9 @@ public partial class BorderlessEntry
 			handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
 			handler.PlatformView.BackgroundTintList = 
 				Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
+			
+			// Remove native padding that can cause text clipping
+			handler.PlatformView.SetPadding(0, 0, 0, 0);
 		});
 	}
 }
