@@ -20,6 +20,9 @@ public partial class FsEntry : ContentView
     }
 
     #region Events
+	/// <summary>
+	/// Occurs when the operation has completed.
+	/// </summary>
 	public event EventHandler? Completed;
 	void OnCompleted(object? sender, EventArgs e) => Completed?.Invoke(this, e);
 
@@ -30,29 +33,47 @@ public partial class FsEntry : ContentView
 	/// respond to changes in the text, such as updating the UI or performing validation.</remarks>
 	public event EventHandler<TextChangedEventArgs>? TextChanged;
 	void OnTextChanged(object? sender, TextChangedEventArgs e) => TextChanged?.Invoke(this, e);
+
+	/// <summary>
+	/// Occurs when the control receives input focus.
+	/// </summary>
+	/// <remarks>Subscribe to this event to be notified when the control becomes the active element for user input.
+	/// This event is typically raised when the user interacts with the control using the keyboard or mouse, or when focus
+	/// is set programmatically.</remarks>
+	public new event EventHandler? Focused;
+	void OnFocused(object? sender, FocusEventArgs e) => Focused?.Invoke(this, e);
+
+	/// <summary>
+	/// Occurs when the control loses input focus.
+	/// </summary>
+	/// <remarks>Subscribe to this event to be notified when the control is no longer the active element. This event
+	/// is typically used to perform actions such as validation or cleanup when the user navigates away from the
+	/// control.</remarks>
+    public new event EventHandler? Unfocused;
+	void OnUnfocused(object? sender, FocusEventArgs e) => Unfocused?.Invoke(this, e);
     #endregion
 
-    #region BorderColorProperty
+	#region BorderBrushProperty
 	/// <summary>
-	/// Identifies the BorderColor bindable property.
+	/// Identifies the BorderBrush bindable property.
 	/// </summary>
-	/// <remarks>This property determines the color of the border for the <see cref="FsEntry"/> control.  The
-	/// default value is <see cref="Colors.Transparent"/>.</remarks>
-    public static readonly BindableProperty BorderColorProperty = BindableProperty.Create(
-		nameof(BorderColor),
-		typeof(Color),
+	/// <remarks>This property determines the brush used for the border of the <see cref="FsEntry"/> control.
+	/// The default value is a transparent solid color brush.</remarks>
+	public static readonly BindableProperty BorderBrushProperty = BindableProperty.Create(
+		nameof(BorderBrush),
+		typeof(Brush),
 		typeof(FsEntry),
-		Colors.Transparent);
+		new SolidColorBrush(Colors.Transparent));
 
 	/// <summary>
-	/// Gets or sets the color of the border.
+	/// Gets or sets the brush used to paint the border.
 	/// </summary>
-	/// <remarks>Setting this property updates the visual appearance of the border. Ensure the color is appropriate
-	/// for the application's theme or design.</remarks>
-	public Color BorderColor
+	/// <remarks>Setting this property updates the visual appearance of the border. The brush can be a solid color,
+	/// gradient, or other brush type. Ensure the brush is appropriate for the application's theme or design.</remarks>
+	public Brush BorderBrush
 	{
-		get { return (Color)GetValue(BorderColorProperty); }
-		set { SetValue(BorderColorProperty, value); }
+		get { return (Brush)GetValue(BorderBrushProperty); }
+		set { SetValue(BorderBrushProperty, value); }
 	}
 	#endregion
 
@@ -196,30 +217,31 @@ public partial class FsEntry : ContentView
 	}
     #endregion
 
-    #region BackgroundColorProperty
+	#region BackgroundProperty
 	/// <summary>
-	/// Identifies the <see cref="BackgroundColor"/> bindable property.
+	/// Identifies the <see cref="Background"/> bindable property.
 	/// </summary>
-	/// <remarks>This property allows binding to the background color of the <see cref="FsEntry"/> control. The
-	/// default value is <see cref="Colors.Transparent"/>.</remarks>
-	public new static readonly BindableProperty BackgroundColorProperty = BindableProperty.Create(
-		nameof(BackgroundColor),
-		typeof(Color),
+	/// <remarks>This property allows binding to the background brush of the <see cref="FsEntry"/> control. The
+	/// default value is a transparent solid color brush.</remarks>
+	public new static readonly BindableProperty BackgroundProperty = BindableProperty.Create(
+		nameof(Background),
+		typeof(Brush),
 		typeof(FsEntry),
-		Colors.Transparent,
+		new SolidColorBrush(Colors.Transparent),
 		BindingMode.OneWay);
 
 	/// <summary>
-	/// Gets or sets the background color of the element.
+	/// Gets or sets the brush that fills the background of the element.
 	/// </summary>
-	public new Color BackgroundColor
+	/// <remarks>The brush can be a solid color, gradient, or other brush type.</remarks>
+	public new Brush Background
 	{
-		get => (Color)GetValue(BackgroundColorProperty);
-		set => SetValue(BackgroundColorProperty, value);
+		get => (Brush)GetValue(BackgroundProperty);
+		set => SetValue(BackgroundProperty, value);
 	}
-    #endregion
+	#endregion
 
-    #region HorizontalTextAlignmentProperty
+	#region HorizontalTextAlignmentProperty
 	/// <summary>
 	/// Identifies the bindable property for the horizontal text alignment of the entry.
 	/// </summary>
@@ -363,6 +385,17 @@ public partial class FsEntry : ContentView
 		get => (Thickness)GetValue(PaddingProperty);
 		set => SetValue(PaddingProperty, value);
 	}
-    #endregion
-}
+	#endregion
 
+	private void BorderlessEntry_Focused(object sender, FocusEventArgs e)
+	{
+		VisualStateManager.GoToState(this, VisualStateManager.CommonStates.Focused);
+		Focused?.Invoke(this, EventArgs.Empty);
+	}
+
+	private void BorderlessEntry_Unfocused(object sender, FocusEventArgs e)
+	{
+		VisualStateManager.GoToState(this, VisualStateManager.CommonStates.Normal);
+		Unfocused?.Invoke(this, EventArgs.Empty);
+	}
+}

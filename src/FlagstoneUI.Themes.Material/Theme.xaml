@@ -198,26 +198,78 @@
     
     <!-- Base Entry Style (Material Filled Text Field) -->
     <Style TargetType="fs:FsEntry">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={DynamicResource Color.SurfaceVariant}, Dark={DynamicResource Color.SurfaceVariant.Dark}}" />
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Color="{AppThemeBinding Light={DynamicResource Color.SurfaceVariant}, Dark={DynamicResource Color.SurfaceVariant.Dark}}" />
+            </Setter.Value>
+        </Setter>
         <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource Color.OnSurface}, Dark={DynamicResource Color.OnSurface.Dark}}" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.BodyLarge}" />
         <Setter Property="CornerRadius" Value="{DynamicResource Radius.ExtraSmall}" />
-        <Setter Property="BorderColor" Value="Transparent" />
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <SolidColorBrush Color="Transparent" />
+            </Setter.Value>
+        </Setter>
         <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.None}" />
         <Setter Property="Padding" Value="16,16,16,8" />
         <Setter Property="HeightRequest" Value="56" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="FocusStates">
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="BorderBrush">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{AppThemeBinding Light={DynamicResource Color.Primary}, Dark={DynamicResource Color.Primary.Dark}}" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="BorderWidth" Value="2" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Normal state is empty - base style properties apply when unfocused -->
+                    <VisualState x:Name="Normal" />
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
     </Style>
 
     <!-- Outlined Entry Style -->
     <Style x:Key="OutlinedEntry" TargetType="fs:FsEntry">
-        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Color="Transparent" />
+            </Setter.Value>
+        </Setter>
         <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource Color.OnSurface}, Dark={DynamicResource Color.OnSurface.Dark}}" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.BodyLarge}" />
         <Setter Property="CornerRadius" Value="{DynamicResource Radius.ExtraSmall}" />
-        <Setter Property="BorderColor" Value="{AppThemeBinding Light={DynamicResource Color.Outline}, Dark={DynamicResource Color.Outline.Dark}}" />
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <SolidColorBrush Color="{AppThemeBinding Light={DynamicResource Color.Outline}, Dark={DynamicResource Color.Outline.Dark}}" />
+            </Setter.Value>
+        </Setter>
         <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
         <Setter Property="Padding" Value="16,16,16,8" />
         <Setter Property="HeightRequest" Value="56" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="FocusStates">
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="BorderBrush">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{AppThemeBinding Light={DynamicResource Color.Primary}, Dark={DynamicResource Color.Primary.Dark}}" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="BorderWidth" Value="2" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Normal state is empty - base style properties (outline border) apply when unfocused -->
+                    <VisualState x:Name="Normal" />
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
     </Style>
 
     <!-- Switch Style (Material Design Switch) -->

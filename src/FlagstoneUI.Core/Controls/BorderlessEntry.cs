@@ -19,7 +19,15 @@ public partial class BorderlessEntry : Entry
 		};
 		focusedTrigger.Setters.Add(transparentBackgroundSetter);
 
+		var hoverTrigger = new Trigger(typeof(BorderlessEntry))
+		{
+			Property = IsFocusedProperty,
+			Value = true
+		};
+		hoverTrigger.Setters.Add(transparentBackgroundSetter);
+
         Triggers.Add(focusedTrigger);
+		Triggers.Add(hoverTrigger);
     }
 	
 	partial void RegisterHandler();

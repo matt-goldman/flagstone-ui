@@ -7,11 +7,12 @@
              x:Name="ViewWrapper">
     <!-- TODO: Add global XML usings -->
   <Border x:Name="WrapperBorder"
-          BackgroundColor="{Binding BackgroundColor}"
-          Stroke="{Binding BorderColor}"
+          Background="{Binding Background}"
+          Stroke="{Binding BorderBrush}"
           StrokeThickness="{Binding BorderWidth}"
           StrokeShape="{Binding BorderShape}">
-    <Grid Padding="{Binding Padding}">
+    <Grid Padding="{Binding Padding}"
+          MinimumHeightRequest="44">
       <fs:BorderlessEntry Text="{Binding Text}"
                           Placeholder="{Binding Placeholder}"
                           TextColor="{Binding TextColor}"
@@ -21,7 +22,11 @@
                           HorizontalTextAlignment="{Binding HorizontalTextAlignment}"
                           VerticalTextAlignment="{Binding VerticalTextAlignment}"
                           IsPassword="{Binding IsPassword}"
-                          Keyboard="{Binding Keyboard}"/>
+                          Keyboard="{Binding Keyboard}"
+                          Margin="0"
+                          VerticalOptions="Center"
+                          Focused="BorderlessEntry_Focused"
+                          Unfocused="BorderlessEntry_Unfocused" />
     </Grid>
   </Border>
 </ContentView>
