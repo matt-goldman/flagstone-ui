@@ -2,14 +2,15 @@
 
 ## Overview
 
-An MCP (Model Context Protocol) server that converts Bootstrap themes into Flagstone UI token definitions and theme files. This enables developers to use existing Bootstrap themes with .NET MAUI applications, bridging the gap between web and mobile styling.
+A .NET-first tool that converts Bootstrap themes into Flagstone UI token definitions and theme files. Follows the proven architecture of the TailwindXamlThemeConverter - core functionality in a class library, wrapped in a console app for POC/testing, packaged as a .NET tool, and serving MCP via stdout.
 
 ## Goals
 
-1. **Primary**: Convert Bootstrap theme variables to Flagstone UI tokens
-2. **Secondary**: Generate complete Flagstone theme files from Bootstrap themes
-3. **Tertiary**: Enable theme switching demonstrations
-4. **Future**: Serve as reference for Tailwind converter
+1. **Primary**: Build robust .NET class library with conversion logic
+2. **Secondary**: Create console app wrapper for rapid testing/iteration
+3. **Tertiary**: Package as .NET global tool
+4. **Quaternary**: Serve MCP protocol via stdout (like .NET tool)
+5. **Future**: Easy migration path to TypeScript/Python if needed for VS Code extension
 
 ## Value Proposition
 
@@ -17,167 +18,218 @@ An MCP (Model Context Protocol) server that converts Bootstrap themes into Flags
 - **Consistent styling** across web and mobile applications
 - **Faster theme development** by leveraging Bootstrap ecosystem
 - **Demonstrates MCP tooling** as core differentiator for Flagstone UI
+- **Rapid iteration** with familiar .NET tooling and testing
+- **Migration-friendly** - solve functionality first, port later if needed
 
 ## Architecture
 
-### MCP Server Structure
+### .NET Project Structure
 
+```tree
+tools/FlagstoneUI.BootstrapConverter/
+├── FlagstoneUI.BootstrapConverter.csproj          # Class library (core logic)
+├── BootstrapParser.cs                             # Parse Bootstrap CSS/SCSS
+├── BootstrapMapper.cs                             # Map Bootstrap → Flagstone tokens
+├── XamlThemeGenerator.cs                          # Generate Tokens.xaml & Theme.xaml
+├── Models/
+│   ├── BootstrapVariables.cs                      # Bootstrap variable models
+│   ├── BootstrapTheme.cs                          # Complete Bootstrap theme
+│   └── ConversionOptions.cs                       # Conversion configuration
+├── Mappings/
+│   ├── ColorMappings.cs                           # Bootstrap → Flagstone color mapping
+│   ├── TypographyMappings.cs                      # Typography mapping rules
+│   └── SpacingMappings.cs                         # Spacing/sizing mappings
+└── Resources/
+    ├── bootstrap-mappings.json                    # Reference mappings
+    └── templates/
+        ├── Tokens.xaml.template                   # Token template
+        └── Theme.xaml.template                    # Theme template
+
+tools/FlagstoneUI.BootstrapConverter.Cli/
+├── FlagstoneUI.BootstrapConverter.Cli.csproj      # Console app / .NET tool
+├── Program.cs                                     # CLI commands (System.CommandLine)
+├── Commands/
+│   ├── ConvertCommand.cs                          # bootstrap convert
+│   ├── ParseCommand.cs                            # bootstrap parse
+│   └── ListCommand.cs                             # bootstrap list-themes
+└── McpServer.cs                                   # MCP protocol via stdout
+
+tests/FlagstoneUI.BootstrapConverter.Tests/
+├── FlagstoneUI.BootstrapConverter.Tests.csproj
+├── ParserTests.cs                                 # Bootstrap parsing tests
+├── MapperTests.cs                                 # Mapping logic tests
+├── GeneratorTests.cs                              # XAML generation tests
+└── Fixtures/
+    ├── bootstrap-default.css                      # Test Bootstrap themes
+    ├── bootstrap-darkly.css                       # Bootswatch Darkly
+    └── bootstrap-custom.scss                      # Custom SCSS
 ```
-flagstone-bootstrap-mcp/
-├── src/
-│   ├── server.ts (or .js)          # MCP server implementation
-│   ├── parser.ts                    # Bootstrap variable parser
-│   ├── mapper.ts                    # Bootstrap → Flagstone mapping
-│   └── generator.ts                 # XAML theme file generator
-├── resources/
-│   ├── mappings.json                # Bootstrap variable mappings
-│   └── templates/
-│       ├── Tokens.xaml.template     # Token file template
-│       └── Theme.xaml.template      # Theme file template
-├── tests/
-│   └── fixtures/
-│       ├── bootstrap-default.scss   # Test Bootstrap themes
-│       └── bootstrap-custom.css
-└── package.json
+
+### Inspired by TokenGenerator
+
+The structure mirrors `tools/FlagstoneUI.TokenGenerator`:
+
+- **Core logic in class library** for reusability and testability
+- **Console app wrapper** with System.CommandLine for CLI interface
+- **Separate concerns**: parsing, mapping, generation
+- **JSON-first internal format** for MCP compatibility
+- **XAML generation** utilities similar to `XamlGenerator.cs`
+
+### CLI Commands (Console App)
+
+The console app exposes functionality via System.CommandLine:
+
+#### 1. `bootstrap convert`
+
+**Purpose**: Convert Bootstrap theme to Flagstone tokens and/or theme
+
+**Usage**:
+
+```bash
+# Convert from URL
+flagstone-bootstrap convert --source https://bootswatch.com/5/darkly/bootstrap.css --output ./themes/darkly
+
+# Convert from file
+flagstone-bootstrap convert --source ./bootstrap.scss --output ./themes/custom --format scss
+
+# Generate tokens only
+flagstone-bootstrap convert --source ./bootstrap.css --output ./tokens --tokens-only
+
+# Generate complete theme with base
+flagstone-bootstrap convert --source ./bootstrap.css --output ./theme --theme-name "Bootstrap Darkly" --base-theme Material
 ```
 
-### MCP Tools Exposed
+**Options**:
 
-#### 1. `bootstrap_parse`
+- `--source`, `-s`: URL or file path to Bootstrap theme (required)
+- `--output`, `-o`: Output directory for generated files (required)
+- `--format`, `-f`: Input format: `css`, `scss`, `json` (auto-detect if omitted)
+- `--tokens-only`: Generate only Tokens.xaml (no Theme.xaml)
+- `--theme-name`: Name for the theme (default: "Bootstrap Theme")
+- `--base-theme`: Base theme to extend: `Material`, `Modern`, `None` (default: None)
+- `--dark-mode`: Dark mode strategy: `auto`, `manual`, `none` (default: auto)
+- `--json`: Output intermediate JSON for inspection
 
-**Purpose**: Parse Bootstrap theme file and extract variables
+**Output**:
 
-**Input**:
+```text
+📦 Bootstrap Theme Converter
+   Source:  https://bootswatch.com/5/darkly/bootstrap.css
+   Output:  ./themes/darkly
+   Format:  css (auto-detected)
 
-```json
-{
-  "source": "url|file|content",
-  "value": "https://bootswatch.com/5/darkly/bootstrap.css"
-}
+✅ Parsing Bootstrap theme...
+   ✓ Found 47 variables (8 colors, 12 typography, 6 spacing, 4 borders)
+
+✅ Mapping to Flagstone tokens...
+   ✓ Mapped 8 color tokens
+   ✓ Mapped 12 typography tokens
+   ✓ Mapped 6 spacing tokens
+   ✓ Mapped 4 border tokens
+   ✓ Generated 8 dark mode variants (auto)
+
+✅ Generating XAML files...
+   ✓ Tokens.xaml (2.4 KB)
+   ✓ Theme.xaml (5.1 KB)
+
+✅ Conversion complete!
+   Files saved to: ./themes/darkly
+```
+
+#### 2. `bootstrap parse`
+
+**Purpose**: Parse Bootstrap theme and output variables as JSON
+
+**Usage**:
+
+```bash
+# Parse and display
+flagstone-bootstrap parse --source ./bootstrap.css
+
+# Parse and save JSON
+flagstone-bootstrap parse --source ./bootstrap.css --output ./variables.json
 ```
 
 **Output**:
 
 ```json
 {
-  "variables": {
-    "colors": {
-      "primary": "#375a7f",
-      "secondary": "#444",
-      "success": "#00bc8c",
-      "danger": "#e74c3c",
-      "warning": "#f39c12",
-      "info": "#3498db",
-      "light": "#adb5bd",
-      "dark": "#303030"
-    },
-    "typography": {
-      "font-family-base": "-apple-system, BlinkMacSystemFont, 'Segoe UI'",
-      "font-size-base": "1rem",
-      "line-height-base": "1.5"
-    },
-    "spacing": {
-      "spacer": "1rem"
-    },
-    "borders": {
-      "border-radius": "0.25rem",
-      "border-width": "1px"
-    }
+  "colors": {
+    "primary": "#375a7f",
+    "secondary": "#444",
+    "success": "#00bc8c",
+    "danger": "#e74c3c",
+    "warning": "#f39c12",
+    "info": "#3498db",
+    "light": "#adb5bd",
+    "dark": "#303030"
+  },
+  "typography": {
+    "fontFamilyBase": "-apple-system, BlinkMacSystemFont, 'Segoe UI'",
+    "fontSizeBase": "1rem",
+    "lineHeightBase": "1.5"
+  },
+  "spacing": {
+    "spacer": "1rem"
+  },
+  "borders": {
+    "borderRadius": "0.25rem",
+    "borderWidth": "1px"
   }
 }
 ```
 
-#### 2. `bootstrap_to_tokens`
+#### 3. `bootstrap list-themes`
 
-**Purpose**: Convert Bootstrap variables to Flagstone tokens XAML
+**Purpose**: List popular Bootstrap themes from Bootswatch
 
-**Input**:
+**Usage**:
 
-```json
-{
-  "variables": { /* from bootstrap_parse */ },
-  "options": {
-    "namespace": "FlagstoneUI.Themes.Bootstrap",
-    "includeComments": true,
-    "darkMode": "auto|manual|none"
-  }
-}
+```bash
+# List all themes
+flagstone-bootstrap list-themes
+
+# List with JSON output
+flagstone-bootstrap list-themes --json
 ```
 
 **Output**:
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-    
-    <!-- Color Tokens (converted from Bootstrap variables) -->
-    <Color x:Key="Color.Primary">#375a7f</Color>
-    <Color x:Key="Color.Primary.Dark">#2a4460</Color>
-    
-    <Color x:Key="Color.Secondary">#444444</Color>
-    <Color x:Key="Color.Secondary.Dark">#333333</Color>
-    
-    <!-- ... additional tokens ... -->
-    
-</ResourceDictionary>
+```text
+🎨 Available Bootstrap Themes (Bootswatch)
+
+1. Darkly
+   Primary: #375a7f | Accent: #00bc8c
+   URL: https://bootswatch.com/5/darkly/bootstrap.css
+   Preview: https://bootswatch.com/5/darkly/
+
+2. Lux
+   Primary: #1a1a1a | Accent: #d9230f
+   URL: https://bootswatch.com/5/lux/bootstrap.css
+   Preview: https://bootswatch.com/5/lux/
+
+... (more themes)
 ```
 
-#### 3. `bootstrap_to_theme`
+### MCP Server Mode
 
-**Purpose**: Generate complete Flagstone theme from Bootstrap
+The CLI tool can also run as an MCP server, communicating via stdin/stdout:
 
-**Input**:
+```bash
+# Start MCP server mode
+flagstone-bootstrap mcp
 
-```json
-{
-  "variables": { /* from bootstrap_parse */ },
-  "themeName": "Bootstrap Darkly",
-  "baseTheme": "Material|Modern|None",
-  "options": {
-    "includeVisualStates": true,
-    "includeControlStyles": ["FsEntry", "FsButton", "FsCard"]
-  }
-}
+# Or via .NET tool
+dotnet tool run flagstone-bootstrap mcp
 ```
 
-**Output**: Complete `Theme.xaml` file content with:
+**MCP Tools Exposed** (same as CLI commands):
 
-- Token imports
-- Base styles for specified controls
-- Visual state definitions
-- Bootstrap-specific adjustments
+- `bootstrap_convert` - Convert Bootstrap theme to Flagstone
+- `bootstrap_parse` - Parse Bootstrap variables
+- `bootstrap_list_themes` - List available themes
 
-#### 4. `bootstrap_list_themes`
-
-**Purpose**: List popular Bootstrap themes from CDNs/libraries
-
-**Input**:
-
-```json
-{
-  "source": "bootswatch|themesberg|default"
-}
-```
-
-**Output**:
-
-```json
-{
-  "themes": [
-    {
-      "name": "Darkly",
-      "url": "https://bootswatch.com/5/darkly/bootstrap.css",
-      "preview": "https://bootswatch.com/5/darkly/",
-      "colors": {
-        "primary": "#375a7f",
-        "accent": "#00bc8c"
-      }
-    },
-    // ... more themes
-  ]
-}
-```
+The MCP server wraps the same class library functionality, just with JSON-RPC protocol over stdio.
 
 ## Bootstrap → Flagstone Mapping
 
@@ -242,42 +294,109 @@ Bootstrap doesn't have built-in dark mode variables, so we need to generate them
 
 ## Implementation Phases
 
-### Phase 1: Core Parser (Days 1-2)
+### Phase 1: Core Class Library (Days 1-2)
 
-- Bootstrap CSS/SCSS variable parser
-- Support CSS custom properties (`--bs-*`)
-- Support SCSS variables (`$primary`)
-- Extract color, typography, spacing, border values
-- Unit conversion utilities (rem → px, etc.)
+**Goal**: Build `FlagstoneUI.BootstrapConverter` class library with core functionality
 
-**Deliverable**: `bootstrap_parse` tool working with test fixtures
+**Tasks**:
 
-### Phase 2: Token Generator (Day 2-3)
-
-- Bootstrap → Flagstone token mapping
+- Bootstrap CSS/SCSS variable parser (`BootstrapParser.cs`)
+  - Support CSS custom properties (`--bs-*`)
+  - Support SCSS variables (`$primary`)
+  - Extract color, typography, spacing, border values
+  - Unit conversion utilities (rem → px, etc.)
+- Bootstrap → Flagstone mapping (`BootstrapMapper.cs`)
+  - Color mapping (Bootstrap semantic colors → Flagstone tokens)
+  - Typography mapping (font stacks, sizes, weights)
+  - Spacing/border mapping
+- XAML generation (`XamlThemeGenerator.cs`)
+  - Similar to `tools/FlagstoneUI.TokenGenerator/XamlGenerator.cs`
+  - Generate `Tokens.xaml` from mapped values
+  - Generate `Theme.xaml` with control styles (optional)
 - Dark mode generation strategies
-- XAML token file generation
-- Validation of generated tokens
+  - Auto-generate dark variants (darken/lighten by 20%)
+  - Manual specification support
+  - None (single theme only)
 
-**Deliverable**: `bootstrap_to_tokens` tool generating valid Tokens.xaml
+**Tests**:
 
-### Phase 3: Theme Generator (Day 3-4)
+- Unit tests for parsing Bootstrap fixtures
+- Mapping validation tests
+- XAML generation tests with expected outputs
 
-- Complete theme file generation
-- Control style templates
-- Visual state definitions based on Bootstrap colors
-- Integration with existing Material/Modern themes
+**Deliverable**: Working class library with comprehensive tests
 
-**Deliverable**: `bootstrap_to_theme` tool generating working themes
+### Phase 2: Console App Wrapper (Day 2-3)
 
-### Phase 4: Integration & Demo (Day 4-5)
+**Goal**: Create CLI tool for rapid testing and iteration
 
-- Theme switching mechanism in ThemePlayground
-- Bootstrap theme gallery (Bootswatch integration)
-- Documentation and examples
-- .NET 10 launch blog post
+**Tasks**:
 
-**Deliverable**: Working demo switching between Material/Modern/Bootstrap themes
+- Set up `FlagstoneUI.BootstrapConverter.Cli` project
+- Implement System.CommandLine commands:
+  - `convert` - Full conversion pipeline
+  - `parse` - Parse and output JSON
+  - `list-themes` - List Bootswatch themes
+- Add progress reporting and colored output
+- Configure as packable .NET tool (.csproj settings)
+
+**Tests**:
+
+- Integration tests running CLI commands
+- Fixture-based validation (convert known themes)
+
+**Deliverable**: Working CLI tool, manually testable with `dotnet run`
+
+### Phase 3: MCP Server Mode (Day 3-4)
+
+**Goal**: Enable MCP protocol communication via stdio
+
+**Tasks**:
+
+- Implement `McpServer.cs` for JSON-RPC over stdio
+- Map MCP tool calls to class library methods
+- Expose tools: `bootstrap_convert`, `bootstrap_parse`, `bootstrap_list_themes`
+- Add `mcp` command to CLI
+- Test with MCP inspector or VS Code
+
+**Tests**:
+
+- MCP protocol tests (JSON-RPC request/response)
+- Tool invocation tests
+
+**Deliverable**: Working MCP server mode
+
+### Phase 4: Integration & Packaging (Day 4-5)
+
+**Goal**: Package as .NET tool and integrate with ThemePlayground
+
+**Tasks**:
+
+- Configure NuGet packaging (.nuspec or .csproj PackageReference)
+- Publish to NuGet (or local feed for testing)
+- Test installation: `dotnet tool install -g FlagstoneUI.BootstrapConverter`
+- Integrate with ThemePlayground sample app
+- Theme switching mechanism demonstration
+- Documentation (README, API docs, examples)
+
+**Tests**:
+
+- End-to-end: install tool → convert theme → use in MAUI app
+- Visual verification in ThemePlayground
+
+**Deliverable**: Packaged tool, working demo, complete documentation
+
+## Migration Path
+
+If we later need to migrate to TypeScript/Python (e.g., for easier VS Code extension):
+
+1. **Core logic is proven** in .NET - we know it works
+2. **Test fixtures serve as migration validation** - same inputs/outputs
+3. **Focus migration on translation**, not functionality
+4. **Keep .NET version** as reference implementation
+5. **Potentially maintain both** - .NET tool for CLI, TS/Python for VS Code extension
+
+This approach dramatically reduces risk compared to building in an unfamiliar platform from scratch.
 
 ## File Format Support
 
@@ -316,134 +435,215 @@ Bootstrap doesn't have built-in dark mode variables, so we need to generate them
 
 ## Usage Examples
 
-### Example 1: Convert Bootswatch Theme
+### Example 1: Convert Bootswatch Theme (CLI)
 
-```typescript
-// 1. Parse Bootswatch Darkly theme
-const variables = await mcp.call('bootstrap_parse', {
-  source: 'url',
-  value: 'https://bootswatch.com/5/darkly/bootstrap.css'
-});
+```bash
+# Install tool (once packaged)
+dotnet tool install -g FlagstoneUI.BootstrapConverter
 
-// 2. Generate tokens
-const tokens = await mcp.call('bootstrap_to_tokens', {
-  variables: variables,
-  options: {
-    darkMode: 'auto',
-    includeComments: true
-  }
-});
+# Convert Bootswatch Darkly theme
+flagstone-bootstrap convert \
+  --source https://bootswatch.com/5/darkly/bootstrap.css \
+  --output ./FlagstoneUI.Themes.Bootstrap.Darkly \
+  --theme-name "Bootstrap Darkly" \
+  --base-theme Material
 
-// 3. Generate complete theme
-const theme = await mcp.call('bootstrap_to_theme', {
-  variables: variables,
-  themeName: 'Bootstrap Darkly',
-  baseTheme: 'Material',
-  options: {
-    includeControlStyles: ['FsEntry', 'FsButton', 'FsCard']
-  }
-});
-
-// 4. Save files
-fs.writeFileSync('Tokens.Bootstrap.Darkly.xaml', tokens);
-fs.writeFileSync('Theme.Bootstrap.Darkly.xaml', theme);
+# Result:
+# ./FlagstoneUI.Themes.Bootstrap.Darkly/Tokens.xaml
+# ./FlagstoneUI.Themes.Bootstrap.Darkly/Theme.xaml
 ```
 
 ### Example 2: Custom Bootstrap Theme
 
-```typescript
-// User provides custom Bootstrap SCSS
-const customScss = `
-$primary: #ff6b6b;
-$secondary: #4ecdc4;
-$font-family-base: 'Inter', sans-serif;
-`;
+```bash
+# User has custom Bootstrap SCSS
+flagstone-bootstrap convert \
+  --source ./custom-bootstrap.scss \
+  --output ./FlagstoneUI.Themes.CustomBrand \
+  --theme-name "Custom Brand" \
+  --format scss
 
-const variables = await mcp.call('bootstrap_parse', {
-  source: 'content',
-  value: customScss
-});
+# Parse first to inspect variables
+flagstone-bootstrap parse --source ./custom-bootstrap.scss --output ./variables.json
 
-const theme = await mcp.call('bootstrap_to_theme', {
-  variables: variables,
-  themeName: 'Custom Brand',
-  baseTheme: 'None'
-});
+# Review variables.json, then convert
+flagstone-bootstrap convert --source ./custom-bootstrap.scss --output ./theme
 ```
 
-### Example 3: Theme Gallery
+### Example 3: Programmatic Usage (C#)
 
-```typescript
-// List available Bootstrap themes
-const themes = await mcp.call('bootstrap_list_themes', {
-  source: 'bootswatch'
+```csharp
+using FlagstoneUI.BootstrapConverter;
+
+// Parse Bootstrap theme
+var parser = new BootstrapParser();
+var variables = await parser.ParseAsync("https://bootswatch.com/5/darkly/bootstrap.css", BootstrapFormat.Css);
+
+// Map to Flagstone tokens
+var mapper = new BootstrapMapper();
+var tokens = mapper.MapToFlagstoneTokens(variables, new ConversionOptions 
+{
+    DarkModeStrategy = DarkModeStrategy.Auto,
+    IncludeComments = true
 });
 
-// Let user pick one
-const selected = themes.themes[0]; // "Darkly"
-
-// Convert to Flagstone theme
-const variables = await mcp.call('bootstrap_parse', {
-  source: 'url',
-  value: selected.url
+// Generate XAML
+var generator = new XamlThemeGenerator();
+var tokensXaml = generator.GenerateTokensXaml(tokens);
+var themeXaml = generator.GenerateThemeXaml(tokens, new ThemeOptions 
+{
+    ThemeName = "Bootstrap Darkly",
+    BaseTheme = BaseTheme.Material,
+    IncludeControlStyles = new[] { "FsEntry", "FsButton", "FsCard" }
 });
 
-const theme = await mcp.call('bootstrap_to_theme', {
-  variables: variables,
-  themeName: `Bootstrap ${selected.name}`
-});
+// Save files
+await File.WriteAllTextAsync("./Tokens.xaml", tokensXaml);
+await File.WriteAllTextAsync("./Theme.xaml", themeXaml);
+```
+
+### Example 4: MCP Usage (from AI assistant)
+
+```json
+// AI assistant calls MCP tool
+{
+  "method": "tools/call",
+  "params": {
+    "name": "bootstrap_convert",
+    "arguments": {
+      "source": "https://bootswatch.com/5/darkly/bootstrap.css",
+      "themeName": "Bootstrap Darkly",
+      "baseTheme": "Material",
+      "outputPath": "./themes/darkly"
+    }
+  }
+}
+
+// MCP server responds with file contents
+{
+  "result": {
+    "tokensXaml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>...",
+    "themeXaml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>...",
+    "outputPath": "./themes/darkly"
+  }
+}
 ```
 
 ## Testing Strategy
 
-### Unit Tests
+### Unit Tests (Class Library)
 
-- Bootstrap variable parsing (CSS, SCSS, JSON)
-- Color mapping and conversion
-- Dark mode generation algorithms
-- Typography font stack conversion
-- Unit conversion (rem, em, px)
-- XAML generation and validation
+**`FlagstoneUI.BootstrapConverter.Tests`**:
 
-### Integration Tests
+- **Parser Tests** (`ParserTests.cs`)
+  - Bootstrap CSS parsing (CSS custom properties)
+  - Bootstrap SCSS parsing (SCSS variables)
+  - Bootstrap JSON parsing (custom format)
+  - Unit conversion (rem, em, px)
+  - Edge cases (missing variables, invalid syntax)
+- **Mapper Tests** (`MapperTests.cs`)
+  - Color mapping validation
+  - Dark mode generation (auto strategy)
+  - Typography font stack conversion
+  - Spacing/border mapping
+- **Generator Tests** (`GeneratorTests.cs`)
+  - XAML token generation
+  - XAML theme generation
+  - XML validation
+  - Output matches expected fixtures
 
-- Full pipeline: Bootstrap CSS → Flagstone theme
-- Theme switching in sample app
-- Visual regression tests (screenshots)
-- Performance (parsing large Bootstrap files)
+### Integration Tests (CLI)
+
+**`FlagstoneUI.BootstrapConverter.Cli.Tests`**:
+
+- Command execution tests (via `CommandLineBuilder`)
+- Full conversion pipeline with fixtures
+- CLI output validation
+- JSON output mode
+
+### End-to-End Tests
+
+- Install tool via NuGet local feed
+- Convert real Bootstrap themes (Bootswatch)
+- Load converted themes in ThemePlayground
+- Visual verification (screenshots/manual testing)
 
 ### Test Fixtures
 
-- Bootstrap 5 default theme
-- Bootswatch themes (5-10 popular ones)
-- Custom Bootstrap themes with edge cases
-- Minimal theme (only required variables)
-- Maximal theme (all possible variables)
+**`tests/FlagstoneUI.BootstrapConverter.Tests/Fixtures/`**:
 
-## MCP Server Configuration
+- `bootstrap-5-default.css` - Bootstrap 5 default theme
+- `bootswatch-darkly.css` - Bootswatch Darkly theme
+- `bootswatch-lux.css` - Bootswatch Lux theme  
+- `custom-minimal.scss` - Minimal custom theme (only required variables)
+- `custom-maximal.scss` - Maximal theme (all possible variables)
+- `expected-outputs/` - Expected Tokens.xaml and Theme.xaml for each fixture
 
-### Server Metadata
+### CI/CD Integration
 
-```json
-{
-  "name": "flagstone-bootstrap-mcp",
-  "version": "0.1.0",
-  "description": "Convert Bootstrap themes to Flagstone UI themes",
-  "author": "Matt Goldman",
-  "license": "MIT",
-  "repository": "https://github.com/matt-goldman/flagstone-bootstrap-mcp"
-}
+Same as existing Flagstone UI CI:
+
+- Run on `.github/workflows/ci.yml`
+- Execute all tests on push/PR
+- Validate against multiple Bootstrap versions
+- Performance benchmarks (parsing large Bootstrap files)
+
+## Packaging & Distribution
+
+### .NET Tool Configuration
+
+**`FlagstoneUI.BootstrapConverter.Cli.csproj`**:
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    
+    <!-- .NET Tool packaging -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>flagstone-bootstrap</ToolCommandName>
+    <PackageId>FlagstoneUI.BootstrapConverter</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Matt Goldman</Authors>
+    <Description>Convert Bootstrap themes to Flagstone UI themes and tokens</Description>
+    <PackageTags>maui;xaml;bootstrap;theme;converter;mcp</PackageTags>
+    <PackageProjectUrl>https://github.com/matt-goldman/flagstone-ui</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/matt-goldman/flagstone-ui</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FlagstoneUI.BootstrapConverter\FlagstoneUI.BootstrapConverter.csproj" />
+  </ItemGroup>
+</Project>
 ```
 
-### Tool Definitions
+### Publishing
 
-Each tool will be registered with:
+```bash
+# Build and pack
+dotnet pack tools/FlagstoneUI.BootstrapConverter.Cli -c Release -o ./nupkg
 
-- Name and description
-- Input schema (JSON Schema)
-- Output schema
-- Examples
-- Error handling
+# Publish to NuGet.org
+dotnet nuget push ./nupkg/FlagstoneUI.BootstrapConverter.0.1.0.nupkg --source https://api.nuget.org/v3/index.json --api-key <key>
+
+# Or test locally
+dotnet tool install --global --add-source ./nupkg FlagstoneUI.BootstrapConverter
+```
+
+### Installation & Updates
+
+```bash
+# Install globally
+dotnet tool install -g FlagstoneUI.BootstrapConverter
+
+# Update
+dotnet tool update -g FlagstoneUI.BootstrapConverter
+
+# Uninstall
+dotnet tool uninstall -g FlagstoneUI.BootstrapConverter
+```
 
 ## Error Handling
 
@@ -484,26 +684,76 @@ Each tool will be registered with:
 
 ## Dependencies
 
-### Required
+### Class Library (`FlagstoneUI.BootstrapConverter`)
 
-- TypeScript/Node.js (MCP server)
-- CSS parser library (postcss or similar)
-- SCSS parser (sass.js)
-- Color manipulation library (chroma.js or tinycolor)
-- XML generation (fast-xml-parser)
+- **Target Framework**: `net10.0`
+- **NuGet Packages**:
+  - `ExCSS` or `AngleSharp.Css` - CSS parser
+  - `LibSassHost` or custom parser - SCSS parser (optional, phase 2)
+  - `System.Text.Json` - JSON parsing/serialization (built-in)
+  - `System.Drawing.Common` or `SixLabors.ImageSharp` - Color manipulation
+- **Optional**:
+  - `HtmlAgilityPack` - HTML parsing if fetching from URLs
+  - `HttpClient` - Fetching Bootstrap themes from CDNs
 
-### Optional
+### CLI Tool (`FlagstoneUI.BootstrapConverter.Cli`)
 
-- Bootstrap CDN client (for theme gallery)
-- VS Code extension (future GUI)
+- **Target Framework**: `net10.0`
+- **NuGet Packages**:
+  - `System.CommandLine` - CLI framework
+  - `Spectre.Console` - Colored terminal output (optional)
+  - Reference to `FlagstoneUI.BootstrapConverter` class library
+
+### Test Projects
+
+- **Target Framework**: `net10.0`
+- **NuGet Packages**:
+  - `xUnit` - Test framework (matching Flagstone UI conventions)
+  - `FluentAssertions` - Assertion library
+  - `Microsoft.NET.Test.Sdk` - Test runner
+
+### Rationale
+
+- **ExCSS/AngleSharp**: Proven CSS parsers for .NET
+- **LibSassHost**: If we need full SCSS support (can defer to phase 2)
+- **System.CommandLine**: Microsoft's official CLI framework
+- **Spectre.Console**: Beautiful terminal UI (like existing TokenGenerator)
+- **xUnit**: Consistent with Flagstone UI test infrastructure
 
 ## Documentation Deliverables
 
-1. **README.md** - Quick start and examples
-2. **API.md** - Complete MCP tool documentation
-3. **MAPPINGS.md** - Detailed variable mapping reference
-4. **CONTRIBUTING.md** - How to add new mappings
-5. **Blog Post** - .NET 10 launch announcement
+1. **README.md** (in `tools/FlagstoneUI.BootstrapConverter/`)
+   - Quick start guide
+   - Installation instructions
+   - CLI command reference
+   - Programmatic API examples
+
+2. **API.md** (in `tools/FlagstoneUI.BootstrapConverter/`)
+   - Class library API documentation
+   - Public types and methods
+   - Extension points for custom mappings
+
+3. **MAPPINGS.md** (in `tools/FlagstoneUI.BootstrapConverter/`)
+   - Complete Bootstrap → Flagstone mapping reference
+   - Color, typography, spacing, border mappings
+   - Dark mode generation strategies
+
+4. **MCP.md** (in `tools/FlagstoneUI.BootstrapConverter/`)
+   - MCP server mode documentation
+   - Tool schemas (JSON-RPC)
+   - Integration examples (Claude Desktop, VS Code)
+
+5. **Blog Post** (in `docs/` or external)
+   - .NET 10 launch announcement
+   - Bootstrap converter showcase
+   - Theme migration tutorial
+   - Before/after comparisons
+
+### In-Code Documentation
+
+- XML doc comments on all public APIs
+- Usage examples in remarks sections
+- Links to relevant mapping documentation
 
 ## Success Metrics
 
@@ -551,18 +801,50 @@ Each tool will be registered with:
 
 ## Next Steps
 
-1. **Review this spec** - Validate approach and scope
-2. **Set up MCP server project** - Bootstrap TypeScript project
-3. **Implement Phase 1** - Parser with test fixtures
-4. **Create mapping reference** - Document all Bootstrap → Flagstone mappings
-5. **Build Phase 2** - Token generator
-6. **Integrate with ThemePlayground** - Theme switching demo
-7. **Documentation** - Complete API docs and examples
-8. **Blog post** - Write .NET 10 launch announcement
+1. **Review this spec** ✅ - Validate .NET-first approach and architecture
+2. **Set up projects** 🔲
+   - Create `tools/FlagstoneUI.BootstrapConverter/` (class library)
+   - Create `tools/FlagstoneUI.BootstrapConverter.Cli/` (console app)
+   - Create `tests/FlagstoneUI.BootstrapConverter.Tests/` (xUnit tests)
+   - Add to `Flagstone.UI.sln`
+3. **Phase 1: Core Library** 🔲
+   - Implement `BootstrapParser.cs` with CSS support
+   - Implement `BootstrapMapper.cs` with color/typography mapping
+   - Implement `XamlThemeGenerator.cs` (reuse patterns from `TokenGenerator`)
+   - Write comprehensive unit tests
+4. **Phase 2: CLI Wrapper** 🔲
+   - Implement `convert`, `parse`, `list-themes` commands
+   - Add progress reporting and colored output
+   - Integration tests with fixtures
+5. **Phase 3: MCP Mode** 🔲
+   - Implement `McpServer.cs` for stdio JSON-RPC
+   - Test with MCP inspector
+6. **Phase 4: Package & Demo** 🔲
+   - Configure NuGet packaging
+   - Publish to local feed for testing
+   - Integrate with ThemePlayground
+   - Complete documentation
+   - Write blog post
 
-## Timeline
+## Timeline (Revised)
 
-- **Day 1-2**: Parser + token generator
-- **Day 3-4**: Theme generator + integration
-- **Day 5**: Documentation + demo polish
-- **Target**: Ready for .NET 10 launch (November 11-12, 2025)
+- **Day 1**: Project setup + Phase 1 start (parser + basic mapping)
+- **Day 2**: Phase 1 completion (full mapping + XAML generation + tests)
+- **Day 3**: Phase 2 (CLI wrapper + integration tests)
+- **Day 4**: Phase 3 (MCP mode) + Phase 4 start (packaging)
+- **Day 5**: Phase 4 completion (demo + docs) + buffer for issues
+
+**Target**: Ready for .NET 10 launch (November 11-12, 2025)
+
+## Advantages of .NET-First Approach
+
+1. **Familiar tooling** - C#, Visual Studio, xUnit, NuGet
+2. **Rapid iteration** - No learning curve, faster development
+3. **Strong typing** - Compile-time safety, better refactoring
+4. **Proven patterns** - Follow `FlagstoneUI.TokenGenerator` structure
+5. **Easy testing** - Robust unit testing with xUnit
+6. **.NET tool ecosystem** - Natural distribution via NuGet
+7. **MCP via stdout** - .NET tools can serve MCP protocol
+8. **Migration-friendly** - Functionality proven before porting
+9. **Maintenance** - Single language/platform for entire repo
+10. **Integration** - Seamless with existing Flagstone UI codebase
