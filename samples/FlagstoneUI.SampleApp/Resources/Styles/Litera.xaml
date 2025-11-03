@@ -1,48 +1,118 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<?xaml-comp compile="true" ?>
-<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                    x:Class="FlagstoneUI.SampleApp.Resources.Styles.Litera"
-                    xmlns:tokens="clr-namespace:FlagstoneUI.Core.Styles;assembly=FlagstoneUI.Core">
-    <ResourceDictionary.MergedDictionaries>
-        <tokens:Tokens />
-    </ResourceDictionary.MergedDictionaries>
-    <!-- ===== Color Tokens ===== -->
-    <!-- Color.Error: Error/danger state color -->
+<?xml version="1.0" encoding="utf-8" ?>
+<?xaml-comp compile="true"?>
+<ResourceDictionary
+    x:Class="FlagstoneUI.SampleApp.Resources.Styles.Litera"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core">
+    <!--  _bootswatch Styles - Generated from Bootstrap  -->
+    <!--  Control styles that use theme tokens  -->
+
+    <!--  ========== FsButton Styles ==========  -->
+    <!--  ===== Color Tokens =====  -->
+    <!--  Color.Error: Error/danger state color  -->
     <Color x:Key="Color.Error">#D9534F</Color>
-    <!-- Dark mode: #FF6B66 -->
-    <!-- Color.Info: Info state color -->
+    <!--  Dark mode: #FF6B66  -->
+    <!--  Color.Info: Info state color  -->
     <Color x:Key="Color.Info">#17A2B8</Color>
-    <!-- Dark mode: #1DD2EF -->
-    <!-- Color.OnBackground: Body text color -->
+    <!--  Dark mode: #1DD2EF  -->
+    <!--  Color.OnBackground: Body text color  -->
     <Color x:Key="Color.OnBackground">#343A40</Color>
-    <!-- Dark mode: #434B53 -->
-    <!-- Color.Primary: Primary brand color -->
+    <!--  Dark mode: #434B53  -->
+    <!--  Color.Primary: Primary brand color  -->
     <Color x:Key="Color.Primary">#4582EC</Color>
-    <!-- Dark mode: #59A9FF -->
-    <!-- Color.Secondary: Secondary brand color -->
+    <!--  Dark mode: #59A9FF  -->
+    <!--  Color.Secondary: Secondary brand color  -->
     <Color x:Key="Color.Secondary">#ADB5BD</Color>
-    <!-- Dark mode: #797E84 -->
-    <!-- Color.Success: Success state color -->
+    <!--  Dark mode: #797E84  -->
+    <!--  Color.Success: Success state color  -->
     <Color x:Key="Color.Success">#02B875</Color>
-    <!-- Dark mode: #02EF98 -->
-    <!-- Color.Surface: Light surface color -->
+    <!--  Dark mode: #02EF98  -->
+    <!--  Color.Surface: Light surface color  -->
     <Color x:Key="Color.Surface">#F8F9FA</Color>
-    <!-- Dark mode: #ADAEAF -->
-    <!-- Color.SurfaceVariant.Dark: Dark surface variant -->
+    <!--  Dark mode: #ADAEAF  -->
+    <!--  Color.SurfaceVariant.Dark: Dark surface variant  -->
     <Color x:Key="Color.SurfaceVariant.Dark">#343A40</Color>
-    <!-- Dark mode: #434B53 -->
-    <!-- Color.Warning: Warning state color -->
+    <!--  Dark mode: #434B53  -->
+    <!--  Color.Warning: Warning state color  -->
     <Color x:Key="Color.Warning">#F0AD4E</Color>
-    <!-- Dark mode: #A87936 -->
-    <!-- ===== Typography Tokens ===== -->
-    <!-- FontSize.Body: Base body font size -->
+    <!--  Dark mode: #A87936  -->
+    <!--  ===== Typography Tokens =====  -->
+    <!--  FontSize.Body: Base body font size  -->
     <x:Double x:Key="FontSize.Body">17.6</x:Double>
-    <!-- ===== Corner Radius Tokens ===== -->
-    <!-- Radius.Large: Large corner radius (from button) -->
+    <!--  ===== Corner Radius Tokens =====  -->
+    <!--  Radius.Large: Large corner radius (from button)  -->
     <x:Double x:Key="Radius.Large">43.008</x:Double>
-    <!-- Radius.Medium: Medium corner radius (from button) -->
+    <!--  Radius.Medium: Medium corner radius (from button)  -->
     <x:Double x:Key="Radius.Medium">17.248</x:Double>
-    <!-- Radius.Small: Small corner radius (from button) -->
+    <!--  Radius.Small: Small corner radius (from button)  -->
     <x:Double x:Key="Radius.Small">13.504</x:Double>
+
+    <!--  Base Button Style (Filled Button - Primary)  -->
+    <Style TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />
+        <Setter Property="TextColor" Value="#FFFFFF" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
+        <Setter Property="Padding" Value="24,10" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.38" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!--  Outlined Button Style  -->
+    <Style x:Key="OutlinedButton" TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{DynamicResource Color.Primary}" />
+        <Setter Property="BorderColor" Value="{DynamicResource Color.Primary}" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
+        <Setter Property="Padding" Value="24,10" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.38" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!--  Text Button Style (No background or border)  -->
+    <Style x:Key="TextButton" TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{DynamicResource Color.Primary}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
+        <Setter Property="Padding" Value="12,10" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.38" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
 </ResourceDictionary>
