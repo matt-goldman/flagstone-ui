@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>FlagstoneUI.BootstrapConverter.Cli</RootNamespace>
+		<AssemblyName>bootstrap-converter</AssemblyName>
+		
+		<!-- .NET Tool configuration -->
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>bootstrap-converter</ToolCommandName>
+		<PackageId>FlagstoneUI.BootstrapConverter.Cli</PackageId>
+		<Version>0.1.0</Version>
+		<Authors>Matt Goldman</Authors>
+		<Description>Convert Bootstrap themes to Flagstone UI XAML resources</Description>
+		<PackageProjectUrl>https://github.com/matt-goldman/flagstone-ui</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/matt-goldman/flagstone-ui</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageTags>maui;xaml;bootstrap;theme;converter</PackageTags>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.CommandLine" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\FlagstoneUI.BootstrapConverter\FlagstoneUI.BootstrapConverter.csproj" />
+	</ItemGroup>
+
+</Project>
