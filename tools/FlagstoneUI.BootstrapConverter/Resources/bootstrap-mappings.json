@@ -1,0 +1,36 @@
+{
+  "colorMappings": {
+    "primary": "Color.Primary",
+    "secondary": "Color.Secondary",
+    "success": "Color.Success",
+    "danger": "Color.Error",
+    "warning": "Color.Warning",
+    "info": "Color.Info",
+    "light": "Color.Surface",
+    "dark": "Color.SurfaceVariant.Dark",
+    "body-bg": "Color.Background",
+    "body-color": "Color.OnBackground",
+    "border-color": "Color.Outline"
+  },
+  "typographyMappings": {
+    "font-family-base": "FontFamily.Default",
+    "font-family-monospace": "FontFamily.Monospace",
+    "font-size-base": "FontSize.Body",
+    "line-height-base": "LineHeight.Default"
+  },
+  "spacingMappings": {
+    "spacer": {
+      "0.25": "Spacing.ExtraSmall",
+      "0.5": "Spacing.Small",
+      "1": "Spacing.Medium",
+      "1.5": "Spacing.Large",
+      "3": "Spacing.ExtraLarge"
+    }
+  },
+  "borderMappings": {
+    "border-radius": "CornerRadius.Medium",
+    "border-radius-sm": "CornerRadius.Small",
+    "border-radius-lg": "CornerRadius.Large",
+    "border-width": "BorderWidth.Default"
+  }
+}
