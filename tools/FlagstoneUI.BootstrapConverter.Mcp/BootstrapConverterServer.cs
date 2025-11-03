@@ -119,6 +119,18 @@ public class BootstrapConverterServer
                         name = "info",
                         description = "Get information about Bootstrap theme variables without converting",
                         inputSchema = InfoToolInput.Schema
+                    },
+                    new
+                    {
+                        name = "get_flagstone_docs",
+                        description = "Get Flagstone UI documentation and architecture guides. Provides comprehensive information about tokens, controls, theming, architecture, and best practices.",
+                        inputSchema = DocsToolInput.Schema
+                    },
+                    new
+                    {
+                        name = "analyze_bootstrap",
+                        description = "Extract raw data from Bootstrap files without generating XAML. Returns structured JSON with colors, typography, spacing, and border values for agent analysis.",
+                        inputSchema = AnalyzeToolInput.Schema
                     }
                 }
             }, _jsonOptions)
@@ -141,6 +153,8 @@ public class BootstrapConverterServer
             {
                 "convert" => await ConvertAsync(callParams.Arguments),
                 "info" => await GetInfoAsync(callParams.Arguments),
+                "get_flagstone_docs" => await GetDocsAsync(callParams.Arguments),
+                "analyze_bootstrap" => await AnalyzeBootstrapAsync(callParams.Arguments),
                 _ => null
             };
 
@@ -330,6 +344,169 @@ public class BootstrapConverterServer
         catch (Exception ex)
         {
             return new InfoToolOutput
+            {
+                Success = false,
+                Error = ex.Message
+            };
+        }
+    }
+
+    private async Task<DocsToolOutput> GetDocsAsync(JsonNode? arguments)
+    {
+        try
+        {
+            var input = JsonSerializer.Deserialize<DocsToolInput>(
+                arguments?.ToString() ?? "{}", _jsonOptions);
+
+            if (input == null || string.IsNullOrEmpty(input.Topic))
+            {
+                return new DocsToolOutput
+                {
+                    Success = false,
+                    Error = "No topic specified",
+                    AvailableTopics = new[] { "tokens", "controls", "theming", "architecture", "best-practices", "all" }
+                };
+            }
+
+            // Documentation file mapping
+            var docFiles = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["tokens"] = "tokens.md",
+                ["controls"] = "control-implementation-guide.md",
+                ["theming"] = "tokens.md", // Includes theming info
+                ["architecture"] = "architecture.md",
+                ["best-practices"] = "control-implementation-guide.md"
+            };
+
+            // Get the docs directory relative to the MCP server executable
+            var docsPath = Path.Combine(
+                Path.GetDirectoryName(typeof(BootstrapConverterServer).Assembly.Location) ?? "",
+                "..", "..", "..", "..", "..", "..", "docs");
+            docsPath = Path.GetFullPath(docsPath);
+
+            var content = new System.Text.StringBuilder();
+
+            if (input.Topic.Equals("all", StringComparison.OrdinalIgnoreCase))
+            {
+                // Return all documentation
+                foreach (var (topic, file) in docFiles)
+                {
+                    var filePath = Path.Combine(docsPath, file);
+                    if (File.Exists(filePath))
+                    {
+                        content.AppendLine($"# {char.ToUpper(topic[0])}{topic[1..]} Documentation\n");
+                        content.AppendLine(await File.ReadAllTextAsync(filePath));
+                        content.AppendLine("\n---\n");
+                    }
+                }
+            }
+            else if (docFiles.TryGetValue(input.Topic, out var docFile))
+            {
+                var filePath = Path.Combine(docsPath, docFile);
+                if (File.Exists(filePath))
+                {
+                    content.Append(await File.ReadAllTextAsync(filePath));
+                }
+                else
+                {
+                    return new DocsToolOutput
+                    {
+                        Success = false,
+                        Error = $"Documentation file not found: {filePath}",
+                        AvailableTopics = docFiles.Keys.ToArray()
+                    };
+                }
+            }
+            else
+            {
+                return new DocsToolOutput
+                {
+                    Success = false,
+                    Error = $"Unknown topic: {input.Topic}",
+                    AvailableTopics = docFiles.Keys.Append("all").ToArray()
+                };
+            }
+
+            return new DocsToolOutput
+            {
+                Success = true,
+                Topic = input.Topic,
+                Content = content.ToString(),
+                AvailableTopics = docFiles.Keys.Append("all").ToArray()
+            };
+        }
+        catch (Exception ex)
+        {
+            return new DocsToolOutput
+            {
+                Success = false,
+                Error = ex.Message,
+                AvailableTopics = new[] { "tokens", "controls", "theming", "architecture", "best-practices", "all" }
+            };
+        }
+    }
+
+    private async Task<AnalyzeToolOutput> AnalyzeBootstrapAsync(JsonNode? arguments)
+    {
+        try
+        {
+            var input = JsonSerializer.Deserialize<AnalyzeToolInput>(
+                arguments?.ToString() ?? "{}", _jsonOptions);
+
+            if (input == null || input.Inputs.Length == 0)
+            {
+                return new AnalyzeToolOutput
+                {
+                    Success = false,
+                    Error = "No input files specified"
+                };
+            }
+
+            var parser = new BootstrapParser();
+            BootstrapVariables variables;
+
+            if (input.Inputs.Length == 1)
+            {
+                var inputPath = input.Inputs[0];
+                if (Uri.TryCreate(inputPath, UriKind.Absolute, out var uri))
+                {
+                    variables = await parser.ParseFromUrlAsync(uri.ToString(), input.Format);
+                }
+                else if (File.Exists(inputPath))
+                {
+                    variables = await parser.ParseFromFileAsync(inputPath, input.Format);
+                }
+                else
+                {
+                    return new AnalyzeToolOutput
+                    {
+                        Success = false,
+                        Error = $"Input file not found: {inputPath}"
+                    };
+                }
+            }
+            else
+            {
+                // Parse multiple files and merge
+                variables = await parser.ParseMultipleFilesAsync(input.Inputs, input.Format);
+            }
+
+            return new AnalyzeToolOutput
+            {
+                Success = true,
+                Variables = new BootstrapData
+                {
+                    Colors = variables.Colors,
+                    Typography = variables.Typography,
+                    Spacing = variables.Spacing,
+                    Borders = variables.Borders,
+                    Other = variables.Other
+                }
+            };
+        }
+        catch (Exception ex)
+        {
+            return new AnalyzeToolOutput
             {
                 Success = false,
                 Error = ex.Message

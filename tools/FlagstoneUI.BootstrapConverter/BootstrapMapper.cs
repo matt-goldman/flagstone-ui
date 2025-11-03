@@ -184,6 +184,19 @@ public class BootstrapMapper
             tokens.BorderRadius["Radius.Large"] = CreateNumericToken("Radius.Large", radiusValue, "Large corner radius");
         }
 
+        // Extract any other border radius values found in the theme
+        foreach (var (key, value) in bootstrapBorders)
+        {
+            if (key.Contains("border-radius", StringComparison.OrdinalIgnoreCase) && 
+                !tokens.BorderRadius.Values.Any(t => Math.Abs(t.Value - ConvertToPixels(value, 16.0)) < 0.1))
+            {
+                var radiusValue = ConvertToPixels(value, 16.0);
+                var tokenKey = GenerateRadiusTokenKey(key);
+                var purpose = $"Corner radius from {key}";
+                tokens.BorderRadius[tokenKey] = CreateNumericToken(tokenKey, radiusValue, purpose);
+            }
+        }
+
         // Border width
         if (bootstrapBorders.TryGetValue("border-width", out var width))
         {
@@ -300,5 +313,21 @@ public class BootstrapMapper
         }
 
         return 0;
+    }
+
+    private static string GenerateRadiusTokenKey(string bootstrapKey)
+    {
+        // Generate appropriate Flagstone token key from Bootstrap variable name
+        return bootstrapKey.ToLowerInvariant() switch
+        {
+            var key when key.Contains("breadcrumb", StringComparison.OrdinalIgnoreCase) => "Radius.Breadcrumb",
+            var key when key.Contains("card", StringComparison.OrdinalIgnoreCase) => "Radius.Card",
+            var key when key.Contains("btn", StringComparison.OrdinalIgnoreCase) && key.Contains("sm", StringComparison.OrdinalIgnoreCase) => "Radius.ButtonSmall",
+            var key when key.Contains("btn", StringComparison.OrdinalIgnoreCase) && key.Contains("lg", StringComparison.OrdinalIgnoreCase) => "Radius.ButtonLarge", 
+            var key when key.Contains("btn", StringComparison.OrdinalIgnoreCase) => "Radius.Button",
+            var key when key.Contains("sm", StringComparison.OrdinalIgnoreCase) => "Radius.Small",
+            var key when key.Contains("lg", StringComparison.OrdinalIgnoreCase) => "Radius.Large",
+            _ => "Radius.Default"
+        };
     }
 }

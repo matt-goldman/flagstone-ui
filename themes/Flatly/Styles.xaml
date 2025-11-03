@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-16"?>
+<?xaml-comp compile="true"?>
+<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="FlagstoneUI.Resources.FlatlyVariablesStyles" xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core" xmlns="http://schemas.microsoft.com/dotnet/2021/maui">
+    <!-- flatly-variables Styles - Generated from Bootstrap -->
+    <!-- Control styles that use theme tokens -->
+
+<!-- ========== FsButton Styles ========== -->
+
+<!-- Base Button Style (Filled Button - Primary) --><Style TargetType="fs:FsButton"><Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" /><Setter Property="TextColor" Value="#FFFFFF" /><Setter Property="CornerRadius" Value="20" /><Setter Property="Padding" Value="24,10" /><Setter Property="MinimumHeightRequest" Value="40" /><Setter Property="VisualStateManager.VisualStateGroups"><VisualStateGroupList><VisualStateGroup x:Name="CommonStates"><VisualState x:Name="Normal" /><VisualState x:Name="Disabled"><VisualState.Setters><Setter Property="Opacity" Value="0.38" /></VisualState.Setters></VisualState></VisualStateGroup></VisualStateGroupList></Setter></Style>
+
+<!-- Outlined Button Style --><Style x:Key="OutlinedButton" TargetType="fs:FsButton"><Setter Property="BackgroundColor" Value="Transparent" /><Setter Property="TextColor" Value="{DynamicResource Color.Primary}" /><Setter Property="BorderColor" Value="{DynamicResource Color.Primary}" /><Setter Property="BorderWidth" Value="1" /><Setter Property="CornerRadius" Value="20" /><Setter Property="Padding" Value="24,10" /><Setter Property="MinimumHeightRequest" Value="40" /><Setter Property="VisualStateManager.VisualStateGroups"><VisualStateGroupList><VisualStateGroup x:Name="CommonStates"><VisualState x:Name="Normal" /><VisualState x:Name="Disabled"><VisualState.Setters><Setter Property="Opacity" Value="0.38" /></VisualState.Setters></VisualState></VisualStateGroup></VisualStateGroupList></Setter></Style>
+
+<!-- Text Button Style (No background or border) --><Style x:Key="TextButton" TargetType="fs:FsButton"><Setter Property="BackgroundColor" Value="Transparent" /><Setter Property="TextColor" Value="{DynamicResource Color.Primary}" /><Setter Property="CornerRadius" Value="20" /><Setter Property="Padding" Value="12,10" /><Setter Property="MinimumHeightRequest" Value="40" /><Setter Property="VisualStateManager.VisualStateGroups"><VisualStateGroupList><VisualStateGroup x:Name="CommonStates"><VisualState x:Name="Normal" /><VisualState x:Name="Disabled"><VisualState.Setters><Setter Property="Opacity" Value="0.38" /></VisualState.Setters></VisualState></VisualStateGroup></VisualStateGroupList></Setter></Style>
+</ResourceDictionary>

@@ -116,3 +116,76 @@ public record VariablesSummary
     public int Other { get; init; }
     public int Total { get; init; }
 }
+
+public record DocsToolInput
+{
+    public required string Topic { get; init; }
+
+    public static JsonObject Schema => new()
+    {
+        ["type"] = "object",
+        ["properties"] = new JsonObject
+        {
+            ["topic"] = new JsonObject
+            {
+                ["type"] = "string",
+                ["enum"] = new JsonArray { "tokens", "controls", "theming", "architecture", "best-practices", "all" },
+                ["description"] = "Documentation topic to retrieve: tokens (token system reference), controls (available controls and their properties), theming (how to create themes), architecture (overall system architecture), best-practices (guidelines for theme and control development), or all (complete documentation)"
+            }
+        },
+        ["required"] = new JsonArray { "topic" }
+    };
+}
+
+public record DocsToolOutput
+{
+    public bool Success { get; init; }
+    public string? Error { get; init; }
+    public string? Topic { get; init; }
+    public string? Content { get; init; }
+    public string[]? AvailableTopics { get; init; }
+}
+
+public record AnalyzeToolInput  
+{
+    public required string[] Inputs { get; init; }
+    public BootstrapFormat Format { get; init; } = BootstrapFormat.Auto;
+
+    public static JsonObject Schema => new()
+    {
+        ["type"] = "object",
+        ["properties"] = new JsonObject
+        {
+            ["inputs"] = new JsonObject
+            {
+                ["type"] = "array",
+                ["items"] = new JsonObject { ["type"] = "string" },
+                ["description"] = "Path(s) to Bootstrap CSS/SCSS file(s) or URL(s). Multiple files will be merged."
+            },
+            ["format"] = new JsonObject
+            {
+                ["type"] = "string",
+                ["enum"] = new JsonArray { "css", "scss", "auto" },
+                ["default"] = "auto",
+                ["description"] = "Input format: css, scss, or auto"
+            }
+        },
+        ["required"] = new JsonArray { "inputs" }
+    };
+}
+
+public record AnalyzeToolOutput
+{
+    public bool Success { get; init; }
+    public string? Error { get; init; }
+    public BootstrapData? Variables { get; init; }
+}
+
+public record BootstrapData
+{
+    public Dictionary<string, string>? Colors { get; init; }
+    public Dictionary<string, string>? Typography { get; init; }
+    public Dictionary<string, string>? Spacing { get; init; }
+    public Dictionary<string, string>? Borders { get; init; }
+    public Dictionary<string, string>? Other { get; init; }
+}

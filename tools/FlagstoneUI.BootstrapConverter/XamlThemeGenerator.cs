@@ -393,10 +393,12 @@ public class XamlThemeGenerator
             : "#FFFFFF";
         defaultStyle.Add(CreateSetter(mauiNs, "TextColor", textColor));
 
-        // Corner radius
-        if (tokens.BorderRadius.ContainsKey("Radius.Large"))
+        // Corner radius - only use if theme provides radius tokens
+        if (tokens.BorderRadius.Count > 0)
         {
-            defaultStyle.Add(CreateSetter(mauiNs, "CornerRadius", "{DynamicResource Radius.Large}"));
+            // Use the first available radius token from the theme
+            var radiusKey = tokens.BorderRadius.Keys.First();
+            defaultStyle.Add(CreateSetter(mauiNs, "CornerRadius", $"{{DynamicResource {radiusKey}}}"));
         }
 
         // Padding - use spacing if available
@@ -405,13 +407,17 @@ public class XamlThemeGenerator
             : "24,10";
         defaultStyle.Add(CreateSetter(mauiNs, "Padding", padding));
 
-        // Font size if available
-        if (tokens.Typography.ContainsKey("FontSize.Body"))
+        // Font size if available - prefer LabelLarge for buttons
+        if (tokens.Typography.ContainsKey("FontSize.LabelLarge"))
+        {
+            defaultStyle.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.LabelLarge}"));
+        }
+        else if (tokens.Typography.ContainsKey("FontSize.Body"))
         {
             defaultStyle.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.Body}"));
         }
 
-        defaultStyle.Add(CreateSetter(mauiNs, "HeightRequest", "40"));
+        defaultStyle.Add(CreateSetter(mauiNs, "MinimumHeightRequest", "40"));
 
         // Add disabled visual state
         AddDisabledVisualState(defaultStyle, mauiNs, xNs);
@@ -439,7 +445,11 @@ public class XamlThemeGenerator
             : "{DynamicResource Color.Primary}";
         outlinedStyle.Add(CreateSetter(mauiNs, "BorderColor", borderColor));
         
-        if (tokens.BorderWidth.ContainsKey("BorderWidth.Default"))
+        if (tokens.BorderWidth.ContainsKey("BorderWidth.Thin"))
+        {
+            outlinedStyle.Add(CreateSetter(mauiNs, "BorderWidth", "{DynamicResource BorderWidth.Thin}"));
+        }
+        else if (tokens.BorderWidth.ContainsKey("BorderWidth.Default"))
         {
             outlinedStyle.Add(CreateSetter(mauiNs, "BorderWidth", "{DynamicResource BorderWidth.Default}"));
         }
@@ -448,19 +458,25 @@ public class XamlThemeGenerator
             outlinedStyle.Add(CreateSetter(mauiNs, "BorderWidth", "1"));
         }
 
-        if (tokens.BorderRadius.ContainsKey("Radius.Large"))
+        // Use the same corner radius logic as default style
+        if (tokens.BorderRadius.Count > 0)
         {
-            outlinedStyle.Add(CreateSetter(mauiNs, "CornerRadius", "{DynamicResource Radius.Large}"));
+            var radiusKey = tokens.BorderRadius.Keys.First();
+            outlinedStyle.Add(CreateSetter(mauiNs, "CornerRadius", $"{{DynamicResource {radiusKey}}}"));
         }
 
         outlinedStyle.Add(CreateSetter(mauiNs, "Padding", padding));
         
-        if (tokens.Typography.ContainsKey("FontSize.Body"))
+        if (tokens.Typography.ContainsKey("FontSize.LabelLarge"))
+        {
+            outlinedStyle.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.LabelLarge}"));
+        }
+        else if (tokens.Typography.ContainsKey("FontSize.Body"))
         {
             outlinedStyle.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.Body}"));
         }
 
-        outlinedStyle.Add(CreateSetter(mauiNs, "HeightRequest", "40"));
+        outlinedStyle.Add(CreateSetter(mauiNs, "MinimumHeightRequest", "40"));
         AddDisabledVisualState(outlinedStyle, mauiNs, xNs);
 
         root.Add(outlinedStyle);
@@ -479,20 +495,26 @@ public class XamlThemeGenerator
 
         textButtonStyle.Add(CreateSetter(mauiNs, "BackgroundColor", "Transparent"));
         textButtonStyle.Add(CreateSetter(mauiNs, "TextColor", "{DynamicResource Color.Primary}"));
-
-        if (tokens.BorderRadius.ContainsKey("Radius.Large"))
+        
+        // Use the same corner radius logic as other styles
+        if (tokens.BorderRadius.Count > 0)
         {
-            textButtonStyle.Add(CreateSetter(mauiNs, "CornerRadius", "{DynamicResource Radius.Large}"));
+            var radiusKey = tokens.BorderRadius.Keys.First();
+            textButtonStyle.Add(CreateSetter(mauiNs, "CornerRadius", $"{{DynamicResource {radiusKey}}}"));
         }
 
         textButtonStyle.Add(CreateSetter(mauiNs, "Padding", "12,10"));
         
-        if (tokens.Typography.ContainsKey("FontSize.Body"))
+        if (tokens.Typography.ContainsKey("FontSize.LabelLarge"))
+        {
+            textButtonStyle.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.LabelLarge}"));
+        }
+        else if (tokens.Typography.ContainsKey("FontSize.Body"))
         {
             textButtonStyle.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.Body}"));
         }
 
-        textButtonStyle.Add(CreateSetter(mauiNs, "HeightRequest", "40"));
+        textButtonStyle.Add(CreateSetter(mauiNs, "MinimumHeightRequest", "40"));
         AddDisabledVisualState(textButtonStyle, mauiNs, xNs);
 
         root.Add(textButtonStyle);
