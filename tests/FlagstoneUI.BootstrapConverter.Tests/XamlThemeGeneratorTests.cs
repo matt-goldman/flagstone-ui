@@ -307,7 +307,7 @@ public class XamlThemeGeneratorTests
             },
             BorderRadius = new Dictionary<string, NumericToken>
             {
-                ["CornerRadius.Medium"] = new NumericToken { Key = "CornerRadius.Medium", Value = 6 }
+                ["Radius.Medium"] = new NumericToken { Key = "Radius.Medium", Value = 6 }
             },
             BorderWidth = new Dictionary<string, NumericToken>
             {

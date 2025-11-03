@@ -6,4 +6,14 @@ public partial class AppShell : Shell
 	{
 		InitializeComponent();
 	}
+
+    private void OnThemeRadioButtonCheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        var theme = (sender as RadioButton)?.ContentAsString();
+
+        if (theme is not null && e.Value)
+        {
+            App.SwitchTheme(theme);
+        }
+    }
 }

@@ -171,9 +171,9 @@ public class BootstrapMapperTests
 
         // Assert
         result.BorderRadius.ShouldNotBeEmpty();
-        result.BorderRadius["CornerRadius.Small"].Value.ShouldBe(4); // 0.25rem = 4px
-        result.BorderRadius["CornerRadius.Medium"].Value.ShouldBe(6); // 0.375rem = 6px
-        result.BorderRadius["CornerRadius.Large"].Value.ShouldBe(8); // 0.5rem = 8px
+        result.BorderRadius["Radius.Small"].Value.ShouldBe(4); // 0.25rem = 4px
+        result.BorderRadius["Radius.Medium"].Value.ShouldBe(6); // 0.375rem = 6px
+        result.BorderRadius["Radius.Large"].Value.ShouldBe(8); // 0.5rem = 8px
     }
 
     [Fact]
@@ -231,7 +231,7 @@ public class BootstrapMapperTests
         var result = _mapper.MapToFlagstoneTokens(variables);
 
         // Assert
-        result.BorderRadius["CornerRadius.Medium"].Value.ShouldBe(8); // 0.5em = 8px
+        result.BorderRadius["Radius.Medium"].Value.ShouldBe(8); // 0.5em = 8px
     }
 
     [Fact]

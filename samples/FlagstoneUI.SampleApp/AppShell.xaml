@@ -8,6 +8,31 @@
     Title="FlagstoneUI.SampleApp"
     FlyoutBehavior="Flyout">
 
+    <Shell.FlyoutHeader>
+        <VerticalStackLayout
+            BackgroundColor="Transparent"
+            RadioButtonGroup.GroupName="ThemeSelectionGroup"
+            Spacing="15">
+            
+            <RadioButton
+                Content="Material"
+                IsChecked="True"
+                CheckedChanged="OnThemeRadioButtonCheckedChanged" />    
+            <RadioButton
+                Content="Litera"
+                CheckedChanged="OnThemeRadioButtonCheckedChanged" />
+
+            <RadioButton
+                Content="Minty"
+                CheckedChanged="OnThemeRadioButtonCheckedChanged" />
+
+            <RadioButton
+                Content="Brite"
+                CheckedChanged="OnThemeRadioButtonCheckedChanged" />
+
+        </VerticalStackLayout>
+    </Shell.FlyoutHeader>
+
     <FlyoutItem Title="Home" Icon="icon_home.png">
         <ShellContent
             Title="Main"

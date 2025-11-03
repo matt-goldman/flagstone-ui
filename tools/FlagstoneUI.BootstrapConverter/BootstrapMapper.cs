@@ -86,6 +86,16 @@ public class BootstrapMapper
                 Purpose = "Default font family"
             };
         }
+        // Fallback to headings-font-family if font-family-base not found
+        else if (bootstrapTypography.TryGetValue("headings-font-family", out var headingsFont))
+        {
+            tokens.Typography["FontFamily.Default"] = new TypographyToken
+            {
+                Key = "FontFamily.Default",
+                Value = ConvertFontFamily(headingsFont),
+                Purpose = "Default font family (from headings)"
+            };
+        }
 
         if (bootstrapTypography.TryGetValue("font-family-monospace", out var monoFont))
         {
@@ -140,23 +150,38 @@ public class BootstrapMapper
 
     private void MapBorders(Dictionary<string, string> bootstrapBorders, FlagstoneTokens tokens)
     {
-        // Border radius
-        if (bootstrapBorders.TryGetValue("border-radius", out var radius))
+        // Border radius - prefer button-specific values if available
+        if (bootstrapBorders.TryGetValue("btn-border-radius", out var btnRadius))
+        {
+            var radiusValue = ConvertToPixels(btnRadius, 16.0);
+            tokens.BorderRadius["Radius.Medium"] = CreateNumericToken("Radius.Medium", radiusValue, "Medium corner radius (from button)");
+        }
+        else if (bootstrapBorders.TryGetValue("border-radius", out var radius))
         {
             var radiusValue = ConvertToPixels(radius, 16.0);
-            tokens.BorderRadius["CornerRadius.Medium"] = CreateNumericToken("CornerRadius.Medium", radiusValue, "Medium corner radius");
+            tokens.BorderRadius["Radius.Medium"] = CreateNumericToken("Radius.Medium", radiusValue, "Medium corner radius");
         }
 
-        if (bootstrapBorders.TryGetValue("border-radius-sm", out var radiusSm))
+        if (bootstrapBorders.TryGetValue("btn-border-radius-sm", out var btnRadiusSm))
+        {
+            var radiusValue = ConvertToPixels(btnRadiusSm, 16.0);
+            tokens.BorderRadius["Radius.Small"] = CreateNumericToken("Radius.Small", radiusValue, "Small corner radius (from button)");
+        }
+        else if (bootstrapBorders.TryGetValue("border-radius-sm", out var radiusSm))
         {
             var radiusValue = ConvertToPixels(radiusSm, 16.0);
-            tokens.BorderRadius["CornerRadius.Small"] = CreateNumericToken("CornerRadius.Small", radiusValue, "Small corner radius");
+            tokens.BorderRadius["Radius.Small"] = CreateNumericToken("Radius.Small", radiusValue, "Small corner radius");
         }
 
-        if (bootstrapBorders.TryGetValue("border-radius-lg", out var radiusLg))
+        if (bootstrapBorders.TryGetValue("btn-border-radius-lg", out var btnRadiusLg))
+        {
+            var radiusValue = ConvertToPixels(btnRadiusLg, 16.0);
+            tokens.BorderRadius["Radius.Large"] = CreateNumericToken("Radius.Large", radiusValue, "Large corner radius (from button)");
+        }
+        else if (bootstrapBorders.TryGetValue("border-radius-lg", out var radiusLg))
         {
             var radiusValue = ConvertToPixels(radiusLg, 16.0);
-            tokens.BorderRadius["CornerRadius.Large"] = CreateNumericToken("CornerRadius.Large", radiusValue, "Large corner radius");
+            tokens.BorderRadius["Radius.Large"] = CreateNumericToken("Radius.Large", radiusValue, "Large corner radius");
         }
 
         // Border width

@@ -29,13 +29,14 @@ bootstrap-converter convert -i path/to/bootstrap.css -o ./output
 
 #### Options
 
-- `-i, --input` (REQUIRED): Path to Bootstrap CSS/SCSS file or URL
+- `-i, --input` (REQUIRED): Path(s) to Bootstrap CSS/SCSS file(s) or URL(s). Multiple files will be merged.
 - `-o, --output`: Output directory for generated XAML files (default: current directory)
 - `-f, --format`: Input format: `css`, `scss`, or `auto` (default: auto)
 - `-d, --dark-mode`: Dark mode generation: `auto`, `manual`, or `none` (default: auto)
 - `-n, --namespace`: XAML namespace for generated resources (default: FlagstoneUI.Resources)
 - `-c, --comments`: Include purpose comments in generated XAML (default: true)
 - `-v, --verbose`: Enable verbose output
+- `--debug`: Enable debug logging (shows all discovered variables)
 
 #### Examples
 
@@ -49,6 +50,24 @@ bootstrap-converter convert -i ./bootstrap.css -o ./themes
 
 ```bash
 bootstrap-converter convert -i https://example.com/bootstrap.css -o ./themes --verbose
+```
+
+**Convert multiple files (Bootswatch theme):**
+
+```bash
+bootstrap-converter convert -i _variables.scss -i _bootswatch.scss -o ./themes
+```
+
+This is the **recommended approach for Bootswatch themes** because:
+- `_variables.scss` contains actual theme color values
+- `_bootswatch.scss` contains font imports and custom overrides
+- Variable references are automatically resolved (e.g., `$success: $green` → `#56cc9d`)
+- Better typography token extraction (font families, etc.)
+
+**Convert with debug logging:**
+
+```bash
+bootstrap-converter convert -i ./bootstrap.scss -o ./themes --debug
 ```
 
 **Convert SCSS without dark mode:**

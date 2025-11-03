@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    x:Class="FlagstoneUI.SampleApp.Resources.Styles.Brite"
+                    xmlns:tokens="clr-namespace:FlagstoneUI.Core.Styles;assembly=FlagstoneUI.Core">
+    <ResourceDictionary.MergedDictionaries>
+        <tokens:Tokens />
+    </ResourceDictionary.MergedDictionaries>
+    <!-- ===== Color Tokens ===== -->
+    <!-- Color.Error: Error/danger state color -->
+    <Color x:Key="Color.Error">#F56565</Color>
+    <!-- Dark mode: #AB4646 -->
+    <!-- Color.Info: Info state color -->
+    <Color x:Key="Color.Info">#22D2ED</Color>
+    <!-- Dark mode: #1793A5 -->
+    <!-- Color.Primary: Primary brand color -->
+    <Color x:Key="Color.Primary">#A2E436</Color>
+    <!-- Dark mode: #719F25 -->
+    <!-- Color.Secondary: Secondary brand color -->
+    <Color x:Key="Color.Secondary">#FFF</Color>
+    <!-- Color.Success: Success state color -->
+    <Color x:Key="Color.Success">#68D391</Color>
+    <!-- Dark mode: #489365 -->
+    <!-- Color.Surface: Light surface color -->
+    <Color x:Key="Color.Surface">#E9ECEF</Color>
+    <!-- Dark mode: #A3A5A7 -->
+    <!-- Color.SurfaceVariant.Dark: Dark surface variant -->
+    <Color x:Key="Color.SurfaceVariant.Dark">#000</Color>
+    <!-- Color.Warning: Warning state color -->
+    <Color x:Key="Color.Warning">#FFC700</Color>
+    <!-- Dark mode: #B28B00 -->
+    <!-- ===== Typography Tokens ===== -->
+    <!-- FontSize.Body: Base body font size -->
+    <x:Double x:Key="FontSize.Body">14</x:Double>
+    <!-- ===== Spacing Tokens ===== -->
+    <!-- Spacing.ExtraLarge: Extra large spacing -->
+    <x:Double x:Key="Spacing.ExtraLarge">48</x:Double>
+    <!-- Spacing.ExtraSmall: Extra small spacing -->
+    <x:Double x:Key="Spacing.ExtraSmall">4</x:Double>
+    <!-- Spacing.Large: Large spacing -->
+    <x:Double x:Key="Spacing.Large">24</x:Double>
+    <!-- Spacing.Medium: Medium spacing (base) -->
+    <x:Double x:Key="Spacing.Medium">16</x:Double>
+    <!-- Spacing.Small: Small spacing -->
+    <x:Double x:Key="Spacing.Small">8</x:Double>
+    <!-- ===== Corner Radius Tokens ===== -->
+    <!-- Radius.Large: Large corner radius -->
+    <x:Double x:Key="Radius.Large">8</x:Double>
+    <!-- Radius.Medium: Medium corner radius -->
+    <x:Double x:Key="Radius.Medium">6</x:Double>
+    <!-- Radius.Small: Small corner radius -->
+    <x:Double x:Key="Radius.Small">4</x:Double>
+</ResourceDictionary>

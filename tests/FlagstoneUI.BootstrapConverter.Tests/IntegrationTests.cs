@@ -29,7 +29,7 @@ public class IntegrationTests
         xaml.ShouldContain("Color.Primary");
         xaml.ShouldContain("#0D6EFD");
         xaml.ShouldContain("Spacing.Medium");
-        xaml.ShouldContain("CornerRadius.Medium");
+        xaml.ShouldContain("Radius.Medium");
     }
 
     [Fact]
@@ -149,6 +149,6 @@ public class IntegrationTests
         tokens.Colors.ShouldContainKey("Color.Background");
         tokens.Typography.ShouldContainKey("FontSize.Body");
         tokens.Spacing.ShouldContainKey("Spacing.Medium");
-        tokens.BorderRadius.ShouldContainKey("CornerRadius.Medium");
+        tokens.BorderRadius.ShouldContainKey("Radius.Medium");
     }
 }

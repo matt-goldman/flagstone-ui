@@ -11,11 +11,12 @@ internal static class ConvertCommand
 {
 	public static Command Create()
 	{
-		var inputOption = new Option<string>(
+		var inputOption = new Option<string[]>(
 			aliases: ["--input", "-i"],
-			description: "Path to Bootstrap CSS/SCSS file or URL")
+			description: "Path(s) to Bootstrap CSS/SCSS file(s) or URL(s). Multiple files will be merged.")
 		{
-			IsRequired = true
+			IsRequired = true,
+			AllowMultipleArgumentsPerToken = true
 		};
 
 		var outputOption = new Option<string>(
@@ -47,6 +48,10 @@ internal static class ConvertCommand
 			aliases: ["--verbose", "-v"],
 			description: "Enable verbose output");
 
+		var debugOption = new Option<bool>(
+			aliases: ["--debug"],
+			description: "Enable debug logging (shows all discovered variables)");
+
 		var command = new Command("convert", "Convert Bootstrap theme to Flagstone UI XAML")
 		{
 			inputOption,
@@ -55,7 +60,8 @@ internal static class ConvertCommand
 			darkModeOption,
 			namespaceOption,
 			commentsOption,
-			verboseOption
+			verboseOption,
+			debugOption
 		};
 
 		command.SetHandler(async (context) =>
@@ -67,10 +73,11 @@ internal static class ConvertCommand
 			var ns = context.ParseResult.GetValueForOption(namespaceOption)!;
 			var comments = context.ParseResult.GetValueForOption(commentsOption);
 			var verbose = context.ParseResult.GetValueForOption(verboseOption);
+			var debug = context.ParseResult.GetValueForOption(debugOption);
 
 			try
 			{
-				await ExecuteConvertAsync(input, output, format, darkMode, ns, comments, verbose);
+				await ExecuteConvertAsync(input, output, format, darkMode, ns, comments, verbose, debug);
 				context.ExitCode = 0;
 			}
 			catch (Exception ex)
@@ -92,14 +99,22 @@ internal static class ConvertCommand
 	}
 
 	private static async Task ExecuteConvertAsync(
-		string input,
+		string[] inputs,
 		string output,
 		string formatStr,
 		string darkModeStr,
 		string ns,
 		bool includeComments,
-		bool verbose)
+		bool verbose,
+		bool debug)
 	{
+		// Enable logging if debug is requested
+		if (debug)
+		{
+			ConverterLogger.IsEnabled = true;
+			ConverterLogger.Info("Debug logging enabled");
+		}
+
 		// Parse format
 		var format = formatStr.ToLowerInvariant() switch
 		{
@@ -118,7 +133,7 @@ internal static class ConvertCommand
 
 		if (verbose)
 		{
-			Console.WriteLine($"Input: {input}");
+			Console.WriteLine($"Input files: {string.Join(", ", inputs)}");
 			Console.WriteLine($"Output: {output}");
 			Console.WriteLine($"Format: {format}");
 			Console.WriteLine($"Dark Mode: {darkMode}");
@@ -127,22 +142,32 @@ internal static class ConvertCommand
 			Console.WriteLine();
 		}
 
-		// Step 1: Parse Bootstrap theme
-		Console.Write("Parsing Bootstrap theme... ");
+		// Step 1: Parse Bootstrap theme (supports multiple files)
+		Console.Write($"Parsing Bootstrap theme{(inputs.Length > 1 ? "s" : "")}... ");
 		var parser = new BootstrapParser();
 		
 		BootstrapVariables variables;
-		if (Uri.TryCreate(input, UriKind.Absolute, out var uri))
+		if (inputs.Length == 1)
 		{
-			variables = await parser.ParseFromUrlAsync(uri.ToString(), format);
-		}
-		else if (File.Exists(input))
-		{
-			variables = await parser.ParseFromFileAsync(input, format);
+			// Single file - use existing logic
+			var input = inputs[0];
+			if (Uri.TryCreate(input, UriKind.Absolute, out var uri))
+			{
+				variables = await parser.ParseFromUrlAsync(uri.ToString(), format);
+			}
+			else if (File.Exists(input))
+			{
+				variables = await parser.ParseFromFileAsync(input, format);
+			}
+			else
+			{
+				throw new FileNotFoundException($"Input file not found: {input}");
+			}
 		}
 		else
 		{
-			throw new FileNotFoundException($"Input file not found: {input}");
+			// Multiple files - merge them
+			variables = await parser.ParseMultipleFilesAsync(inputs, format);
 		}
 		
 		Console.ForegroundColor = ConsoleColor.Green;
@@ -189,9 +214,10 @@ internal static class ConvertCommand
 		// Ensure output directory exists
 		Directory.CreateDirectory(output);
 		
-		// Extract theme name from input file or use default
-		var themeName = Path.GetFileNameWithoutExtension(input);
-		if (string.IsNullOrWhiteSpace(themeName) || Uri.TryCreate(input, UriKind.Absolute, out _))
+		// Extract theme name from first input file or use default
+		var firstInput = inputs[0];
+		var themeName = Path.GetFileNameWithoutExtension(firstInput);
+		if (string.IsNullOrWhiteSpace(themeName) || Uri.TryCreate(firstInput, UriKind.Absolute, out _))
 		{
 			themeName = "Bootstrap";
 		}

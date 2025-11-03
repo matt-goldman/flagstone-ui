@@ -8,6 +8,44 @@ namespace FlagstoneUI.BootstrapConverter;
 /// </summary>
 public partial class BootstrapParser
 {
+    // Dictionary to store all parsed variables for resolution
+    private Dictionary<string, string> _variableRegistry = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Parse multiple Bootstrap files and merge their variables
+    /// </summary>
+    /// <param name="filePaths">Array of file paths to parse</param>
+    /// <param name="format">Expected format (auto-detected if not specified)</param>
+    /// <returns>Merged Bootstrap variables</returns>
+    public async Task<BootstrapVariables> ParseMultipleFilesAsync(string[] filePaths, BootstrapFormat format = BootstrapFormat.Auto)
+    {
+        ConverterLogger.Info($"Parsing {filePaths.Length} file(s)...");
+        
+        var allVariables = new BootstrapVariables();
+        _variableRegistry.Clear();
+
+        // First pass: collect all variables
+        foreach (var filePath in filePaths)
+        {
+            ConverterLogger.Debug($"Reading file: {filePath}");
+            var content = await File.ReadAllTextAsync(filePath);
+            var detectedFormat = format == BootstrapFormat.Auto ? DetectFormat(content, filePath) : format;
+            
+            CollectVariables(content, detectedFormat);
+        }
+
+        ConverterLogger.Debug($"Collected {_variableRegistry.Count} total variables");
+
+        // Second pass: resolve references and categorize
+        foreach (var (name, value) in _variableRegistry)
+        {
+            var resolvedValue = ResolveVariableReferences(value);
+            CategorizeVariable(allVariables, name, resolvedValue);
+        }
+
+        LogVariableSummary(allVariables);
+        return allVariables;
+    }
     /// <summary>
     /// Parse Bootstrap CSS from a string
     /// </summary>
@@ -17,9 +55,13 @@ public partial class BootstrapParser
     {
         var variables = new BootstrapVariables();
 
+        ConverterLogger.Debug("Parsing CSS content...");
+        
         // Use regex to extract CSS custom properties from :root
         // Format: --property-name: value;
         var matches = CssCustomPropertyRegex().Matches(cssContent);
+
+        ConverterLogger.Debug($"Found {matches.Count} CSS custom properties");
 
         foreach (Match match in matches)
         {
@@ -29,6 +71,7 @@ public partial class BootstrapParser
             CategorizeVariable(variables, name, value);
         }
 
+        LogVariableSummary(variables);
         return variables;
     }
 
@@ -41,9 +84,13 @@ public partial class BootstrapParser
     {
         var variables = new BootstrapVariables();
 
+        ConverterLogger.Debug("Parsing SCSS content...");
+
         // Simple regex-based SCSS variable extraction
         // Format: $variable-name: value;
         var matches = ScssVariableRegex().Matches(scssContent);
+
+        ConverterLogger.Debug($"Found {matches.Count} SCSS variables");
 
         foreach (Match match in matches)
         {
@@ -53,6 +100,7 @@ public partial class BootstrapParser
             CategorizeVariable(variables, $"--bs-{name}", value);
         }
 
+        LogVariableSummary(variables);
         return variables;
     }
 
@@ -130,30 +178,131 @@ public partial class BootstrapParser
         if (IsColorVariable(normalizedName))
         {
             variables.Colors[normalizedName] = value;
+            ConverterLogger.LogVariableDiscovered("Color", normalizedName, value);
         }
         else if (IsTypographyVariable(normalizedName))
         {
             variables.Typography[normalizedName] = value;
+            ConverterLogger.LogVariableDiscovered("Typography", normalizedName, value);
         }
         else if (IsSpacingVariable(normalizedName))
         {
             variables.Spacing[normalizedName] = value;
+            ConverterLogger.LogVariableDiscovered("Spacing", normalizedName, value);
         }
         else if (IsBorderVariable(normalizedName))
         {
             variables.Borders[normalizedName] = value;
+            ConverterLogger.LogVariableDiscovered("Border", normalizedName, value);
         }
         else
         {
             variables.Other[normalizedName] = value;
+            ConverterLogger.LogVariableDiscovered("Other", normalizedName, value);
         }
+    }
+
+    private static void LogVariableSummary(BootstrapVariables variables)
+    {
+        ConverterLogger.Info($"Parsing complete - Colors: {variables.Colors.Count}, Typography: {variables.Typography.Count}, Spacing: {variables.Spacing.Count}, Borders: {variables.Borders.Count}, Other: {variables.Other.Count}");
+    }
+
+    private void CollectVariables(string content, BootstrapFormat format)
+    {
+        var matches = format == BootstrapFormat.Scss 
+            ? ScssVariableRegex().Matches(content)
+            : CssCustomPropertyRegex().Matches(content);
+
+        foreach (Match match in matches)
+        {
+            var name = match.Groups[1].Value.Trim();
+            var value = match.Groups[2].Value.Trim().TrimEnd(';');
+
+            // Normalize name (remove --bs- prefix for CSS, add it for SCSS)
+            if (format == BootstrapFormat.Scss)
+            {
+                name = $"--bs-{name}";
+            }
+
+            // Clean up !default and other SCSS syntax
+            value = value.Replace("!default", string.Empty, StringComparison.Ordinal).Trim();
+
+            // Store in registry (later values override earlier ones)
+            _variableRegistry[name] = value;
+        }
+    }
+
+    private string ResolveVariableReferences(string value)
+    {
+        // Resolve SCSS variable references ($variable-name)
+        var scssVarRegex = new System.Text.RegularExpressions.Regex(@"\$([a-zA-Z0-9\-_]+)");
+        var resolved = scssVarRegex.Replace(value, match =>
+        {
+            var varName = match.Groups[1].Value;
+            var lookupName = $"--bs-{varName}";
+            
+            if (_variableRegistry.TryGetValue(lookupName, out var varValue))
+            {
+                // Recursively resolve nested references
+                return ResolveVariableReferences(varValue);
+            }
+            
+            ConverterLogger.Warning($"Unresolved SCSS variable reference: ${varName}");
+            return match.Value; // Keep original if not found
+        });
+
+        // Resolve CSS custom property references (var(--bs-variable-name))
+        var cssVarRegex = new System.Text.RegularExpressions.Regex(@"var\((--[a-zA-Z0-9\-_]+)\)");
+        resolved = cssVarRegex.Replace(resolved, match =>
+        {
+            var varName = match.Groups[1].Value;
+            
+            if (_variableRegistry.TryGetValue(varName, out var varValue))
+            {
+                // Recursively resolve nested references
+                return ResolveVariableReferences(varValue);
+            }
+            
+            ConverterLogger.Warning($"Unresolved CSS variable reference: {varName}");
+            return match.Value; // Keep original if not found
+        });
+
+        return resolved;
+    }
+
+    private static bool IsColorValue(string value)
+    {
+        // Check if value looks like a color (hex, rgb, rgba, named color)
+        return value.StartsWith('#') 
+            || value.StartsWith("rgb", StringComparison.OrdinalIgnoreCase)
+            || value.StartsWith("hsl", StringComparison.OrdinalIgnoreCase)
+            || IsNamedColor(value);
+    }
+
+    private static bool IsNamedColor(string value)
+    {
+        // Common named colors
+        var namedColors = new[] { "white", "black", "gray", "grey", "red", "blue", "green", 
+            "yellow", "orange", "purple", "pink", "cyan", "teal", "indigo", "brown" };
+        return namedColors.Any(c => value.Equals(c, StringComparison.OrdinalIgnoreCase));
     }
 
     private static bool IsColorVariable(string name)
     {
         var colorKeywords = new[] { "primary", "secondary", "success", "danger", "warning", "info", "light", "dark", 
             "color", "bg", "background", "border-color", "text" };
-        return colorKeywords.Any(keyword => name.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+        
+        // Check for color keywords
+        if (colorKeywords.Any(keyword => name.Contains(keyword, StringComparison.OrdinalIgnoreCase)))
+        {
+            return true;
+        }
+
+        // Check for Bootstrap color scale names (gray-100, blue, red, etc.)
+        var colorNames = new[] { "white", "black", "gray", "grey", "red", "blue", "green", 
+            "yellow", "orange", "purple", "pink", "cyan", "teal", "indigo", "brown" };
+        
+        return colorNames.Any(color => name.StartsWith(color, StringComparison.OrdinalIgnoreCase));
     }
 
     private static bool IsTypographyVariable(string name)

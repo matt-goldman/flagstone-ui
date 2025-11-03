@@ -62,6 +62,35 @@ var variables = await parser.ParseFromFileAsync(
 );
 ```
 
+### Parse Multiple Files (Bootswatch Themes)
+
+For best results with Bootswatch themes, use multiple source files to get complete variable resolution:
+
+```csharp
+var parser = new BootstrapParser();
+var variables = await parser.ParseMultipleFilesAsync(
+    new[] { 
+        "./bootswatch/_variables.scss",  // Theme-specific variables
+        "./bootswatch/_bootswatch.scss"  // Theme overrides and fonts
+    },
+    BootstrapFormat.Scss
+);
+```
+
+**Why multiple files?**
+
+- `_variables.scss` contains the actual color values and theme definitions
+- `_bootswatch.scss` contains font imports, custom styles, and variable overrides
+- Multi-file parsing resolves variable references (e.g., `$success: $green` → `#56cc9d`)
+- Better extraction of typography tokens (font families, font imports)
+
+**Variable Resolution:**
+The parser automatically resolves variable references across files:
+
+- SCSS variables: `$primary: $green` → resolves `$green` to actual color
+- CSS custom properties: `var(--bs-primary)` → resolves to value
+- Recursive resolution: `$a: $b; $b: $c; $c: #fff` → all resolve to `#fff`
+
 ### Custom Conversion Options
 
 ```csharp
@@ -92,6 +121,7 @@ await File.WriteAllTextAsync("Tokens.xaml", tokensXaml);
   - `ParseScss()` - Parse SCSS variables
   - `ParseFromUrlAsync()` - Fetch and parse from URL
   - `ParseFromFileAsync()` - Parse from local file
+  - `ParseMultipleFilesAsync()` - Parse and merge multiple files with variable resolution
 
 - **`BootstrapMapper`**: Maps Bootstrap variables to Flagstone tokens
   - `MapToFlagstoneTokens()` - Convert variables to tokens
@@ -129,11 +159,12 @@ await File.WriteAllTextAsync("Tokens.xaml", tokensXaml);
 
 ### Typography
 
-| Bootstrap | Flagstone |
-|-----------|-----------|
-| `--bs-font-family-base` | `FontFamily.Default` |
-| `--bs-font-size-base` | `FontSize.Body` |
-| `--bs-line-height-base` | `LineHeight.Default` |
+| Bootstrap | Flagstone | Notes |
+|-----------|-----------|-------|
+| `--bs-font-family-base` | `FontFamily.Default` | Primary font |
+| `--bs-headings-font-family` | `FontFamily.Default` | Fallback for Bootswatch themes |
+| `--bs-font-size-base` | `FontSize.Body` | |
+| `--bs-line-height-base` | `LineHeight.Default` | |
 
 ### Spacing
 
@@ -147,12 +178,17 @@ await File.WriteAllTextAsync("Tokens.xaml", tokensXaml);
 
 ### Borders
 
-| Bootstrap | Flagstone |
-|-----------|-----------|
-| `--bs-border-radius-sm` | `CornerRadius.Small` |
-| `--bs-border-radius` | `CornerRadius.Medium` |
-| `--bs-border-radius-lg` | `CornerRadius.Large` |
-| `--bs-border-width` | `BorderWidth.Default` |
+| Bootstrap | Flagstone | Notes |
+|-----------|-----------|-------|
+| `--bs-btn-border-radius-sm` | `Radius.Small` | Preferred for buttons |
+| `--bs-border-radius-sm` | `Radius.Small` | Fallback |
+| `--bs-btn-border-radius` | `Radius.Medium` | Preferred for buttons |
+| `--bs-border-radius` | `Radius.Medium` | Fallback |
+| `--bs-btn-border-radius-lg` | `Radius.Large` | Preferred for buttons |
+| `--bs-border-radius-lg` | `Radius.Large` | Fallback |
+| `--bs-border-width` | `BorderWidth.Default` | |
+
+> **Note**: Button-specific radius values (`btn-border-radius-*`) are preferred over generic values to ensure buttons match the theme's intended appearance. For example, the Litera theme uses fully-rounded pill-shaped buttons.
 
 ## Dependencies
 
