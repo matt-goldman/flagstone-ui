@@ -9,7 +9,7 @@ namespace FlagstoneUI.BootstrapConverter;
 public partial class BootstrapParser
 {
     // Dictionary to store all parsed variables for resolution
-    private Dictionary<string, string> _variableRegistry = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, string> _variableRegistry = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     /// Parse multiple Bootstrap files and merge their variables
