@@ -38,15 +38,32 @@ public class BootstrapConverterServer
                 var responseJson = JsonSerializer.Serialize(response, _jsonOptions);
                 await writer.WriteLineAsync(responseJson);
             }
-            catch (Exception ex)
+            catch (JsonException ex)
             {
+                // JSON parsing error - return parse error
                 var errorResponse = new JsonRpcResponse
                 {
                     Jsonrpc = "2.0",
                     Id = null,
                     Error = new JsonRpcError
                     {
-                        Code = -32603,
+                        Code = -32700,  // Parse error
+                        Message = $"Parse error: {ex.Message}"
+                    }
+                };
+                var errorJson = JsonSerializer.Serialize(errorResponse, _jsonOptions);
+                await writer.WriteLineAsync(errorJson);
+            }
+            catch (Exception ex)
+            {
+                // Internal error - return generic error response per JSON-RPC spec
+                var errorResponse = new JsonRpcResponse
+                {
+                    Jsonrpc = "2.0",
+                    Id = null,
+                    Error = new JsonRpcError
+                    {
+                        Code = -32603,  // Internal error
                         Message = ex.Message
                     }
                 };
@@ -180,8 +197,13 @@ public class BootstrapConverterServer
                 }, _jsonOptions)
             };
         }
+        catch (JsonException ex)
+        {
+            return CreateErrorResponse(request.Id, -32602, $"Invalid params: {ex.Message}");
+        }
         catch (Exception ex)
         {
+            // Catch-all for unexpected errors in tool execution per JSON-RPC spec
             return CreateErrorResponse(request.Id, -32603, ex.Message);
         }
     }
@@ -278,8 +300,41 @@ public class BootstrapConverterServer
                 }
             };
         }
+        catch (FileNotFoundException ex)
+        {
+            return new ConvertToolOutput
+            {
+                Success = false,
+                Error = $"File not found: {ex.Message}"
+            };
+        }
+        catch (IOException ex)
+        {
+            return new ConvertToolOutput
+            {
+                Success = false,
+                Error = $"File operation failed: {ex.Message}"
+            };
+        }
+        catch (HttpRequestException ex)
+        {
+            return new ConvertToolOutput
+            {
+                Success = false,
+                Error = $"HTTP request failed: {ex.Message}"
+            };
+        }
+        catch (JsonException ex)
+        {
+            return new ConvertToolOutput
+            {
+                Success = false,
+                Error = $"JSON parsing failed: {ex.Message}"
+            };
+        }
         catch (Exception ex)
         {
+            // Catch-all for unexpected conversion errors
             return new ConvertToolOutput
             {
                 Success = false,
@@ -341,8 +396,33 @@ public class BootstrapConverterServer
                 }
             };
         }
+        catch (FileNotFoundException ex)
+        {
+            return new InfoToolOutput
+            {
+                Success = false,
+                Error = $"File not found: {ex.Message}"
+            };
+        }
+        catch (IOException ex)
+        {
+            return new InfoToolOutput
+            {
+                Success = false,
+                Error = $"File operation failed: {ex.Message}"
+            };
+        }
+        catch (HttpRequestException ex)
+        {
+            return new InfoToolOutput
+            {
+                Success = false,
+                Error = $"HTTP request failed: {ex.Message}"
+            };
+        }
         catch (Exception ex)
         {
+            // Catch-all for unexpected errors
             return new InfoToolOutput
             {
                 Success = false,
@@ -378,11 +458,16 @@ public class BootstrapConverterServer
                 ["best-practices"] = "control-implementation-guide.md"
             };
 
-            // Get the docs directory relative to the MCP server executable
-            var docsPath = Path.Combine(
-                Path.GetDirectoryName(typeof(BootstrapConverterServer).Assembly.Location) ?? "",
-                "..", "..", "..", "..", "..", "..", "docs");
-            docsPath = Path.GetFullPath(docsPath);
+            // Get the docs directory by searching upward for the repository root
+            var docsPath = FindDocsDirectory();
+            if (docsPath == null)
+            {
+                return new DocsToolOutput
+                {
+                    Success = false,
+                    Error = "Could not locate documentation directory"
+                };
+            }
 
             var content = new System.Text.StringBuilder();
 
@@ -435,8 +520,18 @@ public class BootstrapConverterServer
                 AvailableTopics = docFiles.Keys.Append("all").ToArray()
             };
         }
+        catch (IOException ex)
+        {
+            return new DocsToolOutput
+            {
+                Success = false,
+                Error = $"File operation failed: {ex.Message}",
+                AvailableTopics = new[] { "tokens", "controls", "theming", "architecture", "best-practices", "all" }
+            };
+        }
         catch (Exception ex)
         {
+            // Catch-all for unexpected errors
             return new DocsToolOutput
             {
                 Success = false,
@@ -504,8 +599,33 @@ public class BootstrapConverterServer
                 }
             };
         }
+        catch (FileNotFoundException ex)
+        {
+            return new AnalyzeToolOutput
+            {
+                Success = false,
+                Error = $"File not found: {ex.Message}"
+            };
+        }
+        catch (IOException ex)
+        {
+            return new AnalyzeToolOutput
+            {
+                Success = false,
+                Error = $"File operation failed: {ex.Message}"
+            };
+        }
+        catch (HttpRequestException ex)
+        {
+            return new AnalyzeToolOutput
+            {
+                Success = false,
+                Error = $"HTTP request failed: {ex.Message}"
+            };
+        }
         catch (Exception ex)
         {
+            // Catch-all for unexpected errors
             return new AnalyzeToolOutput
             {
                 Success = false,
@@ -526,6 +646,33 @@ public class BootstrapConverterServer
                 Message = message
             }
         };
+    }
+
+    /// <summary>
+    /// Finds the docs directory by searching upward from the assembly location for repository markers
+    /// </summary>
+    private static string? FindDocsDirectory()
+    {
+        var currentDir = Path.GetDirectoryName(typeof(BootstrapConverterServer).Assembly.Location);
+        
+        while (currentDir != null)
+        {
+            // Look for repository markers (e.g., .git, global.json, *.sln)
+            if (Directory.Exists(Path.Combine(currentDir, ".git")) ||
+                File.Exists(Path.Combine(currentDir, "global.json")) ||
+                Directory.GetFiles(currentDir, "*.sln*").Length > 0)
+            {
+                var docsPath = Path.Combine(currentDir, "docs");
+                if (Directory.Exists(docsPath))
+                {
+                    return docsPath;
+                }
+            }
+            
+            currentDir = Directory.GetParent(currentDir)?.FullName;
+        }
+        
+        return null;
     }
 }
 

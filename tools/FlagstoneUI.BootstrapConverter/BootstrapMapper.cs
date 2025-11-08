@@ -243,9 +243,9 @@ public class BootstrapMapper
 
         try
         {
-            var r = Convert.ToInt32(lightColor.Substring(1, 2), 16);
-            var g = Convert.ToInt32(lightColor.Substring(3, 2), 16);
-            var b = Convert.ToInt32(lightColor.Substring(5, 2), 16);
+            var r = int.Parse(lightColor.AsSpan(1, 2), System.Globalization.NumberStyles.HexNumber);
+            var g = int.Parse(lightColor.AsSpan(3, 2), System.Globalization.NumberStyles.HexNumber);
+            var b = int.Parse(lightColor.AsSpan(5, 2), System.Globalization.NumberStyles.HexNumber);
 
             // Calculate brightness (perceived luminance)
             var brightness = (r * 299 + g * 587 + b * 114) / 1000;
@@ -259,7 +259,11 @@ public class BootstrapMapper
 
             return $"#{r:X2}{g:X2}{b:X2}";
         }
-        catch
+        catch (FormatException)
+        {
+            return null;
+        }
+        catch (OverflowException)
         {
             return null;
         }

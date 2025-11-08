@@ -39,6 +39,20 @@ internal static class InfoCommand
 				await ExecuteInfoAsync(input, format);
 				context.ExitCode = 0;
 			}
+			catch (FileNotFoundException ex)
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.Error.WriteLine($"Error: {ex.Message}");
+				Console.ResetColor();
+				context.ExitCode = 1;
+			}
+			catch (IOException ex)
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.Error.WriteLine($"Error: File operation failed - {ex.Message}");
+				Console.ResetColor();
+				context.ExitCode = 1;
+			}
 			catch (Exception ex)
 			{
 				Console.ForegroundColor = ConsoleColor.Red;
