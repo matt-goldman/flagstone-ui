@@ -80,6 +80,26 @@ internal static class ConvertCommand
 				await ExecuteConvertAsync(input, output, format, darkMode, ns, comments, verbose, debug);
 				context.ExitCode = 0;
 			}
+			catch (FileNotFoundException ex)
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.Error.WriteLine($"Error: {ex.Message}");
+				Console.ResetColor();
+				context.ExitCode = 1;
+			}
+			catch (IOException ex)
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.Error.WriteLine($"Error: File operation failed - {ex.Message}");
+				Console.ResetColor();
+				
+				if (verbose)
+				{
+					Console.Error.WriteLine(ex.StackTrace);
+				}
+				
+				context.ExitCode = 1;
+			}
 			catch (Exception ex)
 			{
 				Console.ForegroundColor = ConsoleColor.Red;

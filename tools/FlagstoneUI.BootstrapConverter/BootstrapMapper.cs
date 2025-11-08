@@ -259,7 +259,11 @@ public class BootstrapMapper
 
             return $"#{r:X2}{g:X2}{b:X2}";
         }
-        catch
+        catch (FormatException)
+        {
+            return null;
+        }
+        catch (OverflowException)
         {
             return null;
         }
