@@ -349,9 +349,6 @@ public class XamlThemeGenerator
         var doc = CreateXamlDocument(withClass: true, className: $"{options.Namespace}.{sanitizedThemeName}Styles");
         var root = doc.Root!;
 
-        var mauiNs = root.Name.Namespace;
-        var xNs = root.GetNamespaceOfPrefix("x") ?? XNamespace.Get(XamlNamespace);
-
         // Add Flagstone namespace for controls
         root.Add(new XAttribute(XNamespace.Xmlns + "fs", "clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"));
 
@@ -359,6 +356,15 @@ public class XamlThemeGenerator
         root.Add(new XComment($" {themeName} Styles - Generated from Bootstrap "));
         root.Add(new XComment(" Control styles that use theme tokens "));
         root.Add(new XText("\n\n"));
+
+        // Merge Tokens.xaml to avoid duplication
+        var mauiNs = root.Name.Namespace;
+        var mergedDictionaries = new XElement(mauiNs + "ResourceDictionary.MergedDictionaries");
+        var tokensDictionary = new XElement(mauiNs + "ResourceDictionary",
+            new XAttribute("Source", "Tokens.xaml"));
+        mergedDictionaries.Add(tokensDictionary);
+        root.AddFirst(mergedDictionaries);
+        root.AddFirst(new XText("\n"));
 
         // Add button styles
         AddButtonStyles(root, tokens, options);
