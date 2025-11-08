@@ -5,8 +5,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:FlagstoneUI.SampleApp"
     xmlns:page="clr-namespace:FlagstoneUI.SampleApp.Pages"
+    xmlns:converters="clr-namespace:FlagstoneUI.SampleApp.Converters"
     Title="FlagstoneUI.SampleApp"
     FlyoutBehavior="Flyout">
+
+    <Shell.Resources>
+        <ResourceDictionary>
+            <converters:ThemeToIsCheckedConverter x:Key="ThemeToIsCheckedConverter" />
+        </ResourceDictionary>
+    </Shell.Resources>
 
     <Shell.FlyoutHeader>
         <VerticalStackLayout
@@ -16,19 +23,18 @@
             
             <RadioButton
                 Content="Material"
-                IsChecked="True"
-                CheckedChanged="OnThemeRadioButtonCheckedChanged" />    
+                IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=Material, Mode=TwoWay}" />    
             <RadioButton
                 Content="Litera"
-                CheckedChanged="OnThemeRadioButtonCheckedChanged" />
+                IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=Litera, Mode=TwoWay}" />
 
             <RadioButton
                 Content="Minty"
-                CheckedChanged="OnThemeRadioButtonCheckedChanged" />
+                IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=Minty, Mode=TwoWay}" />
 
             <RadioButton
                 Content="Brite"
-                CheckedChanged="OnThemeRadioButtonCheckedChanged" />
+                IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=Brite, Mode=TwoWay}" />
 
         </VerticalStackLayout>
     </Shell.FlyoutHeader>
