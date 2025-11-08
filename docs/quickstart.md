@@ -4,12 +4,17 @@ Welcome to Flagstone UI! This guide will help you quickly get started building b
 
 ## What is Flagstone UI?
 
-Flagstone UI is a cross-platform, open-source UI kit and framework for .NET MAUI that provides:
+Flagstone UI is a cross-platform, open-source **themeable framework** for .NET MAUI that enables developers to easily style controls using a token-based API, similar to how web developers use CSS.
 
-- **Themeable Controls**: Pre-built controls (FsButton, FsCard, FsEntry) with Material Design 3 styling
-- **Design Token System**: A comprehensive token-based theming system for consistent styling
-- **Multiple Themes**: Built-in Material theme with support for custom themes
-- **Dark Mode Support**: Automatic dark mode support through token bindings
+Unlike traditional control libraries, Flagstone UI's primary purpose is to **surface all styling properties via a common token-based API**, allowing you to:
+
+- **Style at the API layer**: Use .NET MAUI's API layer for styling instead of dropping down to platform-specific Handler configuration
+- **Token-based theming**: Apply consistent styling across your app using design tokens
+- **Community-driven themes**: Share and use themes created by the community (like Bootstrap for .NET MAUI)
+- **Framework controls**: Built-in controls (FsButton, FsCard, FsEntry) that work seamlessly with the token system
+- **Dark mode support**: Automatic dark mode through token bindings
+
+**Key Value Proposition**: Flagstone UI gives you the flexibility and control that web developers have with CSS, with a token system that ensures consistency and makes theming straightforward.
 
 ## Architecture Overview
 
@@ -75,7 +80,7 @@ Then add project references to your `.csproj` file:
 
 ### Step 1: Add Theme to Your Application
 
-In your `App.xaml` file, add the Material theme to your application resources:
+In your `App.xaml` file, add your theme to your application resources. In this example, we'll use the Material theme (included as a demonstration), but you would typically use your own custom theme or one from the community:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -90,13 +95,15 @@ In your `App.xaml` file, add the Material theme to your application resources:
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
                 
-                <!-- Add Flagstone UI Material theme -->
+                <!-- Add your Flagstone UI theme (Material theme shown as example) -->
                 <material:Theme />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
 ```
+
+> **Note**: The Material theme is provided to showcase Flagstone UI's capabilities. The themes demonstrate the concept and are value-add components. The core value of Flagstone UI is the token-based theming framework itself, which allows you to create or use any theme that fits your needs.
 
 ### Step 2: Add Namespace to Your Pages
 
@@ -141,11 +148,11 @@ Now you can use Flagstone controls in your XAML:
 </VerticalStackLayout>
 ```
 
-## Using Built-in Styles
+## Using Control Variants
 
-Flagstone themes provide several pre-defined styles for each control:
+Themes typically provide several style variants for each control. For example, the Material theme includes these button variants:
 
-### Button Styles
+### Button Variants (from Material Theme)
 
 ```xml
 <!-- Filled Button (default) -->
@@ -164,7 +171,7 @@ Flagstone themes provide several pre-defined styles for each control:
              Style="{StaticResource TonalButton}" />
 ```
 
-### Card Styles
+### Card Variants (from Material Theme)
 
 ```xml
 <!-- Filled Card (default) -->
@@ -183,7 +190,7 @@ Flagstone themes provide several pre-defined styles for each control:
 </fs:FsCard>
 ```
 
-### Entry Styles
+### Entry Variants (from Material Theme)
 
 ```xml
 <!-- Filled Entry (default) -->
@@ -193,6 +200,8 @@ Flagstone themes provide several pre-defined styles for each control:
 <fs:FsEntry Placeholder="Outlined Entry"
             Style="{StaticResource OutlinedEntry}" />
 ```
+
+> **Note**: These variants are defined by the Material theme. Your custom theme can define its own variants with different names and styling.
 
 ## Using Design Tokens
 
@@ -218,9 +227,9 @@ You can reference design tokens directly in your custom styles using `DynamicRes
 
 For a complete list of available tokens, see the [Token Reference Documentation](tokens.md).
 
-## Applying a Different Theme
+## Bonus: Runtime Theme Switching
 
-Flagstone UI supports multiple themes. To switch themes at runtime:
+Here's something cool - you can even switch themes at runtime if your app needs it! While the primary use case for Flagstone UI is theming an app according to your desired look and feel, the token-based architecture enables dynamic theme switching:
 
 ```csharp
 // In your App.xaml.cs
@@ -246,9 +255,11 @@ public static void SwitchTheme(string themeName)
 }
 ```
 
-## Creating Custom Styles
+This can be useful for multi-tenant applications, A/B testing different designs, or providing theme options to users.
 
-You can create custom styles that build on Flagstone tokens:
+## Creating Custom Variants
+
+You can create custom style variants in your theme that build on Flagstone tokens:
 
 ```xml
 <Style x:Key="AccentButton" TargetType="fs:FsButton">
