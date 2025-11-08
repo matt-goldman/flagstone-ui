@@ -1,114 +1,73 @@
-# Flagstone UI Token Catalog System
+# Flagstone UI Documentation
 
-This directory contains the machine-readable token catalog system for Flagstone UI, designed to support AI agents, automated tooling, and theme generation.
+Welcome to the Flagstone UI documentation! This directory contains comprehensive guides, references, and technical documentation for building apps with Flagstone UI.
 
-## Files
+## Getting Started
 
-### Core Files
+### For Developers
 
-- **`tokens.md`** - Human-readable documentation of the design token system
-  - Design system philosophy and guidance
-  - Complete token reference with examples
-  - Usage guidelines for designers and developers
+- **[Quickstart Guide](quickstart.md)** ⭐ **START HERE**
+  - Quick setup and basic usage
+  - Installation instructions
+  - Using controls and themes
+  - Complete examples
+
+### For Designers
+
+- **[Theming Guide](theming-guide.md)** 🎨 **FOR DESIGNERS**
+  - Creating custom themes
+  - Understanding the token system
+  - Control properties reference
+  - Sample theme documents
+  - Designer-to-developer workflow
+
+## Reference Documentation
+
+### Token System
+
+- **[Design Tokens Reference](tokens.md)** - Complete token documentation
+  - Color, spacing, typography, shape tokens
+  - Usage guidelines
+  - Semantic meaning of each token
 
 - **`tokens-catalog.json`** - Machine-readable token catalog
   - All base design tokens (colors, spacing, typography, etc.)
   - Control-specific styling properties and recommendations
   - Common style patterns for each control
-  - Theme variant definitions
   - Structured for AI/tooling consumption
 
 - **`tokens-schema.json`** - JSON Schema for validation
   - Validates `tokens-catalog.json` structure
   - Enables IDE auto-completion
-  - Documents expected data structure
-  - Can be used by validators and linters
 
 ### Control Documentation
 
-- **`Controls/FsButton.md`** - Button control documentation
-- **`Controls/FsEntry.md`** - Entry control documentation  
-- **`Controls/FsCard.md`** - Card control documentation
+- **[FsButton](Controls/FsButton.md)** - Button control
+- **[FsCard](Controls/FsCard.md)** - Card container control
+- **[FsEntry](Controls/FsEntry.md)** - Text entry control
 
-## Using the Token Catalog
+## Architecture & Technical Documentation
 
-### For AI Agents
+- **[Architecture Overview](architecture.md)** - System architecture and design decisions
+- **[Control Implementation Guide](control-implementation-guide.md)** - Guide for implementing new controls
+- **[Roadmap](roadmap.md)** - Project roadmap and planned features
 
-The `tokens-catalog.json` file provides structured data for:
+## Advanced Topics
 
-- **Theme Generation**: AI can generate complete themes by overriding base tokens
-- **Style Recommendations**: Common styles show recommended token combinations
-- **Property Validation**: Check if token types match property requirements
-- **Code Generation**: Generate XAML styles programmatically
+### Token Catalog System
 
-Example AI workflow:
+The `tokens-catalog.json` file provides machine-readable token data for:
 
-1. Parse `tokens-catalog.json` to understand available tokens
-2. Read control `styledProperties` to see what can be customized
-3. Review `commonStyles` for proven patterns
-4. Generate theme override with custom token values
-5. Validate against `tokens-schema.json`
+- **AI Agents**: Theme generation, style recommendations, code generation
+- **Tooling**: Automated documentation, validation, IDE integration
+- **Designers**: Import into design tools (Figma, Sketch)
 
-### For Developers
+**For more details**, see the [tokens.md](tokens.md) documentation.
 
-```bash
-# Validate the catalog against schema (requires JSON schema validator)
-jsonschema -i tokens-catalog.json tokens-schema.json
+### Sample Applications
 
-# Use in tooling
-cat tokens-catalog.json | jq '.controls.FsButton.styledProperties'
-```
-
-### For Designers
-
-The catalog can be:
-
-- Imported into design tools (Figma, Sketch)
-- Used to generate design system documentation
-- Validated against design specifications
-- Exported to other design token formats
-
-## Catalog Structure
-
-### Base Tokens
-
-```json
-{
-  "baseTokens": {
-    "colors": { "Color.Primary": { "type": "color", "defaultValue": "#6750A4", ... }},
-    "spacing": { "Space.16": { "type": "spacing", "value": 16, ... }},
-    "typography": { "FontSize.BodyMedium": { "type": "fontSize", "value": 14, ... }},
-    // ... other token categories
-  }
-}
-```
-
-### Control Definitions
-
-```json
-{
-  "controls": {
-    "FsButton": {
-      "inheritsFrom": "Microsoft.Maui.Controls.Button",
-      "architecture": "subclass",
-      "styledProperties": [
-        {
-          "name": "BackgroundColor",
-          "type": "color",
-          "recommendedToken": "Color.Primary",
-          "bindable": true
-        }
-      ],
-      "commonStyles": [
-        {
-          "name": "PrimaryButton",
-          "tokens": { "BackgroundColor": "Color.Primary", ... }
-        }
-      ]
-    }
-  }
-}
-```
+- **[Sample App](../samples/FlagstoneUI.SampleApp/)** - Comprehensive showcase of all controls
+- **[Theme Playground](../samples/FlagstoneUI.ThemePlayground/)** - Test and experiment with themes
 
 ## Maintenance
 
@@ -225,14 +184,26 @@ When adding new tokens or controls:
 5. Validate against schema
 6. Update version and lastUpdated date
 
-## Questions?
+## Getting Help
 
-For questions about the token catalog system:
+- 📖 **Documentation Issues?** Check the [quickstart](quickstart.md) or [theming guide](theming-guide.md)
+- 💬 **Questions?** Open a [GitHub Discussion](https://github.com/matt-goldman/flagstone-ui/discussions)
+- 🐛 **Found a Bug?** Report it on [GitHub Issues](https://github.com/matt-goldman/flagstone-ui/issues)
+- 🤝 **Want to Contribute?** See [CONTRIBUTING.md](../CONTRIBUTING.md)
 
-- 📖 See [`tokens.md`](tokens.md) for human-readable documentation
-- 🔧 Check [`tokens-schema.json`](tokens-schema.json) for technical structure
-- 💬 Open an issue on [GitHub](https://github.com/matt-goldman/flagstone-ui)
+## Documentation Index
+
+### Quick Links
+- [Quickstart Guide](quickstart.md) - Get started in minutes
+- [Theming Guide](theming-guide.md) - Create custom themes
+- [Design Tokens](tokens.md) - Complete token reference
+- [Architecture](architecture.md) - Technical architecture
+
+### By Role
+- **Developers**: Start with [quickstart.md](quickstart.md)
+- **Designers**: Start with [theming-guide.md](theming-guide.md)
+- **Contributors**: See [control-implementation-guide.md](control-implementation-guide.md)
 
 ---
 
-*This catalog system is designed to be AI-friendly while remaining human-readable. It bridges the gap between design intent and implementation reality.*
+*Flagstone UI - A token-based, themeable UI framework for .NET MAUI*
