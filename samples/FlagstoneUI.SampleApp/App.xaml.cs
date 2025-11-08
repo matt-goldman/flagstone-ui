@@ -33,8 +33,6 @@ public partial class App : Application
         Current.Resources.MergedDictionaries.Add(newTheme.Tokens);
     }
 
-	//private static readonly ResourceDictionary _colors = new Resources.Styles.Colors();
-	//private static readonly ResourceDictionary _styles = new Styles();
 
     public static List<Theme> Themes { get; } =
 	[
