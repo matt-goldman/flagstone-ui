@@ -11,7 +11,7 @@
 
     <!-- Material Design 3 Dark Mode Color Overrides -->
     <!-- These override the light mode defaults from Tokens.xaml when dark mode is active -->
-    
+
     <!-- Primary colors - Dark mode -->
     <Color x:Key="Color.Primary.Dark">#D0BCFF</Color>
     <Color x:Key="Color.OnPrimary.Dark">#381E72</Color>
@@ -60,13 +60,13 @@
     <!-- ========================================= -->
 
     <!-- ========== FsButton Styles ========== -->
-    
+
     <!-- Base Button Style (Material Filled Button - Primary) -->
     <Style TargetType="fs:FsButton">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={DynamicResource Color.Primary}, Dark={DynamicResource Color.Primary.Dark}}" />
         <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource Color.OnPrimary}, Dark={DynamicResource Color.OnPrimary.Dark}}" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.None}" />
         <Setter Property="Padding" Value="24,10" />
         <Setter Property="HeightRequest" Value="40" />
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -90,7 +90,7 @@
         <Setter Property="BorderColor" Value="{AppThemeBinding Light={DynamicResource Color.Outline}, Dark={DynamicResource Color.Outline.Dark}}" />
         <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.None}" />
         <Setter Property="Padding" Value="24,10" />
         <Setter Property="HeightRequest" Value="40" />
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -112,7 +112,7 @@
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource Color.Primary}, Dark={DynamicResource Color.Primary.Dark}}" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.None}" />
         <Setter Property="Padding" Value="12,10" />
         <Setter Property="HeightRequest" Value="40" />
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -134,7 +134,51 @@
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={DynamicResource Color.SecondaryContainer}, Dark={DynamicResource Color.SecondaryContainer.Dark}}" />
         <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource Color.OnSecondaryContainer}, Dark={DynamicResource Color.OnSecondaryContainer.Dark}}" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.None}" />
+        <Setter Property="Padding" Value="24,10" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="{DynamicResource Opacity.Disabled}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!-- Secondary Button Style (Uses secondary color) -->
+    <Style x:Key="SecondaryButton" TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={DynamicResource Color.Secondary}, Dark={DynamicResource Color.Secondary.Dark}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource Color.OnSecondary}, Dark={DynamicResource Color.OnSecondary.Dark}}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.None}" />
+        <Setter Property="Padding" Value="24,10" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="{DynamicResource Opacity.Disabled}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!-- Tertiary Button Style (Uses tertiary color) -->
+    <Style x:Key="TertiaryButton" TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={DynamicResource Color.Tertiary}, Dark={DynamicResource Color.Tertiary.Dark}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource Color.OnTertiary}, Dark={DynamicResource Color.OnTertiary.Dark}}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.None}" />
         <Setter Property="Padding" Value="24,10" />
         <Setter Property="HeightRequest" Value="40" />
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -156,13 +200,13 @@
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={DynamicResource Color.Primary}, Dark={DynamicResource Color.Primary.Dark}}" />
         <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource Color.OnPrimary}, Dark={DynamicResource Color.OnPrimary.Dark}}" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.None}" />
         <Setter Property="Padding" Value="24,10" />
         <Setter Property="HeightRequest" Value="40" />
     </Style>
-  
+
     <!-- ========== FsCard Styles ========== -->
-    
+
     <!-- Base Card Style (Material Filled Card) -->
     <Style TargetType="fs:FsCard">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={DynamicResource Color.SurfaceVariant}, Dark={DynamicResource Color.SurfaceVariant.Dark}}" />
@@ -194,7 +238,7 @@
     </Style>
 
     <!-- ========== FsEntry Styles ========== -->
-    
+
     <!-- Base Entry Style (Material Filled Text Field) -->
     <Style TargetType="fs:FsEntry">
         <Setter Property="Background">

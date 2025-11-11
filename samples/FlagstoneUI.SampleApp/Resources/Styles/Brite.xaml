@@ -64,7 +64,7 @@
     <Style TargetType="fs:FsButton">
         <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />
         <Setter Property="TextColor" Value="#FFFFFF" />
-        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
         <Setter Property="Padding" Value="{DynamicResource Spacing.Medium}" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
         <Setter Property="HeightRequest" Value="40" />
@@ -88,7 +88,7 @@
         <Setter Property="TextColor" Value="{DynamicResource Color.Primary}" />
         <Setter Property="BorderColor" Value="{DynamicResource Color.Primary}" />
         <Setter Property="BorderWidth" Value="1" />
-        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
         <Setter Property="Padding" Value="{DynamicResource Spacing.Medium}" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
         <Setter Property="HeightRequest" Value="40" />
@@ -110,7 +110,7 @@
     <Style x:Key="TextButton" TargetType="fs:FsButton">
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="TextColor" Value="{DynamicResource Color.Primary}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
         <Setter Property="Padding" Value="12,10" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
         <Setter Property="HeightRequest" Value="40" />

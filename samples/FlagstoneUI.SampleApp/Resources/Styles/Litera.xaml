@@ -57,7 +57,7 @@
     <Style TargetType="fs:FsButton">
         <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />
         <Setter Property="TextColor" Value="#FFFFFF" />
-        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
         <Setter Property="Padding" Value="24,10" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
         <Setter Property="HeightRequest" Value="40" />
@@ -81,7 +81,7 @@
         <Setter Property="TextColor" Value="{DynamicResource Color.Primary}" />
         <Setter Property="BorderColor" Value="{DynamicResource Color.Primary}" />
         <Setter Property="BorderWidth" Value="1" />
-        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
         <Setter Property="Padding" Value="24,10" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
         <Setter Property="HeightRequest" Value="40" />
@@ -103,8 +103,52 @@
     <Style x:Key="TextButton" TargetType="fs:FsButton">
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="TextColor" Value="{DynamicResource Color.Primary}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
         <Setter Property="Padding" Value="12,10" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.38" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!--  Secondary Button Style  -->
+    <Style x:Key="SecondaryButton" TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Color.Secondary}" />
+        <Setter Property="TextColor" Value="#FFFFFF" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
+        <Setter Property="Padding" Value="24,10" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.38" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!--  Tertiary Button Style  -->
+    <Style x:Key="TertiaryButton" TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Color.Success}" />
+        <Setter Property="TextColor" Value="#FFFFFF" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
+        <Setter Property="Padding" Value="24,10" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
         <Setter Property="HeightRequest" Value="40" />
         <Setter Property="VisualStateManager.VisualStateGroups">

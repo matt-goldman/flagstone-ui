@@ -47,7 +47,7 @@
     <Color x:Key="Color.InverseOnSurface">#F4EFF4</Color>
     <Color x:Key="Color.InversePrimary">#D0BCFF</Color>
 
-    <!-- Border radius tokens -->
+    <!-- Border radius tokens (Double for FsCard, FsEntry) -->
     <x:Double x:Key="Radius.None">0</x:Double>
     <x:Double x:Key="Radius.ExtraSmall">4</x:Double>
     <x:Double x:Key="Radius.Small">8</x:Double>
@@ -55,6 +55,15 @@
     <x:Double x:Key="Radius.Large">16</x:Double>
     <x:Double x:Key="Radius.ExtraLarge">28</x:Double>
     <x:Double x:Key="Radius.Full">9999</x:Double>
+
+    <!-- Border radius tokens (Int32 for Button.CornerRadius) -->
+    <x:Int32 x:Key="Radius.Button.None">0</x:Int32>
+    <x:Int32 x:Key="Radius.Button.ExtraSmall">4</x:Int32>
+    <x:Int32 x:Key="Radius.Button.Small">8</x:Int32>
+    <x:Int32 x:Key="Radius.Button.Medium">12</x:Int32>
+    <x:Int32 x:Key="Radius.Button.Large">16</x:Int32>
+    <x:Int32 x:Key="Radius.Button.ExtraLarge">28</x:Int32>
+    <x:Int32 x:Key="Radius.Button.Full">9999</x:Int32>
 
     <!-- Spacing tokens -->
     <x:Double x:Key="Space.0">0</x:Double>
@@ -85,7 +94,7 @@
     <x:Double x:Key="FontSize.LabelLarge">14</x:Double>
     <x:Double x:Key="FontSize.LabelMedium">12</x:Double>
     <x:Double x:Key="FontSize.LabelSmall">11</x:Double>
-    
+
     <!-- Legacy aliases for backward compatibility -->
     <x:Double x:Key="FontSize.Body">14</x:Double>
     <x:Double x:Key="FontSize.Title">20</x:Double>

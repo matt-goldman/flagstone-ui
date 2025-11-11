@@ -66,11 +66,21 @@
                              Style="{StaticResource TonalButton}"
                              Clicked="OnButtonClicked" />
 
+                <!-- Secondary Button -->
+                <fs:FsButton Text="Secondary Button"
+                             Style="{StaticResource SecondaryButton}"
+                             Clicked="OnButtonClicked" />
+
+                <!-- Tertiary Button -->
+                <fs:FsButton Text="Tertiary Button"
+                             Style="{StaticResource TertiaryButton}"
+                             Clicked="OnButtonClicked" />
+
                 <!-- Disabled Button -->
                 <fs:FsButton Text="Disabled Button"
                              IsEnabled="False" />
 
-                <!-- Button with Icon (using MAUI Button for comparison) -->
+                <!-- Button Group -->
                 <HorizontalStackLayout Spacing="8">
                     <fs:FsButton Text="Primary Action" />
                     <fs:FsButton Text="Secondary"
@@ -87,6 +97,16 @@
 
                 <!-- Default Button -->
                 <fs:FsButton Text="Default Button"
+                             Clicked="OnButtonClicked" />
+
+                <!-- Secondary Button -->
+                <fs:FsButton Text="Secondary Button"
+                             Style="{StaticResource SecondaryButton}"
+                             Clicked="OnButtonClicked" />
+
+                <!-- Tertiary Button -->
+                <fs:FsButton Text="Tertiary Button"
+                             Style="{StaticResource TertiaryButton}"
                              Clicked="OnButtonClicked" />
 
                 <!-- Disabled Button -->
