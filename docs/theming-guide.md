@@ -169,13 +169,25 @@ Font size scale based on Material Design 3:
 
 Corner radius values for different component sizes:
 
+**Standard Radius Tokens (Double type - for Cards, Entries, etc.):**
 - `Radius.None` = 0px (square corners)
 - `Radius.ExtraSmall` = 4px
-- `Radius.Small` = 8px ← Buttons, entries
+- `Radius.Small` = 8px
 - `Radius.Medium` = 12px ← Cards
 - `Radius.Large` = 16px
 - `Radius.ExtraLarge` = 28px
 - `Radius.Full` = 9999px (fully rounded/circular)
+
+**Button-Specific Radius Tokens (Int32 type - for Button.CornerRadius only):**
+- `Radius.Button.None` = 0 ← Square button corners
+- `Radius.Button.ExtraSmall` = 4
+- `Radius.Button.Small` = 8
+- `Radius.Button.Medium` = 12
+- `Radius.Button.Large` = 16 ← Rounded button corners
+- `Radius.Button.ExtraLarge` = 28
+- `Radius.Button.Full` = 9999 ← Pill-shaped buttons
+
+> **⚠️ Important**: Use `Radius.Button.*` tokens when styling `FsButton` or standard `Button` controls. The Button.CornerRadius property requires Int32 type, while other controls use Double. Using the wrong token type will result in silent binding failure and square corners. See [ADR003](Decisions/adr003-button-corner-radius-type.md) for technical details.
 
 #### 5. Other Tokens
 
@@ -286,9 +298,9 @@ Below is a template you can use to document your custom theme and hand it to a d
 
 ### **Theme Name: [Your Theme Name]**
 
-**Version:** 1.0  
-**Created:** [Date]  
-**Designer:** [Your Name]  
+**Version:** 1.0
+**Created:** [Date]
+**Designer:** [Your Name]
 **Brand/Product:** [Brand Name]
 
 ---
@@ -411,9 +423,11 @@ This section shows what properties are themable for each Flagstone UI control.
 | `TextColor` | `Color.OnPrimary` (filled)<br/>`Color.Primary` (outlined/text) | Button text color |
 | `BorderColor` | `Color.Primary` (outlined)<br/>`Transparent` (filled/text) | Border color |
 | `BorderWidth` | `BorderWidth.Thin` (outlined)<br/>`BorderWidth.None` (filled/text) | Border thickness |
-| `CornerRadius` | `Radius.Small` | Button corner radius |
+| `CornerRadius` | **`Radius.Button.Small`** or **`Radius.Button.Large`** | **⚠️ Use Button-specific tokens only!** |
 | `Padding` | `Space.16` (horizontal), `Space.12` (vertical) | Internal padding |
 | `FontSize` | `FontSize.LabelLarge` | Button text size |
+
+> **⚠️ Critical**: Always use `Radius.Button.*` tokens for button corner radius, **never** `Radius.*` tokens. Button.CornerRadius requires Int32 type. Using Double-typed tokens will result in silent failure and square corners.
 
 **Variant Styles:**
 - **Filled** (default): Solid background, primary color
