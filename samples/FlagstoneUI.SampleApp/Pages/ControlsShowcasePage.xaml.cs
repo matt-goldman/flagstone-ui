@@ -1,3 +1,5 @@
+using FlagstoneUI.SampleApp.ViewModels;
+
 namespace FlagstoneUI.SampleApp.Pages;
 
 public partial class ControlsShowcasePage : ContentPage
@@ -5,13 +7,14 @@ public partial class ControlsShowcasePage : ContentPage
 	public ControlsShowcasePage()
 	{
 		InitializeComponent();
+		BindingContext = new ControlsShowcaseViewModel();
 	}
 
 	private async void OnButtonClicked(object sender, EventArgs e)
 	{
 		if (sender is Button button)
 		{
-			await DisplayAlertAsync("Button Clicked", $"You clicked: {button.Text}", "OK");
+			await DisplayAlert("Button Clicked", $"You clicked: {button.Text}", "OK");
 		}
 	}
 
@@ -19,7 +22,7 @@ public partial class ControlsShowcasePage : ContentPage
 	{
 		if (sender is Button button)
 		{
-			await DisplayAlertAsync("Card Action", $"You clicked: {button.Text}", "OK");
+			await DisplayAlert("Card Action", $"You clicked: {button.Text}", "OK");
 		}
 	}
 
@@ -27,7 +30,17 @@ public partial class ControlsShowcasePage : ContentPage
 	{
 		if (sender is Microsoft.Maui.Controls.Entry entry)
 		{
-			EntryFeedbackLabel.Text = $"Text changed: '{e.NewTextValue}' (Length: {e.NewTextValue?.Length ?? 0})";
+			var message = $"Text changed: '{e.NewTextValue}' (Length: {e.NewTextValue?.Length ?? 0})";
+
+			// Update both feedback labels (only one will be visible at a time)
+			if (EntryFeedbackLabel != null)
+			{
+				EntryFeedbackLabel.Text = message;
+			}
+			if (EntryFeedbackLabelAlt != null)
+			{
+				EntryFeedbackLabelAlt.Text = message;
+			}
 		}
 	}
 }

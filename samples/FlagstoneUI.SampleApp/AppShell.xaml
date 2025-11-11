@@ -8,7 +8,7 @@
     xmlns:converters="clr-namespace:FlagstoneUI.SampleApp.Converters"
     xmlns:vm="clr-namespace:FlagstoneUI.SampleApp.ViewModels"
     Title="FlagstoneUI.SampleApp"
-    FlyoutBehavior="Flyout">
+    FlyoutBehavior="Disabled">
 
     <Shell.Resources>
         <ResourceDictionary>
@@ -22,19 +22,19 @@
             RadioButtonGroup.GroupName="ThemeSelectionGroup"
             Spacing="15"
             x:DataType="vm:AppShellViewModel">
-            
+
             <RadioButton
                 Content="SlatePro"
                 IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=SlatePro, Mode=TwoWay}" />
-            
+
             <RadioButton
               Content="NovaPop"
               IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=NovaPop, Mode=TwoWay}" />
-            
+
             <RadioButton
               Content="Material"
               IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=Material, Mode=TwoWay}" />
-            
+
             <RadioButton
                 Content="Litera"
                 IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=Litera, Mode=TwoWay}" />
@@ -50,18 +50,19 @@
         </VerticalStackLayout>
     </Shell.FlyoutHeader>
 
+    <!-- Default content - Controls Showcase -->
+    <ShellContent
+        Title="Controls Showcase"
+        ContentTemplate="{DataTemplate page:ControlsShowcasePage}"
+        Route="ControlsShowcase" />
+
+    <!-- Hidden routes for future use -->
+    <!--
     <FlyoutItem Title="Home" Icon="icon_home.png">
         <ShellContent
             Title="Main"
             ContentTemplate="{DataTemplate local:MainPage}"
             Route="MainPage" />
-    </FlyoutItem>
-
-    <FlyoutItem Title="Controls" Icon="icon_home.png">
-        <ShellContent
-            Title="Showcase"
-            ContentTemplate="{DataTemplate page:ControlsShowcasePage}"
-            Route="ControlsShowcase" />
     </FlyoutItem>
 
     <FlyoutItem Title="Auth" Icon="auth_icon.png">
@@ -73,5 +74,6 @@
                 Icon="signin_icon.png"/>
         </Tab>
     </FlyoutItem>
+    -->
 
 </Shell>

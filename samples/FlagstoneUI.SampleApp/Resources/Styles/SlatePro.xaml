@@ -2,8 +2,13 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
+                    xmlns:tokens="clr-namespace:FlagstoneUI.Core.Styles;assembly=FlagstoneUI.Core"
                     x:Class="FlagstoneUI.SampleApp.Resources.Styles.SlatePro">
-  
+
+  <ResourceDictionary.MergedDictionaries>
+    <tokens:Tokens />
+  </ResourceDictionary.MergedDictionaries>
+
  <!-- ======================================================= -->
   <!--  COLOR TOKENS (SlatePro Professional Palette)           -->
   <!-- ======================================================= -->
@@ -53,15 +58,15 @@
   <!--  CONTROL STYLES                                         -->
   <!-- ======================================================= -->
 
-  <!-- ========== FsButton (Minimal Professional) ========== -->
-  <Style TargetType="fs:FsButton" x:Key="SlateProButtonStyle">
+  <!-- ========== FsButton (Minimal Professional - implicit default) ========== -->
+  <Style TargetType="fs:FsButton">
     <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />
     <Setter Property="TextColor" Value="{DynamicResource Color.OnPrimary}" />
     <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
     <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
     <Setter Property="Padding" Value="20,10" />
     <Setter Property="HeightRequest" Value="40" />
-    <Setter Property="BorderWidth" Value="0" />
+    <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.None}" />
     <Setter Property="BorderColor" Value="Transparent" />
     <Setter Property="VisualStateManager.VisualStateGroups">
       <VisualStateGroupList>
@@ -77,8 +82,8 @@
     </Setter>
   </Style>
 
-  <!-- ========== FsCard ========== -->
-  <Style TargetType="fs:FsCard" x:Key="SlateProCardStyle">
+  <!-- ========== FsCard (implicit default) ========== -->
+  <Style TargetType="fs:FsCard">
     <Setter Property="BackgroundColor" Value="{DynamicResource Color.Surface}" />
     <!-- subtle LOB outline instead of elevation -->
     <Setter Property="BorderColor" Value="{DynamicResource Color.OutlineVariant}" />
@@ -88,8 +93,8 @@
     <Setter Property="Elevation" Value="0" />
   </Style>
 
-  <!-- ========== FsEntry ========== -->
-  <Style TargetType="fs:FsEntry" x:Key="SlateProEntryStyle">
+  <!-- ========== FsEntry (implicit default) ========== -->
+  <Style TargetType="fs:FsEntry">
     <Setter Property="Background">
       <Setter.Value>
         <SolidColorBrush Color="{DynamicResource Color.Surface}" />
@@ -101,9 +106,12 @@
     <Setter Property="FontSize" Value="{DynamicResource FontSize.BodyMedium}" />
     <Setter Property="Padding" Value="12" />
     <Setter Property="HeightRequest" Value="40" />
-    <Setter Property="BorderBrush" Value="{DynamicResource Color.Outline}" />
+    <Setter Property="BorderBrush">
+      <Setter.Value>
+        <SolidColorBrush Color="{DynamicResource Color.Outline}" />
+      </Setter.Value>
+    </Setter>
     <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
   </Style>
-  
-</ResourceDictionary>
 
+</ResourceDictionary>
