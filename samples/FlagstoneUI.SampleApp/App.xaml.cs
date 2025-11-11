@@ -34,7 +34,7 @@ public partial class App : Application
     }
 
 
-    public static List<Theme> Themes { get; } =
+	static List<Theme> Themes { get; } =
 	[
 		new Theme
 		{
@@ -55,6 +55,16 @@ public partial class App : Application
 		{
 			Name	= "Minty",
 			Tokens	= new Minty()
-        }
+        },
+		new Theme
+		{
+			Name	= "NovaPop",
+			Tokens	= new NovaPop()
+		},
+		new Theme
+		{
+			Name = "SlatePro",
+			Tokens = new SlatePro()
+		}
     ];
 }

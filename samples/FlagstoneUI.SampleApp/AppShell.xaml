@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:FlagstoneUI.SampleApp"
     xmlns:page="clr-namespace:FlagstoneUI.SampleApp.Pages"
     xmlns:converters="clr-namespace:FlagstoneUI.SampleApp.Converters"
+    xmlns:vm="clr-namespace:FlagstoneUI.SampleApp.ViewModels"
     Title="FlagstoneUI.SampleApp"
     FlyoutBehavior="Flyout">
 
@@ -19,11 +20,21 @@
         <VerticalStackLayout
             BackgroundColor="Transparent"
             RadioButtonGroup.GroupName="ThemeSelectionGroup"
-            Spacing="15">
+            Spacing="15"
+            x:DataType="vm:AppShellViewModel">
             
             <RadioButton
-                Content="Material"
-                IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=Material, Mode=TwoWay}" />    
+                Content="SlatePro"
+                IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=SlatePro, Mode=TwoWay}" />
+            
+            <RadioButton
+              Content="NovaPop"
+              IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=NovaPop, Mode=TwoWay}" />
+            
+            <RadioButton
+              Content="Material"
+              IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=Material, Mode=TwoWay}" />
+            
             <RadioButton
                 Content="Litera"
                 IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=Litera, Mode=TwoWay}" />

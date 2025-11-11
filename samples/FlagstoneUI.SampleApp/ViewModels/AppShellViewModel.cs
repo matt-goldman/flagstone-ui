@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
 
 namespace FlagstoneUI.SampleApp.ViewModels;
 
@@ -15,12 +14,14 @@ public class AppShellViewModel : INotifyPropertyChanged
         get => _selectedTheme;
         set
         {
-            if (_selectedTheme != value)
-            {
-                _selectedTheme = value;
-                OnPropertyChanged();
-                App.SwitchTheme(value);
-            }
+	        if (_selectedTheme == value)
+	        {
+		        return;
+	        }
+
+	        _selectedTheme = value;
+	        OnPropertyChanged();
+	        App.SwitchTheme(value);
         }
     }
 
