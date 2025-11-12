@@ -4,7 +4,7 @@ using Xunit;
 
 namespace FlagstoneUI.Core.Tests.Controls;
 
-public class FsCardTests
+public class FsCardTests : MauiTestBase
 {
 	[Fact]
 	public void Card_can_be_instantiated()
