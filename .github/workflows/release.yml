@@ -12,7 +12,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
-          # Allow preview versions until .NET 10 RTM (November 14, 2025)
-          dotnet-quality: 'preview'
+
       - name: Build
         run: dotnet build -c Release

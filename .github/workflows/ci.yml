@@ -15,10 +15,9 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
-          # Allow preview versions until .NET 10 RTM (November 14, 2025)
-          dotnet-quality: 'preview'
+
       - name: Install MAUI Workload
-        run: dotnet workload install maui --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-public/nuget/v3/index.json --ignore-failed-sources
+        run: dotnet workload restore
       - name: Restore
         run: dotnet restore
       - name: Build

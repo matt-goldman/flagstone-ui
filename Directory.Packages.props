@@ -6,25 +6,24 @@
   <!-- Centralized package versions -->
   <ItemGroup>
     <!-- Code Analysis -->
-    <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.100-rc.2.25502.107" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.100" />
     <!-- MAUI -->
     <PackageVersion Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
     <PackageVersion Include="CommunityToolkit.Maui" Version="9.1.0" />
     <!-- Logging -->
-    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0-rc.2.25502.107" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
     <!-- Testing -->
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
-    <PackageVersion Include="Shouldly" Version="4.2.1" />
+    <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <!-- Tooling -->
     <PackageVersion Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageVersion Include="ExCSS" Version="4.2.3" />
     <PackageVersion Include="ModelContextProtocol" Version="0.4.0-preview.3" />
     <!-- Web -->
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-rc.2.25502.107" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
     <PackageVersion Include="ModelContextProtocol.AspNetCore" Version="0.4.0-preview.3" />
-
   </ItemGroup>
 </Project>
