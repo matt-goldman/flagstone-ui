@@ -7,7 +7,7 @@
 
 A cross-platform, open-source, community-driven, customisable UI kit and framework for .NET MAUI.
 
-<video src="assets/FlagstoneUI-poc-demo.m4v" style="max-width: 400px" controls autoplay></video>
+![Demo Video](assets/Flagstone-UI.gif)
 
 ## What is it?
 
