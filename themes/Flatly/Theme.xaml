@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-16"?>
-<?xaml-comp compile="true"?>
-<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="FlagstoneUI.Resources.FlatlyVariables" xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core" xmlns="http://schemas.microsoft.com/dotnet/2021/maui">
-    <!-- flatly-variables Theme - Generated from Bootstrap -->
-    <!-- This theme imports tokens and provides base styles for controls -->
-
-<ResourceDictionary.MergedDictionaries><ResourceDictionary Source="Tokens.xaml" /></ResourceDictionary.MergedDictionaries>
-
-<!-- Base control styles can be added here --></ResourceDictionary>
