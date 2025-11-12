@@ -1,0 +1,153 @@
+<?xaml-comp compile="true"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
+                    xmlns:tokens="clr-namespace:FlagstoneUI.Core.Styles;assembly=FlagstoneUI.Core"
+                    x:Class="FlagstoneUI.SampleApp.Resources.Styles.NovaPop">
+
+  <ResourceDictionary.MergedDictionaries>
+    <tokens:Tokens />
+  </ResourceDictionary.MergedDictionaries>
+
+  <!-- primary - Vibrant Electric Blue (more distinct from Material purple) -->
+  <Color x:Key="Color.Primary">#2962FF</Color>
+  <Color x:Key="Color.OnPrimary">#FFFFFF</Color>
+  <Color x:Key="Color.PrimaryContainer">#D3E3FF</Color>
+  <Color x:Key="Color.OnPrimaryContainer">#001A41</Color>
+
+    <!-- secondary - Vibrant Coral/Orange -->
+  <Color x:Key="Color.Secondary">#FF6B35</Color>
+  <Color x:Key="Color.OnSecondary">#FFFFFF</Color>
+  <Color x:Key="Color.SecondaryContainer">#FFD7CC</Color>
+  <Color x:Key="Color.OnSecondaryContainer">#2D0900</Color>
+
+    <!-- tertiary - Vibrant Teal -->
+  <Color x:Key="Color.Tertiary">#00BFA5</Color>
+  <Color x:Key="Color.OnTertiary">#FFFFFF</Color>
+  <Color x:Key="Color.TertiaryContainer">#A7F3E4</Color>
+  <Color x:Key="Color.OnTertiaryContainer">#00201A</Color>
+
+    <!-- error -->
+  <Color x:Key="Color.Error">#D90036</Color>
+  <Color x:Key="Color.OnError">#FFFFFF</Color>
+  <Color x:Key="Color.ErrorContainer">#FFD7DA</Color>
+  <Color x:Key="Color.OnErrorContainer">#300007</Color>
+
+    <!-- surface / background -->
+  <Color x:Key="Color.Surface">#FFFFFF</Color>
+  <Color x:Key="Color.OnSurface">#1C1C28</Color>
+  <Color x:Key="Color.SurfaceVariant">#F3F0FA</Color>
+  <Color x:Key="Color.OnSurfaceVariant">#48455A</Color>
+  <Color x:Key="Color.Background">#FAFAFF</Color>
+  <Color x:Key="Color.OnBackground">#1C1C28</Color>
+
+    <!-- outline -->
+  <Color x:Key="Color.Outline">#79758A</Color>
+  <Color x:Key="Color.OutlineVariant">#CAC4DD</Color>
+
+    <!-- inverse (optional) -->
+  <Color x:Key="Color.InverseSurface">#2C2C3A</Color>
+  <Color x:Key="Color.InverseOnSurface">#F2F2FF</Color>
+  <Color x:Key="Color.InversePrimary">#82B1FF</Color>
+
+  <!--=== Controls Styles ===-->
+
+  <!-- ====== FsButton (implicit default style) ====== -->
+  <Style TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />
+    <Setter Property="TextColor" Value="{DynamicResource Color.OnPrimary}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
+    <Setter Property="Padding" Value="24,10" />
+    <Setter Property="HeightRequest" Value="44" />
+    <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.None}" />
+    <Setter Property="BorderColor" Value="Transparent" />
+    <Setter Property="VisualStateManager.VisualStateGroups">
+      <VisualStateGroupList>
+        <VisualStateGroup x:Name="CommonStates">
+          <VisualState x:Name="Normal" />
+          <VisualState x:Name="Disabled">
+            <VisualState.Setters>
+              <Setter Property="Opacity" Value="{DynamicResource Opacity.Disabled}" />
+            </VisualState.Setters>
+          </VisualState>
+        </VisualStateGroup>
+      </VisualStateGroupList>
+    </Setter>
+  </Style>
+
+  <!-- ====== Secondary Button ====== -->
+  <Style x:Key="SecondaryButton" TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="{DynamicResource Color.Secondary}" />
+    <Setter Property="TextColor" Value="{DynamicResource Color.OnSecondary}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
+    <Setter Property="Padding" Value="24,10" />
+    <Setter Property="HeightRequest" Value="44" />
+    <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.None}" />
+    <Setter Property="BorderColor" Value="Transparent" />
+    <Setter Property="VisualStateManager.VisualStateGroups">
+      <VisualStateGroupList>
+        <VisualStateGroup x:Name="CommonStates">
+          <VisualState x:Name="Normal" />
+          <VisualState x:Name="Disabled">
+            <VisualState.Setters>
+              <Setter Property="Opacity" Value="{DynamicResource Opacity.Disabled}" />
+            </VisualState.Setters>
+          </VisualState>
+        </VisualStateGroup>
+      </VisualStateGroupList>
+    </Setter>
+  </Style>
+
+  <!-- ====== Tertiary Button ====== -->
+  <Style x:Key="TertiaryButton" TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="{DynamicResource Color.Tertiary}" />
+    <Setter Property="TextColor" Value="{DynamicResource Color.OnTertiary}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
+    <Setter Property="Padding" Value="24,10" />
+    <Setter Property="HeightRequest" Value="44" />
+    <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.None}" />
+    <Setter Property="BorderColor" Value="Transparent" />
+    <Setter Property="VisualStateManager.VisualStateGroups">
+      <VisualStateGroupList>
+        <VisualStateGroup x:Name="CommonStates">
+          <VisualState x:Name="Normal" />
+          <VisualState x:Name="Disabled">
+            <VisualState.Setters>
+              <Setter Property="Opacity" Value="{DynamicResource Opacity.Disabled}" />
+            </VisualState.Setters>
+          </VisualState>
+        </VisualStateGroup>
+      </VisualStateGroupList>
+    </Setter>
+  </Style>
+
+  <!-- ====== FsCard (implicit default style) ====== -->
+  <Style TargetType="fs:FsCard">
+    <Setter Property="BackgroundColor" Value="{DynamicResource Color.Surface}" />
+    <Setter Property="BorderColor" Value="Transparent" />
+    <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.None}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Medium}" />
+    <Setter Property="Padding" Value="{DynamicResource Space.16}" />
+    <Setter Property="Elevation" Value="2" />
+  </Style>
+
+  <!-- ====== FsEntry (implicit default style) ====== -->
+  <Style TargetType="fs:FsEntry">
+    <Setter Property="Background">
+      <Setter.Value>
+        <SolidColorBrush Color="{DynamicResource Color.SurfaceVariant}" />
+      </Setter.Value>
+    </Setter>
+    <Setter Property="TextColor" Value="{DynamicResource Color.OnSurface}" />
+    <Setter Property="PlaceholderColor" Value="{DynamicResource Color.OnSurfaceVariant}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontSize.BodyMedium}" />
+    <Setter Property="Padding" Value="16" />
+    <Setter Property="HeightRequest" Value="52" />
+    <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.None}" />
+  </Style>
+
+</ResourceDictionary>

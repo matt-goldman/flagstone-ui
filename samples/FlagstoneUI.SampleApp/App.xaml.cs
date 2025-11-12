@@ -1,4 +1,7 @@
-﻿namespace FlagstoneUI.SampleApp;
+﻿using FlagstoneUI.Core.Themes;
+using FlagstoneUI.SampleApp.Resources.Styles;
+
+namespace FlagstoneUI.SampleApp;
 
 public partial class App : Application
 {
@@ -11,4 +14,57 @@ public partial class App : Application
 	{
 		return new Window(new AppShell());
 	}
+
+	public static void SwitchTheme(string theme)
+	{
+		var newTheme = Themes.FirstOrDefault(t => t.Name == theme);
+
+		if (newTheme is null)
+		{
+			return;
+		}
+
+		Current!.Resources.MergedDictionaries.Clear();
+
+		// re-add default styles and colors
+		Current!.Resources.MergedDictionaries.Add(new Resources.Styles.Colors());
+        Current.Resources.MergedDictionaries.Add(new Styles());
+
+        Current.Resources.MergedDictionaries.Add(newTheme.Tokens);
+    }
+
+
+	static List<Theme> Themes { get; } =
+	[
+		new Theme
+		{
+			Name	= "Material",
+			Tokens	= new Themes.Material.Theme()
+		},
+		new Theme
+		{
+			Name	= "Litera",
+			Tokens	= new Litera()
+		},
+		new Theme
+		{
+			Name	= "Brite",
+			Tokens	= new Brite()
+        },
+		new Theme
+		{
+			Name	= "Minty",
+			Tokens	= new Minty()
+        },
+		new Theme
+		{
+			Name	= "NovaPop",
+			Tokens	= new NovaPop()
+		},
+		new Theme
+		{
+			Name = "SlatePro",
+			Tokens = new SlatePro()
+		}
+    ];
 }

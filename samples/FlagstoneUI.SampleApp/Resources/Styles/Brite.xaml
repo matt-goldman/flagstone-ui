@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xaml-comp compile="true"?>
+<ResourceDictionary
+    x:Class="FlagstoneUI.SampleApp.Resources.Styles.Brite"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
+    xmlns:tokens="clr-namespace:FlagstoneUI.Core.Styles;assembly=FlagstoneUI.Core">
+    <!--  _bootswatch Styles - Generated from Bootstrap  -->
+    <!--  Control styles that use theme tokens  -->
+
+    <ResourceDictionary.MergedDictionaries>
+        <tokens:Tokens />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--  ===== Color Tokens =====  -->
+    <!--  Color.Error: Error/danger state color  -->
+    <Color x:Key="Color.Error">#F56565</Color>
+    <!--  Dark mode: #AB4646  -->
+    <!--  Color.Info: Info state color  -->
+    <Color x:Key="Color.Info">#22D2ED</Color>
+    <!--  Dark mode: #1793A5  -->
+    <!--  Color.Primary: Primary brand color  -->
+    <Color x:Key="Color.Primary">#A2E436</Color>
+    <!--  Dark mode: #719F25  -->
+    <!--  Color.Secondary: Secondary brand color  -->
+    <Color x:Key="Color.Secondary">#FFF</Color>
+    <!--  Color.Success: Success state color  -->
+    <Color x:Key="Color.Success">#68D391</Color>
+    <!--  Dark mode: #489365  -->
+    <!--  Color.Surface: Light surface color  -->
+    <Color x:Key="Color.Surface">#E9ECEF</Color>
+    <!--  Dark mode: #A3A5A7  -->
+    <!--  Color.SurfaceVariant.Dark: Dark surface variant  -->
+    <Color x:Key="Color.SurfaceVariant.Dark">#000</Color>
+    <!--  Color.Warning: Warning state color  -->
+    <Color x:Key="Color.Warning">#FFC700</Color>
+    <!--  Dark mode: #B28B00  -->
+    <!--  ===== Typography Tokens =====  -->
+    <!--  FontSize.Body: Base body font size  -->
+    <x:Double x:Key="FontSize.Body">14</x:Double>
+    <!--  ===== Spacing Tokens =====  -->
+    <!--  Spacing.ExtraLarge: Extra large spacing  -->
+    <x:Double x:Key="Spacing.ExtraLarge">48</x:Double>
+    <!--  Spacing.ExtraSmall: Extra small spacing  -->
+    <x:Double x:Key="Spacing.ExtraSmall">4</x:Double>
+    <!--  Spacing.Large: Large spacing  -->
+    <x:Double x:Key="Spacing.Large">24</x:Double>
+    <!--  Spacing.Medium: Medium spacing (base)  -->
+    <x:Double x:Key="Spacing.Medium">16</x:Double>
+    <!--  Spacing.Small: Small spacing  -->
+    <x:Double x:Key="Spacing.Small">8</x:Double>
+    <!--  ===== Corner Radius Tokens =====  -->
+    <!--  Radius.Large: Large corner radius  -->
+    <x:Double x:Key="Radius.Large">8</x:Double>
+    <!--  Radius.Medium: Medium corner radius  -->
+    <x:Double x:Key="Radius.Medium">6</x:Double>
+    <!--  Radius.Small: Small corner radius  -->
+    <x:Double x:Key="Radius.Small">4</x:Double>
+
+    <!--  ========== FsButton Styles ==========  -->
+
+    <!--  Base Button Style (Filled Button - Primary)  -->
+    <Style TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />
+        <Setter Property="TextColor" Value="#FFFFFF" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
+        <Setter Property="Padding" Value="{DynamicResource Spacing.Medium}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.38" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!--  Outlined Button Style  -->
+    <Style x:Key="OutlinedButton" TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{DynamicResource Color.Primary}" />
+        <Setter Property="BorderColor" Value="{DynamicResource Color.Primary}" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
+        <Setter Property="Padding" Value="{DynamicResource Spacing.Medium}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.38" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!--  Text Button Style (No background or border)  -->
+    <Style x:Key="TextButton" TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{DynamicResource Color.Primary}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
+        <Setter Property="Padding" Value="12,10" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.38" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!--  ========== FsCard Styles ==========  -->
+    <!--  Base Card Style  -->
+    <Style TargetType="fs:FsCard">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Color.Surface}" />
+        <Setter Property="BorderColor" Value="Transparent" />
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.None}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Medium}" />
+        <Setter Property="Padding" Value="{DynamicResource Spacing.Medium}" />
+        <Setter Property="Elevation" Value="1" />
+    </Style>
+
+    <!--  Outlined Card Style  -->
+    <Style x:Key="OutlinedCard" TargetType="fs:FsCard">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Color.Surface}" />
+        <Setter Property="BorderColor" Value="{DynamicResource Color.Primary}" />
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Medium}" />
+        <Setter Property="Padding" Value="{DynamicResource Spacing.Medium}" />
+        <Setter Property="Elevation" Value="0" />
+    </Style>
+
+    <!--  Elevated Card Style  -->
+    <Style x:Key="ElevatedCard" TargetType="fs:FsCard">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Color.Surface}" />
+        <Setter Property="BorderColor" Value="Transparent" />
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.None}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Medium}" />
+        <Setter Property="Padding" Value="{DynamicResource Spacing.Medium}" />
+        <Setter Property="Elevation" Value="3" />
+    </Style>
+
+    <!--  ========== FsEntry Styles ==========  -->
+    <!--  Base Entry Style  -->
+    <Style TargetType="fs:FsEntry">
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Color="{DynamicResource Color.Surface}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextColor" Value="{DynamicResource Color.SurfaceVariant.Dark}" />
+        <Setter Property="PlaceholderColor" Value="{DynamicResource Color.Secondary}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
+        <Setter Property="Padding" Value="{DynamicResource Spacing.Medium}" />
+        <Setter Property="HeightRequest" Value="48" />
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <SolidColorBrush Color="{DynamicResource Color.Primary}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+    </Style>
+
+    <!--  Outlined Entry Style  -->
+    <Style x:Key="OutlinedEntry" TargetType="fs:FsEntry">
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Color="Transparent" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextColor" Value="{DynamicResource Color.SurfaceVariant.Dark}" />
+        <Setter Property="PlaceholderColor" Value="{DynamicResource Color.Secondary}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
+        <Setter Property="Padding" Value="{DynamicResource Spacing.Medium}" />
+        <Setter Property="HeightRequest" Value="48" />
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <SolidColorBrush Color="{DynamicResource Color.Primary}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+    </Style>
+</ResourceDictionary>

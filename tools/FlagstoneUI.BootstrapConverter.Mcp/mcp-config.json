@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "bootstrap-converter": {
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "tools/FlagstoneUI.BootstrapConverter.Mcp/FlagstoneUI.BootstrapConverter.Mcp.csproj"
+      ],
+      "env": {}
+    }
+  }
+}

@@ -54,6 +54,20 @@ generateCommand.SetHandler(async (sourceDir, outputFile) =>
         Console.WriteLine($"   File: {outputFile.FullName}");
         Console.WriteLine($"   Size: {new FileInfo(outputFile.FullName).Length:N0} bytes");
     }
+    catch (UnauthorizedAccessException ex)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"❌ Access denied: {ex.Message}");
+        Console.ResetColor();
+        Environment.Exit(1);
+    }
+    catch (IOException ex)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"❌ File operation failed: {ex.Message}");
+        Console.ResetColor();
+        Environment.Exit(1);
+    }
     catch (Exception ex)
     {
         Console.ForegroundColor = ConsoleColor.Red;
@@ -159,6 +173,34 @@ validateCommand.SetHandler((inputFile, format, jsonOutput) =>
             Environment.Exit(1);
         }
     }
+    catch (FileNotFoundException ex)
+    {
+        if (jsonOutput)
+        {
+            Console.WriteLine($"{{\"valid\": false, \"error\": \"File not found: {ex.Message}\"}}");
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"❌ File not found: {ex.Message}");
+            Console.ResetColor();
+        }
+        Environment.Exit(1);
+    }
+    catch (IOException ex)
+    {
+        if (jsonOutput)
+        {
+            Console.WriteLine($"{{\"valid\": false, \"error\": \"File operation failed: {ex.Message}\"}}");
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"❌ File operation failed: {ex.Message}");
+            Console.ResetColor();
+        }
+        Environment.Exit(1);
+    }
     catch (Exception ex)
     {
         if (jsonOutput)
@@ -219,6 +261,27 @@ generateXamlCommand.SetHandler((inputFile, outputFile) =>
         Console.ResetColor();
         Console.WriteLine($"   File: {outputFile.FullName}");
         Console.WriteLine($"   Size: {new FileInfo(outputFile.FullName).Length:N0} bytes");
+    }
+    catch (FileNotFoundException ex)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"❌ File not found: {ex.Message}");
+        Console.ResetColor();
+        Environment.Exit(1);
+    }
+    catch (UnauthorizedAccessException ex)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"❌ Access denied: {ex.Message}");
+        Console.ResetColor();
+        Environment.Exit(1);
+    }
+    catch (IOException ex)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"❌ File operation failed: {ex.Message}");
+        Console.ResetColor();
+        Environment.Exit(1);
     }
     catch (Exception ex)
     {

@@ -15,6 +15,7 @@
           MinimumHeightRequest="44">
       <fs:BorderlessEntry Text="{Binding Text}"
                           Placeholder="{Binding Placeholder}"
+                          PlaceholderColor="{Binding PlaceholderColor}"
                           TextColor="{Binding TextColor}"
                           TextChanged="OnTextChanged"
                           Completed="OnCompleted"

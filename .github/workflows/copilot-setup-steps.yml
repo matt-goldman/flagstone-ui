@@ -34,15 +34,13 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
-          # Allow preview versions until .NET 10 RTM (November 14, 2025)
-          dotnet-quality: 'preview'
 
       - name: Install Linux dependencies for .NET MAUI
         run: |
           # Install OpenJDK 17 (required for Android development)
           sudo apt-get update
           sudo apt-get install -y openjdk-17-jdk
-          
+
           # Set JAVA_HOME environment variable
           echo "JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64" >> $GITHUB_ENV
           export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
@@ -56,7 +54,7 @@ jobs:
           mkdir -p $HOME/android-sdk
           echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
           export ANDROID_HOME=$HOME/android-sdk
-          
+
           # Use InstallAndroidDependencies target with a specific Android-capable project
           dotnet build src/FlagstoneUI.Core/FlagstoneUI.Core.csproj -t:InstallAndroidDependencies --framework net10.0-android -p:AndroidSdkDirectory=$HOME/android-sdk -p:JavaSdkDirectory=$JAVA_HOME -p:AcceptAndroidSdkLicenses=True
 

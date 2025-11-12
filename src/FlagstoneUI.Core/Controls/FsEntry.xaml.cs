@@ -193,6 +193,29 @@ public partial class FsEntry : ContentView
 		set => SetValue(PlaceholderProperty, value);
 	}
     #endregion
+    
+    #region PlaceholderColorProperty
+    /// <summary>
+    /// Identifies the bindable property for the placeholder text color of the entry.
+    /// </summary>
+    /// <remarks>This property allows binding to the color of the placeholder text. The default value is <see
+	/// cref="Colors.Gray"/>.</remarks>
+    public static readonly BindableProperty PlaceholderColorProperty = BindableProperty.Create(
+		nameof(PlaceholderColor),
+		typeof(Color),
+		typeof(FsEntry),
+		Colors.Gray,
+		BindingMode.OneWay);
+
+    /// <summary>
+    /// Gets or sets the color of the placeholder text displayed by the control.
+    /// </summary>
+    public Color PlaceholderColor
+    {
+	    get => (Color)GetValue(PlaceholderColorProperty);
+	    set => SetValue(PlaceholderColorProperty, value);
+    }
+    #endregion
 
     #region TextColorProperty
 	/// <summary>

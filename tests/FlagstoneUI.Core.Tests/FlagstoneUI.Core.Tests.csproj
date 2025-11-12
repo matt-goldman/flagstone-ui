@@ -9,6 +9,10 @@
     </TargetFrameworks>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+
+    <!-- Enable MAUI for UI component testing -->
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\FlagstoneUI.Core\FlagstoneUI.Core.csproj" />

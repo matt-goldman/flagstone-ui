@@ -39,4 +39,9 @@
     <PackageReference Include="Shouldly" />
     <PackageReference Include="coverlet.collector" PrivateAssets="all" />
   </ItemGroup>
+
+  <!-- Web project package references -->
+  <ItemGroup Condition="'$(IsWebProject)' == 'true'">
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+  </ItemGroup>
 </Project>

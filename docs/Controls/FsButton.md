@@ -42,22 +42,24 @@ All standard .NET MAUI Button properties are available. Key styling properties i
 ### Styled Button
 
 ```xaml
-<fs:FsButton 
+<fs:FsButton
     Text="Sign In"
     BackgroundColor="{DynamicResource Color.Primary}"
     TextColor="{DynamicResource Color.OnPrimary}"
     BorderColor="{DynamicResource Color.Primary}"
     BorderWidth="2"
-    CornerRadius="8"
+    CornerRadius="{DynamicResource Radius.Button.Small}"
     Padding="16,12"
     FontSize="16"
     FontAttributes="Bold" />
 ```
 
+> **Note**: Always use `Radius.Button.*` tokens for CornerRadius. The Button.CornerRadius property requires Int32 type.
+
 ### Button with Command (MVVM)
 
 ```xaml
-<fs:FsButton 
+<fs:FsButton
     Text="Submit"
     Command="{Binding SubmitCommand}"
     CommandParameter="{Binding CurrentItem}"
@@ -68,20 +70,20 @@ All standard .NET MAUI Button properties are available. Key styling properties i
 ### Outlined Button
 
 ```xaml
-<fs:FsButton 
+<fs:FsButton
     Text="Cancel"
     BackgroundColor="Transparent"
     BorderColor="{DynamicResource Color.Outline}"
     BorderWidth="1"
     TextColor="{DynamicResource Color.OnSurface}"
-    CornerRadius="4"
+    CornerRadius="{DynamicResource Radius.Button.ExtraSmall}"
     Padding="20,10" />
 ```
 
 ### Button with Image
 
 ```xaml
-<fs:FsButton 
+<fs:FsButton
     Text="Save"
     ImageSource="save_icon.png"
     BackgroundColor="{DynamicResource Color.Primary}"
@@ -91,7 +93,7 @@ All standard .NET MAUI Button properties are available. Key styling properties i
 ### Text Button (No Background)
 
 ```xaml
-<fs:FsButton 
+<fs:FsButton
     Text="Learn More"
     BackgroundColor="Transparent"
     TextColor="{DynamicResource Color.Primary}"
@@ -106,12 +108,14 @@ Buttons can be styled globally through themes:
 <Style TargetType="fs:FsButton">
     <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />
     <Setter Property="TextColor" Value="{DynamicResource Color.OnPrimary}" />
-    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Small}" />
     <Setter Property="Padding" Value="16,12" />
     <Setter Property="FontSize" Value="16" />
     <Setter Property="BorderWidth" Value="0" />
 </Style>
 ```
+
+> **⚠️ Important**: Always use `Radius.Button.*` tokens (Int32 type) for button CornerRadius. Using standard `Radius.*` tokens (Double type) will cause silent binding failure. See [ADR003](../Decisions/adr003-button-corner-radius-type.md) for details.
 
 ### Material Design Button Variants
 
@@ -122,7 +126,7 @@ You can create different button styles for various contexts:
 <Style TargetType="fs:FsButton" x:Key="PrimaryButton">
     <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />
     <Setter Property="TextColor" Value="{DynamicResource Color.OnPrimary}" />
-    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.ExtraSmall}" />
     <Setter Property="Padding" Value="24,12" />
 </Style>
 
@@ -132,7 +136,7 @@ You can create different button styles for various contexts:
     <Setter Property="TextColor" Value="{DynamicResource Color.Primary}" />
     <Setter Property="BorderColor" Value="{DynamicResource Color.Outline}" />
     <Setter Property="BorderWidth" Value="1" />
-    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.ExtraSmall}" />
     <Setter Property="Padding" Value="24,12" />
 </Style>
 
@@ -141,6 +145,7 @@ You can create different button styles for various contexts:
     <Setter Property="BackgroundColor" Value="Transparent" />
     <Setter Property="TextColor" Value="{DynamicResource Color.Primary}" />
     <Setter Property="BorderWidth" Value="0" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.ExtraSmall}" />
     <Setter Property="Padding" Value="12,8" />
 </Style>
 ```
@@ -158,7 +163,7 @@ You can create different button styles for various contexts:
 ### Event Example
 
 ```xaml
-<fs:FsButton 
+<fs:FsButton
     Text="Click Me"
     Clicked="OnButtonClicked" />
 ```
@@ -200,19 +205,19 @@ The Button control is used in the SignInForm block:
 ```xaml
 <fs:FsCard Elevation="2" Padding="24">
     <VerticalStackLayout Spacing="16">
-        <fs:FsEntry 
-            Placeholder="Username" 
+        <fs:FsEntry
+            Placeholder="Username"
             BackgroundColor="{DynamicResource Color.SurfaceVariant}" />
-        <fs:FsEntry 
-            Placeholder="Password" 
+        <fs:FsEntry
+            Placeholder="Password"
             IsPassword="True"
             BackgroundColor="{DynamicResource Color.SurfaceVariant}" />
-        <fs:FsButton 
+        <fs:FsButton
             Text="Sign In"
             BackgroundColor="{DynamicResource Color.Primary}"
             TextColor="{DynamicResource Color.OnPrimary}"
             Command="{Binding SignInCommand}" />
-        <fs:FsButton 
+        <fs:FsButton
             Text="Forgot Password?"
             BackgroundColor="Transparent"
             TextColor="{DynamicResource Color.Primary}"
@@ -226,7 +231,7 @@ The Button control is used in the SignInForm block:
 The Button control is fully supported on:
 
 - Android
-- iOS  
+- iOS
 - Windows
 - macOS
 

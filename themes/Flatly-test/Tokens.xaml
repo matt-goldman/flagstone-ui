@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns="http://schemas.microsoft.com/dotnet/2021/maui">
+    <!-- ===== Color Tokens ===== -->
+    <!-- Color.Error: Error/danger state color -->
+    <Color x:Key="Color.Error">#E74C3C</Color>
+    <!-- Dark mode: #FF624E -->
+    <!-- Color.Info: Info state color -->
+    <Color x:Key="Color.Info">#3498DB</Color>
+    <!-- Dark mode: #246A99 -->
+    <!-- Color.Primary: Primary brand color -->
+    <Color x:Key="Color.Primary">#2C3E50</Color>
+    <!-- Dark mode: #395068 -->
+    <!-- Color.Secondary: Secondary brand color -->
+    <Color x:Key="Color.Secondary">#95A5A6</Color>
+    <!-- Dark mode: #687374 -->
+    <!-- Color.Success: Success state color -->
+    <Color x:Key="Color.Success">#18BC9C</Color>
+    <!-- Dark mode: #10836D -->
+    <!-- Color.Surface: Light surface color -->
+    <Color x:Key="Color.Surface">#ECF0F1</Color>
+    <!-- Dark mode: #A5A8A8 -->
+    <!-- Color.SurfaceVariant.Dark: Dark surface variant -->
+    <Color x:Key="Color.SurfaceVariant.Dark">#7B8A8B</Color>
+    <!-- Dark mode: #566061 -->
+    <!-- Color.Warning: Warning state color -->
+    <Color x:Key="Color.Warning">#F39C12</Color>
+    <!-- Dark mode: #AA6D0C -->
+</ResourceDictionary>

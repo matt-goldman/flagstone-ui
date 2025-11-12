@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xaml-comp compile="true"?>
+<ResourceDictionary
+    x:Class="FlagstoneUI.SampleApp.Resources.Styles.Minty"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
+    xmlns:tokens="clr-namespace:FlagstoneUI.Core.Styles;assembly=FlagstoneUI.Core">
+    <!--  _bootswatch Styles - Generated from Bootstrap  -->
+    <!--  Control styles that use theme tokens  -->
+
+    <ResourceDictionary.MergedDictionaries>
+        <tokens:Tokens />
+    </ResourceDictionary.MergedDictionaries>
+
+<!--  ===== Color Tokens =====  -->
+    <!--  Color.Error: Error/danger state color  -->
+    <Color x:Key="Color.Error">#FF7851</Color>
+    <!--  Dark mode: #B25438  -->
+    <!--  Color.Info: Info state color  -->
+    <Color x:Key="Color.Info">#6CC3D5</Color>
+    <!--  Dark mode: #4B8895  -->
+    <!--  Color.OnBackground: Body text color  -->
+    <Color x:Key="Color.OnBackground">#888</Color>
+    <!--  Color.Primary: Primary brand color  -->
+    <Color x:Key="Color.Primary">#78C2AD</Color>
+    <!--  Dark mode: #548779  -->
+    <!--  Color.Secondary: Secondary brand color  -->
+    <Color x:Key="Color.Secondary">#F3969A</Color>
+    <!--  Dark mode: #AA696B  -->
+    <!--  Color.Success: Success state color  -->
+    <Color x:Key="Color.Success">#56CC9D</Color>
+    <!--  Dark mode: #3C8E6D  -->
+    <!--  Color.Surface: Light surface color  -->
+    <Color x:Key="Color.Surface">#F8F9FA</Color>
+    <!--  Dark mode: #ADAEAF  -->
+    <!--  Color.SurfaceVariant.Dark: Dark surface variant  -->
+    <Color x:Key="Color.SurfaceVariant.Dark">#343A40</Color>
+    <!--  Dark mode: #434B53  -->
+    <!--  Color.Warning: Warning state color  -->
+    <Color x:Key="Color.Warning">#FFCE67</Color>
+    <!--  Dark mode: #B29048  -->
+    <!--  ===== Typography Tokens =====  -->
+    <!--  FontFamily.Default: Default font family (from headings)  -->
+    <x:String x:Key="FontFamily.Default">Montserrat</x:String>
+    <!--  ===== Corner Radius Tokens =====  -->
+    <!--  Radius.Large: Large corner radius  -->
+    <x:Double x:Key="Radius.Large">9.6</x:Double>
+    <!--  Radius.Medium: Medium corner radius  -->
+    <x:Double x:Key="Radius.Medium">6.4</x:Double>
+    <!--  Radius.Small: Small corner radius  -->
+    <x:Double x:Key="Radius.Small">4.8</x:Double>
+    <!--  ========== FsButton Styles ==========  -->
+
+    <!--  Base Button Style (Filled Button - Primary)  -->
+    <Style TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />
+        <Setter Property="TextColor" Value="#FFFFFF" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
+        <Setter Property="Padding" Value="24,10" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.38" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!--  Outlined Button Style  -->
+    <Style x:Key="OutlinedButton" TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{DynamicResource Color.Primary}" />
+        <Setter Property="BorderColor" Value="{DynamicResource Color.Primary}" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
+        <Setter Property="Padding" Value="24,10" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.38" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!--  Text Button Style (No background or border)  -->
+    <Style x:Key="TextButton" TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{DynamicResource Color.Primary}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Large}" />
+        <Setter Property="Padding" Value="12,10" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.38" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!--  ========== FsCard Styles ==========  -->
+    <!--  Base Card Style  -->
+    <Style TargetType="fs:FsCard">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Color.Surface}" />
+        <Setter Property="BorderColor" Value="Transparent" />
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.None}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Medium}" />
+        <Setter Property="Padding" Value="{DynamicResource Space.16}" />
+        <Setter Property="Elevation" Value="1" />
+    </Style>
+
+    <!--  Outlined Card Style  -->
+    <Style x:Key="OutlinedCard" TargetType="fs:FsCard">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Color.Surface}" />
+        <Setter Property="BorderColor" Value="{DynamicResource Color.Primary}" />
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Medium}" />
+        <Setter Property="Padding" Value="{DynamicResource Space.16}" />
+        <Setter Property="Elevation" Value="0" />
+    </Style>
+
+    <!--  Elevated Card Style  -->
+    <Style x:Key="ElevatedCard" TargetType="fs:FsCard">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Color.Surface}" />
+        <Setter Property="BorderColor" Value="Transparent" />
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.None}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Medium}" />
+        <Setter Property="Padding" Value="{DynamicResource Space.16}" />
+        <Setter Property="Elevation" Value="3" />
+    </Style>
+
+    <!--  ========== FsEntry Styles ==========  -->
+    <!--  Base Entry Style  -->
+    <Style TargetType="fs:FsEntry">
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Color="{DynamicResource Color.Surface}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextColor" Value="{DynamicResource Color.OnBackground}" />
+        <Setter Property="PlaceholderColor" Value="{DynamicResource Color.Secondary}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
+        <Setter Property="Padding" Value="16" />
+        <Setter Property="HeightRequest" Value="48" />
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <SolidColorBrush Color="{DynamicResource Color.Primary}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+    </Style>
+
+    <!--  Outlined Entry Style  -->
+    <Style x:Key="OutlinedEntry" TargetType="fs:FsEntry">
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Color="Transparent" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextColor" Value="{DynamicResource Color.OnBackground}" />
+        <Setter Property="PlaceholderColor" Value="{DynamicResource Color.Secondary}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
+        <Setter Property="Padding" Value="16" />
+        <Setter Property="HeightRequest" Value="48" />
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <SolidColorBrush Color="{DynamicResource Color.Primary}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+    </Style>
+</ResourceDictionary>
