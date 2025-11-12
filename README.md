@@ -80,6 +80,8 @@ A sample application is included that demonstrates how to use these controls and
 - AI-friendly tooling for generating themes, styles, and full applications
 - AI-friendly tools for converting popular web design systems (e.g., Tailwind CSS, Bootstrap) into Flagstone UI themes
 
+MCP server build is in progress to support AI tooling features.
+
 ## Getting Started
 
 At this stage, Flagstone UI is experimental, and in the proof-of-concept phase. However, you can get started by cloning the repository and exploring the sample application included.
