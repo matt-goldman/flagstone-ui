@@ -21,6 +21,18 @@ It's 2025 (barely at this stage), and many developers are embracing AI tools in 
 
 Flagstone UI is NOT a control or component library. Instead of shipping pre-built controls, Flagstone UI provides a consistent set of stylable properties that can be applied to the built-in .NET MAUI controls. In much the same way that Bootstrap does not provide custom HTML elements, but instead styles the built-in HTML elements, Flagstone UI aims to do the same for .NET MAUI.
 
+### Pairs with the MAUI Community Toolkit
+
+Flagstone UI is designed to complement the [.NET MAUI Community Toolkit](https://github.com/CommunityToolkit/Maui). While Flagstone focuses on providing a theming and styling substrate for .NET MAUI applications, the Community Toolkit provides behaviors, converters, animations, and other utilities that enhance the developer experience.
+
+- Flagstone UI provides the themed controls and design tokens
+- Community Toolkit provides behaviors like validation, converters, and animations
+- Both maintain the same philosophy of extending .NET MAUI without replacing it
+
+Flagstone UI does not have a hard dependency on the Community Toolkit, but it is designed to be used with it. For example, while Flagstone UI does not include validation, it provides a passthrough mechanism to easily apply Community Toolkit validation behaviors to Flagstone controls.
+
+All sample applications and documentation demonstrate this recommended pairing, showing how validation behaviors, converters, and other toolkit features integrate seamlessly with Flagstone's themed controls.
+
 ### What problems does it solve?
 
 .NET MAUI is a powerful framework for building modern, secure, performant cross-platform mobile and desktop applications. It has some powerful styling capabilities, and gives full access to the native platform APIs, allowing essentially unlimited flexibility when building applications.
