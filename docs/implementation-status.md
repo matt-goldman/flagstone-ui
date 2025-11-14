@@ -31,7 +31,7 @@ This document tracks the current implementation status of Flagstone UI component
 
 | Component    | Status         | Required for MVP | Priority |
 | ------------ | -------------- | ---------------- | -------- |
-| **FsSwitch** | ❌ Not Started | Yes              | Medium   |
+| **FsSwitch** | ❌ Not Started | No (MVP)         | Medium   |
 | **Snackbar** | ❌ Not Planned | No               | Medium   |
 
 ## Architecture Review
@@ -47,11 +47,11 @@ This document tracks the current implementation status of Flagstone UI component
 
 ## Milestone Progress
 
-### Milestone 0.1.0 (MVP)
+### Current Milestone: Proof of Concept (POC)
 
-- **Target**: Basic themeable UI kit with core controls
-- **Current Progress**: ~85% complete
-- **Estimated Completion**: 2-3 more iterations needed
+- **Target**: Validate theming approach with essential controls
+- **Current Progress**: ~60% complete
+- **Note**: MVP milestone will follow POC completion
 
 ### Next Priority Items
 

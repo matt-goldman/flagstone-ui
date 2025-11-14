@@ -1,12 +1,14 @@
-# Flagstone UI Spec & Project Plan (Historical Draft)
+# Flagstone UI Spec & Project Plan (Historical Draft - Archived)
 
-> **⚠️ HISTORICAL DOCUMENT**  
-> This document contains the original project specification and planning draft.  
+> **⚠️ ARCHIVED HISTORICAL DOCUMENT**  
+> This document contains the original project specification and planning draft and has been moved to the archive folder.  
 > **For current information**, see:
-> - [architecture.md](architecture.md) - Current technical architecture
-> - [implementation-status.md](implementation-status.md) - Current progress tracking
-> - [roadmap.md](roadmap.md) - Updated roadmap and future plans
-> - [control-implementation-guide.md](control-implementation-guide.md) - Control implementation standards
+> - [../architecture.md](../architecture.md) - Current technical architecture
+> - [../implementation-status.md](../implementation-status.md) - Current progress tracking
+> - [../roadmap.md](../roadmap.md) - Updated roadmap and future plans
+> - [../control-implementation-guide.md](../control-implementation-guide.md) - Control implementation standards
+> 
+> **Note on FlagstoneUIBuilder**: The builder pattern described in this document is no longer planned (YAGNI). Theme configuration is done via merged dictionaries in App.xaml.
 
 ---
 

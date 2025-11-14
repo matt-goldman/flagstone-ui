@@ -119,13 +119,15 @@ flagstone-ui/
 ├── src/
 │   ├── FlagstoneUI.Core/          # Core controls and token system
 │   ├── FlagstoneUI.Themes.Material/ # Material theme
-│   └── FlagstoneUI.Blocks/        # Reusable app screens (future)
+│   └── FlagstoneUI.Blocks/        # Reusable app screens (planned for MVP)
 ├── samples/
 │   ├── FlagstoneUI.SampleApp/     # Main showcase app
 │   └── FlagstoneUI.ThemePlayground/ # Theme experimentation
 ├── docs/                          # 📚 Complete documentation
 └── tools/                         # AI tooling & converters
 ```
+
+**Note**: The Blocks project will contain common UI building blocks (signup/signin forms, basic CRUD, etc.) and is planned as an extension for the MVP milestone. Currently at POC stage.
 
 ## Contributing
 

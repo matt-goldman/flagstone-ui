@@ -115,39 +115,54 @@ The catalog can be:
 
 ### Current Status
 
-**Version**: 0.1.0 (MVP)  
-**Last Updated**: 2025-11-01  
-**Maintenance**: Manual (for now)
+**Version**: 0.1.0 (POC)  
+**Last Updated**: November 2025  
+**Maintenance**: Manual (with planned automation)
 
-The catalog is currently maintained manually to establish the structure and validate the approach.
+The catalog is currently maintained manually. A .NET tool (`FlagstoneUI.TokenGenerator`) exists and is functional but has not been extensively tested or integrated into CI/CD workflows yet.
 
-### Future Automation
+### Automation Tooling
 
-A .NET tool is planned for automated catalog generation:
+The `FlagstoneUI.TokenGenerator` tool is available for automated catalog generation:
 
 ```bash
-# Planned future usage
-dotnet tool install -g FlagstoneUI.TokenGenerator
-flagstone-tokens generate --source ./src --output ./docs/tokens-catalog.json
+# Tool is functional but not yet in CI/CD
+# Located at: tools/FlagstoneUI.TokenGenerator/
+dotnet run --project tools/FlagstoneUI.TokenGenerator -- generate --source ./src --output ./docs/tokens-catalog.json
 ```
 
-**Benefits of automation:**
+**Current Status**:
+- ✅ Tool is functional
+- ⚠️ Not extensively tested
+- ❌ Not yet integrated into CI/CD pipeline
+- ❌ Not published as global tool
+
+**Future Plans**:
+- Complete testing and validation
+- Integrate into GitHub Actions workflow
+- Publish as .NET global tool
+- Automate catalog updates with each build
+
+**Benefits when fully automated:**
 
 - ✅ Single source of truth (XAML files)
 - ✅ No manual sync needed
 - ✅ Can run in CI/CD pipeline
 - ✅ Validates XAML against schema
-- ✅ Can be integrated into theme generator tool
+- ✅ Can be integrated into theme generator tools
 
-### When to Update
+### Maintenance Responsibility
 
-Update the catalog when:
+**Who**: Repository maintainers (not end users or developers using Flagstone UI)
 
+**When to Update**:
 - ✏️ New controls are added
 - ✏️ Control properties change
 - ✏️ New base tokens are added
 - ✏️ Common styles are introduced
 - ✏️ New theme variants are created
+
+**How**: Manual updates until CI/CD automation is completed
 
 ## Integration Points
 

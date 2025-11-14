@@ -114,28 +114,23 @@ public partial class Card : ContentView
 }
 ```
 
-### Builder Pattern
+### Theme Configuration
 
-**Purpose**: Provide fluent API for configuring Flagstone UI in MAUI applications.
+**Approach**: Themes are configured via merged ResourceDictionaries in App.xaml (no builder pattern needed - YAGNI).
 
-**Current Implementation**:
-```csharp
-public class FlagstoneUIBuilder
-{
-    public FlagstoneUIBuilder UseDefaultTheme() => this;
-    // TODO: Expand configuration options
-}
+**Implementation**:
+```xml
+<!-- In App.xaml -->
+<Application.Resources>
+    <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+            <material:Theme />
+        </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+</Application.Resources>
 ```
 
-**Planned API**:
-```csharp
-builder.UseFlagstoneUI(ui =>
-{
-    ui.Theme("Themes/Material.xaml");
-    ui.Density = Density.Compact;
-    ui.Motion = Motion.Standard;
-});
-```
+**Note**: A minimal FlagstoneUIBuilder class exists in the codebase but is not required for theme configuration and may be removed in the future.
 
 ### Theme Loading
 
@@ -165,12 +160,9 @@ ThemeLoader.Register(app.Resources);
 
 **Status**: ✅ Fully resolved and working
 
-Cross-assembly ResourceDictionary referencing is implemented using typed references in MergedDictionaries:
-- ResourceDictionary files include x:Class attributes with code-behind files
-- Themes reference core tokens using typed syntax: `<tokens:Tokens />`
-- Global XAML namespaces are defined via GlobalXmlns.cs files
+Cross-assembly ResourceDictionary referencing is implemented using typed references in MergedDictionaries. See [ADR004: Cross-Assembly ResourceDictionary Loading](Decisions/adr004-cross-assembly-resource-loading.md) for detailed technical decisions and implementation.
 
-**For Consumers**: Reference themes using the typed syntax in your App.xaml:
+**Quick Reference for Consumers**:
 ```xml
 <Application.Resources>
     <ResourceDictionary>
@@ -186,10 +178,11 @@ Cross-assembly ResourceDictionary referencing is implemented using typed referen
 **Impact**: Controls will show platform-specific styling  
 **Solution**: Implement handlers for FsButton, FsEntry to strip native styling  
 
-### 3. Builder API Status
-**Current State**: FlagstoneUIBuilder exists with minimal implementation  
-**Note**: The builder pattern approach and future API expansion are under review
-**See**: implementation-status.md for current plans
+### 3. Builder Pattern Not Required
+**Decision**: FlagstoneUIBuilder pattern is not needed (YAGNI principle)  
+**Approach**: Theme configuration via merged dictionaries in App.xaml  
+**Note**: Minimal builder class may be removed in future cleanup  
+**See**: [Archived technical-plan.md](archive/technical-plan.md) for historical builder API plans
 
 ## Future Architecture Considerations
 

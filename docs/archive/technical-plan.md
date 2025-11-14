@@ -1,11 +1,13 @@
-# Technical Plan (Historical)
+# Technical Plan (Historical - Archived)
 
-> **⚠️ HISTORICAL DOCUMENT**  
-> This document contains the original technical planning from the project's inception.  
+> **⚠️ ARCHIVED HISTORICAL DOCUMENT**  
+> This document contains the original technical planning from the project's inception and has been moved to the archive folder.  
 > **For current information**, see:
-> - [architecture.md](architecture.md) - Current architecture and implementation
-> - [implementation-status.md](implementation-status.md) - Current completion status
-> - [roadmap.md](roadmap.md) - Future plans and phases
+> - [../architecture.md](../architecture.md) - Current architecture and implementation
+> - [../implementation-status.md](../implementation-status.md) - Current completion status
+> - [../roadmap.md](../roadmap.md) - Future plans and phases
+> 
+> **Note on FlagstoneUIBuilder**: The builder pattern described in this document is no longer planned (YAGNI). Theme configuration is done via merged dictionaries in App.xaml.
 
 ---
 

@@ -103,6 +103,11 @@ In your `App.xaml` file, add your theme to your application resources. In this e
 </Application>
 ```
 
+> **Important Requirements**:
+> - You must add a **project reference** to `FlagstoneUI.Themes.Material` in your `.csproj`
+> - You must declare the **XAML namespace** (the `xmlns:material=...` line shown above)
+> - The theme will take advantage of .NET 10's global XAML namespaces and implicit usings in future updates
+
 > **Note**: The Material theme is provided to showcase Flagstone UI's capabilities. The themes demonstrate the concept and are value-add components. The core value of Flagstone UI is the token-based theming framework itself, which allows you to create or use any theme that fits your needs.
 
 ### Step 2: Add Namespace to Your Pages

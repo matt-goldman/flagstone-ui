@@ -2,6 +2,8 @@
 
 This directory contains prompts for AI-powered design tools (v0, GitHub Spark, Claude, ChatGPT, etc.) to help generate themes, palettes, and design assets for Flagstone UI.
 
+**Audience**: These prompts are tooling for **theme creators and contributors**, not end users. If you're using Flagstone UI in your application (not creating themes), see the [Quickstart Guide](../quickstart.md) instead.
+
 ## Available Prompts
 
 - **[generate-modern-theme.md](./generate-modern-theme.md)** - Generate a complete Modern theme palette with Material Design 3 semantic tokens
