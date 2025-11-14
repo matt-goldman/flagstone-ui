@@ -1,8 +1,15 @@
-# Technical plan
+# Technical Plan (Historical)
 
-This file contains the technical plan for Flagstone UI implementation.
+> **⚠️ HISTORICAL DOCUMENT**  
+> This document contains the original technical planning from the project's inception.  
+> **For current information**, see:
+> - [architecture.md](architecture.md) - Current architecture and implementation
+> - [implementation-status.md](implementation-status.md) - Current completion status
+> - [roadmap.md](roadmap.md) - Future plans and phases
 
-**Note**: This document reflects the original planning. See [implementation-status.md](implementation-status.md) and [architecture.md](architecture.md) for current state and implementation details.
+---
+
+This file contains the original technical plan for Flagstone UI implementation.
 
 ## Technology
 

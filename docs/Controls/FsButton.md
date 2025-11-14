@@ -242,3 +242,4 @@ All styling properties work consistently across platforms with minor rendering v
 - [FsEntry Control](FsEntry.md) - For contrast, see why Entry requires a wrapper approach
 - [FsCard Control](FsCard.md) - Container control for grouping UI elements
 - [Theme Tokens](../tokens.md) - Available design tokens for styling
+- [Control Implementation Guide](../control-implementation-guide.md) - For contributors: how to implement new controls

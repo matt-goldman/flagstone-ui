@@ -331,3 +331,4 @@ Platform handlers ensure consistent borderless rendering across all platforms, w
 - [FsCard Control](FsCard.md) - Container control for grouping UI elements
 - [ADR001: FsEntry Behavior](../Decisions/adr001-fsentry-behavior.md) - Design decisions and validation strategy
 - [Theme Tokens](../tokens.md) - Available design tokens for styling
+- [Control Implementation Guide](../control-implementation-guide.md) - For contributors: how to implement new controls

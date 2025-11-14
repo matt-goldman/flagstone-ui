@@ -689,6 +689,7 @@ By following this guide, you can create beautiful, consistent, accessible themes
 **Next Steps:**
 
 - [View the Token Reference](tokens.md) for complete token documentation
+- [Token Catalog System](token-catalog-system.md) - For AI-assisted theme generation
 - [See Control Documentation](Controls/) for detailed control properties
 - [Check the Quickstart Guide](quickstart.md) to understand the developer perspective
 - [Explore Sample Apps](../samples/) to see themes in action

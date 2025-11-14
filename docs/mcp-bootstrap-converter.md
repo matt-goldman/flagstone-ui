@@ -1,5 +1,9 @@
 # Bootstrap Theme Converter MCP
 
+> **⚠️ DRAFT DOCUMENT - WORK IN PROGRESS**  
+> This documentation is incomplete and reflects planned functionality.  
+> See [implementation-status.md](implementation-status.md) for current tool status.
+
 ## Overview
 
 A .NET-first tool that converts Bootstrap themes into Flagstone UI token definitions and theme files. Follows the proven architecture of the TailwindXamlThemeConverter - core functionality in a class library, wrapped in a console app for POC/testing, packaged as a .NET tool, and serving MCP via stdout.

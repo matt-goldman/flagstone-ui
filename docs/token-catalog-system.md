@@ -4,7 +4,11 @@ This document describes the machine-readable token catalog system for Flagstone 
 
 ## Overview
 
-The token catalog system provides structured, machine-readable data about Flagstone UI's design tokens and controls. This enables:
+The token catalog system provides structured, machine-readable data about Flagstone UI's design tokens and controls. This documentation is intended for **AI agents, automated tooling, and developers building tools** that integrate with Flagstone UI.
+
+**For human-readable token documentation**, see [tokens.md](tokens.md) which provides complete descriptions, usage guidelines, and design principles for designers and developers.
+
+This machine-readable system enables:
 
 - **AI Agents**: Automated theme generation, style recommendations, and code generation
 - **Developer Tooling**: IDE integration, documentation generation, and validation
