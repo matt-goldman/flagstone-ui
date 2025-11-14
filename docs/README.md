@@ -2,6 +2,8 @@
 
 Welcome to the Flagstone UI documentation! This directory contains comprehensive guides, references, and technical documentation for building apps with Flagstone UI.
 
+> 👈 **New here?** Check the [main README](../README.md) for a quick overview, code examples, and how to run the samples.
+
 ## Getting Started
 
 ### For Developers
@@ -73,8 +75,8 @@ The token catalog system provides machine-readable data about Flagstone UI's tok
 
 ### Current Status
 
-**Version**: 0.1.0 (MVP)  
-**Last Updated**: 2025-11-01  
+**Version**: 0.1.0 (MVP)
+**Last Updated**: 2025-11-01
 **Maintenance**: Manual (for now)
 
 The catalog is currently maintained manually to establish the structure and validate the approach.
@@ -138,10 +140,10 @@ AI agents will be able to:
 # Example GitHub Actions workflow
 - name: Generate Token Catalog
   run: dotnet flagstone-tokens generate
-  
+
 - name: Validate Token Catalog
   run: jsonschema -i docs/tokens-catalog.json docs/tokens-schema.json
-  
+
 - name: Commit if changed
   run: |
     git diff --exit-code docs/tokens-catalog.json || \
