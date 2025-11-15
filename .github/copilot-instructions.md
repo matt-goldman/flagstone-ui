@@ -6,18 +6,20 @@ This guide helps AI coding agents work productively in the Flagstone UI codebase
 
 - **Flagstone UI** is a cross-platform, open-source UI kit and framework for .NET MAUI.
 - The repo is organized into modular projects for core controls, themes, blocks (app screens), samples, and tests.
-- Status: early WIP; structure will evolve.
+- **Current Status**: Proof of Concept (POC) at ~60% completion. MVP milestone will follow POC validation.
+- **Core Controls Implemented**: FsButton, FsCard, FsEntry
+- **Theme Configuration**: Via merged ResourceDictionaries in App.xaml (no builder pattern - YAGNI)
 
 ## Key Directories & Components
 
 - `src/FlagstoneUI.Core/`: Core UI library. Key areas:
-	- `Builders/FlagstoneUIBuilder.cs`: entry for configuring Flagstone features.
-	- `Controls/`: custom controls (to be added, e.g., `Card`, `Snackbar`).
+	- `Builders/FlagstoneUIBuilder.cs`: minimal builder class (may be removed - not required for theme configuration).
+	- `Controls/`: custom controls (FsButton, FsCard, FsEntry implemented).
 	- `Styles/Tokens.xaml`: token dictionary (colors, spacing, typography) used via `DynamicResource`.
-	- `Themes/ThemeLoader.cs`: merges core resource dictionaries into app resources.
+	- `Themes/ThemeLoader.cs`: utility for theme registration (themes configured via merged dictionaries in App.xaml).
 - `src/FlagstoneUI.Themes.Material/`: Material theme library with `Theme.xaml`.
 - `src/FlagstoneUI.Themes.Modern/`: Modern theme library (planned).
-- `src/FlagstoneUI.Blocks/`: Reusable app screens (CRUD, auth, settings) under `Blocks/`.
+- `src/FlagstoneUI.Blocks/`: Reusable app screens (CRUD, auth, settings) - planned for MVP, currently minimal content.
 - `samples/`: Sample apps for manual testing:
 	- `FlagstoneUI.SampleApp/`: Main sample application
 	- `FlagstoneUI.ThemePlayground/`: Theme testing and development
@@ -91,7 +93,7 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 - **Central package management**: `Directory.Build.props` defines common properties and package versions
 - **Global SDK version**: Specified in `global.json` - currently .NET 10.0.0
 - **MAUI workload required**: All library projects set `<UseMaui>true</UseMaui>` and require MAUI workload for building
-- **Package references**: CommunityToolkit.Maui included automatically for MAUI library projects
+- **Package references**: CommunityToolkit.Maui is currently commented out in Directory.Build.props (optional, not a default dependency)
 
 ## Project-Specific Conventions
 
@@ -103,8 +105,10 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 
 ## Integration Points
 
-- **.NET MAUI**: This UI library targets .NET 10 frameworks (`net10.0-android`, `net10.0-ios`, `net10.0-windows10.0.19041.0`) and integrates with .NET MAUI applications. CommunityToolkit.Maui package is included automatically via Directory.Build.props.
-- **Resource dictionaries**: Merge tokens in apps or via `ThemeLoader.Register(app.Resources)` (see `src/FlagstoneUI.Core/Themes/ThemeLoader.cs`).
+- **.NET MAUI**: This UI library targets .NET 10 frameworks (`net10.0-android`, `net10.0-ios`, `net10.0-windows10.0.19041.0`) and integrates with .NET MAUI applications.
+- **Theme Configuration**: Themes are configured via merged ResourceDictionaries in App.xaml (no builder pattern - YAGNI). Example: `<material:Theme />`
+- **CommunityToolkit.Maui**: Optional integration (not a required dependency). Currently commented out in Directory.Build.props.
+- **Resource dictionaries**: Themes reference core tokens using typed syntax with x:Class and code-behind (see ADR004).
 - **DynamicResource**: Use token keys (e.g., `Color.Primary`) in theme styles: `<Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />`.
 - **Package management**: Central package version management via Directory.Build.props with consistent versioning across all library projects.
 

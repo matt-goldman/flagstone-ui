@@ -114,28 +114,23 @@ public partial class Card : ContentView
 }
 ```
 
-### Builder Pattern
+### Theme Configuration
 
-**Purpose**: Provide fluent API for configuring Flagstone UI in MAUI applications.
+**Approach**: Themes are configured via merged ResourceDictionaries in App.xaml (no builder pattern needed - YAGNI).
 
-**Current Implementation**:
-```csharp
-public class FlagstoneUIBuilder
-{
-    public FlagstoneUIBuilder UseDefaultTheme() => this;
-    // TODO: Expand configuration options
-}
+**Implementation**:
+```xml
+<!-- In App.xaml -->
+<Application.Resources>
+    <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+            <material:Theme />
+        </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+</Application.Resources>
 ```
 
-**Planned API**:
-```csharp
-builder.UseFlagstoneUI(ui =>
-{
-    ui.Theme("Themes/Material.xaml");
-    ui.Density = Density.Compact;
-    ui.Motion = Motion.Standard;
-});
-```
+**Note**: A minimal FlagstoneUIBuilder class exists in the codebase but is not required for theme configuration and may be removed in the future.
 
 ### Theme Loading
 
@@ -161,18 +156,13 @@ ThemeLoader.Register(app.Resources);
 
 ## Known Issues & Technical Debt
 
-### 1. Resource Loading ✅ RESOLVED
-**Previous Issue**: Cross-component XAML resource references not working  
-**Previous Impact**: Themes cannot consume core tokens properly  
-**Previous Workaround**: Temporary local token definitions  
+### 1. Cross-Assembly Resource Loading
 
-**Resolution**: Implemented proper cross-assembly ResourceDictionary referencing using Microsoft's recommended approach:
-- Added x:Class attributes and code-behind files to all ResourceDictionary files that need cross-assembly consumption
-- Use `MergedDictionaries` collection with typed references (e.g., `<tokens:Tokens />`) instead of `Source` property
-- Added proper XAML namespace definitions via GlobalXmlns.cs files
-- All themes now properly inherit design tokens from FlagstoneUI.Core
+**Status**: ✅ Fully resolved and working
 
-**For Consumers**: When using Flagstone UI themes in your applications, reference them using the typed syntax:
+Cross-assembly ResourceDictionary referencing is implemented using typed references in MergedDictionaries. See [ADR004: Cross-Assembly ResourceDictionary Loading](Decisions/adr004-cross-assembly-resource-loading.md) for detailed technical decisions and implementation.
+
+**Quick Reference for Consumers**:
 ```xml
 <Application.Resources>
     <ResourceDictionary>
@@ -181,17 +171,18 @@ ThemeLoader.Register(app.Resources);
         </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
 </Application.Resources>
-```  
+```
 
 ### 2. Missing Platform Handlers
 **Issue**: No platform handlers for neutral styling  
 **Impact**: Controls will show platform-specific styling  
 **Solution**: Implement handlers for FsButton, FsEntry to strip native styling  
 
-### 3. Incomplete Builder API
-**Issue**: FlagstoneUIBuilder lacks configuration options  
-**Impact**: Limited customization and theming options  
-**Solution**: Expand builder with density, motion, theme selection options  
+### 3. Builder Pattern Not Required
+**Decision**: FlagstoneUIBuilder pattern is not needed (YAGNI principle)  
+**Approach**: Theme configuration via merged dictionaries in App.xaml  
+**Note**: Minimal builder class may be removed in future cleanup  
+**See**: [Archived technical-plan.md](archive/technical-plan.md) for historical builder API plans
 
 ## Future Architecture Considerations
 
@@ -213,12 +204,7 @@ ThemeLoader.Register(app.Resources);
 
 ## Testing Strategy
 
-### Current State
-- ✅ Basic test projects exist
-- ❌ Minimal test coverage
-- ❌ No UI testing infrastructure
-
-### Planned Testing
+### Testing Approach
 - **Unit Tests**: Control properties and behavior
 - **Integration Tests**: Theme application and resource loading
 - **Visual Tests**: Cross-platform rendering validation
@@ -229,12 +215,13 @@ ThemeLoader.Register(app.Resources);
 ### Current Dependencies
 - **.NET 10**: Minimum version requirement
 - **MAUI Workload**: Required for all projects
-- **CommunityToolkit.Maui**: Included via Directory.Build.props
+- **CommunityToolkit.Maui**: Optional (currently disabled in Directory.Build.props - see issue #12)
 
 ### Future Dependencies
 - **Font Assets**: Inter Variable for typography
 - **Icon Libraries**: Material Design Icons or similar
 - **Animation Libraries**: For motion system implementation
 
-*Last Updated: [Current Date]*
-*Status: Initial implementation phase*
+**Note**: For current implementation status and completion tracking, see [implementation-status.md](implementation-status.md).
+
+*Last Updated: November 2025*

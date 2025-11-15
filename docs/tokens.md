@@ -24,6 +24,8 @@ For AI agents, automated tooling, and programmatic access, a comprehensive machi
 - ✅ Validating theme completeness and correctness
 - 🔄 Converting between design formats (Figma, Sketch, etc.)
 
+**See also**: [Token Catalog System](token-catalog-system.md) for complete documentation on the machine-readable token catalog architecture, automation plans, and integration with AI agents and development tooling.
+
 ## How to Use This Document
 
 This document is intended for:
@@ -281,25 +283,31 @@ General opacity tokens for various UI states and elements.
 
 ## Dark Mode Support
 
-Flagstone UI themes can override token values to support dark mode. The Material theme, for example, provides dark mode variants for all color tokens using the `.Dark` suffix pattern (e.g., `Color.Primary.Dark`).
+**Important**: The base token system in `Tokens.xaml` defines only light mode values. Dark mode support is implemented at the **theme level**, not in the base tokens.
 
-When implementing dark mode in your theme:
+Flagstone UI themes can define dark mode color variants using the `.Dark` suffix pattern (e.g., `Color.Primary.Dark`). The Material theme demonstrates this approach.
 
-1. Define dark mode color variants with `.Dark` suffix
-2. Use `AppThemeBinding` in styles to switch between light and dark values
-3. Ensure sufficient contrast ratios for accessibility
+### Implementing Dark Mode in Your Theme
 
-Example:
+1. **Define dark mode color variants** in your theme file (not in base tokens) with `.Dark` suffix:
+   ```xml
+   <!-- In your Theme.xaml, not in Tokens.xaml -->
+   <Color x:Key="Color.Primary.Dark">#D0BCFF</Color>
+   <Color x:Key="Color.OnPrimary.Dark">#381E72</Color>
+   ```
 
-```xml
-<Color x:Key="Color.Primary.Dark">#D0BCFF</Color>
+2. **Use `AppThemeBinding`** in control styles to switch between light and dark values:
+   ```xml
+   <Style TargetType="Button">
+       <Setter Property="BackgroundColor" 
+               Value="{AppThemeBinding Light={DynamicResource Color.Primary}, 
+                                      Dark={DynamicResource Color.Primary.Dark}}" />
+   </Style>
+   ```
 
-<Style TargetType="Button">
-    <Setter Property="BackgroundColor" 
-            Value="{AppThemeBinding Light={DynamicResource Color.Primary}, 
-                                   Dark={DynamicResource Color.Primary.Dark}}" />
-</Style>
-```
+3. **Ensure sufficient contrast ratios** for accessibility in both modes
+
+**Note**: Base tokens (in `FlagstoneUI.Core/Styles/Tokens.xaml`) contain only the standard token names without `.Dark` suffixes. Themes override or extend these tokens to add dark mode support.
 
 ## Using Tokens in Custom Themes
 

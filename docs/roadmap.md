@@ -4,7 +4,9 @@ This document provides an updated roadmap based on current implementation progre
 
 ## Current Status (November 2025)
 
-**Phase 1 (MVP) Progress**: ~85% Complete
+**Current Milestone**: Proof of Concept (POC)  
+**POC Progress**: ~60% Complete  
+**Note**: MVP milestone will follow after POC validation
 
 ### Recently Completed ✅
 
@@ -73,10 +75,11 @@ None! All critical MVP blockers resolved.
 - ✅ **Missing Core Controls**: FsButton and FsEntry complete
 - ✅ **Sample App**: Working demonstration application with showcase
 
-## Updated Phase 1: MVP (Priority: Critical)
+## Updated Phase 1: POC → MVP (Priority: Critical)
 
-**Status**: 85% Complete  
-**Target**: Preview release aligned with .NET 10 launch (November 12, 2025)
+**Current**: POC at 60% Complete  
+**Next**: MVP after POC validation  
+**Target**: Preview release aligned with .NET 10 launch
 
 ### Completed Items ✅
 

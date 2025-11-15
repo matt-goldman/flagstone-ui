@@ -103,6 +103,11 @@ In your `App.xaml` file, add your theme to your application resources. In this e
 </Application>
 ```
 
+> **Important Requirements**:
+> - You must add a **project reference** to `FlagstoneUI.Themes.Material` in your `.csproj`
+> - You must declare the **XAML namespace** (the `xmlns:material=...` line shown above)
+> - The theme will take advantage of .NET 10's global XAML namespaces and implicit usings in future updates
+
 > **Note**: The Material theme is provided to showcase Flagstone UI's capabilities. The themes demonstrate the concept and are value-add components. The core value of Flagstone UI is the token-based theming framework itself, which allows you to create or use any theme that fits your needs.
 
 ### Step 2: Add Namespace to Your Pages
@@ -347,6 +352,61 @@ Now that you have the basics:
    - [FsCard](Controls/FsCard.md)
    - [FsEntry](Controls/FsEntry.md)
 5. **Architecture Details**: Read the [Architecture Documentation](architecture.md) for deeper technical insights
+
+## Optional: MAUI Community Toolkit Integration
+
+Flagstone UI is designed to work well with the [MAUI Community Toolkit](https://github.com/CommunityToolkit/Maui), which provides additional behaviors, converters, and functionality.
+
+**Note**: CommunityToolkit.Maui is **not** a required dependency of Flagstone UI. Add it to your application project only if you need its features:
+
+```bash
+dotnet add package CommunityToolkit.Maui
+```
+
+Then initialize it in your `MauiProgram.cs`:
+
+```csharp
+builder.UseMauiApp<App>()
+    .UseMauiCommunityToolkit();
+```
+
+**Common use cases with Flagstone UI:**
+- Email/URL validation on `FsEntry` using `EmailValidationBehavior`
+- Converters for advanced binding scenarios
+- Additional UI enhancements and animations
+
+See [ADR001](Decisions/adr001-fsentry-behavior.md) for more details on the Flagstone UI + MCT integration approach.
+
+## Troubleshooting
+
+### Theme Not Applied
+
+If your controls don't have the expected styling:
+
+1. Verify the theme ResourceDictionary is in your `App.xaml` MergedDictionaries
+2. Ensure you have the correct XAML namespace declaration (e.g., `xmlns:material=...`)
+3. Check that you've added the project reference to the theme library
+4. Clean and rebuild your solution
+
+### Controls Not Found
+
+If you get "Type not found" errors:
+
+1. Verify the Flagstone.Core namespace is declared in your XAML:
+   ```xml
+   xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
+   ```
+2. Ensure you have a project reference to FlagstoneUI.Core
+3. Check that the control name is spelled correctly (e.g., `FsButton` not `FsButton`)
+
+### Build Errors
+
+If you encounter build errors:
+
+1. Ensure you have .NET 10 SDK installed (minimum version from `global.json`)
+2. Install the MAUI workload: `dotnet workload install maui`
+3. Restore packages: `dotnet restore`
+4. Clean and rebuild: `dotnet clean && dotnet build`
 
 ## Getting Help
 
