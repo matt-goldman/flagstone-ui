@@ -1,7 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
              x:Class="FlagstoneUI.SampleApp.MainPage">
+    <ContentPage.Resources>
+        <Style x:Key="InvalidFsEntryStyle" TargetType="fs:FsEntry">
+            <Setter Property="BorderBrush" Value="{DynamicResource Color.Error}" />
+            <Setter Property="TextColor" Value="Red" />
+            <Setter Property="BorderWidth" Value="2" />
+        </Style>
+
+        <Style x:Key="ValidFsEntryStyle" TargetType="fs:FsEntry">
+            <Setter Property="BorderBrush" Value="{DynamicResource Color.Primary}" />
+        </Style>
+        <Style x:Key="InvalidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="{DynamicResource Color.Error}" />
+            <Setter Property="IsPassword" Value="True"/>
+        </Style>
+        <Style x:Key="ValidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="{DynamicResource Color.Primary}" />
+        </Style>
+    </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout
@@ -14,10 +34,32 @@
                 SemanticProperties.HeadingLevel="Level1" />
 
             <Label
-                Text="Select a theme"
+                Text="Validation"
                 Style="{StaticResource SubHeadline}"
                 SemanticProperties.HeadingLevel="Level2" />
-            
+
+            <fs:FsEntry Placeholder="Enter your email"
+            x:Name="ValidatedEntry">
+                <fs:FsEntry.Behaviors>
+                    <toolkit:EmailValidationBehavior 
+            InvalidStyle="{DynamicResource InvalidFsEntryStyle}"
+            ValidStyle="{DynamicResource ValidFsEntryStyle}"
+            ValuePropertyName="Text"
+            Flags="ValidateOnValueChanged"/>
+                </fs:FsEntry.Behaviors>
+            </fs:FsEntry>
+
+            <Entry Placeholder="Enter an email">
+                <Entry.Behaviors>
+                    <toolkit:TextValidationBehavior
+            MinimumLength="5"
+            MaximumLength="10"
+            InvalidStyle="{DynamicResource InvalidEntryStyle}"
+            ValidStyle="{DynamicResource ValidEntryStyle}"
+            Flags="ValidateOnValueChanged"/>
+                </Entry.Behaviors>
+            </Entry>
+
         </VerticalStackLayout>
     </ScrollView>
 

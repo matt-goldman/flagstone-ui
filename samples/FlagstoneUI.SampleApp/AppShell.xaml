@@ -10,51 +10,13 @@
     Title="FlagstoneUI.SampleApp"
     FlyoutBehavior="Disabled">
 
-    <Shell.Resources>
-        <ResourceDictionary>
-            <converters:ThemeToIsCheckedConverter x:Key="ThemeToIsCheckedConverter" />
-        </ResourceDictionary>
-    </Shell.Resources>
-
-    <Shell.FlyoutHeader>
-        <VerticalStackLayout
-            BackgroundColor="Transparent"
-            RadioButtonGroup.GroupName="ThemeSelectionGroup"
-            Spacing="15"
-            x:DataType="vm:AppShellViewModel">
-
-            <RadioButton
-                Content="SlatePro"
-                IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=SlatePro, Mode=TwoWay}" />
-
-            <RadioButton
-              Content="NovaPop"
-              IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=NovaPop, Mode=TwoWay}" />
-
-            <RadioButton
-              Content="Material"
-              IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=Material, Mode=TwoWay}" />
-
-            <RadioButton
-                Content="Litera"
-                IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=Litera, Mode=TwoWay}" />
-
-            <RadioButton
-                Content="Minty"
-                IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=Minty, Mode=TwoWay}" />
-
-            <RadioButton
-                Content="Brite"
-                IsChecked="{Binding SelectedTheme, Converter={StaticResource ThemeToIsCheckedConverter}, ConverterParameter=Brite, Mode=TwoWay}" />
-
-        </VerticalStackLayout>
-    </Shell.FlyoutHeader>
+    
 
     <!-- Default content - Controls Showcase -->
-    <ShellContent
+    <!--<ShellContent
         Title="Controls Showcase"
         ContentTemplate="{DataTemplate page:ControlsShowcasePage}"
-        Route="ControlsShowcase" />
+        Route="ControlsShowcase" />-->
 
     <!-- Hidden routes for future use -->
     <!--

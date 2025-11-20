@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<!--<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
@@ -9,22 +9,34 @@
              x:DataType="vm:ControlsShowcaseViewModel"
              BackgroundColor="{AppThemeBinding Light={DynamicResource Color.Background}, Dark={DynamicResource Color.Background.Dark}}">
        <ContentPage.Resources>
-         <Style x:Key="InvalidEntryStyle" TargetType="fs:FsEntry">
-           <Setter Property="BorderBrush" Value="{DynamicResource Color.Error}" />
-           <Setter Property="BorderWidth" Value="2" />
-         </Style>
-       </ContentPage.Resources>
+        <Style x:Key="InvalidFsEntryStyle" TargetType="fs:FsEntry">
+            <Setter Property="BorderBrush" Value="{DynamicResource Color.Error}" />
+            <Setter Property="TextColor" Value="Red" />
+            <Setter Property="BorderWidth" Value="2" />
+        </Style>
+
+        <Style x:Key="ValidFsEntryStyle" TargetType="fs:FsEntry">
+            <Setter Property="BorderBrush" Value="{DynamicResource Color.Primary}" />
+        </Style>
+        <Style x:Key="InvalidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="{DynamicResource Color.Error}" />
+            <Setter Property="IsPassword" Value="True"/>
+        </Style>
+        <Style x:Key="ValidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="{DynamicResource Color.Primary}" />
+        </Style>
+    </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout Padding="16" Spacing="24">
 
-            <!-- Page Header -->
+            --><!-- Page Header --><!--
             <Label Text="Flagstone UI Controls"
                    FontSize="32"
                    FontAttributes="Bold"
                    TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}" />
 
-            <!-- Theme Selector -->
+            --><!-- Theme Selector --><!--
             <HorizontalStackLayout Spacing="12" Margin="0,0,0,8">
                 <Label Text="Theme:"
                        FontSize="16"
@@ -41,13 +53,13 @@
                    TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
                    Margin="0,0,0,16" />
 
-            <!-- ========== FsEntry Section ========== -->
+            --><!-- ========== FsEntry Section ========== --><!--
             <Label Text="FsEntry"
                    FontSize="24"
                    FontAttributes="Bold"
                    TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}" />
 
-            <!-- Show integration with Community Toolkit Validators -->
+            --><!-- Show integration with Community Toolkit Validators --><!--
             <Label Text="Text input field with Email ValidationBehavior from MAUI Community Toolkit"
                        FontSize="14"
                        TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
@@ -55,49 +67,65 @@
             <fs:FsEntry Placeholder="Enter your email"
                         x:Name="ValidatedEntry">
                 <fs:FsEntry.Behaviors>
-                    <toolkit:EmailValidationBehavior InvalidStyle="{DynamicResource InvalidEntryStyle}" />
+                    <toolkit:EmailValidationBehavior 
+                        InvalidStyle="{DynamicResource InvalidFsEntryStyle}"
+                        ValidStyle="{DynamicResource ValidFsEntryStyle}"
+                        ValuePropertyName="Text"
+                        Flags="ValidateOnValueChanged"/>
                 </fs:FsEntry.Behaviors>
             </fs:FsEntry>
 
-            <!-- Material Theme: Show all variants -->
+            <Entry Placeholder="Enter an email">
+                <Entry.Behaviors>
+                    <toolkit:TextValidationBehavior
+                        MinimumLength="5"
+                        MaximumLength="10"
+                        InvalidStyle="{DynamicResource InvalidEntryStyle}"
+                        ValidStyle="{DynamicResource ValidEntryStyle}"
+                        Flags="ValidateOnValueChanged"/>
+                </Entry.Behaviors>
+            </Entry>
+            
+
+            --><!-- Material Theme: Show all variants --><!--
             <VerticalStackLayout Spacing="12" IsVisible="{Binding IsMaterialTheme}">
                 <Label Text="Text input field with customizable border and styling"
                        FontSize="14"
                        TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
                        Margin="0,0,0,8" />
 
-                <!-- Filled Entry (Default) -->
+                --><!-- Filled Entry (Default) --><!--
                 <fs:FsEntry Placeholder="Filled Entry (Default)"
                             x:Name="FilledEntry"
                             TextChanged="OnEntryTextChanged" />
 
-                <!-- Outlined Entry -->
+                --><!-- Outlined Entry --><!--
                 <fs:FsEntry Placeholder="Outlined Entry"
                             Style="{StaticResource OutlinedEntry}"
                             x:Name="OutlinedEntry"
                             TextChanged="OnEntryTextChanged" />
 
-                <!-- Entry with Text -->
+                --><!-- Entry with Text --><!--
                 <fs:FsEntry Placeholder="Entry with preset text"
                             Text="Sample text content" />
 
-                <!-- Password Entry -->
+                --><!-- Password Entry --><!--
                 <fs:FsEntry Placeholder="Password Entry"
                             IsPassword="True" />
 
-                <!-- Disabled Entry -->
+                --><!-- Disabled Entry --><!--
                 <fs:FsEntry Placeholder="Disabled Entry"
                             IsEnabled="False"
                             Text="This entry is disabled" />
 
-                <!-- Entry with Keyboard Types -->
+                --><!-- Entry with Keyboard Types --><!--
                 <fs:FsEntry Placeholder="Email Entry"
                             Keyboard="Email" />
 
                 <fs:FsEntry Placeholder="Numeric Entry"
                             Keyboard="Numeric" />
 
-                <!-- Entry State Feedback -->
+                --><!-- Entry State Feedback --><!--
                 <Label x:Name="EntryFeedbackLabel"
                        Text="Type in any entry to see feedback..."
                        FontSize="12"
@@ -105,36 +133,36 @@
                        Margin="0,8,0,0" />
             </VerticalStackLayout>
 
-            <!-- Other Themes: Show base controls only -->
+            --><!-- Other Themes: Show base controls only --><!--
             <VerticalStackLayout Spacing="12" IsVisible="{Binding IsNotMaterialTheme}">
                 <Label Text="Theme-styled text input field"
                        FontSize="14"
                        TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
                        Margin="0,0,0,8" />
 
-                <!-- Default Entry -->
+                --><!-- Default Entry --><!--
                 <fs:FsEntry Placeholder="Default Entry"
                             x:Name="DefaultEntry"
                             TextChanged="OnEntryTextChanged" />
 
-                <!-- Entry with Text -->
+                --><!-- Entry with Text --><!--
                 <fs:FsEntry Placeholder="Entry with preset text"
                             Text="Sample text content" />
 
-                <!-- Password Entry -->
+                --><!-- Password Entry --><!--
                 <fs:FsEntry Placeholder="Password Entry"
                             IsPassword="True" />
 
-                <!-- Disabled Entry -->
+                --><!-- Disabled Entry --><!--
                 <fs:FsEntry Placeholder="Disabled Entry"
                             IsEnabled="False"
                             Text="This entry is disabled" />
 
-                <!-- Entry with Keyboard Types -->
+                --><!-- Entry with Keyboard Types --><!--
                 <fs:FsEntry Placeholder="Email Entry"
                             Keyboard="Email" />
 
-                <!-- Entry State Feedback -->
+                --><!-- Entry State Feedback --><!--
                 <Label x:Name="EntryFeedbackLabelAlt"
                        Text="Type in any entry to see feedback..."
                        FontSize="12"
@@ -142,58 +170,58 @@
                        Margin="0,8,0,0" />
             </VerticalStackLayout>
 
-            <!-- Divider -->
+            --><!-- Divider --><!--
             <BoxView HeightRequest="1"
                      BackgroundColor="{AppThemeBinding Light={DynamicResource Color.OutlineVariant}, Dark={DynamicResource Color.OutlineVariant.Dark}}"
                      Margin="0,16" />
 
-            <!-- ========== FsButton Section ========== -->
+            --><!-- ========== FsButton Section ========== --><!--
             <Label Text="FsButton"
                    FontSize="24"
                    FontAttributes="Bold"
                    TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}" />
 
-            <!-- Material Theme: Show all variants -->
+            --><!-- Material Theme: Show all variants --><!--
             <VerticalStackLayout Spacing="12" IsVisible="{Binding IsMaterialTheme}">
                 <Label Text="Material Design 3 button variants"
                        FontSize="14"
                        TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
                        Margin="0,0,0,8" />
 
-                <!-- Filled Button (Default) -->
+                --><!-- Filled Button (Default) --><!--
                 <fs:FsButton Text="Filled Button (Default)"
                              Clicked="OnButtonClicked" />
 
-                <!-- Outlined Button -->
+                --><!-- Outlined Button --><!--
                 <fs:FsButton Text="Outlined Button"
                              Style="{StaticResource OutlinedButton}"
                              Clicked="OnButtonClicked" />
 
-                <!-- Text Button -->
+                --><!-- Text Button --><!--
                 <fs:FsButton Text="Text Button"
                              Style="{StaticResource TextButton}"
                              Clicked="OnButtonClicked" />
 
-                <!-- Tonal Button -->
+                --><!-- Tonal Button --><!--
                 <fs:FsButton Text="Tonal Button"
                              Style="{StaticResource TonalButton}"
                              Clicked="OnButtonClicked" />
 
-                <!-- Secondary Button -->
+                --><!-- Secondary Button --><!--
                 <fs:FsButton Text="Secondary Button"
                              Style="{StaticResource SecondaryButton}"
                              Clicked="OnButtonClicked" />
 
-                <!-- Tertiary Button -->
+                --><!-- Tertiary Button --><!--
                 <fs:FsButton Text="Tertiary Button"
                              Style="{StaticResource TertiaryButton}"
                              Clicked="OnButtonClicked" />
 
-                <!-- Disabled Button -->
+                --><!-- Disabled Button --><!--
                 <fs:FsButton Text="Disabled Button"
                              IsEnabled="False" />
 
-                <!-- Button Group -->
+                --><!-- Button Group --><!--
                 <HorizontalStackLayout Spacing="8">
                     <fs:FsButton Text="Primary Action" />
                     <fs:FsButton Text="Secondary"
@@ -201,57 +229,57 @@
                 </HorizontalStackLayout>
             </VerticalStackLayout>
 
-            <!-- Other Themes: Show base controls only -->
+            --><!-- Other Themes: Show base controls only --><!--
             <VerticalStackLayout Spacing="12" IsVisible="{Binding IsNotMaterialTheme}">
                 <Label Text="Theme-styled buttons"
                        FontSize="14"
                        TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
                        Margin="0,0,0,8" />
 
-                <!-- Default Button -->
+                --><!-- Default Button --><!--
                 <fs:FsButton Text="Default Button"
                              Clicked="OnButtonClicked" />
 
-                <!-- Secondary Button -->
+                --><!-- Secondary Button --><!--
                 <fs:FsButton Text="Secondary Button"
                              Style="{StaticResource SecondaryButton}"
                              Clicked="OnButtonClicked" />
 
-                <!-- Tertiary Button -->
+                --><!-- Tertiary Button --><!--
                 <fs:FsButton Text="Tertiary Button"
                              Style="{StaticResource TertiaryButton}"
                              Clicked="OnButtonClicked" />
 
-                <!-- Disabled Button -->
+                --><!-- Disabled Button --><!--
                 <fs:FsButton Text="Disabled Button"
                              IsEnabled="False" />
 
-                <!-- Button Group -->
+                --><!-- Button Group --><!--
                 <HorizontalStackLayout Spacing="8">
                     <fs:FsButton Text="Action 1" />
                     <fs:FsButton Text="Action 2" />
                 </HorizontalStackLayout>
             </VerticalStackLayout>
 
-            <!-- Divider -->
+            --><!-- Divider --><!--
             <BoxView HeightRequest="1"
                      BackgroundColor="{AppThemeBinding Light={DynamicResource Color.OutlineVariant}, Dark={DynamicResource Color.OutlineVariant.Dark}}"
                      Margin="0,8" />
 
-            <!-- ========== FsCard Section ========== -->
+            --><!-- ========== FsCard Section ========== --><!--
             <Label Text="FsCard"
                    FontSize="24"
                    FontAttributes="Bold"
                    TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}" />
 
-            <!-- Material Theme: Show all variants -->
+            --><!-- Material Theme: Show all variants --><!--
             <VerticalStackLayout Spacing="12" IsVisible="{Binding IsMaterialTheme}">
                 <Label Text="Container control with elevation and border options"
                        FontSize="14"
                        TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
                        Margin="0,0,0,8" />
 
-                <!-- Filled Card (Default) -->
+                --><!-- Filled Card (Default) --><!--
                 <fs:FsCard>
                     <VerticalStackLayout Spacing="8">
                         <Label Text="Filled Card (Default)"
@@ -264,7 +292,7 @@
                     </VerticalStackLayout>
                 </fs:FsCard>
 
-                <!-- Outlined Card -->
+                --><!-- Outlined Card --><!--
                 <fs:FsCard Style="{StaticResource OutlinedCard}">
                     <VerticalStackLayout Spacing="8">
                         <Label Text="Outlined Card"
@@ -277,7 +305,7 @@
                     </VerticalStackLayout>
                 </fs:FsCard>
 
-                <!-- Elevated Card -->
+                --><!-- Elevated Card --><!--
                 <fs:FsCard Style="{StaticResource ElevatedCard}">
                     <VerticalStackLayout Spacing="8">
                         <Label Text="Elevated Card"
@@ -290,7 +318,7 @@
                     </VerticalStackLayout>
                 </fs:FsCard>
 
-                <!-- Card with Content Example -->
+                --><!-- Card with Content Example --><!--
                 <fs:FsCard>
                     <VerticalStackLayout Spacing="12">
                         <Label Text="Card with Action Buttons"
@@ -312,14 +340,14 @@
                 </fs:FsCard>
             </VerticalStackLayout>
 
-            <!-- Other Themes: Show base controls only -->
+            --><!-- Other Themes: Show base controls only --><!--
             <VerticalStackLayout Spacing="12" IsVisible="{Binding IsNotMaterialTheme}">
                 <Label Text="Theme-styled container control"
                        FontSize="14"
                        TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
                        Margin="0,0,0,8" />
 
-                <!-- Default Card -->
+                --><!-- Default Card --><!--
                 <fs:FsCard>
                     <VerticalStackLayout Spacing="8">
                         <Label Text="Default Card"
@@ -332,7 +360,7 @@
                     </VerticalStackLayout>
                 </fs:FsCard>
 
-                <!-- Card with Content -->
+                --><!-- Card with Content --><!--
                 <fs:FsCard>
                     <VerticalStackLayout Spacing="12">
                         <Label Text="Card with Content"
@@ -349,12 +377,12 @@
                 </fs:FsCard>
             </VerticalStackLayout>
 
-            <!-- Divider -->
+            --><!-- Divider --><!--
             <BoxView HeightRequest="1"
                      BackgroundColor="{AppThemeBinding Light={DynamicResource Color.OutlineVariant}, Dark={DynamicResource Color.OutlineVariant.Dark}}"
                      Margin="0,8" />
 
-                        <!-- Footer Info -->
+                        --><!-- Footer Info --><!--
             <fs:FsCard Style="{StaticResource OutlinedCard}">
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Token-Based Styling"
@@ -386,9 +414,9 @@
                 </VerticalStackLayout>
             </fs:FsCard>
 
-            <!-- Bottom Spacing -->
+            --><!-- Bottom Spacing --><!--
             <BoxView HeightRequest="32" Color="Transparent" />
 
         </VerticalStackLayout>
     </ScrollView>
-</ContentPage>
+</ContentPage>-->
