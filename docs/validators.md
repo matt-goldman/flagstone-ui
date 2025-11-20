@@ -5,15 +5,15 @@ Let’s unpack this carefully because what you’re zeroing in on here is not ju
 🧠 1. You’re right about the MAUI Community Toolkit validators
 
 They’re not Entry-specific behaviors.
-They derive from Behavior<VisualElement> — meaning they can attach to anything that inherits VisualElement, not just Entry.
+They derive from `Behavior<VisualElement>` — meaning they can attach to anything that inherits `VisualElement`, not just `Entry`.
 
 Here’s what that means in practice:
 
-They don’t require you to expose or forward the inner Entry.
+They don’t require you to expose or forward the inner `Entry`.
 
-They’ll happily attach to your FsEntry directly because it’s a ContentView (→ Layout → VisualElement).
+They’ll happily attach to your `FsEntry` directly because it’s a `ContentView` (→ `Layout` → `VisualElement`).
 
-Their OnAttachedTo logic walks the visual tree and will apply fine.
+Their `OnAttachedTo` logic walks the visual tree and will apply fine.
 
 The visual state changes (valid/invalid) bubble up, not down — so they’ll trigger on your control regardless.
 
@@ -26,21 +26,23 @@ Try it, but I’d bet it “just works.”
 
 Let’s think through the possible APIs:
 
-Approach	Description	Pros	Cons
-No special property	Consumers just attach behaviors directly to FsEntry	Simplest, works with MCT validators out of the box	None really — unless you later want to intercept or modify them
-EntryBehaviors property	A list of behaviors that you forward to the inner Entry	Gives you control over which behaviors touch the real Entry	Slightly more API surface for minimal value
-Attached property (FsEntryBehaviors)	External helper to apply behaviors	Feels like over-engineering if behaviors already attach fine	Adds another concept to learn
+Approach | Description | Pros | Cons
+--- | --- | --- | ---
+No special property | Consumers just attach behaviors directly to FsEntry	|Simplest, works with MCT validators out of the box	| None really — unless you later want to intercept or modify them
+EntryBehaviors property	| A list of behaviors that you forward to the inner Entry | Gives you control over which behaviors touch the real Entry	|   Slightly more API surface for minimal value
+Attached property (FsEntryBehaviors) | External helper to apply behaviors	| Feels like over-engineering if behaviors already attach fine	| Adds another concept to learn
 
 Given your mission — reduce boilerplate, surface style, not implementation details — the first option is cleanest and truest to the philosophy.
 
 If it works, you’ve achieved maximum elegance:
 
+```xml
 <fs:FsEntry>
     <fs:FsEntry.Behaviors>
         <toolkit:ValidationBehavior InvalidStyle="InvalidEntryStyle" />
     </fs:FsEntry.Behaviors>
 </fs:FsEntry>
-
+```
 
 That’s idiomatic MAUI. No new API, no extra layer.
 
@@ -48,6 +50,7 @@ That’s idiomatic MAUI. No new API, no extra layer.
 
 If testing shows the MCT validators specifically expect an Entry (e.g., they bind to Text), then the minimal solution is to surface an EntryBehaviors property that directly forwards behaviors to the inner entry:
 
+```csharp
 public IList<Behavior> EntryBehaviors { get; } = new List<Behavior>();
 
 protected override void OnApplyTemplate()
@@ -58,7 +61,7 @@ protected override void OnApplyTemplate()
     foreach (var b in EntryBehaviors)
         entry.Behaviors.Add(b);
 }
-
+```
 
 That gives you:
 
@@ -70,9 +73,11 @@ Zero coupling to the Toolkit.
 
 In XAML:
 
+```xml
 <fs:FsEntry>
     <fs:FsEntry.EntryBehaviors>
         <toolkit:ValidationBehavior InvalidStyle="InvalidEntryStyle" />
         <my:CustomFlagstoneEntryBehavior />
     </fs:FsEntry.EntryBehaviors>
 </fs:FsEntry>
+```

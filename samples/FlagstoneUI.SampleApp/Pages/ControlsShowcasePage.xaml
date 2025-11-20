@@ -4,9 +4,16 @@
              xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
              xmlns:vm="clr-namespace:FlagstoneUI.SampleApp.ViewModels"
              x:Class="FlagstoneUI.SampleApp.Pages.ControlsShowcasePage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              Title="Controls Showcase"
              x:DataType="vm:ControlsShowcaseViewModel"
              BackgroundColor="{AppThemeBinding Light={DynamicResource Color.Background}, Dark={DynamicResource Color.Background.Dark}}">
+       <ContentPage.Resources>
+         <Style x:Key="InvalidEntryStyle" TargetType="fs:FsEntry">
+           <Setter Property="BorderBrush" Value="{DynamicResource Color.Error}" />
+           <Setter Property="BorderWidth" Value="2" />
+         </Style>
+       </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout Padding="16" Spacing="24">
@@ -33,6 +40,112 @@
                    FontSize="16"
                    TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
                    Margin="0,0,0,16" />
+
+            <!-- ========== FsEntry Section ========== -->
+            <Label Text="FsEntry"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}" />
+
+            <!-- Show integration with Community Toolkit Validators -->
+            <Label Text="Text input field with Email ValidationBehavior from MAUI Community Toolkit"
+                       FontSize="14"
+                       TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
+                       Margin="0,0,0,8" />
+            <fs:FsEntry Placeholder="Enter your email"
+                        x:Name="ValidatedEntry">
+                <fs:FsEntry.Behaviors>
+                    <toolkit:EmailValidationBehavior InvalidStyle="{DynamicResource InvalidEntryStyle}" />
+                </fs:FsEntry.Behaviors>
+            </fs:FsEntry>
+
+            <!-- Material Theme: Show all variants -->
+            <VerticalStackLayout Spacing="12" IsVisible="{Binding IsMaterialTheme}">
+                <Label Text="Text input field with customizable border and styling"
+                       FontSize="14"
+                       TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
+                       Margin="0,0,0,8" />
+
+                <!-- Filled Entry (Default) -->
+                <fs:FsEntry Placeholder="Filled Entry (Default)"
+                            x:Name="FilledEntry"
+                            TextChanged="OnEntryTextChanged" />
+
+                <!-- Outlined Entry -->
+                <fs:FsEntry Placeholder="Outlined Entry"
+                            Style="{StaticResource OutlinedEntry}"
+                            x:Name="OutlinedEntry"
+                            TextChanged="OnEntryTextChanged" />
+
+                <!-- Entry with Text -->
+                <fs:FsEntry Placeholder="Entry with preset text"
+                            Text="Sample text content" />
+
+                <!-- Password Entry -->
+                <fs:FsEntry Placeholder="Password Entry"
+                            IsPassword="True" />
+
+                <!-- Disabled Entry -->
+                <fs:FsEntry Placeholder="Disabled Entry"
+                            IsEnabled="False"
+                            Text="This entry is disabled" />
+
+                <!-- Entry with Keyboard Types -->
+                <fs:FsEntry Placeholder="Email Entry"
+                            Keyboard="Email" />
+
+                <fs:FsEntry Placeholder="Numeric Entry"
+                            Keyboard="Numeric" />
+
+                <!-- Entry State Feedback -->
+                <Label x:Name="EntryFeedbackLabel"
+                       Text="Type in any entry to see feedback..."
+                       FontSize="12"
+                       TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
+                       Margin="0,8,0,0" />
+            </VerticalStackLayout>
+
+            <!-- Other Themes: Show base controls only -->
+            <VerticalStackLayout Spacing="12" IsVisible="{Binding IsNotMaterialTheme}">
+                <Label Text="Theme-styled text input field"
+                       FontSize="14"
+                       TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
+                       Margin="0,0,0,8" />
+
+                <!-- Default Entry -->
+                <fs:FsEntry Placeholder="Default Entry"
+                            x:Name="DefaultEntry"
+                            TextChanged="OnEntryTextChanged" />
+
+                <!-- Entry with Text -->
+                <fs:FsEntry Placeholder="Entry with preset text"
+                            Text="Sample text content" />
+
+                <!-- Password Entry -->
+                <fs:FsEntry Placeholder="Password Entry"
+                            IsPassword="True" />
+
+                <!-- Disabled Entry -->
+                <fs:FsEntry Placeholder="Disabled Entry"
+                            IsEnabled="False"
+                            Text="This entry is disabled" />
+
+                <!-- Entry with Keyboard Types -->
+                <fs:FsEntry Placeholder="Email Entry"
+                            Keyboard="Email" />
+
+                <!-- Entry State Feedback -->
+                <Label x:Name="EntryFeedbackLabelAlt"
+                       Text="Type in any entry to see feedback..."
+                       FontSize="12"
+                       TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
+                       Margin="0,8,0,0" />
+            </VerticalStackLayout>
+
+            <!-- Divider -->
+            <BoxView HeightRequest="1"
+                     BackgroundColor="{AppThemeBinding Light={DynamicResource Color.OutlineVariant}, Dark={DynamicResource Color.OutlineVariant.Dark}}"
+                     Margin="0,16" />
 
             <!-- ========== FsButton Section ========== -->
             <Label Text="FsButton"
@@ -241,101 +354,7 @@
                      BackgroundColor="{AppThemeBinding Light={DynamicResource Color.OutlineVariant}, Dark={DynamicResource Color.OutlineVariant.Dark}}"
                      Margin="0,8" />
 
-            <!-- ========== FsEntry Section ========== -->
-            <Label Text="FsEntry"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}" />
-
-            <!-- Material Theme: Show all variants -->
-            <VerticalStackLayout Spacing="12" IsVisible="{Binding IsMaterialTheme}">
-                <Label Text="Text input field with customizable border and styling"
-                       FontSize="14"
-                       TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
-                       Margin="0,0,0,8" />
-
-                <!-- Filled Entry (Default) -->
-                <fs:FsEntry Placeholder="Filled Entry (Default)"
-                            x:Name="FilledEntry"
-                            TextChanged="OnEntryTextChanged" />
-
-                <!-- Outlined Entry -->
-                <fs:FsEntry Placeholder="Outlined Entry"
-                            Style="{StaticResource OutlinedEntry}"
-                            x:Name="OutlinedEntry"
-                            TextChanged="OnEntryTextChanged" />
-
-                <!-- Entry with Text -->
-                <fs:FsEntry Placeholder="Entry with preset text"
-                            Text="Sample text content" />
-
-                <!-- Password Entry -->
-                <fs:FsEntry Placeholder="Password Entry"
-                            IsPassword="True" />
-
-                <!-- Disabled Entry -->
-                <fs:FsEntry Placeholder="Disabled Entry"
-                            IsEnabled="False"
-                            Text="This entry is disabled" />
-
-                <!-- Entry with Keyboard Types -->
-                <fs:FsEntry Placeholder="Email Entry"
-                            Keyboard="Email" />
-
-                <fs:FsEntry Placeholder="Numeric Entry"
-                            Keyboard="Numeric" />
-
-                <!-- Entry State Feedback -->
-                <Label x:Name="EntryFeedbackLabel"
-                       Text="Type in any entry to see feedback..."
-                       FontSize="12"
-                       TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
-                       Margin="0,8,0,0" />
-            </VerticalStackLayout>
-
-            <!-- Other Themes: Show base controls only -->
-            <VerticalStackLayout Spacing="12" IsVisible="{Binding IsNotMaterialTheme}">
-                <Label Text="Theme-styled text input field"
-                       FontSize="14"
-                       TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
-                       Margin="0,0,0,8" />
-
-                <!-- Default Entry -->
-                <fs:FsEntry Placeholder="Default Entry"
-                            x:Name="DefaultEntry"
-                            TextChanged="OnEntryTextChanged" />
-
-                <!-- Entry with Text -->
-                <fs:FsEntry Placeholder="Entry with preset text"
-                            Text="Sample text content" />
-
-                <!-- Password Entry -->
-                <fs:FsEntry Placeholder="Password Entry"
-                            IsPassword="True" />
-
-                <!-- Disabled Entry -->
-                <fs:FsEntry Placeholder="Disabled Entry"
-                            IsEnabled="False"
-                            Text="This entry is disabled" />
-
-                <!-- Entry with Keyboard Types -->
-                <fs:FsEntry Placeholder="Email Entry"
-                            Keyboard="Email" />
-
-                <!-- Entry State Feedback -->
-                <Label x:Name="EntryFeedbackLabelAlt"
-                       Text="Type in any entry to see feedback..."
-                       FontSize="12"
-                       TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
-                       Margin="0,8,0,0" />
-            </VerticalStackLayout>
-
-            <!-- Divider -->
-            <BoxView HeightRequest="1"
-                     BackgroundColor="{AppThemeBinding Light={DynamicResource Color.OutlineVariant}, Dark={DynamicResource Color.OutlineVariant.Dark}}"
-                     Margin="0,16" />
-
-            <!-- Footer Info -->
+                        <!-- Footer Info -->
             <fs:FsCard Style="{StaticResource OutlinedCard}">
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Token-Based Styling"
