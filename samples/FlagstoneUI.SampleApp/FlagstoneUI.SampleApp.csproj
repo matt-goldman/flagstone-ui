@@ -69,16 +69,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Include="Pages\ControlsShowcasePage.xaml.csbak">
-	    <DependentUpon>ControlsShowcasePage.xamlbak</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiXaml Include="Pages\ControlsShowcasePage.xamlbak" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\..\src\FlagstoneUI.Core\FlagstoneUI.Core.csproj" />
 		<ProjectReference Include="..\..\src\FlagstoneUI.Blocks\FlagstoneUI.Blocks.csproj" />
 		<ProjectReference Include="..\..\src\FlagstoneUI.Themes.Material\FlagstoneUI.Themes.Material.csproj" />
