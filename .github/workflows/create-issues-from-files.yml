@@ -1,0 +1,43 @@
+name: Create Issues From Markdown Files
+
+on:
+  push:
+    # When new files are added inside .github/issues
+    paths:
+      - ".github/issues/**"
+
+jobs:
+  create_issues:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Get list of added markdown files
+        id: added_files
+        run: |
+          echo "files=$(jq -r '.commits[].added[]' $GITHUB_EVENT_PATH | grep '.github/issues/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+
+      - name: Create issues from files
+        if: ${{ steps.added_files.outputs.files != '' }}
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          content-filepath: "" # Will be replaced dynamically per file below
+          title: "" # Will be replaced dynamically
+        continue-on-error: true  # So one bad file doesn't block the rest
+
+      # Our dynamic multi-file loop
+      - name: Loop over files and create an issue for each
+        if: ${{ steps.added_files.outputs.files != '' }}
+        run: |
+          for file in ${{ steps.added_files.outputs.files }}; do
+            echo "Creating issue from: $file"
+            gh issue create \
+              --title "$(basename "$file" .md)" \
+              --body-file "$file"
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+create-issues-fromfiles.yml
