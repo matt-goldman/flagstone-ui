@@ -6,7 +6,7 @@ namespace FlagstoneUI.Integrations.MCT.Behaviors;
 public static class ValidationBehaviorAdapter
 {
     public static BindableProperty ValidationBehaviorProperty = BindableProperty.CreateAttached(
-        "ValidationBehavior",
+        "ValidationAdapter",
         typeof(Behavior),
         typeof(ValidationBehaviorAdapter),
         null,
@@ -51,13 +51,13 @@ public static class ValidationBehaviorAdapter
 	/// Backing BindableProperty for the <see cref="ValidStyle"/> property.
 	/// </summary>
 	public static readonly BindableProperty ValidStyleProperty =
-        BindableProperty.Create(nameof(ValidStyle), typeof(Style), typeof(ValidationBehavior), propertyChanged: OnValidationPropertyChanged);
+        BindableProperty.Create(nameof(ValidStyle), typeof(Style), typeof(ValidationBehavior));//, propertyChanged: OnValidationPropertyChanged);
 
     /// <summary>
     /// Backing BindableProperty for the <see cref="InvalidStyle"/> property.
     /// </summary>
     public static readonly BindableProperty InvalidStyleProperty =
-        BindableProperty.Create(nameof(InvalidStyle), typeof(Style), typeof(ValidationBehavior), propertyChanged: OnValidationPropertyChanged);
+        BindableProperty.Create(nameof(InvalidStyle), typeof(Style), typeof(ValidationBehavior));//, propertyChanged: OnValidationPropertyChanged);
 
     /// <summary>
 	/// The <see cref="Style"/> to apply to the element when validation is successful. This is a bindable property.
