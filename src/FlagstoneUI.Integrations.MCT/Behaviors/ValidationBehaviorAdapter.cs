@@ -39,6 +39,16 @@ public class ValidationBehaviorAdapter : Behavior<FsEntry>
             typeof(ValidationBehaviorAdapter));
 
     /// <summary>
+    /// Backing BindableProperty for the <see cref="Flags"/> property.
+    /// </summary>
+    public static readonly BindableProperty FlagsProperty =
+        BindableProperty.Create(
+            nameof(Flags),
+            typeof(ValidationFlags),
+            typeof(ValidationBehaviorAdapter),
+            ValidationFlags.ValidateOnValueChanged);
+
+    /// <summary>
     /// The <see cref="ValidationBehavior"/> to adapt from the MAUI Community Toolkit.
     /// </summary>
     public ValidationBehavior? Behavior
@@ -63,6 +73,15 @@ public class ValidationBehaviorAdapter : Behavior<FsEntry>
     {
         get => (Style?)GetValue(InvalidStyleProperty);
         set => SetValue(InvalidStyleProperty, value);
+    }
+
+    /// <summary>
+    /// The <see cref="ValidationFlags"/> to control when validation occurs.
+    /// </summary>
+    public ValidationFlags Flags
+    {
+        get => (ValidationFlags)GetValue(FlagsProperty);
+        set => SetValue(FlagsProperty, value);
     }
 
     protected override void OnAttachedTo(FsEntry bindable)
@@ -114,7 +133,7 @@ public class ValidationBehaviorAdapter : Behavior<FsEntry>
 		}
 
 		_currentBehavior = Behavior;
-		_currentBehavior.Flags = ValidationFlags.ValidateOnValueChanged; // TODO: make configurable
+		_currentBehavior.Flags = Flags;
 		_innerEntry.Behaviors.Add(_currentBehavior);
 
         _currentBehavior.PropertyChanged += OnValidationBehaviorPropertyChanged;

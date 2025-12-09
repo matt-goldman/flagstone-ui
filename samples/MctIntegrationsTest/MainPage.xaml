@@ -54,7 +54,8 @@
               <int:ValidationBehaviorAdapter
                         ValidStyle="{StaticResource ValidStyle}"
                         InvalidStyle="{StaticResource InvalidStyle}"
-                        Behavior="{mct:EmailValidationBehavior}"/>
+                        Behavior="{mct:EmailValidationBehavior}"
+                        Flags="ValidateOnValueChanged"/>
             </fs:FsEntry.Behaviors>
       </fs:FsEntry>
     </VerticalStackLayout>
