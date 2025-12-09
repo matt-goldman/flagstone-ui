@@ -57,8 +57,8 @@
                         Behavior="{mct:EmailValidationBehavior}"
                         Flags="ValidateOnValueChanged"/>
             </fs:FsEntry.Behaviors>
-      </fs:FsEntry>
-    </VerticalStackLayout>
+        </fs:FsEntry>
+      </VerticalStackLayout>
     </ScrollView>
 
 </ContentPage>
