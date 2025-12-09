@@ -3,77 +3,159 @@ using FlagstoneUI.Core.Controls;
 
 namespace FlagstoneUI.Integrations.MCT.Behaviors;
 
-public static class ValidationBehaviorAdapter
+public class ValidationBehaviorAdapter : Behavior<FsEntry>
 {
-    public static BindableProperty ValidationBehaviorProperty = BindableProperty.CreateAttached(
-        "ValidationAdapter",
-        typeof(Behavior),
-        typeof(ValidationBehaviorAdapter),
-        null,
-        propertyChanged: OnValidationBehaviorChanged);
-
-    public static void SetValidationBehavior(BindableObject view, Behavior behavior)
-    {
-        view.SetValue(ValidationBehaviorProperty, behavior);
-    }
-
-    public static Behavior GetValidationBehavior(BindableObject view)
-    {
-        return (Behavior)view.GetValue(ValidationBehaviorProperty);
-    }
-
-    private static void OnValidationBehaviorChanged(BindableObject view, object oldValue, object newValue)
-    {
-        if (view is FsEntry fsEntry)
-        {
-            if (newValue is ValidationBehavior newBehavior)
-            {
-                var innerEntry = fsEntry.FindByName<Entry>("InnerEntry");
-
-                if (innerEntry is not null)
-                {
-                    innerEntry.Behaviors.Add(newBehavior);
-                    newBehavior.PropertyChanged += (s, e) =>
-                    {
-                        if (e.PropertyName == nameof(ValidationBehavior.IsValid))
-                        {
-                            // perform style switch
-                            VisualStateManager.GoToState(fsEntry, newBehavior.IsValid ? "Valid" : "Invalid");
-                            fsEntry.Style = newBehavior.IsValid ? ValidStyle : InvalidStyle;
-                        }
-                    };
-                }
-            }
-        }
-    }
+    private Entry? _innerEntry;
+    private ValidationBehavior? _currentBehavior;
+    private FsEntry? _fsEntry;
 
     /// <summary>
-	/// Backing BindableProperty for the <see cref="ValidStyle"/> property.
-	/// </summary>
-	public static readonly BindableProperty ValidStyleProperty =
-        BindableProperty.Create(nameof(ValidStyle), typeof(Style), typeof(ValidationBehavior));//, propertyChanged: OnValidationPropertyChanged);
+    /// Backing BindableProperty for the <see cref="Behavior"/> property.
+    /// </summary>
+    public static readonly BindableProperty BehaviorProperty =
+        BindableProperty.Create(
+            nameof(Behavior),
+            typeof(ValidationBehavior),
+            typeof(ValidationBehaviorAdapter),
+            null,
+            propertyChanged: OnBehaviorChanged);
+
+    /// <summary>
+    /// Backing BindableProperty for the <see cref="ValidStyle"/> property.
+    /// </summary>
+    public static readonly BindableProperty ValidStyleProperty =
+        BindableProperty.Create(
+            nameof(ValidStyle),
+            typeof(Style),
+            typeof(ValidationBehaviorAdapter));
 
     /// <summary>
     /// Backing BindableProperty for the <see cref="InvalidStyle"/> property.
     /// </summary>
     public static readonly BindableProperty InvalidStyleProperty =
-        BindableProperty.Create(nameof(InvalidStyle), typeof(Style), typeof(ValidationBehavior));//, propertyChanged: OnValidationPropertyChanged);
+        BindableProperty.Create(
+            nameof(InvalidStyle),
+            typeof(Style),
+            typeof(ValidationBehaviorAdapter));
 
     /// <summary>
-	/// The <see cref="Style"/> to apply to the element when validation is successful. This is a bindable property.
-	/// </summary>
-	public static Style? ValidStyle
+    /// The <see cref="ValidationBehavior"/> to adapt from the MAUI Community Toolkit.
+    /// </summary>
+    public ValidationBehavior? Behavior
+    {
+        get => (ValidationBehavior?)GetValue(BehaviorProperty);
+        set => SetValue(BehaviorProperty, value);
+    }
+
+    /// <summary>
+    /// The <see cref="Style"/> to apply to the FsEntry when validation is successful.
+    /// </summary>
+    public Style? ValidStyle
     {
         get => (Style?)GetValue(ValidStyleProperty);
         set => SetValue(ValidStyleProperty, value);
     }
 
     /// <summary>
-    /// The <see cref="Style"/> to apply to the element when validation fails. This is a bindable property.
+    /// The <see cref="Style"/> to apply to the FsEntry when validation fails.
     /// </summary>
-    public static Style? InvalidStyle
+    public Style? InvalidStyle
     {
         get => (Style?)GetValue(InvalidStyleProperty);
         set => SetValue(InvalidStyleProperty, value);
+    }
+
+    protected override void OnAttachedTo(FsEntry bindable)
+    {
+        base.OnAttachedTo(bindable);
+
+        _fsEntry = bindable;
+        _innerEntry = bindable.FindByName<Entry>("InnerEntry");
+
+        if (_innerEntry != null && Behavior != null)
+        {
+            AttachBehavior(bindable);
+        }
+    }
+
+    protected override void OnDetachingFrom(FsEntry bindable)
+    {
+        if (_innerEntry != null && _currentBehavior != null)
+        {
+            DetachBehavior(bindable);
+        }
+
+        _innerEntry = null;
+        _fsEntry = null;
+        base.OnDetachingFrom(bindable);
+    }
+
+    private static void OnBehaviorChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        if (bindable is ValidationBehaviorAdapter adapter && adapter._fsEntry != null)
+        {
+            if (oldValue is ValidationBehavior)
+            {
+                adapter.DetachBehavior(adapter._fsEntry);
+            }
+
+            if (newValue is ValidationBehavior)
+            {
+                adapter.AttachBehavior(adapter._fsEntry);
+            }
+        }
+    }
+
+    private void AttachBehavior(FsEntry fsEntry)
+    {
+        if (_innerEntry == null || Behavior == null)
+		{
+			return;
+		}
+
+		_currentBehavior = Behavior;
+		_currentBehavior.Flags = ValidationFlags.ValidateOnValueChanged; // TODO: make configurable
+		_innerEntry.Behaviors.Add(_currentBehavior);
+
+        _currentBehavior.PropertyChanged += OnValidationBehaviorPropertyChanged;
+
+        // Set initial state
+        UpdateValidationState(fsEntry, _currentBehavior.IsValid);
+    }
+
+    private void DetachBehavior(FsEntry fsEntry)
+    {
+        if (_innerEntry == null || _currentBehavior == null)
+		{
+			return;
+		}
+
+		_currentBehavior.PropertyChanged -= OnValidationBehaviorPropertyChanged;
+        _innerEntry.Behaviors.Remove(_currentBehavior);
+        _currentBehavior = null;
+    }
+
+    private void OnValidationBehaviorPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ValidationBehavior.IsValid) && 
+            sender is ValidationBehavior validationBehavior &&
+            _fsEntry != null)
+        {
+            UpdateValidationState(_fsEntry, validationBehavior.IsValid);
+        }
+    }
+
+    private void UpdateValidationState(FsEntry fsEntry, bool isValid)
+    {
+        VisualStateManager.GoToState(fsEntry, isValid ? "Valid" : "Invalid");
+
+        if (isValid && ValidStyle != null)
+        {
+            fsEntry.Style = ValidStyle;
+        }
+        else if (!isValid && InvalidStyle != null)
+        {
+            fsEntry.Style = InvalidStyle;
+        }
     }
 }
