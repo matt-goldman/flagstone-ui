@@ -10,13 +10,13 @@
     Title="FlagstoneUI.SampleApp"
     FlyoutBehavior="Disabled">
 
-    
+
 
     <!-- Default content - Controls Showcase -->
-    <!--<ShellContent
+    <ShellContent
         Title="Controls Showcase"
         ContentTemplate="{DataTemplate page:ControlsShowcasePage}"
-        Route="ControlsShowcase" />-->
+        Route="ControlsShowcase" />
 
     <!-- Hidden routes for future use -->
     <!--

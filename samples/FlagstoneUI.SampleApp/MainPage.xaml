@@ -39,9 +39,9 @@
                 SemanticProperties.HeadingLevel="Level2" />
 
             <fs:FsEntry Placeholder="Enter your email"
-            x:Name="ValidatedEntry">
+                        x:Name="ValidatedEntry">
                 <fs:FsEntry.Behaviors>
-                    <toolkit:EmailValidationBehavior 
+                    <toolkit:EmailValidationBehavior
             InvalidStyle="{DynamicResource InvalidFsEntryStyle}"
             ValidStyle="{DynamicResource ValidFsEntryStyle}"
             ValuePropertyName="Text"
