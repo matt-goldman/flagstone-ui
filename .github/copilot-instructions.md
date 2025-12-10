@@ -7,18 +7,22 @@ This guide helps AI coding agents work productively in the Flagstone UI codebase
 - **Flagstone UI** is a cross-platform, open-source UI kit and framework for .NET MAUI.
 - The repo is organized into modular projects for core controls, themes, blocks (app screens), samples, and tests.
 - **Current Status**: Proof of Concept (POC) at ~60% completion. MVP milestone will follow POC validation.
-- **Core Controls Implemented**: FsButton, FsCard, FsEntry
+- **Core Controls Implemented**: FsButton, FsCard, FsEntry, FsEditor
 - **Theme Configuration**: Via merged ResourceDictionaries in App.xaml (no builder pattern - YAGNI)
+- **MCT Integration**: Optional `FlagstoneUI.Integrations.MCT` package provides ValidationBehaviorAdapter and FsEditorBorderAnimation
 
 ## Key Directories & Components
 
 - `src/FlagstoneUI.Core/`: Core UI library. Key areas:
 	- `Builders/FlagstoneUIBuilder.cs`: minimal builder class (may be removed - not required for theme configuration).
-	- `Controls/`: custom controls (FsButton, FsCard, FsEntry implemented).
+	- `Controls/`: custom controls (FsButton, FsCard, FsEntry, FsEditor implemented).
 	- `Styles/Tokens.xaml`: token dictionary (colors, spacing, typography) used via `DynamicResource`.
 	- `Themes/ThemeLoader.cs`: utility for theme registration (themes configured via merged dictionaries in App.xaml).
 - `src/FlagstoneUI.Themes.Material/`: Material theme library with `Theme.xaml`.
 - `src/FlagstoneUI.Themes.Modern/`: Modern theme library (planned).
+- `src/FlagstoneUI.Integrations.MCT/`: Optional MAUI Community Toolkit integrations:
+	- `Behaviors/ValidationBehaviorAdapter.cs`: Adapter for using MCT validation behaviors with FsEntry.
+	- `Animations/FsEditorBorderAnimation.cs`: Animated gradient border effects for FsEditor.
 - `src/FlagstoneUI.Blocks/`: Reusable app screens (CRUD, auth, settings) - planned for MVP, currently minimal content.
 - `samples/`: Sample apps for manual testing:
 	- `FlagstoneUI.SampleApp/`: Main sample application
@@ -107,7 +111,8 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 
 - **.NET MAUI**: This UI library targets .NET 10 frameworks (`net10.0-android`, `net10.0-ios`, `net10.0-windows10.0.19041.0`) and integrates with .NET MAUI applications.
 - **Theme Configuration**: Themes are configured via merged ResourceDictionaries in App.xaml (no builder pattern - YAGNI). Example: `<material:Theme />`
-- **CommunityToolkit.Maui**: Optional integration (not a required dependency). Currently commented out in Directory.Build.props.
+- **CommunityToolkit.Maui**: Optional integration via `FlagstoneUI.Integrations.MCT` package (not a core dependency). MCT is commented out in Directory.Build.props for core library but included in the integrations package.
+- **MCT Integrations**: `ValidationBehaviorAdapter` for FsEntry validation, `FsEditorBorderAnimation` for animated borders. See `docs/mct-integrations.md`.
 - **Resource dictionaries**: Themes reference core tokens using typed syntax with x:Class and code-behind (see ADR004).
 - **DynamicResource**: Use token keys (e.g., `Color.Primary`) in theme styles: `<Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />`.
 - **Package management**: Central package version management via Directory.Build.props with consistent versioning across all library projects.
