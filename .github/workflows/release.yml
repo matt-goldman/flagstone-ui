@@ -215,15 +215,21 @@ jobs:
             PACKAGE_URL="https://api.nuget.org/v3-flatcontainer/$PACKAGE_ID_LOWER/${{ needs.generate-version.outputs.new_version }}/$PACKAGE_ID_LOWER.${{ needs.generate-version.outputs.new_version }}.nupkg"
 
             echo "Polling for: $PACKAGE_URL"
+            PACKAGE_FOUND=0
             for i in {1..30}; do
             if curl --head --silent --fail "$PACKAGE_URL" > /dev/null; then
                 echo "Package available!"
+                PACKAGE_FOUND=1
                 break
             fi
             echo "Not yet available... retrying in 10s"
             sleep 10
             done
 
+            if [ "$PACKAGE_FOUND" -ne 1 ]; then
+              echo "ERROR: Package $PACKAGE_URL was not available after 5 minutes (30 retries). Failing workflow."
+              exit 1
+            fi
             echo "Done waiting (or max retries reached)"
 
       - name: Install workloads
