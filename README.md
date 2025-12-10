@@ -99,7 +99,7 @@ dotnet add package FlagstoneUI.Themes.Material --version 0.0.1-preview1
 
 **The challenge:** Many visual properties aren't exposed in the .NET MAUI API. For example, for a colored border on a text input you'll need custom handlers for iOS, Android, and Windows, each with platform-specific code.
 
-**Flagstone's solution:** Enhanced controls that expose these properties as simple XAML attributes. Write once, works everywhere.
+**Flagstone's solution:** Enhanced controls that expose these properties as simple control properties, editable in XAML, C#, or as themes in resource dictionaries. Write once, works everywhere.
 
 **Example:**
 
