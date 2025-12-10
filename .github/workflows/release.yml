@@ -6,6 +6,25 @@ on:
     paths:
       - 'src/**'
   workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release type'
+        required: true
+        type: choice
+        options:
+          - preview
+          - release
+          - norelease
+        default: preview
+      bump_type:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+        default: patch
 
 permissions:
   contents: write
@@ -24,47 +43,84 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get last merged PR labels
+      - name: Determine release configuration
         id: prlabels
         run: |
-          PR=$(gh pr list --state merged --base main --limit 1 --json number --jq '.[0].number')
-          LABELS=$(gh pr view $PR --json labels --jq '[.labels[].name]')
-          echo "PR_NUMBER=$PR" >> $GITHUB_ENV
-          echo "LABELS=$LABELS" >> $GITHUB_ENV
+          # Check if triggered manually via workflow_dispatch
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "🔧 Manual workflow dispatch detected"
+            echo "Using inputs: release_type=${{ inputs.release_type }}, bump_type=${{ inputs.bump_type }}"
 
-          # Fail if both preview and release are set
-          if [[ "$LABELS" == *"preview"* && "$LABELS" == *"release"* ]]; then
-            echo "❌ Both 'preview' and 'release' labels present. Only one allowed."
-            exit 1
-          fi
+            # Use workflow inputs instead of PR labels
+            RELEASE_TYPE="${{ inputs.release_type }}"
+            BUMP_TYPE="${{ inputs.bump_type }}"
 
-          # Fail if neither preview nor release is set
-          if [[ "$LABELS" != *"preview"* && "$LABELS" != *"release"*  && "$LABELS" != *"norelease"* ]]; then
-            echo "❌ PR must have 'preview', 'release' or 'norelease' label."
-            exit 1
-          fi
+            # Set PRERELEASE based on release_type input
+            if [[ "$RELEASE_TYPE" == "preview" ]]; then
+              echo "PRERELEASE=true" >> $GITHUB_ENV
+            else
+              echo "PRERELEASE=false" >> $GITHUB_ENV
+            fi
 
-          # Set PRERELEASE
-          if [[ "$LABELS" == *"preview"* ]]; then
-            echo "PRERELEASE=true" >> $GITHUB_ENV
+            # Set BUMP from input
+            echo "BUMP=$BUMP_TYPE" >> $GITHUB_ENV
+
+            # Set NORELEASE based on release_type input
+            if [[ "$RELEASE_TYPE" == "norelease" ]]; then
+              echo "NORELEASE=true" >> $GITHUB_ENV
+            else
+              echo "NORELEASE=false" >> $GITHUB_ENV
+            fi
           else
-            echo "PRERELEASE=false" >> $GITHUB_ENV
-          fi
+            echo "🔄 Push event detected - checking last merged PR"
 
-          # Set bump type
-          if [[ "$LABELS" == *"Semver-Major"* ]]; then
-            echo "BUMP=major" >> $GITHUB_ENV
-          elif [[ "$LABELS" == *"Semver-Minor"* ]]; then
-            echo "BUMP=minor" >> $GITHUB_ENV
-          else
-            echo "BUMP=patch" >> $GITHUB_ENV
-          fi
+            # Get last merged PR
+            PR=$(gh pr list --state merged --base main --limit 1 --json number --jq '.[0].number')
 
-          # Set NORELEASE
-          if [[ "$LABELS" == *"norelease"* ]]; then
-            echo "NORELEASE=true" >> $GITHUB_ENV
-          else
-            echo "NORELEASE=false" >> $GITHUB_ENV
+            # Check if PR was found
+            if [[ -z "$PR" || "$PR" == "null" ]]; then
+              echo "❌ No recently merged PR found. For push events, a merged PR with labels is required."
+              exit 1
+            fi
+
+            LABELS=$(gh pr view $PR --json labels --jq '[.labels[].name]')
+            echo "PR_NUMBER=$PR" >> $GITHUB_ENV
+            echo "LABELS=$LABELS" >> $GITHUB_ENV
+
+            # Fail if both preview and release are set
+            if [[ "$LABELS" == *"preview"* && "$LABELS" == *"release"* ]]; then
+              echo "❌ Both 'preview' and 'release' labels present. Only one allowed."
+              exit 1
+            fi
+
+            # Fail if neither preview nor release is set
+            if [[ "$LABELS" != *"preview"* && "$LABELS" != *"release"*  && "$LABELS" != *"norelease"* ]]; then
+              echo "❌ PR must have 'preview', 'release' or 'norelease' label."
+              exit 1
+            fi
+
+            # Set PRERELEASE
+            if [[ "$LABELS" == *"preview"* ]]; then
+              echo "PRERELEASE=true" >> $GITHUB_ENV
+            else
+              echo "PRERELEASE=false" >> $GITHUB_ENV
+            fi
+
+            # Set bump type
+            if [[ "$LABELS" == *"Semver-Major"* ]]; then
+              echo "BUMP=major" >> $GITHUB_ENV
+            elif [[ "$LABELS" == *"Semver-Minor"* ]]; then
+              echo "BUMP=minor" >> $GITHUB_ENV
+            else
+              echo "BUMP=patch" >> $GITHUB_ENV
+            fi
+
+            # Set NORELEASE
+            if [[ "$LABELS" == *"norelease"* ]]; then
+              echo "NORELEASE=true" >> $GITHUB_ENV
+            else
+              echo "NORELEASE=false" >> $GITHUB_ENV
+            fi
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -88,7 +144,7 @@ jobs:
         id: get_latest_tag
         if: env.PRERELEASE == 'true' && env.NORELEASE != 'true'
         run: |
-          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "3.0.0")
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.1")
           echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
 
       - name: Calculate Preview Version
@@ -215,15 +271,21 @@ jobs:
             PACKAGE_URL="https://api.nuget.org/v3-flatcontainer/$PACKAGE_ID_LOWER/${{ needs.generate-version.outputs.new_version }}/$PACKAGE_ID_LOWER.${{ needs.generate-version.outputs.new_version }}.nupkg"
 
             echo "Polling for: $PACKAGE_URL"
+            PACKAGE_FOUND=0
             for i in {1..30}; do
             if curl --head --silent --fail "$PACKAGE_URL" > /dev/null; then
                 echo "Package available!"
+                PACKAGE_FOUND=1
                 break
             fi
             echo "Not yet available... retrying in 10s"
             sleep 10
             done
 
+            if [ "$PACKAGE_FOUND" -ne 1 ]; then
+              echo "ERROR: Package $PACKAGE_URL was not available after 5 minutes (30 retries). Failing workflow."
+              exit 1
+            fi
             echo "Done waiting (or max retries reached)"
 
       - name: Install workloads
