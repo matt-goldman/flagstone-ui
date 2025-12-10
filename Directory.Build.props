@@ -51,7 +51,7 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(IsPackable)' != 'false'">
     <None Include="$(MSBuildThisFileDirectory)assets/icon.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
