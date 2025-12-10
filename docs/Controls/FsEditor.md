@@ -176,33 +176,6 @@ Editors can be styled globally through themes:
     <Setter Property="Padding" Value="16,12" />
     <Setter Property="MinimumHeightRequest" Value="88" />
 </Style>
-
-<!-- AI Editor Style (with custom gradient border animation - requires MCT integration) -->
-<Style TargetType="fs:FsEditor" x:Key="AiEditorStyle">
-    <Setter Property="Background">
-        <Setter.Value>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#1A1A2E" Offset="0.0" />
-                <GradientStop Color="#16213E" Offset="1.0" />
-            </LinearGradientBrush>
-        </Setter.Value>
-    </Setter>
-    <Setter Property="BorderBrush">
-        <Setter.Value>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="Gold" Offset="0.0" />
-                <GradientStop Color="Goldenrod" Offset="0.5" />
-                <GradientStop Color="Gold" Offset="1.0" />
-            </LinearGradientBrush>
-        </Setter.Value>
-    </Setter>
-    <Setter Property="BorderWidth" Value="2" />
-    <Setter Property="CornerRadius" Value="8" />
-    <Setter Property="TextColor" Value="White" />
-    <Setter Property="PlaceholderColor" Value="LightGray" />
-    <Setter Property="Padding" Value="16,12" />
-    <Setter Property="MinimumHeightRequest" Value="88" />
-</Style>
 ```
 
 ## Events
@@ -245,21 +218,7 @@ private void OnEditorUnfocused(object sender, EventArgs e)
 
 ## Integration with MAUI Community Toolkit
 
-`FsEditor` works seamlessly with MCT animations and behaviors through the optional `FlagstoneUI.Integrations.MCT` package.
-
-### Animated Border Example
-
-See the [MCT Integrations documentation](../mct-integrations.md) for details on using `FsEditorBorderAnimation` to create animated gradient borders.
-
-```xaml
-<!-- AI-style editor with animated gradient border -->
-<fs:FsEditor 
-    x:Name="AiEditor"
-    Placeholder="🤖 Ask me anything..."
-    Style="{DynamicResource AiEditorStyle}"
-    Focused="OnAiEditorFocused"
-    Unfocused="OnAiEditorUnfocused" />
-```
+`FsEditor` works seamlessly with MCT animations and behaviors through the optional `FlagstoneUI.Integrations.MCT` package. See the [MCT Integrations documentation](../mct-integrations.md) for details on using `FsEditorBorderAnimation` to create animated gradient borders and other integration features.
 
 ## Best Practices
 
@@ -307,35 +266,24 @@ See the [MCT Integrations documentation](../mct-integrations.md) for details on 
 </fs:FsCard>
 ```
 
-## Example: AI Chat Input
+## Example: Chat-Style Input
 
-The Editor control can be used to create chat-style inputs. See the sample app for a complete AI-style editor with animated border:
+The Editor control is well-suited for chat or messaging interfaces:
 
 ```xaml
-<Grid>
-    <fs:FsEditor 
-        Placeholder="🤖 Ask me anything..."
-        x:Name="AiEditor"
-        Style="{DynamicResource AiEditorStyle}"
-        Focused="AiEditor_OnFocused"
-        Unfocused="AiEditor_OnUnfocused" />
-    
-    <Button 
-        Background="Goldenrod"
-        CornerRadius="5"
-        HorizontalOptions="End"
-        VerticalOptions="End"
-        Margin="5,10">
-        <Button.ImageSource>
-            <FontImageSource 
-                FontFamily="FluentIcons"
-                Glyph="{DynamicResource IconSparkle}"
-                Size="48"
-                Color="Gold" />
-        </Button.ImageSource>
-    </Button>
-</Grid>
+<fs:FsEditor 
+    Placeholder="Type a message..."
+    Text="{Binding MessageText}"
+    BorderBrush="{DynamicResource Color.Outline}"
+    BorderWidth="1"
+    CornerRadius="20"
+    Padding="12,8"
+    MinimumHeightRequest="44"
+    MaximumHeightRequest="120"
+    AutoSize="TextChanges" />
 ```
+
+For advanced chat UI examples with animated borders, see the [MCT Integrations documentation](../mct-integrations.md).
 
 ## Platform Support
 
