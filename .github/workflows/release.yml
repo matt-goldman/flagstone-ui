@@ -292,11 +292,11 @@ jobs:
         run: dotnet workload install maui
 
       - name: Build Material Theme
-        run: dotnet build src\FlagstoneUI.MaterialTheme\FlagstoneUI.MaterialTheme.csproj --configuration Release -p:FlagstoneUICoreVersion=${{ needs.generate-version.outputs.new_version }}
+        run: dotnet build src\FlagstoneUI.Themes.Material\FlagstoneUI.Themes.Material.csproj --configuration Release -p:FlagstoneUICoreVersion=${{ needs.generate-version.outputs.new_version }}
 
       - name: Pack Material Theme
         run: |
-          dotnet pack src\FlagstoneUI.MaterialTheme\FlagstoneUI.MaterialTheme.csproj `
+          dotnet pack src\FlagstoneUI.Themes.Material\FlagstoneUI.Themes.Material.csproj `
             --configuration Release `
             --no-build `
             -p:PackageVersion=${{ needs.generate-version.outputs.new_version }} `
