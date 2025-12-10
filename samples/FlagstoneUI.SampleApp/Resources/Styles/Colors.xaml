@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <?xaml-comp compile="true" ?>
-<ResourceDictionary 
+<ResourceDictionary
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="FlagstoneUI.SampleApp.Resources.Styles.Colors">
@@ -43,4 +43,37 @@
     <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
+
+    <LinearGradientBrush x:Key="AiGradientBrush"
+                         StartPoint="0,0"
+                         EndPoint="1,1">
+        <GradientStop Color="Yellow"
+                      Offset="0.0" />
+        <GradientStop Color="Pink"
+                      Offset="0.15" />
+        <GradientStop Color="Blue"
+                      Offset="0.3" />
+        <GradientStop Color="Red"
+                      Offset="0.45" />
+        <GradientStop Color="Orange"
+                      Offset="0.6" />
+        <GradientStop Color="LimeGreen"
+                      Offset="0.75" />
+        <GradientStop Color="Plum"
+                      Offset="1.0" />
+    </LinearGradientBrush>
+
+    <!-- Gradient stop colors for gold gradient button -->
+    <Color x:Key="GoldGradientStart">#FFD700</Color>
+    <Color x:Key="GoldGradientMiddle">#FFB800</Color>
+    <Color x:Key="GoldGradientEnd">#FF8C00</Color>
+
+    <LinearGradientBrush x:Key="GoldGradientBrush"
+                         StartPoint="0,0"
+                         EndPoint="1,1">
+        <GradientStop Color="{StaticResource GoldGradientStart}" Offset="0.0" />
+        <GradientStop Color="{StaticResource GoldGradientMiddle}" Offset="0.5" />
+        <GradientStop Color="{StaticResource GoldGradientEnd}" Offset="1.0" />
+    </LinearGradientBrush>
+
 </ResourceDictionary>

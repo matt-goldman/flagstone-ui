@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <?xaml-comp compile="true" ?>
-<ResourceDictionary 
+<ResourceDictionary
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
     x:Class="FlagstoneUI.SampleApp.Resources.Styles.Styles">
 
     <Style TargetType="ActivityIndicator">
@@ -386,7 +387,7 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
-  
+
     <!--
     <Style TargetType="TitleBar">
         <Setter Property="MinimumHeightRequest" Value="32"/>
@@ -410,6 +411,22 @@
         </Setter>
     </Style>
     -->
+
+    <Style TargetType="fs:FsEditor" x:Key="AiEditorStyle">
+        <Setter Property="Background">
+        <Setter.Value>
+            <SolidColorBrush Color="{DynamicResource Color.Surface}" />
+        </Setter.Value>
+        </Setter>
+        <Setter Property="TextColor" Value="{DynamicResource Color.OnSurface}" />
+        <Setter Property="PlaceholderColor" Value="{DynamicResource Color.OnSurfaceVariant}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSize.BodyMedium}" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="MinimumHeightRequest" Value="120" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AiGradientBrush}" />
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+    </Style>
 
     <Style TargetType="Page" ApplyToDerivedTypes="True">
         <Setter Property="Padding" Value="0"/>

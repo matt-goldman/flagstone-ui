@@ -154,15 +154,36 @@
                      Margin="0,0,0,8" />
 
               <fs:FsEditor Placeholder="Enter multi-line text here"
-                            TextChanged="OnEditorTextChanged"
                             x:Name="MultiLineEditor"
                             Style="{DynamicResource OutlinedEditor}" />
 
+              <Grid>
+                     <fs:FsEditor Placeholder="🤖 Ask me anything..."
+                            x:Name="AiEditor"
+                            Focused="AiEditor_OnFocused"
+                            Unfocused="AiEditor_OnUnfocused"
+                            Style="{DynamicResource AiEditorStyle}" />
+
+                     <Button Background="Goldenrod"
+                             CornerRadius="5"
+                             BorderWidth="0"
+                             HorizontalOptions="End"
+                             VerticalOptions="End"
+                             Margin="5,10">
+                       <Button.ImageSource>
+                         <FontImageSource FontFamily="FluentIcons"
+                                          Glyph="{DynamicResource IconSparkle}"
+                                          Size="48"
+                                          Color="Gold"/>
+                       </Button.ImageSource>
+                     </Button>
+
+              </Grid>
 
               <!-- Divider -->
             <BoxView HeightRequest="1"
                      BackgroundColor="{AppThemeBinding Light={DynamicResource Color.OutlineVariant}, Dark={DynamicResource Color.OutlineVariant.Dark}}"
-
+                     Margin="0,16" />
 
             <!-- ========== FsButton Section ========== -->
             <Label Text="FsButton"

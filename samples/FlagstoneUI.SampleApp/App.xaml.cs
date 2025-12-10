@@ -29,6 +29,7 @@ public partial class App : Application
 		// re-add default styles and colors
 		Current!.Resources.MergedDictionaries.Add(new Resources.Styles.Colors());
         Current.Resources.MergedDictionaries.Add(new Styles());
+        Current.Resources.MergedDictionaries.Add(new Icons());
 
         Current.Resources.MergedDictionaries.Add(newTheme.Tokens);
     }
