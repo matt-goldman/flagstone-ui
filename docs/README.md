@@ -41,13 +41,21 @@ Welcome to the Flagstone UI documentation! This directory contains comprehensive
 
 - **[FsButton](Controls/FsButton.md)** - Button control
 - **[FsCard](Controls/FsCard.md)** - Card container control
-- **[FsEntry](Controls/FsEntry.md)** - Text entry control
+- **[FsEntry](Controls/FsEntry.md)** - Single-line text entry control
+- **[FsEditor](Controls/FsEditor.md)** - Multi-line text editor control
 
 ## Architecture & Technical Documentation
 
 - **[Architecture Overview](architecture.md)** - System architecture and design decisions
 - **[Control Implementation Guide](control-implementation-guide.md)** - Guide for implementing new controls
 - **[Roadmap](roadmap.md)** - Project roadmap and planned features
+
+## Integrations
+
+- **[MAUI Community Toolkit Integration](mct-integrations.md)** - Optional MCT integration package
+  - ValidationBehaviorAdapter for FsEntry
+  - FsEditorBorderAnimation for animated borders
+  - Examples and best practices
 
 ## Advanced Topics
 
