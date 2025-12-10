@@ -1,19 +1,18 @@
 <div align="center">
-  <img src="assets/logov1.svg" alt="Flagstone UI Logo" width="400" height="400">
-  <h1>Flagstone UI</h1>
-  <p><strong>A customisable UI framework for .NET MAUI</strong></p>
-  <h2>⚠️ WARNING! Experimental ⚠️</h2>
+  <img src="assets/logov1.svg" alt="FlagstoneUI Logo" width="200" height="200">
+  <h1>FlagstoneUI</h1>
+  <p><strong>Complete visual control over .NET MAUI apps—no platform-specific code required</strong></p>
 </div>
 
-**Bootstrap for .NET MAUI.** A token-based theming system that makes it easy to create beautiful, consistent UIs without deep platform knowledge.
+.NET MAUI gives you cross-platform UI, but many visual properties—borders, corner radius, background colors on inputs—require custom handlers for each platform. **FlagstoneUI changes that.**
+
+Get full control over how your app looks, with simple properties that work everywhere, that you can style in XAML or C#. Create consistent, themeable designs without touching platform-specific code. Change your entire app's appearance by swapping a single theme file.
+
+> **⚠️ Note:** This is an early experimental project. It's functional and available for testing, but expect changes as it evolves.
 
 ![Demo Video](assets/Flagstone-UI.gif)
 
-## Current Status: Experimental POC
-
-Flagstone UI is an early prototype exploring a theming system for .NET MAUI apps. It provides a foundation for defining design tokens (colors, spacing, typography) and applying them to enhanced MAUI controls via XAML resource dictionaries.
-
-It's available now for testing and experimentation, but there's still a lot to do. Available now:
+## What's Available Now
 
 * Four core controls: `FsButton`, `FsEntry`, `FsCard`, `FsEditor`
 * Material theme `*`
@@ -46,7 +45,7 @@ Or reference the `FlagstoneUI.Core` project in your own MAUI app to start themin
 ### NuGet Package (Preview)
 
 ```bash
-# Install Flagstone UI Core package
+# Install FlagstoneUI Core package
 dotnet add package FlagstoneUI.Core --version 0.0.1-preview1
 
 # (Optional) Install MAUI Community Toolkit integration package
@@ -71,8 +70,11 @@ dotnet add package FlagstoneUI.Themes.Material --version 0.0.1-preview1
     BackgroundColor="{DynamicResource Color.Surface}"
     BorderColor="{DynamicResource Color.Border}">
     <FsEntry.Behaviors>
-        <toolkit:EmailValidationBehavior />
-    </FsEntry.Behaviors>
+          <ValidationBehaviorAdapter ValidStyle="{StaticResource ValidStyle}"
+                                     InvalidStyle="{StaticResource InvalidStyle}"
+                                     Behavior="{EmailValidationBehavior}"
+                                     Flags="ValidateOnValueChanged" />
+        </FsEntry.Behaviors>
 </FsEntry>
 
 <!-- Card container with theme tokens -->
@@ -86,24 +88,20 @@ dotnet add package FlagstoneUI.Themes.Material --version 0.0.1-preview1
 
 **Note:** Above assumes you're using [XAML global and implicit namespaces](https://learn.microsoft.com/dotnet/maui/whats-new/dotnet-10?view=net-maui-10.0#implicit-and-global-xml-namespaces). Without that you would consume these with a namespace prefix like `<fs:FsButton>...</fs:FsButton>`.
 
-## Key Concepts
+## How It Works
 
-**Design Tokens** → Define your design system once (colors, spacing, typography, shapes)
-**Theme Files** → Apply tokens to controls via XAML resource dictionaries
-**Flagstone Controls** → Enhanced MAUI controls that expose themable properties
+1. **Enhanced Controls** → Use `FsButton`, `FsEntry`, `FsCard`, etc. with full visual property control
+2. **Design Tokens** → Define your design system once (colors, spacing, typography, shapes)
+3. **Theme Files** → Apply consistent styling across your app with XAML resource dictionaries
+4. **Swap Themes** → Change your entire app's look by switching theme files
 
-Think of it like Bootstrap for web dev: you're still using standard HTML elements, but with consistent, customizable styling.
+## Why FlagstoneUI?
 
-## Why Flagstone UI?
+**The challenge:** Many visual properties aren't exposed in the .NET MAUI API. For example, for a colored border on a text input you'll need custom handlers for iOS, Android, and Windows, each with platform-specific code.
 
-| Without Flagstone | With Flagstone |
-|------------------|----------------|
-| Write platform-specific handlers for styling | Use XAML properties that work everywhere |
-| Different code for iOS/Android/Windows borders | One `BorderColor` property |
-| Scattered styling across codebehind | Centralized theme tokens |
-| Reinvent styling for each app | Reusable, shareable themes |
+**Flagstone's solution:** Enhanced controls that expose these properties as simple XAML attributes. Write once, works everywhere.
 
-**Example:** Getting a rounded, bordered text entry:
+**Example:**
 
 ```xml
 <!-- Traditional MAUI: requires custom handlers for each platform -->
@@ -120,30 +118,27 @@ Think of it like Bootstrap for web dev: you're still using standard HTML element
     BorderWidth="2" />
 ```
 
-**Pairs perfectly with [MAUI Community Toolkit](https://github.com/CommunityToolkit/Maui)** - Flagstone handles theming, MCT provides behaviors/converters.
+**Bonus:** Theme your entire app with design tokens—like Bootstrap's approach to theming, but for native mobile apps. Change colors, spacing, and typography across your whole app by swapping one theme file.
 
-**Learn more:** [Architecture](docs/architecture.md) | [Technical Plan](docs/technical-plan.md)
+**Pairs perfectly with [MAUI Community Toolkit](https://github.com/CommunityToolkit/Maui)** - FlagstoneUI handles visual styling, MCT provides behaviors and converters.
 
-## Current Status
+**Learn more:** [Architecture](docs/architecture.md) | [Roadmap](docs/roadmap.md)
 
-**🎯 Available Now:**
-- ✅ Token system foundation
+## Development Status
+
+**Available now:**
 - ✅ Four core controls: `FsButton`, `FsEntry`, `FsCard`, `FsEditor`
-- ✅ Material theme included
-- ✅ Sample app with multiple themes
+- ✅ Token-based theming system
+- ✅ Material theme + sample app with theme variations
+- ✅ MAUI Community Toolkit integration
 - ✅ [Complete documentation](docs/README.md)
 
-**🚧 In Progress:**
-- 🔨 Additional controls (labels, lists, navigation)
-- 🔨 Bootstrap theme converter (convert web design systems to Flagstone themes)
-- 🔨 AI-powered theme generation tooling
+**Coming soon:**
+- Additional controls (labels, lists, navigation)
+- Theme conversion tools (Bootstrap CSS → Flagstone themes)
+- AI-powered theme generation
 
-**🔮 Planned:**
-- Visual theme generator (web & native)
-- Theme sharing gallery
-- Figma/~~Adobe XD~~ to Flagstone converters
-
-See the full [roadmap](docs/roadmap.md) for details.
+See the [roadmap](docs/roadmap.md) for details.
 
 ## Project Structure
 
@@ -160,7 +155,7 @@ flagstone-ui/
 └── tools/                         # AI tooling & converters
 ```
 
-**Note**: The Blocks project will contain common UI building blocks (signup/signin forms, basic CRUD, etc.) and is planned as an extension for the MVP milestone. Currently at POC stage.
+**Note**: The Blocks (in progress) project will contain common UI building blocks (signup/signin forms, basic CRUD, etc.) and is planned as an extension for the MVP milestone. Currently at POC stage.
 
 ## Contributing
 
