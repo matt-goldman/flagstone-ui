@@ -1,17 +1,372 @@
 name: Release
 
 on:
-  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release type'
+        required: true
+        type: choice
+        options:
+          - preview
+          - release
+          - norelease
+        default: preview
+      bump_type:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+        default: patch
+
+permissions:
+  contents: write
+  packages: write
 
 jobs:
-  build:
-    runs-on: windows-latest
+
+  generate-version:
+    runs-on: ubuntu-latest
+    outputs:
+      new_version: ${{ steps.tag_bump_release.outputs.new_tag || steps.tag_bump_preview.outputs.new_tag }}
+      NORELEASE: ${{ steps.check_norelease.outputs.norelease }}
+
     steps:
       - uses: actions/checkout@v4
-      - name: Set up .NET 10 SDK
+        with:
+          fetch-depth: 0
+
+      - name: Determine release configuration
+        id: prlabels
+        run: |
+          # Check if triggered manually via workflow_dispatch
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "🔧 Manual workflow dispatch detected"
+            echo "Using inputs: release_type=${{ inputs.release_type }}, bump_type=${{ inputs.bump_type }}"
+
+            # Use workflow inputs instead of PR labels
+            RELEASE_TYPE="${{ inputs.release_type }}"
+            BUMP_TYPE="${{ inputs.bump_type }}"
+
+            # Set PRERELEASE based on release_type input
+            if [[ "$RELEASE_TYPE" == "preview" ]]; then
+              echo "PRERELEASE=true" >> $GITHUB_ENV
+            else
+              echo "PRERELEASE=false" >> $GITHUB_ENV
+            fi
+
+            # Set BUMP from input
+            echo "BUMP=$BUMP_TYPE" >> $GITHUB_ENV
+
+            # Set NORELEASE based on release_type input
+            if [[ "$RELEASE_TYPE" == "norelease" ]]; then
+              echo "NORELEASE=true" >> $GITHUB_ENV
+            else
+              echo "NORELEASE=false" >> $GITHUB_ENV
+            fi
+          else
+            echo "🔄 Push event detected - checking last merged PR"
+
+            # Get last merged PR
+            PR=$(gh pr list --state merged --base main --limit 1 --json number --jq '.[0].number')
+
+            # Check if PR was found
+            if [[ -z "$PR" || "$PR" == "null" ]]; then
+              echo "❌ No recently merged PR found. For push events, a merged PR with labels is required."
+              exit 1
+            fi
+
+            LABELS=$(gh pr view $PR --json labels --jq '[.labels[].name]')
+            echo "PR_NUMBER=$PR" >> $GITHUB_ENV
+            echo "LABELS=$LABELS" >> $GITHUB_ENV
+
+            # Fail if both preview and release are set
+            if [[ "$LABELS" == *"preview"* && "$LABELS" == *"release"* ]]; then
+              echo "❌ Both 'preview' and 'release' labels present. Only one allowed."
+              exit 1
+            fi
+
+            # Fail if neither preview nor release is set
+            if [[ "$LABELS" != *"preview"* && "$LABELS" != *"release"*  && "$LABELS" != *"norelease"* ]]; then
+              echo "❌ PR must have 'preview', 'release' or 'norelease' label."
+              exit 1
+            fi
+
+            # Set PRERELEASE
+            if [[ "$LABELS" == *"preview"* ]]; then
+              echo "PRERELEASE=true" >> $GITHUB_ENV
+            else
+              echo "PRERELEASE=false" >> $GITHUB_ENV
+            fi
+
+            # Set bump type
+            if [[ "$LABELS" == *"Semver-Major"* ]]; then
+              echo "BUMP=major" >> $GITHUB_ENV
+            elif [[ "$LABELS" == *"Semver-Minor"* ]]; then
+              echo "BUMP=minor" >> $GITHUB_ENV
+            else
+              echo "BUMP=patch" >> $GITHUB_ENV
+            fi
+
+            # Set NORELEASE
+            if [[ "$LABELS" == *"norelease"* ]]; then
+              echo "NORELEASE=true" >> $GITHUB_ENV
+            else
+              echo "NORELEASE=false" >> $GITHUB_ENV
+            fi
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set No Release Flag
+        id: check_norelease
+        run: |
+          echo "norelease=${{ env.NORELEASE }}" >> $GITHUB_OUTPUT
+
+      - name: GitHub Tag Bump (Release)
+        id: tag_bump_release
+        if: env.PRERELEASE == 'false' && env.NORELEASE != 'true'
+        uses: anothrNick/github-tag-action@1.73.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INITIAL_VERSION: 0.0.1-preview1
+          DEFAULT_BUMP: ${{ env.BUMP }}
+          PRERELEASE: false
+
+      - name: Get Latest Tag
+        id: get_latest_tag
+        if: env.PRERELEASE == 'true' && env.NORELEASE != 'true'
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.1")
+          echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+
+      - name: Calculate Preview Version
+        id: calc_preview_version
+        if: env.PRERELEASE == 'true' && env.NORELEASE != 'true'
+        run: |
+          LATEST_TAG="${{ steps.get_latest_tag.outputs.latest_tag }}"
+          # Remove 'v' prefix if present
+          LATEST_TAG=${LATEST_TAG#v}
+
+          # Split version into parts
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$LATEST_TAG"
+
+          # Bump version based on BUMP type
+          if [[ "${{ env.BUMP }}" == "major" ]]; then
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+          elif [[ "${{ env.BUMP }}" == "minor" ]]; then
+            MINOR=$((MINOR + 1))
+            PATCH=0
+          else
+            PATCH=$((PATCH + 1))
+          fi
+
+          # Create preview version
+          NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}-preview"
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create Preview Tag
+        id: tag_bump_preview
+        if: env.PRERELEASE == 'true' && env.NORELEASE != 'true'
+        run: |
+          NEW_VERSION="${{ steps.calc_preview_version.outputs.new_version }}"
+          git tag "$NEW_VERSION"
+          git push origin "$NEW_VERSION"
+          echo "new_tag=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+  build-and-test:
+    needs: generate-version
+    runs-on: windows-latest
+    env:
+      BUILD_CONFIG: 'Release'
+      SOLUTION: '.\Flagstone.UI.slnx'
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Install workloads
+      run: dotnet workload install maui
+
+    - name: Build
+      run: dotnet build $env:SOLUTION --configuration $env:BUILD_CONFIG
+
+    - name: Run All Tests
+      run: dotnet test --configuration $env:BUILD_CONFIG --verbosity normal --logger "trx;LogFileName=test-results.trx" --no-build
+      continue-on-error: false
+
+    - name: Publish Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: '**/test-results.trx'
+
+    - name: Pack Core
+      if: needs.generate-version.outputs.NORELEASE != 'true'
+      run: dotnet pack src\FlagstoneUI.Core\FlagstoneUI.Core.csproj --configuration $env:BUILD_CONFIG --no-build -p:PackageVersion=${{ needs.generate-version.outputs.new_version }} -o packages
+
+    - name: Upload Build Artifacts
+      if: needs.generate-version.outputs.NORELEASE != 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-packages
+        path: packages/*.nupkg
+
+  publish-core:
+    if: needs.generate-version.outputs.NORELEASE != 'true'
+    needs:
+      - build-and-test
+      - generate-version
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-packages
+          path: packages
+
+      - name: Push to NuGet
+        run: |
+          dotnet nuget push packages/FlagstoneUI.Core.${{ needs.generate-version.outputs.new_version }}.nupkg \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+
+  publish-mct-integrations:
+    if: needs.generate-version.outputs.NORELEASE != 'true'
+    needs:
+      - build-and-test
+      - generate-version
+      - publish-core
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          global-json-file: global.json
+          dotnet-version: 10.0.x
 
-      - name: Build
-        run: dotnet build -c Release
+      - name: Wait for FlagstoneUI.Core ${{ needs.generate-version.outputs.new_version }} to be available on NuGet
+        shell: bash
+        run: |
+            PACKAGE_ID_LOWER="flagstoneui.core"
+            PACKAGE_URL="https://api.nuget.org/v3-flatcontainer/$PACKAGE_ID_LOWER/${{ needs.generate-version.outputs.new_version }}/$PACKAGE_ID_LOWER.${{ needs.generate-version.outputs.new_version }}.nupkg"
+
+            echo "Polling for: $PACKAGE_URL"
+            PACKAGE_FOUND=0
+            for i in {1..30}; do
+            if curl --head --silent --fail "$PACKAGE_URL" > /dev/null; then
+                echo "Package available!"
+                PACKAGE_FOUND=1
+                break
+            fi
+            echo "Not yet available... retrying in 10s"
+            sleep 10
+            done
+
+            if [ "$PACKAGE_FOUND" -ne 1 ]; then
+              echo "ERROR: Package $PACKAGE_URL was not available after 5 minutes (30 retries). Failing workflow."
+              exit 1
+            fi
+            echo "Done waiting (or max retries reached)"
+
+      - name: Install workloads
+        run: dotnet workload install maui
+
+      - name: Build MCT Integrations
+        run: dotnet build src\FlagstoneUI.Integrations.MCT\FlagstoneUI.Integrations.MCT.csproj --configuration Release -p:FlagstoneUICoreVersion=${{ needs.generate-version.outputs.new_version }}
+
+      - name: Pack MCT Integrations
+        run: |
+          dotnet pack src\FlagstoneUI.Integrations.MCT\FlagstoneUI.Integrations.MCT.csproj `
+            --configuration Release `
+            --no-build `
+            -p:PackageVersion=${{ needs.generate-version.outputs.new_version }} `
+            -o packages
+
+      - name: Push to NuGet
+        run: |
+          dotnet nuget push packages\*.nupkg `
+            --api-key ${{ secrets.NUGET_API_KEY }} `
+            --source https://api.nuget.org/v3/index.json `
+            --skip-duplicate
+
+  publish-material-theme:
+    if: needs.generate-version.outputs.NORELEASE != 'true'
+    needs:
+      - build-and-test
+      - generate-version
+      - publish-core
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Wait for FlagstoneUI.Core ${{ needs.generate-version.outputs.new_version }} to be available on NuGet
+        shell: bash
+        run: |
+            PACKAGE_ID_LOWER="flagstoneui.core"
+            PACKAGE_URL="https://api.nuget.org/v3-flatcontainer/$PACKAGE_ID_LOWER/${{ needs.generate-version.outputs.new_version }}/$PACKAGE_ID_LOWER.${{ needs.generate-version.outputs.new_version }}.nupkg"
+
+            echo "Polling for: $PACKAGE_URL"
+            PACKAGE_FOUND=0
+            for i in {1..30}; do
+            if curl --head --silent --fail "$PACKAGE_URL" > /dev/null; then
+                echo "Package available!"
+                PACKAGE_FOUND=1
+                break
+            fi
+            echo "Not yet available... retrying in 10s"
+            sleep 10
+            done
+
+            if [ "$PACKAGE_FOUND" -ne 1 ]; then
+              echo "ERROR: Package $PACKAGE_URL was not found after 5 minutes of polling."
+              exit 1
+            fi
+            echo "Done waiting (or max retries reached)"
+
+      - name: Install workloads
+        run: dotnet workload install maui
+
+      - name: Build Material Theme
+        run: dotnet build src\FlagstoneUI.Themes.Material\FlagstoneUI.Themes.Material.csproj --configuration Release -p:FlagstoneUICoreVersion=${{ needs.generate-version.outputs.new_version }}
+
+      - name: Pack Material Theme
+        run: |
+          dotnet pack src\FlagstoneUI.Themes.Material\FlagstoneUI.Themes.Material.csproj `
+            --configuration Release `
+            --no-build `
+            -p:PackageVersion=${{ needs.generate-version.outputs.new_version }} `
+            -o packages
+
+      - name: Push to NuGet
+        run: |
+          dotnet nuget push packages\*.nupkg `
+            --api-key ${{ secrets.NUGET_API_KEY }} `
+            --source https://api.nuget.org/v3/index.json `
+            --skip-duplicate

@@ -14,6 +14,10 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>FlagstoneUI.Integrations.MCT</PackageId>
+		<Description>Flagstone UI integration library for MAUI Community Toolkit.</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -21,8 +25,12 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition="'$(Configuration)'=='Debug'">
 	  <ProjectReference Include="..\FlagstoneUI.Core\FlagstoneUI.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(Configuration)'=='Release'">
+	  <PackageReference Include="FlagstoneUI.Core" />
 	</ItemGroup>
 
 </Project>
