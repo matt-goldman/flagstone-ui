@@ -230,11 +230,11 @@ jobs:
         run: dotnet workload install maui
 
       - name: Build MCT Integrations
-        run: dotnet build src\FlagstoneUI.MCT.Integrations\FlagstoneUI.MCT.Integrations.csproj --configuration Release -p:FlagstoneUICoreVersion=${{ needs.generate-version.outputs.new_version }}
+        run: dotnet build src\FlagstoneUI.Integrations.MCT\FlagstoneUI.Integrations.MCT.csproj --configuration Release -p:FlagstoneUICoreVersion=${{ needs.generate-version.outputs.new_version }}
 
       - name: Pack MCT Integrations
         run: |
-          dotnet pack src\FlagstoneUI.MCT.Integrations\FlagstoneUI.MCT.Integrations.csproj `
+          dotnet pack src\FlagstoneUI.Integrations.MCT\FlagstoneUI.Integrations.MCT.csproj `
             --configuration Release `
             --no-build `
             -p:PackageVersion=${{ needs.generate-version.outputs.new_version }} `
