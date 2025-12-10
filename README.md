@@ -9,7 +9,27 @@
 
 ![Demo Video](assets/Flagstone-UI.gif)
 
+## Current Status: Experimental POC
+
+Flagstone UI is an early prototype exploring a theming system for .NET MAUI apps. It provides a foundation for defining design tokens (colors, spacing, typography) and applying them to enhanced MAUI controls via XAML resource dictionaries.
+
+It's available now for testing and experimentation, but there's still a lot to do. Available now:
+
+* Four core controls: `FsButton`, `FsEntry`, `FsCard`, `FsEditor`
+* Material theme `*`
+* .NET MAUI Community Toolkit integration
+    - `ValidationBehaviorAdapter`: Let's you re-use validators from the CommunityToolkit with FlagstoneUI input controls (`FsEntry` and `FsEditor`). See example implementation in the sample app.
+    - Border animation for `FsEditor`. This is mostly just for fun and was used to create the `AiEditor` in the sample app. But you could easily adapt this for your own use case.
+
+`*` Note that there are several themes included in the sample app. You can use these in your apps too if you wish, just copy the code. Themes are just resource dictionaries so you can just copy them into your own app. However the Material theme is the only one available as a NuGet package at this time. ALSO: feel free to create and share your own themes!
+
 ## Quick Start
+
+**📚 [Full Documentation & Guides](docs/README.md)** | **🚀 [Quickstart Guide](docs/quickstart.md)**
+
+This is still a very early prototype but you can start playing with it now.
+
+### Build from Source
 
 ```bash
 # Clone and explore
@@ -21,7 +41,20 @@ dotnet build
 dotnet run --project samples/FlagstoneUI.SampleApp
 ```
 
-**📚 [Full Documentation & Guides](docs/README.md)** | **🚀 [Quickstart Guide](docs/quickstart.md)**
+Or reference the `FlagstoneUI.Core` project in your own MAUI app to start theming your controls.
+
+### NugGet Package (Preview)
+
+```bash
+# Install Flagstone UI Core package
+dotnet add package FlagstoneUI.Core --version 0.0.1-preview1
+
+# (Optional) Install MAUI Community Toolkit integration package
+dotnet add package FlagstoneUI.Integrations.MCT --version 0.0.1-preview1
+
+# (Optional) Install Material theme package
+dotnet add package FlagstoneUI.Themes.Material --version 0.0.1-preview1
+```
 
 ## What Does It Look Like?
 
@@ -95,7 +128,7 @@ Think of it like Bootstrap for web dev: you're still using standard HTML element
 
 **🎯 Available Now:**
 - ✅ Token system foundation
-- ✅ Three core controls: `FsButton`, `FsEntry`, `FsCard`
+- ✅ Four core controls: `FsButton`, `FsEntry`, `FsCard`, `FsEditor`
 - ✅ Material theme included
 - ✅ Sample app with multiple themes
 - ✅ [Complete documentation](docs/README.md)
@@ -108,7 +141,7 @@ Think of it like Bootstrap for web dev: you're still using standard HTML element
 **🔮 Planned:**
 - Visual theme generator (web & native)
 - Theme sharing gallery
-- Figma/Adobe XD to Flagstone converters
+- Figma/~~Adobe XD~~ to Flagstone converters
 
 See the full [roadmap](docs/roadmap.md) for details.
 

@@ -9,13 +9,19 @@
     <NoWarn>$(NoWarn);1591</NoWarn>
     <AnalysisLevel>latest</AnalysisLevel>
     <!-- Package metadata for NuGet packages -->
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Matt Goldman</Authors>
+    <Company></Company>
     <RepositoryUrl>https://github.com/matt-goldman/flagstone-ui</RepositoryUrl>
+    <Copyright>Matt Goldman 2025</Copyright>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Version>0.0.1-preview1</Version>
     <PackageReadmeFile>README.md</PackageReadmeFile>
 
     <!-- Enable MAUI preview features and global XML namespaces -->
     <DefineConstants Condition="'$(UseMaui)' == 'true'">$(DefineConstants);MauiAllowImplicitXmlnsDeclaration</DefineConstants>
     <EnablePreviewFeatures Condition="'$(UseMaui)' == 'true'">true</EnablePreviewFeatures>
+
   </PropertyGroup>
 
   <!-- Common package references for all projects -->
@@ -43,5 +49,20 @@
   <!-- Web project package references -->
   <ItemGroup Condition="'$(IsWebProject)' == 'true'">
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../assets/icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="../../LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="../../README.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 </Project>
