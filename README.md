@@ -43,7 +43,7 @@ dotnet run --project samples/FlagstoneUI.SampleApp
 
 Or reference the `FlagstoneUI.Core` project in your own MAUI app to start theming your controls.
 
-### NugGet Package (Preview)
+### NuGet Package (Preview)
 
 ```bash
 # Install Flagstone UI Core package
