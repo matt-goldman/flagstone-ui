@@ -4,16 +4,21 @@
              xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
              xmlns:vm="clr-namespace:FlagstoneUI.SampleApp.ViewModels"
              x:Class="FlagstoneUI.SampleApp.Pages.ControlsShowcasePage"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:int="clr-namespace:FlagstoneUI.Integrations.MCT.Behaviors;assembly=FlagstoneUI.Integrations.MCT"
              Title="Controls Showcase"
              x:DataType="vm:ControlsShowcaseViewModel"
              BackgroundColor="{AppThemeBinding Light={DynamicResource Color.Background}, Dark={DynamicResource Color.Background.Dark}}">
-       <ContentPage.Resources>
-         <Style x:Key="InvalidEntryStyle" TargetType="fs:FsEntry">
-           <Setter Property="BorderBrush" Value="{DynamicResource Color.Error}" />
-           <Setter Property="BorderWidth" Value="2" />
-         </Style>
-       </ContentPage.Resources>
+  <ContentPage.Resources>
+    <Style x:Key="ValidStyle" TargetType="fs:FsEntry">
+      <Setter Property="BorderBrush" Value="Green" />
+      <Setter Property="BorderWidth" Value="2" />
+    </Style>
+    <Style x:Key="InvalidStyle" TargetType="fs:FsEntry">
+      <Setter Property="BorderBrush" Value="Red" />
+      <Setter Property="BorderWidth" Value="2" />
+    </Style>
+  </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout Padding="16" Spacing="24">
@@ -52,11 +57,17 @@
                        FontSize="14"
                        TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
                        Margin="0,0,0,8" />
-            <fs:FsEntry Placeholder="Enter your email"
-                        x:Name="ValidatedEntry">
-                <fs:FsEntry.Behaviors>
-                    <toolkit:EmailValidationBehavior InvalidStyle="{DynamicResource InvalidEntryStyle}" />
-                </fs:FsEntry.Behaviors>
+            
+            <fs:FsEntry
+              Placeholder="Enter your email"
+              Keyboard="Email">
+              <fs:FsEntry.Behaviors>
+                <int:ValidationBehaviorAdapter
+                  ValidStyle="{StaticResource ValidStyle}"
+                  InvalidStyle="{StaticResource InvalidStyle}"
+                  Behavior="{mct:EmailValidationBehavior}"
+                  Flags="ValidateOnValueChanged"/>
+              </fs:FsEntry.Behaviors>
             </fs:FsEntry>
 
             <!-- Material Theme: Show all variants -->

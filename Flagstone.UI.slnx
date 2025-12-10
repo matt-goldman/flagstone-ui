@@ -4,7 +4,6 @@
       <Deploy Solution="Debug|*" />
     </Project>
     <Project Path="samples/FlagstoneUI.ThemePlayground/ThemePlayground.csproj" />
-    <Project Path="samples/MctIntegrationsTest/MctIntegrationsTest.csproj" Id="75f4574f-389e-4379-bca3-89534866b1a1" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/FlagstoneUI.Blocks/FlagstoneUI.Blocks.csproj" />
