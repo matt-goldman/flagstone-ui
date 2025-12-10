@@ -27,7 +27,8 @@
                           Margin="0"
                           VerticalOptions="Center"
                           Focused="BorderlessEntry_Focused"
-                          Unfocused="BorderlessEntry_Unfocused" />
+                          Unfocused="BorderlessEntry_Unfocused"
+                          x:Name="InnerEntry"/>
     </Grid>
   </Border>
 </ContentView>

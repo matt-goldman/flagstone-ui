@@ -1,11 +1,14 @@
 <Solution>
   <Folder Name="/samples/">
-    <Project Path="samples/FlagstoneUI.SampleApp/FlagstoneUI.SampleApp.csproj" />
+    <Project Path="samples/FlagstoneUI.SampleApp/FlagstoneUI.SampleApp.csproj">
+      <Deploy Solution="Debug|*" />
+    </Project>
     <Project Path="samples/FlagstoneUI.ThemePlayground/ThemePlayground.csproj" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/FlagstoneUI.Blocks/FlagstoneUI.Blocks.csproj" />
     <Project Path="src/FlagstoneUI.Core/FlagstoneUI.Core.csproj" />
+    <Project Path="src/FlagstoneUI.Integrations.MCT/FlagstoneUI.Integrations.MCT.csproj" Id="cee05ff4-e79d-433a-b484-9f68baa40ed4" />
     <Project Path="src/FlagstoneUI.Themes.Material/FlagstoneUI.Themes.Material.csproj" />
     <Project Path="src/FlagstoneUI.Themes.Modern/FlagstoneUI.Themes.Modern.csproj" />
   </Folder>
@@ -21,8 +24,8 @@
     </Project>
   </Folder>
   <Folder Name="/tools/">
-    <Project Path="tools/FlagstoneUI.MCP.Http/FlagstoneUI.MCP.Http.csproj" Type="C#" />
-    <Project Path="tools/FlagstoneUI.MCP.Stdio/FlagstoneUI.MCP.Stdio.csproj" Type="C#" />
-    <Project Path="tools/FlagstoneUI.MCP.Tools/FlagstoneUI.MCP.Tools.csproj" Type="C#" />
+    <Project Path="tools/FlagstoneUI.MCP.Http/FlagstoneUI.MCP.Http.csproj" />
+    <Project Path="tools/FlagstoneUI.MCP.Stdio/FlagstoneUI.MCP.Stdio.csproj" />
+    <Project Path="tools/FlagstoneUI.MCP.Tools/FlagstoneUI.MCP.Tools.csproj" />
   </Folder>
 </Solution>

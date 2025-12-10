@@ -7,7 +7,7 @@
   <ResourceDictionary.MergedDictionaries>
     <tokens:Tokens />
   </ResourceDictionary.MergedDictionaries>
-  
+
   <!-- Modern theme specific overrides and additional styles -->
   <Style TargetType="Label">
     <Setter Property="TextColor" Value="#222222" />
@@ -19,5 +19,23 @@
     <Setter Property="CornerRadius" Value="{DynamicResource Radius.Large}" />
     <Setter Property="BorderColor" Value="#E0E0E0" />
   </Style>
- 
+
+  <Style TargetType="fs:FsEditor">
+    <Setter Property="Background">
+      <Setter.Value>
+        <SolidColorBrush Color="#FFFFFF" />
+      </Setter.Value>
+    </Setter>
+    <Setter Property="TextColor" Value="#222222" />
+    <Setter Property="BorderBrush">
+      <Setter.Value>
+        <SolidColorBrush Color="#E0E0E0" />
+      </Setter.Value>
+    </Setter>
+    <Setter Property="BorderWidth" Value="1" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Medium}" />
+    <Setter Property="Padding" Value="12" />
+    <Setter Property="MinimumHeightRequest" Value="120" />
+  </Style>
+
 </ResourceDictionary>

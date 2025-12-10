@@ -71,6 +71,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\FlagstoneUI.Core\FlagstoneUI.Core.csproj" />
 		<ProjectReference Include="..\..\src\FlagstoneUI.Blocks\FlagstoneUI.Blocks.csproj" />
+		<ProjectReference Include="..\..\src\FlagstoneUI.Integrations.MCT\FlagstoneUI.Integrations.MCT.csproj" />
 		<ProjectReference Include="..\..\src\FlagstoneUI.Themes.Material\FlagstoneUI.Themes.Material.csproj" />
 	</ItemGroup>
 
@@ -87,6 +88,10 @@
 	  <MauiXaml Update="Resources\Styles\Minty.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="CommunityToolkit.Maui" />
 	</ItemGroup>
 
 </Project>

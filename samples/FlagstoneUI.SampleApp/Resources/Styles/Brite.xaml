@@ -201,4 +201,47 @@
         </Setter>
         <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
     </Style>
+
+    <!--  ========== FsEditor Styles ==========  -->
+    <!--  Base Editor Style  -->
+    <Style TargetType="fs:FsEditor">
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Color="{DynamicResource Color.Surface}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextColor" Value="{DynamicResource Color.SurfaceVariant.Dark}" />
+        <Setter Property="PlaceholderColor" Value="{DynamicResource Color.Secondary}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
+        <Setter Property="Padding" Value="{DynamicResource Spacing.Medium}" />
+        <Setter Property="MinimumHeightRequest" Value="120" />
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <SolidColorBrush Color="{DynamicResource Color.Primary}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+    </Style>
+
+    <!--  Outlined Editor Style  -->
+    <Style x:Key="OutlinedEditor" TargetType="fs:FsEditor">
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Color="Transparent" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextColor" Value="{DynamicResource Color.SurfaceVariant.Dark}" />
+        <Setter Property="PlaceholderColor" Value="{DynamicResource Color.Secondary}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
+        <Setter Property="Padding" Value="{DynamicResource Spacing.Medium}" />
+        <Setter Property="MinimumHeightRequest" Value="120" />
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <SolidColorBrush Color="{DynamicResource Color.Primary}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+    </Style>
 </ResourceDictionary>

@@ -1,3 +1,4 @@
+using FlagstoneUI.Integrations.MCT.Animations;
 using FlagstoneUI.SampleApp.ViewModels;
 
 namespace FlagstoneUI.SampleApp.Pages;
@@ -42,5 +43,32 @@ public partial class ControlsShowcasePage : ContentPage
 				EntryFeedbackLabelAlt.Text = message;
 			}
 		}
+	}
+
+	readonly FsEditorBorderAnimation _animation = new FsEditorBorderAnimation
+	{
+		Length = 2000,
+		Gradient = App.Current!.Resources["AiGradientBrush"] as LinearGradientBrush,
+	};
+
+	private CancellationTokenSource? _cts;
+	
+	async void AiEditor_OnFocused(object? sender, EventArgs e)
+	{
+		_cts?.Cancel();
+		_cts = new CancellationTokenSource();
+		try
+		{
+			await _animation.Animate(AiEditor, _cts.Token);
+		}
+		catch (OperationCanceledException)
+		{
+			// Animation was cancelled, no action needed
+		}
+	}
+	
+	async void AiEditor_OnUnfocused(object? sender, EventArgs e)
+	{
+		await _cts?.CancelAsync()!;
 	}
 }
