@@ -29,41 +29,33 @@ public class FsEditorBorderAnimation : BaseAnimation<FsEditor>
 	}
 	#endregion
 	
+	/// <summary>
+	/// Animates a border gradient by rotating the gradient stops around a fixed diagonal line.
+	/// For best results, use 3-5 evenly-spaced gradient stops with the first color repeated at offset 1.0.
+	/// </summary>
 	public override async Task Animate(FsEditor view, CancellationToken token = new CancellationToken())
 	{
 		ArgumentNullException.ThrowIfNull(view);
 		token.ThrowIfCancellationRequested();
 		
-		var originalBrush = view.BorderBrush as GradientBrush;
-		GradientBrush brush = _brush;
+		var originalBrush = view.BorderBrush;
 		
-		// Only animate LinearGradientBrush
-		if (brush is not LinearGradientBrush linearBrush)
+		if (_brush is not LinearGradientBrush linearBrush || linearBrush.GradientStops.Count < 2)
 		{
 			return;
 		}
 		
-		// Frame rate: 30 fps = ~33ms per frame (smoother, less flickering)
-		const int frameDelayMs = 33;
-		
-		// Calculate how much to progress per frame to complete animation in Length milliseconds
-		var totalFrames = Length / frameDelayMs;
-		var stepIncrement = 1.0f / totalFrames;
-		
-		float progress = 0.0f;
+		const int frameDelayMs = 50; // 20 fps
+		var stopShiftPerFrame = 1.0f / ((float)Length / frameDelayMs);
+		var startPoint = new Point(0, 0);
+		var endPoint = new Point(1, 1);
+		var currentShift = 0f;
 		
 		while (!token.IsCancellationRequested)
 		{
-			// Calculate start and end points based on progress around the border
-			var (startPoint, endPoint) = CalculateGradientPoints(progress);
+			var rotatedStops = RotateGradientStops(linearBrush.GradientStops, currentShift);
+			var animatedBrush = new LinearGradientBrush(rotatedStops, startPoint, endPoint);
 			
-			// Create new gradient with same stops but updated points
-			var animatedBrush = new LinearGradientBrush(
-				linearBrush.GradientStops,
-				startPoint,
-				endPoint);
-			
-			// Update the border brush on main thread
 			await MainThread.InvokeOnMainThreadAsync(() =>
 			{
 				if (!token.IsCancellationRequested)
@@ -72,16 +64,13 @@ public class FsEditorBorderAnimation : BaseAnimation<FsEditor>
 				}
 			});
 			
-			// Increment and wrap around
-			progress = (progress + stepIncrement) % 1.0f;
-			
 			await Task.Delay(frameDelayMs, token);
+			currentShift = (currentShift + stopShiftPerFrame) % 1.0f;
 		}
 		
-		// Restore original brush on main thread
 		await MainThread.InvokeOnMainThreadAsync(() =>
 		{
-			view.BorderBrush = originalBrush ?? new LinearGradientBrush();
+			view.BorderBrush = originalBrush;
 		});
 	}
 
@@ -89,55 +78,26 @@ public class FsEditorBorderAnimation : BaseAnimation<FsEditor>
 	
 	public void SetBrush(GradientBrush brush) => _brush = brush;
 	
-	private (Point startPoint, Point endPoint) CalculateGradientPoints(float progress)
+	private static GradientStopCollection RotateGradientStops(GradientStopCollection stops, float shift)
 	{
-		// Progress goes from 0.0 to 1.0 and represents one full rotation around the border
-		// Use a helper method to calculate point position for any progress value
-		var startPoint = CalculatePointOnBorder(progress);
+		var result = new GradientStopCollection();
 		
-		// End point is offset by 0.5 (opposite side)
-		// Don't use modulo here - let the helper handle wrapping
-		var endPoint = CalculatePointOnBorder(progress + 0.5f);
-		
-		return (startPoint, endPoint);
-	}
-	
-	private Point CalculatePointOnBorder(float progress)
-	{
-		// Normalize progress to 0-1 range (handle values > 1.0)
-		progress = progress % 1.0f;
-		
-		// Normalize progress to 0-4 range (4 sides)
-		var segmentProgress = progress * 4.0f;
-		
-		// Calculate position based on which segment we're in
-		// Segment 0 (0.0-1.0): Top edge, left to right (0,0) -> (1,0)
-		// Segment 1 (1.0-2.0): Right edge, top to bottom (1,0) -> (1,1)
-		// Segment 2 (2.0-3.0): Bottom edge, right to left (1,1) -> (0,1)
-		// Segment 3 (3.0-4.0): Left edge, bottom to top (0,1) -> (0,0)
-		
-		if (segmentProgress < 1.0f)
+		// Shift all stops except the last (which is the closing stop at 1.0)
+		foreach (var stop in stops.Take(stops.Count - 1))
 		{
-			// Top edge: moving right along x-axis
-			return new Point(segmentProgress, 0);
+			var newOffset = (stop.Offset + shift) % 1.0f;
+			result.Add(new GradientStop(stop.Color, newOffset));
 		}
-		else if (segmentProgress < 2.0f)
+		
+		// Sort and add closing stop
+		var sorted = result.OrderBy(s => s.Offset).ToList();
+		result.Clear();
+		foreach (var stop in sorted)
 		{
-			// Right edge: moving down along y-axis
-			var t = segmentProgress - 1.0f;
-			return new Point(1, t);
+			result.Add(stop);
 		}
-		else if (segmentProgress < 3.0f)
-		{
-			// Bottom edge: moving left along x-axis
-			var t = segmentProgress - 2.0f;
-			return new Point(1 - t, 1);
-		}
-		else
-		{
-			// Left edge: moving up along y-axis
-			var t = segmentProgress - 3.0f;
-			return new Point(0, 1 - t);
-		}
+		result.Add(new GradientStop(sorted[0].Color, 1.0f));
+		
+		return result;
 	}
 }
