@@ -3,7 +3,7 @@
 <div align="center">
   <img src="assets/logov1.svg" alt="FlagstoneUI Logo" width="200" height="200" />
   <h1>FlagstoneUI</h1>
-  <p><strong>True cross‑platform UI for .NET MAUI — one control surface, consistent behaviour everywhere, no platform code.</strong></p>
+  <h3>True cross‑platform UI for .NET MAUI — one control surface, consistent behaviour everywhere, no platform code.</h3>
 </div>
 
 FlagstoneUI removes the last barrier to building visually consistent .NET MAUI apps.    

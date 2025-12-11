@@ -96,9 +96,9 @@ FlagstoneUI.Blocks/
 
 **Current Implementation**:
 - ✅ **Card**: Complete custom ContentView with elevation (shadow support), corner radius, and border properties. Elevation automatically applies Material Design-compliant shadows.
-- ❌ **FsButton**: Not implemented (planned: subclass Button, add platform handlers)
-- ❌ **FsEntry**: Not implemented (planned: subclass Entry, add validation states)
-- ❌ **Snackbar**: Not implemented (planned: overlay service pattern)
+- ✅ **FsButton**: Button subclass with all properties exposed
+- ✅ **FsEntry**: Subclass of Entry wrapped in a ContentView, all inner properties surfaces as bindable properties, all visual properties exposed as bindable properties, Community Toolkit validators integration via adapters
+- ✅ **FsEditor**: Subclass of Editor wrapped in a ContentView, all inner properties surfaces as bindable properties, all visual properties exposed as bindable properties, Community Toolkit validators integration via adapters
 
 **Card Example**:
 ```csharp
@@ -128,30 +128,6 @@ public partial class Card : ContentView
         </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
 </Application.Resources>
-```
-
-**Note**: A minimal FlagstoneUIBuilder class exists in the codebase but is not required for theme configuration and may be removed in the future.
-
-### Theme Loading
-
-**Current Implementation**:
-```csharp
-public static class ThemeLoader
-{
-    public static void Register(ResourceDictionary appResources)
-    {
-        appResources.MergedDictionaries.Add(new ResourceDictionary
-        {
-            Source = new Uri("/FlagstoneUI.Core;component/Styles/Tokens.xaml", UriKind.Relative)
-        });
-    }
-}
-```
-
-**Usage Pattern**:
-```csharp
-// In App.xaml.cs or MauiProgram.cs
-ThemeLoader.Register(app.Resources);
 ```
 
 ## Known Issues & Technical Debt
