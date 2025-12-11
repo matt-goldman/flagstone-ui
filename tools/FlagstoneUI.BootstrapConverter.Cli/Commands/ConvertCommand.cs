@@ -52,6 +52,11 @@ internal static class ConvertCommand
 			aliases: ["--debug"],
 			description: "Enable debug logging (shows all discovered variables)");
 
+		var analysisMode = new Option<string>(
+			aliases: ["--analysis-mode", "-a"],
+			description: "Analysis mode: css (top-down CSS class analysis), variables (bottom-up variable mapping), or hybrid (both, default)",
+			getDefaultValue: () => "hybrid");
+
 		var command = new Command("convert", "Convert Bootstrap theme to Flagstone UI XAML")
 		{
 			inputOption,
@@ -61,7 +66,8 @@ internal static class ConvertCommand
 			namespaceOption,
 			commentsOption,
 			verboseOption,
-			debugOption
+			debugOption,
+			analysisMode
 		};
 
 		command.SetHandler(async (context) =>
@@ -74,10 +80,11 @@ internal static class ConvertCommand
 			var comments = context.ParseResult.GetValueForOption(commentsOption);
 			var verbose = context.ParseResult.GetValueForOption(verboseOption);
 			var debug = context.ParseResult.GetValueForOption(debugOption);
+			var mode = context.ParseResult.GetValueForOption(analysisMode)!;
 
 			try
 			{
-				await ExecuteConvertAsync(input, output, format, darkMode, ns, comments, verbose, debug);
+				await ExecuteConvertAsync(input, output, format, darkMode, ns, comments, verbose, debug, mode);
 				context.ExitCode = 0;
 			}
 			catch (FileNotFoundException ex)
@@ -126,7 +133,8 @@ internal static class ConvertCommand
 		string ns,
 		bool includeComments,
 		bool verbose,
-		bool debug)
+		bool debug,
+		string analysisMode)
 	{
 		// Enable logging if debug is requested
 		if (debug)
@@ -159,64 +167,138 @@ internal static class ConvertCommand
 			Console.WriteLine($"Dark Mode: {darkMode}");
 			Console.WriteLine($"Namespace: {ns}");
 			Console.WriteLine($"Comments: {includeComments}");
+			Console.WriteLine($"Analysis Mode: {analysisMode}");
 			Console.WriteLine();
 		}
 
-		// Step 1: Parse Bootstrap theme (supports multiple files)
-		Console.Write($"Parsing Bootstrap theme{(inputs.Length > 1 ? "s" : "")}... ");
-		var parser = new BootstrapParser();
-		
-		BootstrapVariables variables;
-		if (inputs.Length == 1)
-		{
-			// Single file - use existing logic
-			var input = inputs[0];
-			if (Uri.TryCreate(input, UriKind.Absolute, out var uri))
-			{
-				variables = await parser.ParseFromUrlAsync(uri.ToString(), format);
-			}
-			else if (File.Exists(input))
-			{
-				variables = await parser.ParseFromFileAsync(input, format);
-			}
-			else
-			{
-				throw new FileNotFoundException($"Input file not found: {input}");
-			}
-		}
-		else
-		{
-			// Multiple files - merge them
-			variables = await parser.ParseMultipleFilesAsync(inputs, format);
-		}
-		
-		Console.ForegroundColor = ConsoleColor.Green;
-		Console.WriteLine("✓");
-		Console.ResetColor();
-
-		if (verbose)
-		{
-			Console.WriteLine($"  Colors: {variables.Colors.Count}");
-			Console.WriteLine($"  Typography: {variables.Typography.Count}");
-			Console.WriteLine($"  Spacing: {variables.Spacing.Count}");
-			Console.WriteLine($"  Borders: {variables.Borders.Count}");
-			Console.WriteLine($"  Other: {variables.Other.Count}");
-		}
-
-		// Step 2: Map to Flagstone tokens
-		Console.Write("Mapping to Flagstone UI tokens... ");
-		var mapper = new BootstrapMapper();
+		FlagstoneTokens tokens;
 		var options = new ConversionOptions
 		{
 			DarkModeStrategy = darkMode,
 			IncludeComments = includeComments,
 			Namespace = ns
 		};
-		
-		var tokens = mapper.MapToFlagstoneTokens(variables, options);
-		Console.ForegroundColor = ConsoleColor.Green;
-		Console.WriteLine("✓");
-		Console.ResetColor();
+
+		// Determine analysis strategy
+		var useVariableAnalysis = analysisMode.ToLowerInvariant() is "variables" or "hybrid";
+		var useCssAnalysis = analysisMode.ToLowerInvariant() is "css" or "hybrid";
+
+		if (useCssAnalysis)
+		{
+			// New top-down approach: analyze CSS classes
+			Console.Write("Analyzing Bootstrap CSS classes... ");
+			
+			// Read CSS content
+			var cssContents = new List<string>();
+			foreach (var input in inputs)
+			{
+				string content;
+				if (Uri.TryCreate(input, UriKind.Absolute, out var uri))
+				{
+					using var client = new HttpClient();
+					content = await client.GetStringAsync(uri);
+				}
+				else if (File.Exists(input))
+				{
+					content = await File.ReadAllTextAsync(input);
+				}
+				else
+				{
+					throw new FileNotFoundException($"Input file not found: {input}");
+				}
+				cssContents.Add(content);
+			}
+			
+			var analyzer = new BootstrapCssAnalyzer();
+			var componentStyles = cssContents.Count == 1 
+				? analyzer.AnalyzeComponents(cssContents[0])
+				: analyzer.AnalyzeMultipleFiles(cssContents.ToArray());
+			
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine("✓");
+			Console.ResetColor();
+
+			if (verbose)
+			{
+				var styleCount = typeof(BootstrapComponentStyles).GetProperties()
+					.Count(p => p.GetValue(componentStyles) != null);
+				Console.WriteLine($"  Component styles extracted: {styleCount}");
+			}
+
+			// Map computed styles to tokens
+			Console.Write("Extracting tokens from component styles... ");
+			var mapper = new BootstrapMapper();
+			tokens = mapper.MapComponentStylesToTokens(componentStyles, options);
+			
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine("✓");
+			Console.ResetColor();
+		}
+		else
+		{
+			tokens = new FlagstoneTokens();
+		}
+
+		// Optionally supplement with variable-based analysis
+		if (useVariableAnalysis)
+		{
+			Console.Write($"Parsing Bootstrap {(useCssAnalysis ? "variables (supplemental)" : "variables")}... ");
+			var parser = new BootstrapParser();
+			
+			BootstrapVariables variables;
+			if (inputs.Length == 1)
+			{
+				var input = inputs[0];
+				if (Uri.TryCreate(input, UriKind.Absolute, out var uri))
+				{
+					variables = await parser.ParseFromUrlAsync(uri.ToString(), format);
+				}
+				else if (File.Exists(input))
+				{
+					variables = await parser.ParseFromFileAsync(input, format);
+				}
+				else
+				{
+					throw new FileNotFoundException($"Input file not found: {input}");
+				}
+			}
+			else
+			{
+				variables = await parser.ParseMultipleFilesAsync(inputs, format);
+			}
+			
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine("✓");
+			Console.ResetColor();
+
+			if (verbose)
+			{
+				Console.WriteLine($"  Colors: {variables.Colors.Count}");
+				Console.WriteLine($"  Typography: {variables.Typography.Count}");
+				Console.WriteLine($"  Spacing: {variables.Spacing.Count}");
+				Console.WriteLine($"  Borders: {variables.Borders.Count}");
+				Console.WriteLine($"  Other: {variables.Other.Count}");
+			}
+
+			// Map variables to tokens (merge with CSS-based tokens if hybrid mode)
+			Console.Write($"Mapping variables to tokens{(useCssAnalysis ? " (merging)" : "")}... ");
+			var mapper = new BootstrapMapper();
+			var variableTokens = mapper.MapToFlagstoneTokens(variables, options);
+			
+			// Merge tokens (CSS-based tokens take precedence)
+			if (useCssAnalysis)
+			{
+				MergeTokens(tokens, variableTokens);
+			}
+			else
+			{
+				tokens = variableTokens;
+			}
+			
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine("✓");
+			Console.ResetColor();
+		}
 
 		if (verbose)
 		{
@@ -254,5 +336,57 @@ internal static class ConvertCommand
 		Console.ResetColor();
 		Console.WriteLine($"  Tokens.xaml: {Path.Combine(output, "Tokens.xaml")}");
 		Console.WriteLine($"  Theme.xaml:  {Path.Combine(output, "Theme.xaml")}");
+	}
+
+	/// <summary>
+	/// Merge tokens from variable analysis into CSS-based tokens
+	/// CSS-based tokens take precedence (only add missing tokens from variables)
+	/// </summary>
+	private static void MergeTokens(FlagstoneTokens target, FlagstoneTokens source)
+	{
+		// Merge colors (don't override CSS-extracted colors)
+		foreach (var (key, value) in source.Colors)
+		{
+			if (!target.Colors.ContainsKey(key))
+			{
+				target.Colors[key] = value;
+			}
+		}
+
+		// Merge typography
+		foreach (var (key, value) in source.Typography)
+		{
+			if (!target.Typography.ContainsKey(key))
+			{
+				target.Typography[key] = value;
+			}
+		}
+
+		// Merge spacing
+		foreach (var (key, value) in source.Spacing)
+		{
+			if (!target.Spacing.ContainsKey(key))
+			{
+				target.Spacing[key] = value;
+			}
+		}
+
+		// Merge border radius
+		foreach (var (key, value) in source.BorderRadius)
+		{
+			if (!target.BorderRadius.ContainsKey(key))
+			{
+				target.BorderRadius[key] = value;
+			}
+		}
+
+		// Merge border width
+		foreach (var (key, value) in source.BorderWidth)
+		{
+			if (!target.BorderWidth.ContainsKey(key))
+			{
+				target.BorderWidth[key] = value;
+			}
+		}
 	}
 }
