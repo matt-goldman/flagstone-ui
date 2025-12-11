@@ -396,9 +396,11 @@ public class BootstrapMapper
 
     private void ExtractTokensFromButton(ComputedStyle buttonStyle, FlagstoneTokens tokens, string colorName, ConversionOptions options)
     {
-        var bgColor = buttonStyle.GetProperty("background-color");
-        var textColor = buttonStyle.GetProperty("color");
-        var borderColor = buttonStyle.GetProperty("border-color");
+        // Bootstrap 5 uses CSS custom properties (--bs-btn-bg, --bs-btn-color, etc.)
+        // Try CSS custom properties first, fall back to regular properties
+        var bgColor = buttonStyle.GetProperty("--bs-btn-bg") ?? buttonStyle.GetProperty("background-color");
+        var textColor = buttonStyle.GetProperty("--bs-btn-color") ?? buttonStyle.GetProperty("color");
+        var borderColor = buttonStyle.GetProperty("--bs-btn-border-color") ?? buttonStyle.GetProperty("border-color");
 
         if (!string.IsNullOrWhiteSpace(bgColor))
         {
@@ -424,11 +426,12 @@ public class BootstrapMapper
 
     private void ExtractSpacingTokens(ComputedStyle style, FlagstoneTokens tokens)
     {
-        var padding = style.GetProperty("padding");
+        // Try CSS custom properties first
+        var padding = style.GetProperty("--bs-btn-padding-y") ?? style.GetProperty("padding");
         if (!string.IsNullOrWhiteSpace(padding))
         {
-            // Parse padding (e.g., "0.375rem 0.75rem")
-            var paddingValue = ConvertToPixels(padding, 16.0);
+            // Parse padding (e.g., "0.375rem 0.75rem" or "0.375rem")
+            var paddingValue = ConvertToPixels(padding.Split(' ')[0], 16.0);
             
             tokens.Spacing["Spacing.Button"] = new NumericToken
             {
@@ -442,7 +445,7 @@ public class BootstrapMapper
 
     private void ExtractBorderTokens(ComputedStyle style, FlagstoneTokens tokens)
     {
-        var borderRadius = style.GetProperty("border-radius");
+        var borderRadius = style.GetProperty("--bs-btn-border-radius") ?? style.GetProperty("border-radius");
         if (!string.IsNullOrWhiteSpace(borderRadius))
         {
             var radiusValue = ConvertToPixels(borderRadius, 16.0);
@@ -456,7 +459,7 @@ public class BootstrapMapper
             };
         }
 
-        var borderWidth = style.GetProperty("border-width");
+        var borderWidth = style.GetProperty("--bs-btn-border-width") ?? style.GetProperty("border-width");
         if (!string.IsNullOrWhiteSpace(borderWidth))
         {
             var widthValue = ConvertToPixels(borderWidth, 16.0);
@@ -473,7 +476,7 @@ public class BootstrapMapper
 
     private void ExtractTypographyTokens(ComputedStyle style, FlagstoneTokens tokens)
     {
-        var fontSize = style.GetProperty("font-size");
+        var fontSize = style.GetProperty("--bs-btn-font-size") ?? style.GetProperty("font-size");
         if (!string.IsNullOrWhiteSpace(fontSize))
         {
             var sizeValue = ConvertToPixels(fontSize, 16.0);
@@ -487,7 +490,7 @@ public class BootstrapMapper
             };
         }
 
-        var fontWeight = style.GetProperty("font-weight");
+        var fontWeight = style.GetProperty("--bs-btn-font-weight") ?? style.GetProperty("font-weight");
         if (!string.IsNullOrWhiteSpace(fontWeight))
         {
             tokens.Typography["FontWeight.Button"] = new TypographyToken

@@ -100,7 +100,13 @@ public class BootstrapCssAnalyzer
 
 		foreach (var rule in matchingRules)
 		{
-			if (rule.Style == null) continue;
+			if (rule.Style == null)
+			{
+				ConverterLogger.Debug($"    Rule has null Style property");
+				continue;
+			}
+			
+			ConverterLogger.Debug($"    Rule has {rule.Style.Length} declarations");
 			
 			foreach (var declaration in rule.Style)
 			{
