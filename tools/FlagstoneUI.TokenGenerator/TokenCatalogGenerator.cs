@@ -179,7 +179,7 @@ public class TokenCatalogGenerator
         controls = controlFiles
             .Select(file => Path.GetFileNameWithoutExtension(file))
             .Where(controlName => controlName.StartsWith("Fs", StringComparison.Ordinal) && !controlName.Contains("BorderlessEntry", StringComparison.Ordinal))
-            .ToDictionary(
+            .ToDictionary<string, string, object>(
                 controlName =>
                 {
                     Console.WriteLine($"   → Analyzing {controlName}...");
