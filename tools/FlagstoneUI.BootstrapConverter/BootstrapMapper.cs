@@ -334,4 +334,168 @@ public class BootstrapMapper
             _ => "Radius.Default"
         };
     }
+
+    /// <summary>
+    /// Map Bootstrap component styles to Flagstone tokens (top-down approach)
+    /// Extracts tokens from computed CSS styles rather than variables
+    /// </summary>
+    /// <param name="componentStyles">Computed Bootstrap component styles</param>
+    /// <param name="options">Conversion options</param>
+    /// <returns>Flagstone tokens extracted from component styles</returns>
+    public FlagstoneTokens MapComponentStylesToTokens(BootstrapComponentStyles componentStyles, ConversionOptions? options = null)
+    {
+        options ??= new ConversionOptions();
+        var tokens = new FlagstoneTokens();
+
+        ConverterLogger.Info("Mapping computed component styles to Flagstone tokens...");
+
+        // Extract tokens from button primary (our reference component)
+        if (componentStyles.ButtonPrimary != null)
+        {
+            ExtractTokensFromButton(componentStyles.ButtonPrimary, tokens, "Primary", options);
+        }
+
+        // Extract from other button variants
+        if (componentStyles.ButtonSecondary != null)
+        {
+            ExtractTokensFromButton(componentStyles.ButtonSecondary, tokens, "Secondary", options);
+        }
+
+        if (componentStyles.ButtonSuccess != null)
+        {
+            ExtractTokensFromButton(componentStyles.ButtonSuccess, tokens, "Success", options);
+        }
+
+        if (componentStyles.ButtonDanger != null)
+        {
+            ExtractTokensFromButton(componentStyles.ButtonDanger, tokens, "Error", options);
+        }
+
+        if (componentStyles.ButtonWarning != null)
+        {
+            ExtractTokensFromButton(componentStyles.ButtonWarning, tokens, "Warning", options);
+        }
+
+        if (componentStyles.ButtonInfo != null)
+        {
+            ExtractTokensFromButton(componentStyles.ButtonInfo, tokens, "Info", options);
+        }
+
+        // Extract base spacing and borders from button base
+        if (componentStyles.ButtonBase != null)
+        {
+            ExtractSpacingTokens(componentStyles.ButtonBase, tokens);
+            ExtractBorderTokens(componentStyles.ButtonBase, tokens);
+            ExtractTypographyTokens(componentStyles.ButtonBase, tokens);
+        }
+
+        ConverterLogger.Debug($"Extracted {tokens.Colors.Count} color tokens, {tokens.Typography.Count} typography tokens, {tokens.Spacing.Count} spacing tokens");
+
+        return tokens;
+    }
+
+    private void ExtractTokensFromButton(ComputedStyle buttonStyle, FlagstoneTokens tokens, string colorName, ConversionOptions options)
+    {
+        var bgColor = buttonStyle.GetProperty("background-color");
+        var textColor = buttonStyle.GetProperty("color");
+        var borderColor = buttonStyle.GetProperty("border-color");
+
+        if (!string.IsNullOrWhiteSpace(bgColor))
+        {
+            tokens.Colors[$"Color.{colorName}"] = new ColorToken
+            {
+                Key = $"Color.{colorName}",
+                Value = NormalizeColorValue(bgColor),
+                DarkValue = options.DarkModeStrategy == DarkModeStrategy.Auto ? GenerateDarkModeColor(NormalizeColorValue(bgColor)) : null,
+                Purpose = $"{colorName} color from Bootstrap .btn-{colorName.ToLowerInvariant()}"
+            };
+        }
+
+        if (!string.IsNullOrWhiteSpace(textColor))
+        {
+            tokens.Colors[$"Color.On{colorName}"] = new ColorToken
+            {
+                Key = $"Color.On{colorName}",
+                Value = NormalizeColorValue(textColor),
+                Purpose = $"Text color on {colorName} background"
+            };
+        }
+    }
+
+    private void ExtractSpacingTokens(ComputedStyle style, FlagstoneTokens tokens)
+    {
+        var padding = style.GetProperty("padding");
+        if (!string.IsNullOrWhiteSpace(padding))
+        {
+            // Parse padding (e.g., "0.375rem 0.75rem")
+            var paddingValue = ConvertToPixels(padding, 16.0);
+            
+            tokens.Spacing["Spacing.Button"] = new NumericToken
+            {
+                Key = "Spacing.Button",
+                Value = paddingValue,
+                Unit = "px",
+                Purpose = "Button padding from Bootstrap .btn"
+            };
+        }
+    }
+
+    private void ExtractBorderTokens(ComputedStyle style, FlagstoneTokens tokens)
+    {
+        var borderRadius = style.GetProperty("border-radius");
+        if (!string.IsNullOrWhiteSpace(borderRadius))
+        {
+            var radiusValue = ConvertToPixels(borderRadius, 16.0);
+            
+            tokens.BorderRadius["Radius.Button"] = new NumericToken
+            {
+                Key = "Radius.Button",
+                Value = radiusValue,
+                Unit = "px",
+                Purpose = "Button border radius from Bootstrap .btn"
+            };
+        }
+
+        var borderWidth = style.GetProperty("border-width");
+        if (!string.IsNullOrWhiteSpace(borderWidth))
+        {
+            var widthValue = ConvertToPixels(borderWidth, 16.0);
+            
+            tokens.BorderWidth["BorderWidth.Button"] = new NumericToken
+            {
+                Key = "BorderWidth.Button",
+                Value = widthValue,
+                Unit = "px",
+                Purpose = "Button border width from Bootstrap .btn"
+            };
+        }
+    }
+
+    private void ExtractTypographyTokens(ComputedStyle style, FlagstoneTokens tokens)
+    {
+        var fontSize = style.GetProperty("font-size");
+        if (!string.IsNullOrWhiteSpace(fontSize))
+        {
+            var sizeValue = ConvertToPixels(fontSize, 16.0);
+            
+            tokens.Typography["FontSize.Button"] = new TypographyToken
+            {
+                Key = "FontSize.Button",
+                Value = sizeValue.ToString(CultureInfo.InvariantCulture),
+                Unit = "px",
+                Purpose = "Button font size from Bootstrap .btn"
+            };
+        }
+
+        var fontWeight = style.GetProperty("font-weight");
+        if (!string.IsNullOrWhiteSpace(fontWeight))
+        {
+            tokens.Typography["FontWeight.Button"] = new TypographyToken
+            {
+                Key = "FontWeight.Button",
+                Value = fontWeight,
+                Purpose = "Button font weight from Bootstrap .btn"
+            };
+        }
+    }
 }
