@@ -1,32 +1,85 @@
+# FlagstoneUI
+
 <div align="center">
-  <img src="assets/logov1.svg" alt="FlagstoneUI Logo" width="200" height="200">
+  <img src="assets/logov1.svg" alt="FlagstoneUI Logo" width="200" height="200" />
   <h1>FlagstoneUI</h1>
-  <p><strong>Complete visual control over .NET MAUI apps—no platform-specific code required</strong></p>
+  <p><strong>True cross‑platform UI for .NET MAUI — one control surface, consistent behaviour everywhere, no platform code.</strong></p>
 </div>
 
-.NET MAUI gives you cross-platform UI, but many visual properties—borders, corner radius, background colors on inputs—require custom handlers for each platform. **FlagstoneUI changes that.**
+FlagstoneUI removes the last barrier to building visually consistent .NET MAUI apps.    
 
-Get full control over how your app looks, with simple properties that work everywhere, that you can style in XAML or C#. Create consistent, themeable designs without touching platform-specific code. Change your entire app's appearance by swapping a single theme file.
+.NET MAUI gets you most of the way there, but as soon as you need a custom border, corner radius, or background on a text input, you fall through a gap, and end up in platform handlers for iOS, Android, and Windows.
 
-> **⚠️ Note:** This is an early experimental project. It's functional and available for testing, but expect changes as it evolves.
+**FlagstoneUI closes those gaps.**
+It gives you enhanced, neutral controls designed for full visual control from shared code. No renderers. No handlers. No platform quirks. Just the UI your app is meant to have, working the same on every device.
+
+> **⚠️ Early experimental project.**
+> Functional and ready for testing, but evolving quickly.
+
+## What’s Available Now
+
+* Core controls: `FsButton`, `FsEntry`, `FsCard`, `FsEditor`
+* Token‑based theming system (colour, spacing, shapes, typography)
+* Material theme (NuGet) + example themes in the sample app
+* Community Toolkit integrations:
+
+  * `ValidationBehaviorAdapter` for reuse of existing validators
+  * Optional animated border behaviour for `FsEditor`
+
+Themes are standard resource dictionaries — copy, customise, extend, or publish your own.
 
 ![Demo Video](assets/Flagstone-UI.gif)
 
-## What's Available Now
+## Why FlagstoneUI?
 
-* Four core controls: `FsButton`, `FsEntry`, `FsCard`, `FsEditor`
-* Material theme `*`
-* .NET MAUI Community Toolkit integration
-    - `ValidationBehaviorAdapter`: Let's you re-use validators from the CommunityToolkit with FlagstoneUI input controls (`FsEntry` and `FsEditor`). See example implementation in the sample app.
-    - Border animation for `FsEditor`. This is mostly just for fun and was used to create the `AiEditor` in the sample app. But you could easily adapt this for your own use case.
+### The gap in .NET MAUI
 
-`*` Note that there are several themes included in the sample app. You can use these in your apps too if you wish, just copy the code. Themes are just resource dictionaries so you can just copy them into your own app. However the Material theme is the only one available as a NuGet package at this time. ALSO: feel free to create and share your own themes!
+.NET MAUI’s default controls look native, and _relatively_ consistent, but many visual properties simply aren't exposed.
+
+```xml
+<Entry Placeholder="Email" />
+```
+
+Looks simple. But here's an example of how an `Entry` is rendered on each platform:
+
+![The default Entry control looks slightly different on each platform](assets/xplat-entry.png)
+
+Now imagine your designer specifies:
+
+* CornerRadius: 8
+* BorderWidth: 2
+* BorderColor: #2196F3
+
+To implement that in .NET MAUI, you'll need **custom handler code for iOS, Android, and Windows**, and you'll maintain that code forever — including variants:
+
+- Write a handler to modify `UITextField` for iOS and macOS (and understand what that means)
+- Write a separate handler to modify `EditText` for Android (and understand _that_ platform's APIs)
+- Write yet another handler to modify `TextBox` for Windows (and learn _those_ platform-specific details)
+- Create variants for different styles (primary, secondary, different input purposes) _in each handler_
+- Create variants for different states (focused, disabled, valid, invalid, error) _in each handler_
+- Maintain all three handlers, forever, as platforms evolve and APIs change
+
+### FlagstoneUI’s approach
+
+FlagstoneUI gives you controls designed for full visual control from shared code.
+
+```xml
+<FsEntry
+    Placeholder="Email"
+    CornerRadius="8"
+    BorderColor="#2196F3"
+    BorderWidth="2" />
+```
+
+And you can use [explicit styles](https://learn.microsoft.com/dotnet/maui/user-interface/styles/xaml?view=net-maui-10.0#explicit-styles) for your variants and states, or [Visual State Manager](https://learn.microsoft.com/dotnet/maui/user-interface/visual-states?view=net-maui-10.0), all in .NET MAUI, without touching platform code.
+
+One place. One API. Same behaviour everywhere.
+
+This is the layer that makes .NET MAUI feel complete: define your visual system once, and your entire app uses it.
 
 ## Quick Start
 
-**📚 [Full Documentation & Guides](docs/README.md)** | **🚀 [Quickstart Guide](docs/quickstart.md)**
-
-This is still a very early prototype but you can start playing with it now.
+**📚 [Documentation](docs/README.md)** | **🚀 [Quickstart](docs/quickstart.md)**
 
 ### Build from Source
 
@@ -35,49 +88,47 @@ This is still a very early prototype but you can start playing with it now.
 git clone https://github.com/matt-goldman/flagstone-ui.git
 cd flagstone-ui
 
-# Run the sample app (requires .NET 10 SDK + MAUI workload)
 dotnet build
+
+# Run sample app
 dotnet run --project samples/FlagstoneUI.SampleApp
 ```
 
-Or reference the `FlagstoneUI.Core` project in your own MAUI app to start theming your controls.
+Or reference `FlagstoneUI.Core` in your MAUI project.
 
-### NuGet Package (Preview)
+### Install via NuGet (Preview)
 
 ```bash
-# Install FlagstoneUI Core package
 dotnet add package FlagstoneUI.Core --version 0.0.1-preview1
 
-# (Optional) Install MAUI Community Toolkit integration package
 dotnet add package FlagstoneUI.Integrations.MCT --version 0.0.1-preview1
 
-# (Optional) Install Material theme package
 dotnet add package FlagstoneUI.Themes.Material --version 0.0.1-preview1
 ```
 
 ## What Does It Look Like?
 
 ```xml
-<!-- Simple themed button with consistent styling across platforms -->
+<!-- Consistent themed button -->
 <FsButton
     Text="Click Me"
     BackgroundColor="{DynamicResource Color.Primary}"
     CornerRadius="{DynamicResource Shape.CornerRadius.Medium}" />
 
-<!-- Themed text entry with validation (using Community Toolkit) -->
-<FsEntry
-    Placeholder="Enter email"
-    BackgroundColor="{DynamicResource Color.Surface}"
-    BorderColor="{DynamicResource Color.Border}">
+<!-- Themed entry with Community Toolkit validation -->
+<FsEntry Placeholder="Enter email"
+         BackgroundColor="{DynamicResource Color.Surface}"
+         BorderColor="{DynamicResource Color.Border}">
     <FsEntry.Behaviors>
-          <ValidationBehaviorAdapter ValidStyle="{StaticResource ValidStyle}"
-                                     InvalidStyle="{StaticResource InvalidStyle}"
-                                     Behavior="{EmailValidationBehavior}"
-                                     Flags="ValidateOnValueChanged" />
-        </FsEntry.Behaviors>
+        <ValidationBehaviorAdapter
+            ValidStyle="{StaticResource ValidStyle}"
+            InvalidStyle="{StaticResource InvalidStyle}"
+            Behavior="{EmailValidationBehavior}"
+            Flags="ValidateOnValueChanged" />
+    </FsEntry.Behaviors>
 </FsEntry>
 
-<!-- Card container with theme tokens -->
+<!-- Card container using tokens -->
 <FsCard
     BackgroundColor="{DynamicResource Color.Surface}"
     CornerRadius="{DynamicResource Shape.CornerRadius.Large}"
@@ -86,92 +137,78 @@ dotnet add package FlagstoneUI.Themes.Material --version 0.0.1-preview1
 </FsCard>
 ```
 
-**Note:** Above assumes you're using [XAML global and implicit namespaces](https://learn.microsoft.com/dotnet/maui/whats-new/dotnet-10?view=net-maui-10.0#implicit-and-global-xml-namespaces). Without that you would consume these with a namespace prefix like `<fs:FsButton>...</fs:FsButton>`.
+If not using implicit/global namespaces, prefix controls as:
+`<fs:FsButton>...</fs:FsButton>`
 
 ## How It Works
 
-1. **Enhanced Controls** → Use `FsButton`, `FsEntry`, `FsCard`, etc. with full visual property control
-2. **Design Tokens** → Define your design system once (colors, spacing, typography, shapes)
-3. **Theme Files** → Apply consistent styling across your app with XAML resource dictionaries
-4. **Swap Themes** → Change your entire app's look by switching theme files
+1. **Enhanced Controls**
+   Purpose‑built replacements that expose full visual control.
 
-## Why FlagstoneUI?
+2. **Design Tokens**
+   Central definition of colour, spacing, typography, shapes.
 
-**The challenge:** Many visual properties aren't exposed in the .NET MAUI API. For example, for a colored border on a text input you'll need custom handlers for iOS, Android, and Windows, each with platform-specific code.
+3. **Themes**
+   Resource dictionaries that apply consistent design across the app.
 
-**Flagstone's solution:** Enhanced controls that expose these properties as simple XAML attributes. Write once, works everywhere.
-
-**Example:**
-
-```xml
-<!-- Traditional MAUI: requires custom handlers for each platform -->
-<Entry Placeholder="Email" />
-<!-- + C# handler code for iOS UITextField styling -->
-<!-- + C# handler code for Android EditText styling -->
-<!-- + C# handler code for Windows styling -->
-
-<!-- Flagstone: works everywhere out of the box -->
-<FsEntry
-    Placeholder="Email"
-    CornerRadius="8"
-    BorderColor="#2196F3"
-    BorderWidth="2" />
-```
-
-**Bonus:** Theme your entire app with design tokens—like Bootstrap's approach to theming, but for native mobile apps. Change colors, spacing, and typography across your whole app by swapping one theme file.
-
-**Pairs perfectly with [MAUI Community Toolkit](https://github.com/CommunityToolkit/Maui)** - FlagstoneUI handles visual styling, MCT provides behaviors and converters.
-
-**Learn more:** [Architecture](docs/architecture.md) | [Roadmap](docs/roadmap.md)
+4. **Swap or Create Themes**
+   Change the entire feel of your app by replacing one file.
 
 ## Development Status
 
-**Available now:**
-- ✅ Four core controls: `FsButton`, `FsEntry`, `FsCard`, `FsEditor`
-- ✅ Token-based theming system
-- ✅ Material theme + sample app with theme variations
-- ✅ MAUI Community Toolkit integration
-- ✅ [Complete documentation](docs/README.md)
+### Available
 
-**Coming soon:**
-- Additional controls (labels, lists, navigation)
-- Theme conversion tools (Bootstrap CSS → Flagstone themes)
-- AI-powered theme generation
+* `FsButton`, `FsEntry`, `FsCard`, `FsEditor`
+* Token engine
+* Material theme
+* Sample app with multiple theme examples
+* Community Toolkit integration
+* Full documentation
 
-See the [roadmap](docs/roadmap.md) for details.
+### Coming Soon
+
+* Additional controls (labels, lists, navigation)
+* Theme conversion tools
+* AI‑assisted theme creation
+
+See the [roadmap](docs/roadmap.md).
 
 ## Project Structure
 
-```
+```text
 flagstone-ui/
 ├── src/
-│   ├── FlagstoneUI.Core/          # Core controls and token system
-│   ├── FlagstoneUI.Themes.Material/ # Material theme
-│   └── FlagstoneUI.Blocks/        # Reusable app screens (planned for MVP)
+│   ├── FlagstoneUI.Core/              # Core controls + tokens
+│   ├── FlagstoneUI.Themes.Material/   # Material theme
+│   └── FlagstoneUI.Blocks/            # Planned: reusable UI building blocks
 ├── samples/
-│   ├── FlagstoneUI.SampleApp/     # Main showcase app
-│   └── FlagstoneUI.ThemePlayground/ # Theme experimentation
-├── docs/                          # 📚 Complete documentation
-└── tools/                         # AI tooling & converters
+│   ├── FlagstoneUI.SampleApp/         # Showcase
+│   └── FlagstoneUI.ThemePlayground/   # Theme experimentation
+├── docs/                              # Documentation
+└── tools/                             # Converters, AI tools
 ```
 
-**Note**: The Blocks (in progress) project will contain common UI building blocks (signup/signin forms, basic CRUD, etc.) and is planned as an extension for the MVP milestone. Currently at POC stage.
+The **Blocks** project (planned) will offer prebuilt forms, layouts, and workflows — optional extensions built on the same token system.
 
 ## Contributing
 
-**This is an early experiment - feedback is gold!** 🙏
+This project is still early — **your feedback genuinely shapes its direction**.
 
-Most important: **Is this useful?** Tell me if you'd use it (or why you wouldn't). This helps validate the project direction.
+Most important of all:
+**Tell me whether this is useful, or if you think the entire idea is misguided.**
+Honest critique is just as valuable as enthusiasm.
 
-**Ways to help:**
-- 💬 Try the samples and share feedback (Issues welcome!)
-- 🐛 Report bugs or suggest features
-- 💻 Submit PRs (bug fixes, docs, new controls)
-- 🎨 Create and share themes
-- 📖 Improve documentation
+### Ways to help
 
-**Questions?** Open a [Discussion](../../discussions) or ping [@matt-goldman](https://github.com/matt-goldman)
+* Try the sample apps and share what worked (or didn’t)
+* Tell me *why* you would or wouldn’t use this
+* Report bugs or suggest features
+* Submit PRs
+* Create and publish themes
+* Improve documentation
 
----
+Open a [Discussion](../../discussions) or reach out to [@matt-goldman](https://github.com/matt-goldman).
 
-**License:** MIT | **Status:** Experimental POC | **Compatibility:** .NET 10 + MAUI
+**License:** MIT
+**Status:** Experimental
+**Compatibility:** .NET 10 + MAUI

@@ -179,6 +179,7 @@
 
       <Grid>
         <fs:FsEditor Placeholder="🤖 Ask me anything..."
+                     PlaceholderColor="LightGrey"
                      x:Name="AiEditor"
                      Focused="AiEditor_OnFocused"
                      Unfocused="AiEditor_OnUnfocused"
