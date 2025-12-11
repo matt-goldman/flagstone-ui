@@ -2,7 +2,7 @@
 
 public partial class BorderlessEditor
 {
-	partial void RegisterHandler()
+	internal static partial void RegisterHandler()
 	{
 		Microsoft.Maui.Handlers.EditorHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
 		{
