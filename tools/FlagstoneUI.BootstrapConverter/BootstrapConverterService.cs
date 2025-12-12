@@ -63,6 +63,11 @@ public class BootstrapConverterService
 		/// Statistics about the conversion
 		/// </summary>
 		public required ConversionStatistics Statistics { get; init; }
+
+		/// <summary>
+		/// Font information (if IncludeFonts option was enabled)
+		/// </summary>
+		public FontInformation? Fonts { get; init; }
 	}
 
 	/// <summary>
@@ -122,11 +127,12 @@ public class BootstrapConverterService
 		BootstrapComponentStyles? componentStyles = null;
 		int variablesParsed = 0;
 
+		// Read all inputs (we'll need content for font parsing too)
+		var cssContents = await ReadInputsAsync(request.Inputs);
+
 		// CSS analysis (top-down)
 		if (useCssAnalysis)
 		{
-			var cssContents = await ReadInputsAsync(request.Inputs);
-			
 			var analyzer = new BootstrapCssAnalyzer();
 			componentStyles = cssContents.Count == 1
 				? analyzer.AnalyzeComponents(cssContents[0])
@@ -184,18 +190,26 @@ public class BootstrapConverterService
 			}
 		}
 
+		// Parse fonts if requested
+		FontInformation? fontInfo = null;
+		if (options.IncludeFonts)
+		{
+			var fontParser = new FontParser();
+			fontInfo = fontParser.ParseFonts(request.Inputs, [.. cssContents]);
+		}
+
 		// Extract theme name
 		var themeName = ExtractThemeName(request.Inputs[0]);
 
 		// Build statistics
 		var statistics = new ConversionStatistics
 		{
-			ColorTokens					= tokens.Colors.Count,
-			TypographyTokens			= tokens.Typography.Count,
-			SpacingTokens				= tokens.Spacing.Count,
-			BorderRadiusTokens			= tokens.BorderRadius.Count,
-			BorderWidthTokens			= tokens.BorderWidth.Count,
-			ComponentStylesExtracted	= componentStyles != null
+			ColorTokens = tokens.Colors.Count,
+			TypographyTokens = tokens.Typography.Count,
+			SpacingTokens = tokens.Spacing.Count,
+			BorderRadiusTokens = tokens.BorderRadius.Count,
+			BorderWidthTokens = tokens.BorderWidth.Count,
+			ComponentStylesExtracted = componentStyles != null
 				? typeof(BootstrapComponentStyles).GetProperties().Count(p => p.GetValue(componentStyles) != null)
 				: 0,
 			VariablesParsed = variablesParsed
@@ -203,10 +217,11 @@ public class BootstrapConverterService
 
 		return new ConversionResult
 		{
-			Tokens			= tokens,
+			Tokens = tokens,
 			ComponentStyles = componentStyles,
-			ThemeName		= themeName,
-			Statistics		= statistics
+			ThemeName = themeName,
+			Statistics = statistics,
+			Fonts = fontInfo
 		};
 	}
 

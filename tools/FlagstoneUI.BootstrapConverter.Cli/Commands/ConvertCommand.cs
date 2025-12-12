@@ -48,6 +48,11 @@ internal static class ConvertCommand
 			description: "Include purpose comments in generated XAML",
 			getDefaultValue: () => true);
 
+		var includeFontsOption = new Option<bool>(
+			aliases: ["--include-fonts"],
+			description: "Include font information in conversion result",
+			getDefaultValue: () => false);
+
 		var verboseOption = new Option<bool>(
 			aliases: ["--verbose", "-v"],
 			description: "Enable verbose output");
@@ -70,6 +75,7 @@ internal static class ConvertCommand
 			darkModeOption,
 			namespaceOption,
 			commentsOption,
+			includeFontsOption,
 			verboseOption,
 			debugOption,
 			analysisMode
@@ -84,13 +90,14 @@ internal static class ConvertCommand
 			var darkMode = context.ParseResult.GetValueForOption(darkModeOption)!;
 			var ns = context.ParseResult.GetValueForOption(namespaceOption)!;
 			var comments = context.ParseResult.GetValueForOption(commentsOption);
+			var includeFonts = context.ParseResult.GetValueForOption(includeFontsOption);
 			var verbose = context.ParseResult.GetValueForOption(verboseOption);
 			var debug = context.ParseResult.GetValueForOption(debugOption);
 			var mode = context.ParseResult.GetValueForOption(analysisMode)!;
 
 			try
 			{
-				await ExecuteConvertAsync(input, output, format, outputFormat, darkMode, ns, comments, verbose, debug, mode);
+				await ExecuteConvertAsync(input, output, format, outputFormat, darkMode, ns, comments, includeFonts, verbose, debug, mode);
 				context.ExitCode = 0;
 			}
 			catch (FileNotFoundException ex)
@@ -139,6 +146,7 @@ internal static class ConvertCommand
 		string darkModeStr,
 		string ns,
 		bool includeComments,
+		bool includeFonts,
 		bool verbose,
 		bool debug,
 		string analysisMode)
@@ -199,7 +207,8 @@ internal static class ConvertCommand
 				DarkModeStrategy = darkMode,
 				IncludeComments = includeComments,
 				Namespace = ns,
-				OutputFormat = outputFormat
+				OutputFormat = outputFormat,
+				IncludeFonts = includeFonts
 			}
 		};
 
@@ -265,5 +274,70 @@ internal static class ConvertCommand
 		Console.WriteLine($"  Tokens.{fileExtension}: {Path.Combine(output, $"Tokens.{fileExtension}")}");
 		Console.WriteLine($"  Theme.{fileExtension}:  {Path.Combine(output, $"Theme.{fileExtension}")}");
 		Console.WriteLine($"  Styles.{fileExtension}: {Path.Combine(output, $"Styles.{fileExtension}")}");
+
+		// Display font information if requested
+		if (includeFonts && result.Fonts != null && result.Fonts.HasFonts)
+		{
+			Console.WriteLine();
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.WriteLine("⚠ Font Setup Required");
+			Console.ResetColor();
+
+			foreach (var family in result.Fonts.Families)
+			{
+				Console.WriteLine();
+				Console.WriteLine($"Font: {family.Name}");
+				Console.WriteLine($"  Source: {family.Source}");
+
+				if (family.Weights.Count > 0)
+				{
+					Console.WriteLine($"  Weights: {string.Join(", ", family.Weights.OrderBy(w => w))}");
+				}
+
+				if (family.HasItalic)
+				{
+					Console.WriteLine($"  Italic: Yes");
+				}
+
+				Console.WriteLine($"  Suggested Alias: \"{family.SuggestedAlias}\"");
+			}
+
+			// Display download URLs
+			if (result.Fonts.DownloadUrls.Count > 0)
+			{
+				Console.WriteLine();
+				Console.ForegroundColor = ConsoleColor.Cyan;
+				Console.WriteLine("Download fonts from:");
+				Console.ResetColor();
+				foreach (var url in result.Fonts.DownloadUrls)
+				{
+					Console.WriteLine($"  {url}");
+				}
+			}
+
+			// Display registration instructions
+			Console.WriteLine();
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine("Registration Instructions:");
+			Console.ResetColor();
+			Console.WriteLine("1. Download font files (.ttf or .otf format)");
+			Console.WriteLine("2. Add fonts to your project (e.g., Resources/Fonts/)");
+			Console.WriteLine("3. Register in MauiProgram.cs:");
+			Console.WriteLine();
+			Console.WriteLine("   builder.ConfigureFonts(fonts =>");
+			Console.WriteLine("   {");
+			
+			foreach (var family in result.Fonts.Families.Where(f => f.Source != FontSource.System))
+			{
+				var fileName = $"{family.SuggestedAlias}-Regular.ttf";
+				Console.WriteLine($"       fonts.AddFont(\"{fileName}\", \"{family.SuggestedAlias}\");");
+			}
+			
+			Console.WriteLine("   });");
+			Console.WriteLine();
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.WriteLine("⚠ Always verify font licenses before using downloaded fonts in your application.");
+			Console.ResetColor();
+		}
 	}
 }

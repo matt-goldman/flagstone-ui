@@ -3,6 +3,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlagstoneUI.BootstrapConverter.UI.MainPage">
 
-   
+  <Grid ColumnDefinitions="300,*">
+    
+    <!-- Input options -->
+    <VerticalStackLayout Spacing="20">
+      <VerticalStackLayout Spacing="10" Padding="10">
+        <Label Text="Bootstrap Converter" FontSize="24" FontAttributes="Bold" />
+        <Label Text="Convert Bootstrap themes to Flagstone UI XAML resources." FontSize="14" />
+      </VerticalStackLayout>
+
+      <VerticalStackLayout Spacing="10" Padding="10">
+        <Label Text="Input Options" FontSize="18" FontAttributes="Bold" />
+        <Button Text="Select Bootstrap CSS File" />
+        <Button Text="Select Output Directory" />
+      </VerticalStackLayout>
+      
+    </VerticalStackLayout>
+
+    <!-- Controls showcase -->
+  </Grid>
 
 </ContentPage>
