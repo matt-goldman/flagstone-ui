@@ -1,4 +1,4 @@
-namespace FlagstoneUI.BootstrapConverter.Models;
+﻿namespace FlagstoneUI.BootstrapConverter.Models;
 
 /// <summary>
 /// Options for converting Bootstrap themes to Flagstone UI
@@ -19,6 +19,11 @@ public class ConversionOptions
     /// Namespace to use in generated XAML (if applicable)
     /// </summary>
     public string? Namespace { get; set; }
+
+    /// <summary>
+    /// Output format for resource dictionaries (XAML or C#)
+    /// </summary>
+    public ResourceDictionaryFormat OutputFormat { get; set; } = ResourceDictionaryFormat.Xaml;
 }
 
 /// <summary>
@@ -40,4 +45,20 @@ public enum DarkModeStrategy
     /// No dark mode support (single theme only)
     /// </summary>
     None
+}
+
+/// <summary>
+/// Output format for resource dictionaries
+/// </summary>
+public enum ResourceDictionaryFormat
+{
+    /// <summary>
+    /// Generate XAML resource dictionaries
+    /// </summary>
+    Xaml,
+
+    /// <summary>
+    /// Generate C# resource dictionaries
+    /// </summary>
+    CSharp
 }

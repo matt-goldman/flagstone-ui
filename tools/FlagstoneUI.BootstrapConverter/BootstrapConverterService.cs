@@ -219,18 +219,31 @@ public class BootstrapConverterService
 	{
 		var result = await ConvertAsync(request);
 
-		var generator = new XamlThemeGenerator();
-		
 		// Ensure output directory exists
 		Directory.CreateDirectory(outputDirectory);
 
-		await generator.GenerateFilesAsync(
-			result.Tokens,
-			result.ThemeName,
-			outputDirectory,
-			request.Options ?? new ConversionOptions(),
-			result.ComponentStyles
-		);
+		// Choose generator based on format
+		if (request.Options?.OutputFormat == ResourceDictionaryFormat.CSharp)
+		{
+			var generator = new CSharpThemeGenerator();
+			await generator.GenerateFilesAsync(
+				result.Tokens,
+				result.ThemeName,
+				outputDirectory,
+				request.Options
+			);
+		}
+		else
+		{
+			var generator = new XamlThemeGenerator();
+			await generator.GenerateFilesAsync(
+				result.Tokens,
+				result.ThemeName,
+				outputDirectory,
+				request.Options ?? new ConversionOptions(),
+				result.ComponentStyles
+			);
+		}
 	}
 
 	/// <summary>

@@ -28,6 +28,11 @@ internal static class ConvertCommand
 			description: "Input format: css, scss, or auto (default: auto)",
 			getDefaultValue: () => "auto");
 
+		var outputFormatOption = new Option<string>(
+			aliases: ["--output-format"],
+			description: "Output format: xaml or csharp (default: xaml)",
+			getDefaultValue: () => "xaml");
+
 		var darkModeOption = new Option<string>(
 			aliases: ["--dark-mode", "-d"],
 			description: "Dark mode generation: auto, manual, or none (default: auto)",
@@ -61,6 +66,7 @@ internal static class ConvertCommand
 			inputOption,
 			outputOption,
 			formatOption,
+			outputFormatOption,
 			darkModeOption,
 			namespaceOption,
 			commentsOption,
@@ -74,6 +80,7 @@ internal static class ConvertCommand
 			var input = context.ParseResult.GetValueForOption(inputOption)!;
 			var output = context.ParseResult.GetValueForOption(outputOption)!;
 			var format = context.ParseResult.GetValueForOption(formatOption)!;
+			var outputFormat = context.ParseResult.GetValueForOption(outputFormatOption)!;
 			var darkMode = context.ParseResult.GetValueForOption(darkModeOption)!;
 			var ns = context.ParseResult.GetValueForOption(namespaceOption)!;
 			var comments = context.ParseResult.GetValueForOption(commentsOption);
@@ -83,7 +90,7 @@ internal static class ConvertCommand
 
 			try
 			{
-				await ExecuteConvertAsync(input, output, format, darkMode, ns, comments, verbose, debug, mode);
+				await ExecuteConvertAsync(input, output, format, outputFormat, darkMode, ns, comments, verbose, debug, mode);
 				context.ExitCode = 0;
 			}
 			catch (FileNotFoundException ex)
@@ -128,6 +135,7 @@ internal static class ConvertCommand
 		string[] inputs,
 		string output,
 		string formatStr,
+		string outputFormatStr,
 		string darkModeStr,
 		string ns,
 		bool includeComments,
@@ -141,6 +149,13 @@ internal static class ConvertCommand
 			"css" => BootstrapFormat.Css,
 			"scss" => BootstrapFormat.Scss,
 			_ => BootstrapFormat.Auto
+		};
+
+		// Parse output format
+		var outputFormat = outputFormatStr.ToLowerInvariant() switch
+		{
+			"csharp" or "cs" => ResourceDictionaryFormat.CSharp,
+			_ => ResourceDictionaryFormat.Xaml
 		};
 
 		// Parse dark mode strategy
@@ -164,6 +179,7 @@ internal static class ConvertCommand
 			Console.WriteLine($"Input files: {string.Join(", ", inputs)}");
 			Console.WriteLine($"Output: {output}");
 			Console.WriteLine($"Format: {format}");
+			Console.WriteLine($"Output Format: {outputFormat}");
 			Console.WriteLine($"Dark Mode: {darkMode}");
 			Console.WriteLine($"Namespace: {ns}");
 			Console.WriteLine($"Comments: {includeComments}");
@@ -182,7 +198,8 @@ internal static class ConvertCommand
 			{
 				DarkModeStrategy = darkMode,
 				IncludeComments = includeComments,
-				Namespace = ns
+				Namespace = ns,
+				OutputFormat = outputFormat
 			}
 		};
 
@@ -212,18 +229,27 @@ internal static class ConvertCommand
 			}
 		}
 
-		// Generate XAML files
-		Console.Write("Generating XAML files... ");
-		var generator = new XamlThemeGenerator();
+		// Generate files
+		var fileType = outputFormat == ResourceDictionaryFormat.CSharp ? "C# files" : "XAML files";
+		Console.Write($"Generating {fileType}... ");
 		
 		Directory.CreateDirectory(output);
-		
-		await generator.GenerateFilesAsync(
-			result.Tokens, 
-			result.ThemeName, 
-			output, 
-			request.Options!, 
-			result.ComponentStyles);
+
+		if (outputFormat == ResourceDictionaryFormat.CSharp)
+		{
+			var generator = new CSharpThemeGenerator();
+			await generator.GenerateFilesAsync(result.Tokens, result.ThemeName, output, request.Options);
+		}
+		else
+		{
+			var generator = new XamlThemeGenerator();
+			await generator.GenerateFilesAsync(
+				result.Tokens, 
+				result.ThemeName, 
+				output, 
+				request.Options!, 
+				result.ComponentStyles);
+		}
 		
 		Console.ForegroundColor = ConsoleColor.Green;
 		Console.WriteLine("✓");
@@ -234,8 +260,10 @@ internal static class ConvertCommand
 		Console.ForegroundColor = ConsoleColor.Cyan;
 		Console.WriteLine("Conversion complete!");
 		Console.ResetColor();
-		Console.WriteLine($"  Tokens.xaml: {Path.Combine(output, "Tokens.xaml")}");
-		Console.WriteLine($"  Theme.xaml:  {Path.Combine(output, "Theme.xaml")}");
-		Console.WriteLine($"  Styles.xaml: {Path.Combine(output, "Styles.xaml")}");
+
+		var fileExtension = outputFormat == ResourceDictionaryFormat.CSharp ? "cs" : "xaml";
+		Console.WriteLine($"  Tokens.{fileExtension}: {Path.Combine(output, $"Tokens.{fileExtension}")}");
+		Console.WriteLine($"  Theme.{fileExtension}:  {Path.Combine(output, $"Theme.{fileExtension}")}");
+		Console.WriteLine($"  Styles.{fileExtension}: {Path.Combine(output, $"Styles.{fileExtension}")}");
 	}
 }
