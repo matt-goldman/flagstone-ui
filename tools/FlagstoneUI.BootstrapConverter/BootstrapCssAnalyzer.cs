@@ -53,6 +53,13 @@ public class BootstrapCssAnalyzer
 			// Form controls
 			FormControl = ExtractStyle(stylesheet, ".form-control"),
 			FormControlFocus = ExtractStyle(stylesheet, ".form-control:focus"),
+			FormControlPlaceholder = ExtractStyle(stylesheet, ".form-control::placeholder"),
+
+			// Validation states
+			FormControlValid = ExtractStyle(stylesheet, ".form-control.is-valid"),
+			FormControlInvalid = ExtractStyle(stylesheet, ".form-control.is-invalid"),
+			FormControlValidFocus = ExtractStyle(stylesheet, ".form-control.is-valid:focus"),
+			FormControlInvalidFocus = ExtractStyle(stylesheet, ".form-control.is-invalid:focus"),
 
 			// Cards
 			Card = ExtractStyle(stylesheet, ".card"),

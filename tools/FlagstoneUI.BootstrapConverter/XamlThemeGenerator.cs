@@ -146,7 +146,8 @@ public class XamlThemeGenerator
     /// <param name="themeName">Theme name</param>
     /// <param name="outputDirectory">Output directory path</param>
     /// <param name="options">Conversion options</param>
-    public async Task GenerateFilesAsync(FlagstoneTokens tokens, string themeName, string outputDirectory, ConversionOptions? options = null)
+    /// <param name="componentStyles">Optional Bootstrap component computed styles (used to better match sizing/padding where available)</param>
+    public async Task GenerateFilesAsync(FlagstoneTokens tokens, string themeName, string outputDirectory, ConversionOptions? options = null, BootstrapComponentStyles? componentStyles = null)
     {
         options ??= new ConversionOptions();
 
@@ -173,7 +174,7 @@ public class XamlThemeGenerator
         await File.WriteAllTextAsync(themeCodeBehindPath, themeCodeBehind);
 
         // Generate Styles.xaml with code-behind
-        var stylesXaml = GenerateStylesXaml(tokens, themeName, options);
+        var stylesXaml = GenerateStylesXaml(tokens, themeName, componentStyles, options);
         var stylesPath = Path.Combine(outputDirectory, "Styles.xaml");
         await File.WriteAllTextAsync(stylesPath, stylesXaml);
 
@@ -342,6 +343,19 @@ public class XamlThemeGenerator
     /// <returns>XAML content as string</returns>
     public string GenerateStylesXaml(FlagstoneTokens tokens, string themeName, ConversionOptions? options = null)
     {
+        return GenerateStylesXaml(tokens, themeName, componentStyles: null, options);
+    }
+
+    /// <summary>
+    /// Generate Styles.xaml file with styles for FlagstoneUI controls.
+    /// </summary>
+    /// <param name="tokens">Flagstone tokens</param>
+    /// <param name="themeName">Theme name</param>
+    /// <param name="componentStyles">Optional computed Bootstrap component styles (used for size/padding defaults where available)</param>
+    /// <param name="options">Conversion options</param>
+    /// <returns>XAML content as string</returns>
+    public string GenerateStylesXaml(FlagstoneTokens tokens, string themeName, BootstrapComponentStyles? componentStyles, ConversionOptions? options = null)
+    {
         options ??= new ConversionOptions();
 
         // Sanitize theme name for class name
@@ -366,13 +380,16 @@ public class XamlThemeGenerator
         root.AddFirst(mergedDictionaries);
         root.AddFirst(new XText("\n"));
 
-        // Add button styles
-        AddButtonStyles(root, tokens, options);
+        // Add control styles
+        AddButtonStyles(root, tokens, componentStyles, options);
+        AddEntryStyles(root, tokens, componentStyles, options);
+        AddEditorStyles(root, tokens, componentStyles, options);
+        AddCardStyles(root, tokens, componentStyles, options);
 
         return FormatXamlDocument(doc);
     }
 
-    private void AddButtonStyles(XElement root, FlagstoneTokens tokens, ConversionOptions options)
+    private void AddButtonStyles(XElement root, FlagstoneTokens tokens, BootstrapComponentStyles? componentStyles, ConversionOptions options)
     {
         var mauiNs = root.Name.Namespace;
         var xNs = root.GetNamespaceOfPrefix("x") ?? XNamespace.Get(XamlNamespace);
@@ -524,6 +541,452 @@ public class XamlThemeGenerator
         AddDisabledVisualState(textButtonStyle, mauiNs, xNs);
 
         root.Add(textButtonStyle);
+        root.Add(new XText("\n"));
+
+        // Additional Bootstrap-like variants
+        root.Add(new XText("\n\n"));
+        if (options.IncludeComments)
+        {
+            root.Add(new XComment(" Semantic button variants " ));
+        }
+
+        var filledVariants = new (string KeySuffix, string BgToken, string? OnToken)[]
+        {
+            ("Secondary", "Color.Secondary", "Color.OnSecondary"),
+            ("Success", "Color.Success", "Color.OnSuccess"),
+            ("Danger", "Color.Error", "Color.OnError"),
+            ("Warning", "Color.Warning", "Color.OnWarning"),
+            ("Info", "Color.Info", "Color.OnInfo"),
+            ("Light", tokens.Colors.ContainsKey("Color.Light") ? "Color.Light" : "Color.Surface", tokens.Colors.ContainsKey("Color.OnLight") ? "Color.OnLight" : "Color.OnBackground"),
+            ("Dark", tokens.Colors.ContainsKey("Color.Dark") ? "Color.Dark" : "Color.SurfaceVariant.Dark", tokens.Colors.ContainsKey("Color.OnDark") ? "Color.OnDark" : "Color.OnBackground")
+        };
+
+        foreach (var (keySuffix, bgToken, onToken) in filledVariants)
+        {
+            AddButtonFilledVariantStyle(root, tokens, keySuffix, bgToken, onToken, options);
+        }
+
+        root.Add(new XText("\n\n"));
+        if (options.IncludeComments)
+        {
+            root.Add(new XComment(" Outline button variants " ));
+        }
+
+        var outlineVariants = new (string KeySuffix, string Token)[]
+        {
+            ("Primary", "Color.Primary"),
+            ("Secondary", "Color.Secondary"),
+            ("Success", "Color.Success"),
+            ("Danger", "Color.Error"),
+            ("Warning", "Color.Warning"),
+            ("Info", "Color.Info"),
+            ("Light", tokens.Colors.ContainsKey("Color.Light") ? "Color.Light" : "Color.Surface"),
+            ("Dark", tokens.Colors.ContainsKey("Color.Dark") ? "Color.Dark" : "Color.SurfaceVariant.Dark")
+        };
+
+        foreach (var (keySuffix, tokenKey) in outlineVariants)
+        {
+            AddButtonOutlineVariantStyle(root, tokens, keySuffix, tokenKey, options);
+        }
+
+        root.Add(new XText("\n\n"));
+        if (options.IncludeComments)
+        {
+            root.Add(new XComment(" Size variants " ));
+        }
+        AddButtonSizeStyles(root, tokens, componentStyles, options);
+    }
+
+    private void AddButtonFilledVariantStyle(XElement root, FlagstoneTokens tokens, string keySuffix, string backgroundTokenKey, string? onTokenKey, ConversionOptions options)
+    {
+        if (!tokens.Colors.ContainsKey(backgroundTokenKey))
+            return;
+
+        var mauiNs = root.Name.Namespace;
+        var xNs = root.GetNamespaceOfPrefix("x") ?? XNamespace.Get(XamlNamespace);
+
+        var style = new XElement(mauiNs + "Style",
+            new XAttribute(xNs + "Key", $"Button{keySuffix}"),
+            new XAttribute("TargetType", "fs:FsButton")
+        );
+
+        style.Add(CreateSetter(mauiNs, "BackgroundColor", $"{{DynamicResource {backgroundTokenKey}}}"));
+        var textColor = (onTokenKey != null && tokens.Colors.ContainsKey(onTokenKey))
+            ? $"{{DynamicResource {onTokenKey}}}"
+            : (tokens.Colors.ContainsKey($"Color.On{keySuffix}") ? $"{{DynamicResource Color.On{keySuffix}}}" : "#FFFFFF");
+        style.Add(CreateSetter(mauiNs, "TextColor", textColor));
+
+        // Shared geometry/spacing/typography settings (match base style defaults)
+        var radiusKey = GetPreferredRadiusKey(tokens);
+        if (!string.IsNullOrWhiteSpace(radiusKey))			
+        {
+            style.Add(CreateSetter(mauiNs, "CornerRadius", $"{{DynamicResource {radiusKey}}}"));
+        }
+
+        style.Add(CreateSetter(mauiNs, "Padding", GetPreferredButtonPadding(tokens)));
+        AddButtonTypography(style, mauiNs, tokens);
+        style.Add(CreateSetter(mauiNs, "MinimumHeightRequest", "40"));
+        AddDisabledVisualState(style, mauiNs, xNs);
+
+        root.Add(style);
+        root.Add(new XText("\n\n"));
+    }
+
+    private void AddButtonOutlineVariantStyle(XElement root, FlagstoneTokens tokens, string keySuffix, string tokenKey, ConversionOptions options)
+    {
+        if (!tokens.Colors.ContainsKey(tokenKey))
+            return;
+
+        var mauiNs = root.Name.Namespace;
+        var xNs = root.GetNamespaceOfPrefix("x") ?? XNamespace.Get(XamlNamespace);
+
+        var style = new XElement(mauiNs + "Style",
+            new XAttribute(xNs + "Key", $"ButtonOutline{keySuffix}"),
+            new XAttribute("TargetType", "fs:FsButton")
+        );
+
+        style.Add(CreateSetter(mauiNs, "BackgroundColor", "Transparent"));
+        style.Add(CreateSetter(mauiNs, "TextColor", $"{{DynamicResource {tokenKey}}}"));
+        style.Add(CreateSetter(mauiNs, "BorderColor", $"{{DynamicResource {tokenKey}}}"));
+        style.Add(CreateSetter(mauiNs, "BorderWidth", GetPreferredBorderWidth(tokens)));
+
+        var radiusKey = GetPreferredRadiusKey(tokens);
+        if (!string.IsNullOrWhiteSpace(radiusKey))
+        {
+            style.Add(CreateSetter(mauiNs, "CornerRadius", $"{{DynamicResource {radiusKey}}}"));
+        }
+
+        style.Add(CreateSetter(mauiNs, "Padding", GetPreferredButtonPadding(tokens)));
+        AddButtonTypography(style, mauiNs, tokens);
+        style.Add(CreateSetter(mauiNs, "MinimumHeightRequest", "40"));
+        AddDisabledVisualState(style, mauiNs, xNs);
+
+        root.Add(style);
+        root.Add(new XText("\n\n"));
+    }
+
+    private void AddButtonSizeStyles(XElement root, FlagstoneTokens tokens, BootstrapComponentStyles? componentStyles, ConversionOptions options)
+    {
+        var mauiNs = root.Name.Namespace;
+        var xNs = root.GetNamespaceOfPrefix("x") ?? XNamespace.Get(XamlNamespace);
+
+        var (smPadding, lgPadding) = GetButtonSizePaddings(componentStyles);
+
+        var smallStyle = new XElement(mauiNs + "Style",
+            new XAttribute(xNs + "Key", "ButtonSmall"),
+            new XAttribute("TargetType", "fs:FsButton")
+        );
+        smallStyle.Add(CreateSetter(mauiNs, "Padding", smPadding));
+        if (tokens.Typography.ContainsKey("FontSize.Button"))
+        {
+            smallStyle.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.Button}"));
+        }
+        root.Add(smallStyle);
+        root.Add(new XText("\n\n"));
+
+        var largeStyle = new XElement(mauiNs + "Style",
+            new XAttribute(xNs + "Key", "ButtonLarge"),
+            new XAttribute("TargetType", "fs:FsButton")
+        );
+        largeStyle.Add(CreateSetter(mauiNs, "Padding", lgPadding));
+        if (tokens.Typography.ContainsKey("FontSize.Button"))
+        {
+            largeStyle.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.Button}"));
+        }
+        root.Add(largeStyle);
+        root.Add(new XText("\n"));
+    }
+
+    private static (string SmallPadding, string LargePadding) GetButtonSizePaddings(BootstrapComponentStyles? componentStyles)
+    {
+        var sm = TryGetPaddingFromButtonSize(componentStyles?.ButtonSmall) ?? "16,8";
+        var lg = TryGetPaddingFromButtonSize(componentStyles?.ButtonLarge) ?? "32,14";
+        return (sm, lg);
+    }
+
+    private static string? TryGetPaddingFromButtonSize(ComputedStyle? style)
+    {
+        if (style == null)
+            return null;
+
+        // Bootstrap often expresses padding via CSS custom properties for buttons.
+        var py = style.GetProperty("--bs-btn-padding-y");
+        var px = style.GetProperty("--bs-btn-padding-x");
+        if (!string.IsNullOrWhiteSpace(px) && !string.IsNullOrWhiteSpace(py))
+        {
+            var x = CssLengthToPixels(px);
+            var y = CssLengthToPixels(py);
+            if (x > 0 && y > 0)
+                return $"{x.ToString(CultureInfo.InvariantCulture)},{y.ToString(CultureInfo.InvariantCulture)}";
+        }
+
+        var padding = style.GetProperty("padding");
+        return TryParseCssPaddingToThickness(padding);
+    }
+
+    private static void AddButtonTypography(XElement style, XNamespace mauiNs, FlagstoneTokens tokens)
+    {
+        if (tokens.Typography.ContainsKey("FontSize.Button"))
+        {
+            style.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.Button}"));
+            return;
+        }
+
+        if (tokens.Typography.ContainsKey("FontSize.LabelLarge"))
+        {
+            style.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.LabelLarge}"));
+        }
+        else if (tokens.Typography.ContainsKey("FontSize.Body"))
+        {
+            style.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.Body}"));
+        }
+    }
+
+    private static string GetPreferredButtonPadding(FlagstoneTokens tokens)
+    {
+        return tokens.Spacing.ContainsKey("Spacing.Button")
+            ? "{DynamicResource Spacing.Button}"
+            : (tokens.Spacing.ContainsKey("Spacing.Medium") ? "{DynamicResource Spacing.Medium}" : "24,10");
+    }
+
+    private static string GetPreferredBorderWidth(FlagstoneTokens tokens)
+    {
+        if (tokens.BorderWidth.ContainsKey("BorderWidth.Button"))
+            return "{DynamicResource BorderWidth.Button}";
+        if (tokens.BorderWidth.ContainsKey("BorderWidth.Default"))
+            return "{DynamicResource BorderWidth.Default}";
+        return "1";
+    }
+
+    private static string? GetPreferredRadiusKey(FlagstoneTokens tokens)
+    {
+        var preferredKeys = new[]
+        {
+            "Radius.Button",
+            "Radius.Medium",
+            "Radius.Default",
+            "Radius.Small",
+            "Radius.Large"
+        };
+
+        foreach (var key in preferredKeys)
+        {
+            if (tokens.BorderRadius.ContainsKey(key))
+                return key;
+        }
+
+        return tokens.BorderRadius.Count > 0 ? tokens.BorderRadius.Keys.First() : null;
+    }
+
+    private static double CssLengthToPixels(string value)
+    {
+        value = value.Trim().ToLowerInvariant();
+        if (value.EndsWith("px", StringComparison.Ordinal))
+        {
+            return double.TryParse(value.Replace("px", string.Empty, StringComparison.Ordinal), CultureInfo.InvariantCulture, out var px)
+                ? px
+                : 0;
+        }
+        if (value.EndsWith("rem", StringComparison.Ordinal))
+        {
+            return double.TryParse(value.Replace("rem", string.Empty, StringComparison.Ordinal), CultureInfo.InvariantCulture, out var rem)
+                ? rem * 16.0
+                : 0;
+        }
+        if (value.EndsWith("em", StringComparison.Ordinal))
+        {
+            return double.TryParse(value.Replace("em", string.Empty, StringComparison.Ordinal), CultureInfo.InvariantCulture, out var em)
+                ? em * 16.0
+                : 0;
+        }
+        return double.TryParse(value, CultureInfo.InvariantCulture, out var number) ? number : 0;
+    }
+
+    private static string? TryParseCssPaddingToThickness(string? cssPadding)
+    {
+        if (string.IsNullOrWhiteSpace(cssPadding))
+            return null;
+
+        // Expect "vertical horizontal" or "top right bottom left".
+        var parts = cssPadding.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        if (parts.Length == 1)
+        {
+            var v = CssLengthToPixels(parts[0]);
+            return v > 0 ? v.ToString(CultureInfo.InvariantCulture) : null;
+        }
+        if (parts.Length == 2)
+        {
+            var y = CssLengthToPixels(parts[0]);
+            var x = CssLengthToPixels(parts[1]);
+            return (x > 0 && y > 0)
+                ? $"{x.ToString(CultureInfo.InvariantCulture)},{y.ToString(CultureInfo.InvariantCulture)}"
+                : null;
+        }
+        if (parts.Length == 4)
+        {
+            var top = CssLengthToPixels(parts[0]);
+            var right = CssLengthToPixels(parts[1]);
+            var bottom = CssLengthToPixels(parts[2]);
+            var left = CssLengthToPixels(parts[3]);
+            return (top > 0 && right > 0 && bottom > 0 && left > 0)
+                ? $"{left.ToString(CultureInfo.InvariantCulture)},{top.ToString(CultureInfo.InvariantCulture)},{right.ToString(CultureInfo.InvariantCulture)},{bottom.ToString(CultureInfo.InvariantCulture)}"
+                : null;
+        }
+
+        return null;
+    }
+
+    private void AddEntryStyles(XElement root, FlagstoneTokens tokens, BootstrapComponentStyles? componentStyles, ConversionOptions options)
+    {
+        var mauiNs = root.Name.Namespace;
+        var xNs = root.GetNamespaceOfPrefix("x") ?? XNamespace.Get(XamlNamespace);
+
+        root.Add(new XText("\n\n"));
+        root.Add(new XComment(" ========== FsEntry Styles ========== "));
+        root.Add(new XText("\n\n"));
+
+        var baseStyle = new XElement(mauiNs + "Style",
+            new XAttribute("TargetType", "fs:FsEntry")
+        );
+
+        // Background + border
+        if (tokens.Colors.ContainsKey("Color.Background"))
+        {
+            baseStyle.Add(CreateSetter(mauiNs, "Background", "{DynamicResource Color.Background}"));
+        }
+        if (tokens.Colors.ContainsKey("Color.Outline"))
+        {
+            baseStyle.Add(CreateSetter(mauiNs, "BorderBrush", "{DynamicResource Color.Outline}"));
+        }
+        baseStyle.Add(CreateSetter(mauiNs, "BorderWidth", GetPreferredBorderWidth(tokens)));
+        var radiusKey = GetPreferredRadiusKey(tokens);
+        if (!string.IsNullOrWhiteSpace(radiusKey))
+        {
+            baseStyle.Add(CreateSetter(mauiNs, "CornerRadius", $"{{DynamicResource {radiusKey}}}"));
+        }
+
+        // Text
+        if (tokens.Colors.ContainsKey("Color.OnBackground"))
+        {
+            baseStyle.Add(CreateSetter(mauiNs, "TextColor", "{DynamicResource Color.OnBackground}"));
+            baseStyle.Add(CreateSetter(mauiNs, "PlaceholderColor", "{DynamicResource Color.OnBackground}"));
+        }
+
+        // Padding (prefer .form-control padding if available)
+        var entryPadding = TryParseCssPaddingToThickness(componentStyles?.FormControl?.GetProperty("padding")) ?? "12,10";
+        baseStyle.Add(CreateSetter(mauiNs, "Padding", entryPadding));
+
+        // Typography
+        if (tokens.Typography.ContainsKey("FontSize.Body"))
+        {
+            baseStyle.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.Body}"));
+        }
+
+        root.Add(baseStyle);
+        root.Add(new XText("\n\n"));
+
+        // Validation styles (for MCT integrations)
+        AddValidationStyle(root, mauiNs, xNs, tokens, targetType: "fs:FsEntry", key: "EntryValid", borderToken: "Color.Success");
+        AddValidationStyle(root, mauiNs, xNs, tokens, targetType: "fs:FsEntry", key: "EntryInvalid", borderToken: "Color.Error");
+    }
+
+    private void AddEditorStyles(XElement root, FlagstoneTokens tokens, BootstrapComponentStyles? componentStyles, ConversionOptions options)
+    {
+        var mauiNs = root.Name.Namespace;
+        var xNs = root.GetNamespaceOfPrefix("x") ?? XNamespace.Get(XamlNamespace);
+
+        root.Add(new XText("\n\n"));
+        root.Add(new XComment(" ========== FsEditor Styles ========== "));
+        root.Add(new XText("\n\n"));
+
+        var baseStyle = new XElement(mauiNs + "Style",
+            new XAttribute("TargetType", "fs:FsEditor")
+        );
+
+        if (tokens.Colors.ContainsKey("Color.Background"))
+        {
+            baseStyle.Add(CreateSetter(mauiNs, "Background", "{DynamicResource Color.Background}"));
+        }
+        if (tokens.Colors.ContainsKey("Color.Outline"))
+        {
+            baseStyle.Add(CreateSetter(mauiNs, "BorderBrush", "{DynamicResource Color.Outline}"));
+        }
+        baseStyle.Add(CreateSetter(mauiNs, "BorderWidth", GetPreferredBorderWidth(tokens)));
+        var radiusKey = GetPreferredRadiusKey(tokens);
+        if (!string.IsNullOrWhiteSpace(radiusKey))
+        {
+            baseStyle.Add(CreateSetter(mauiNs, "CornerRadius", $"{{DynamicResource {radiusKey}}}"));
+        }
+
+        if (tokens.Colors.ContainsKey("Color.OnBackground"))
+        {
+            baseStyle.Add(CreateSetter(mauiNs, "TextColor", "{DynamicResource Color.OnBackground}"));
+            baseStyle.Add(CreateSetter(mauiNs, "PlaceholderColor", "{DynamicResource Color.OnBackground}"));
+        }
+
+        var editorPadding = TryParseCssPaddingToThickness(componentStyles?.FormControl?.GetProperty("padding")) ?? "12,10";
+        baseStyle.Add(CreateSetter(mauiNs, "Padding", editorPadding));
+
+        if (tokens.Typography.ContainsKey("FontSize.Body"))
+        {
+            baseStyle.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.Body}"));
+        }
+
+        root.Add(baseStyle);
+        root.Add(new XText("\n\n"));
+
+        AddValidationStyle(root, mauiNs, xNs, tokens, targetType: "fs:FsEditor", key: "EditorValid", borderToken: "Color.Success");
+        AddValidationStyle(root, mauiNs, xNs, tokens, targetType: "fs:FsEditor", key: "EditorInvalid", borderToken: "Color.Error");
+    }
+
+    private static void AddValidationStyle(XElement root, XNamespace mauiNs, XNamespace xNs, FlagstoneTokens tokens, string targetType, string key, string borderToken)
+    {
+        if (!tokens.Colors.ContainsKey(borderToken))
+            return;
+
+        var style = new XElement(mauiNs + "Style",
+            new XAttribute(xNs + "Key", key),
+            new XAttribute("TargetType", targetType)
+        );
+        style.Add(CreateSetter(mauiNs, "BorderBrush", $"{{DynamicResource {borderToken}}}"));
+        root.Add(style);
+        root.Add(new XText("\n\n"));
+    }
+
+    private void AddCardStyles(XElement root, FlagstoneTokens tokens, BootstrapComponentStyles? componentStyles, ConversionOptions options)
+    {
+        var mauiNs = root.Name.Namespace;
+        root.Add(new XText("\n\n"));
+        root.Add(new XComment(" ========== FsCard Styles ========== "));
+        root.Add(new XText("\n\n"));
+
+        var baseStyle = new XElement(mauiNs + "Style",
+            new XAttribute("TargetType", "fs:FsCard")
+        );
+
+        // Bootstrap cards are typically surface containers with borders
+        if (tokens.Colors.ContainsKey("Color.Background"))
+        {
+            baseStyle.Add(CreateSetter(mauiNs, "BackgroundColor", "{DynamicResource Color.Background}"));
+        }
+        if (tokens.Colors.ContainsKey("Color.Outline"))
+        {
+            baseStyle.Add(CreateSetter(mauiNs, "BorderColor", "{DynamicResource Color.Outline}"));
+        }
+        baseStyle.Add(CreateSetter(mauiNs, "BorderWidth", GetPreferredBorderWidth(tokens)));
+
+        var radiusKey = GetPreferredRadiusKey(tokens);
+        if (!string.IsNullOrWhiteSpace(radiusKey))
+        {
+            baseStyle.Add(CreateSetter(mauiNs, "CornerRadius", $"{{DynamicResource {radiusKey}}}"));
+        }
+
+        // Prefer card padding if available in CSS, otherwise a reasonable default
+        var cardPadding = TryParseCssPaddingToThickness(componentStyles?.Card?.GetProperty("padding"))
+            ?? (tokens.Spacing.ContainsKey("Spacing.Medium") ? "{DynamicResource Spacing.Medium}" : "16");
+        baseStyle.Add(CreateSetter(mauiNs, "Padding", cardPadding));
+
+        root.Add(baseStyle);
         root.Add(new XText("\n"));
     }
 

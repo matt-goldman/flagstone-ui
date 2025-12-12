@@ -172,6 +172,7 @@ internal static class ConvertCommand
 		}
 
 		FlagstoneTokens tokens;
+		BootstrapComponentStyles? componentStyles = null;
 		var options = new ConversionOptions
 		{
 			DarkModeStrategy = darkMode,
@@ -210,7 +211,7 @@ internal static class ConvertCommand
 			}
 			
 			var analyzer = new BootstrapCssAnalyzer();
-			var componentStyles = cssContents.Count == 1 
+			componentStyles = cssContents.Count == 1 
 				? analyzer.AnalyzeComponents(cssContents[0])
 				: analyzer.AnalyzeMultipleFiles(cssContents.ToArray());
 			
@@ -228,7 +229,7 @@ internal static class ConvertCommand
 			// Map computed styles to tokens
 			Console.Write("Extracting tokens from component styles... ");
 			var mapper = new BootstrapMapper();
-			tokens = mapper.MapComponentStylesToTokens(componentStyles, options);
+			tokens = mapper.MapComponentStylesToTokens(componentStyles ?? new BootstrapComponentStyles(), options);
 			
 			Console.ForegroundColor = ConsoleColor.Green;
 			Console.WriteLine("✓");
@@ -324,7 +325,7 @@ internal static class ConvertCommand
 			themeName = "Bootstrap";
 		}
 		
-		await generator.GenerateFilesAsync(tokens, themeName, output, options);
+		await generator.GenerateFilesAsync(tokens, themeName, output, options, componentStyles);
 		Console.ForegroundColor = ConsoleColor.Green;
 		Console.WriteLine("✓");
 		Console.ResetColor();
