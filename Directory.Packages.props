@@ -6,6 +6,7 @@
   <!-- Centralized package versions -->
   <ItemGroup>
     <!-- Code Analysis -->
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.100" />
     <!-- MAUI -->
     <!-- <PackageVersion Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" /> -->
@@ -13,7 +14,6 @@
     <PackageVersion Include="CommunityToolkit.Maui" Version="13.0.0" />
     <!-- Package reference for FlagstoneUI.Core for dependent libraries in Release builds -->
     <PackageVersion Include="FlagstoneUI.Core" Version="0.0.1-preview1" />
-
     <!-- Logging -->
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
     <!-- Testing -->

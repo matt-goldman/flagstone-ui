@@ -24,9 +24,10 @@
     </Project>
   </Folder>
   <Folder Name="/tools/">
-    <Project Path="tools/FlagstoneUI.BootstrapConverter/FlagstoneUI.BootstrapConverter.csproj" />
     <Project Path="tools/FlagstoneUI.BootstrapConverter.Cli/FlagstoneUI.BootstrapConverter.Cli.csproj" />
     <Project Path="tools/FlagstoneUI.BootstrapConverter.Mcp/FlagstoneUI.BootstrapConverter.Mcp.csproj" />
+    <Project Path="tools/FlagstoneUI.BootstrapConverter.UI/FlagstoneUI.BootstrapConverter.UI.csproj" Id="4a0eca0d-8459-47af-80d9-b6bf4885b2e3" />
+    <Project Path="tools/FlagstoneUI.BootstrapConverter/FlagstoneUI.BootstrapConverter.csproj" />
     <Project Path="tools/FlagstoneUI.TokenGenerator/FlagstoneUI.TokenGenerator.csproj" />
   </Folder>
   <Folder Name="/tools/tests/">
