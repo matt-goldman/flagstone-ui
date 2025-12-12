@@ -443,7 +443,7 @@ public class XamlThemeGenerator
         defaultStyle.Add(CreateSetter(mauiNs, "MinimumHeightRequest", "40"));
 
         // Add disabled visual state
-        AddDisabledVisualState(defaultStyle, mauiNs, xNs);
+        AddButtonVisualStates(defaultStyle, mauiNs, xNs);
 
         root.Add(defaultStyle);
         root.Add(new XText("\n\n"));
@@ -500,7 +500,7 @@ public class XamlThemeGenerator
         }
 
         outlinedStyle.Add(CreateSetter(mauiNs, "MinimumHeightRequest", "40"));
-        AddDisabledVisualState(outlinedStyle, mauiNs, xNs);
+        AddButtonVisualStates(outlinedStyle, mauiNs, xNs);
 
         root.Add(outlinedStyle);
         root.Add(new XText("\n\n"));
@@ -538,7 +538,7 @@ public class XamlThemeGenerator
         }
 
         textButtonStyle.Add(CreateSetter(mauiNs, "MinimumHeightRequest", "40"));
-        AddDisabledVisualState(textButtonStyle, mauiNs, xNs);
+        AddButtonVisualStates(textButtonStyle, mauiNs, xNs);
 
         root.Add(textButtonStyle);
         root.Add(new XText("\n"));
@@ -626,7 +626,7 @@ public class XamlThemeGenerator
         style.Add(CreateSetter(mauiNs, "Padding", GetPreferredButtonPadding(tokens)));
         AddButtonTypography(style, mauiNs, tokens);
         style.Add(CreateSetter(mauiNs, "MinimumHeightRequest", "40"));
-        AddDisabledVisualState(style, mauiNs, xNs);
+        AddButtonVisualStates(style, mauiNs, xNs);
 
         root.Add(style);
         root.Add(new XText("\n\n"));
@@ -659,7 +659,7 @@ public class XamlThemeGenerator
         style.Add(CreateSetter(mauiNs, "Padding", GetPreferredButtonPadding(tokens)));
         AddButtonTypography(style, mauiNs, tokens);
         style.Add(CreateSetter(mauiNs, "MinimumHeightRequest", "40"));
-        AddDisabledVisualState(style, mauiNs, xNs);
+        AddButtonVisualStates(style, mauiNs, xNs);
 
         root.Add(style);
         root.Add(new XText("\n\n"));
@@ -882,6 +882,15 @@ public class XamlThemeGenerator
             baseStyle.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.Body}"));
         }
 
+		// Focus/disabled states
+		var focusedBorder = tokens.Colors.ContainsKey("Color.Primary")
+			? "{DynamicResource Color.Primary}"
+			: (tokens.Colors.ContainsKey("Color.Outline") ? "{DynamicResource Color.Outline}" : null);
+		if (!string.IsNullOrWhiteSpace(focusedBorder))
+		{
+			AddInputVisualStates(baseStyle, mauiNs, xNs, focusedBorder);
+		}
+
         root.Add(baseStyle);
         root.Add(new XText("\n\n"));
 
@@ -932,6 +941,15 @@ public class XamlThemeGenerator
             baseStyle.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.Body}"));
         }
 
+        // Focus/disabled states
+        var focusedBorder = tokens.Colors.ContainsKey("Color.Primary")
+            ? "{DynamicResource Color.Primary}"
+            : (tokens.Colors.ContainsKey("Color.Outline") ? "{DynamicResource Color.Outline}" : null);
+        if (!string.IsNullOrWhiteSpace(focusedBorder))
+        {
+            AddInputVisualStates(baseStyle, mauiNs, xNs, focusedBorder);
+        }
+
         root.Add(baseStyle);
         root.Add(new XText("\n\n"));
 
@@ -948,9 +966,47 @@ public class XamlThemeGenerator
             new XAttribute(xNs + "Key", key),
             new XAttribute("TargetType", targetType)
         );
-        style.Add(CreateSetter(mauiNs, "BorderBrush", $"{{DynamicResource {borderToken}}}"));
+        var border = $"{{DynamicResource {borderToken}}}";
+        style.Add(CreateSetter(mauiNs, "BorderBrush", border));
+        // Keep the same border color when focused, and also include Disabled state.
+        AddInputVisualStates(style, mauiNs, xNs, border);
         root.Add(style);
         root.Add(new XText("\n\n"));
+    }
+
+    private static void AddInputVisualStates(XElement style, XNamespace mauiNs, XNamespace xNs, string focusedBorderBrush)
+    {
+        var visualStateManager = new XElement(mauiNs + "Setter",
+            new XAttribute("Property", "VisualStateManager.VisualStateGroups"),
+            new XElement(mauiNs + "VisualStateGroupList",
+                new XElement(mauiNs + "VisualStateGroup",
+                    new XAttribute(xNs + "Name", "CommonStates"),
+                    new XElement(mauiNs + "VisualState",
+                        new XAttribute(xNs + "Name", "Normal")
+                    ),
+                    new XElement(mauiNs + "VisualState",
+                        new XAttribute(xNs + "Name", "Focused"),
+                        new XElement(mauiNs + "VisualState.Setters",
+                            new XElement(mauiNs + "Setter",
+                                new XAttribute("Property", "BorderBrush"),
+                                new XAttribute("Value", focusedBorderBrush)
+                            )
+                        )
+                    ),
+                    new XElement(mauiNs + "VisualState",
+                        new XAttribute(xNs + "Name", "Disabled"),
+                        new XElement(mauiNs + "VisualState.Setters",
+                            new XElement(mauiNs + "Setter",
+                                new XAttribute("Property", "Opacity"),
+                                new XAttribute("Value", "0.38")
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        style.Add(visualStateManager);
     }
 
     private void AddCardStyles(XElement root, FlagstoneTokens tokens, BootstrapComponentStyles? componentStyles, ConversionOptions options)
@@ -998,7 +1054,7 @@ public class XamlThemeGenerator
         );
     }
 
-    private static void AddDisabledVisualState(XElement style, XNamespace mauiNs, XNamespace xNs)
+    private static void AddButtonVisualStates(XElement style, XNamespace mauiNs, XNamespace xNs)
     {
         var visualStateManager = new XElement(mauiNs + "Setter",
             new XAttribute("Property", "VisualStateManager.VisualStateGroups"),
@@ -1007,6 +1063,15 @@ public class XamlThemeGenerator
                     new XAttribute(xNs + "Name", "CommonStates"),
                     new XElement(mauiNs + "VisualState",
                         new XAttribute(xNs + "Name", "Normal")
+                    ),
+                    new XElement(mauiNs + "VisualState",
+                        new XAttribute(xNs + "Name", "Pressed"),
+                        new XElement(mauiNs + "VisualState.Setters",
+                            new XElement(mauiNs + "Setter",
+                                new XAttribute("Property", "Opacity"),
+                                new XAttribute("Value", "0.90")
+                            )
+                        )
                     ),
                     new XElement(mauiNs + "VisualState",
                         new XAttribute(xNs + "Name", "Disabled"),

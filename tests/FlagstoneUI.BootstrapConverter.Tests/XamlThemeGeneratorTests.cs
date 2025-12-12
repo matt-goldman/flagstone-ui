@@ -352,6 +352,11 @@ public class XamlThemeGeneratorTests
         xaml.ShouldContain("x:Key=\"EditorValid\"");
         xaml.ShouldContain("x:Key=\"EditorInvalid\"");
 
+        // Assert (visual states exist)
+        xaml.ShouldContain("x:Name=\"Disabled\"");
+        xaml.ShouldContain("x:Name=\"Pressed\"");
+        xaml.ShouldContain("x:Name=\"Focused\"");
+
         // Assert (default TargetType styles exist)
         var styles = doc.Descendants().Where(e => e.Name.LocalName == "Style").ToList();
         styles.Any(s => (string?)s.Attribute("TargetType") == "fs:FsEntry").ShouldBeTrue();
