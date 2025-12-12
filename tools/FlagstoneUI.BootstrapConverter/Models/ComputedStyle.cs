@@ -67,6 +67,12 @@ public class BootstrapComponentStyles
 	public ComputedStyle? FormControlFocus { get; set; }
 	public ComputedStyle? FormControlPlaceholder { get; set; }
 
+	// Validation states (.is-valid / .is-invalid)
+	public ComputedStyle? FormControlValid { get; set; }
+	public ComputedStyle? FormControlInvalid { get; set; }
+	public ComputedStyle? FormControlValidFocus { get; set; }
+	public ComputedStyle? FormControlInvalidFocus { get; set; }
+
 	// Cards
 	public ComputedStyle? Card { get; set; }
 	public ComputedStyle? CardBody { get; set; }

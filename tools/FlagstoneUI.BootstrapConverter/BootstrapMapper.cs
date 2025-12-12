@@ -49,6 +49,10 @@ public class BootstrapMapper
         MapColor(bootstrapColors, tokens, "light", "Color.Surface", "Light surface color", options);
         MapColor(bootstrapColors, tokens, "dark", "Color.SurfaceVariant.Dark", "Dark surface variant", options);
 
+        // Convenience aliases for Bootstrap's semantic "light" / "dark" button variants
+        MapColor(bootstrapColors, tokens, "light", "Color.Light", "Light semantic color (Bootstrap light)", options);
+        MapColor(bootstrapColors, tokens, "dark", "Color.Dark", "Dark semantic color (Bootstrap dark)", options);
+
         // Background and text colors
         MapColor(bootstrapColors, tokens, "body-bg", "Color.Background", "Body background color", options);
         MapColor(bootstrapColors, tokens, "body-color", "Color.OnBackground", "Body text color", options);
@@ -72,6 +76,50 @@ public class BootstrapMapper
                 : null,
             Purpose = purpose
         };
+
+        // Auto-generate an accessible on-color for semantic colors if it's not already provided.
+        // This helps avoid hard-coded fallbacks in generated styles.
+        if (flagstoneKey.StartsWith("Color.", StringComparison.Ordinal) &&
+            !flagstoneKey.StartsWith("Color.On", StringComparison.Ordinal))
+        {
+            var baseName = flagstoneKey.Substring("Color.".Length);
+            var onKey = $"Color.On{baseName}";
+            if (!tokens.Colors.ContainsKey(onKey))
+            {
+                var onValue = TryGenerateOnColor(normalizedValue);
+                if (!string.IsNullOrWhiteSpace(onValue))
+                {
+                    tokens.Colors[onKey] = new ColorToken
+                    {
+                        Key = onKey,
+                        Value = onValue,
+                        Purpose = $"Auto-generated on-color for {flagstoneKey}"
+                    };
+                }
+            }
+        }
+    }
+
+    private static string? TryGenerateOnColor(string color)
+    {
+        // Only handle #RRGGBB for now.
+        if (!color.StartsWith('#') || color.Length != 7)
+            return null;
+
+        try
+        {
+            var r = int.Parse(color.AsSpan(1, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+            var g = int.Parse(color.AsSpan(3, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+            var b = int.Parse(color.AsSpan(5, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+
+            // Relative luminance approximation (0..255)
+            var brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            return brightness >= 128 ? "#000000" : "#FFFFFF";
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     private void MapTypography(Dictionary<string, string> bootstrapTypography, FlagstoneTokens tokens)
@@ -381,6 +429,16 @@ public class BootstrapMapper
             ExtractTokensFromButton(componentStyles.ButtonInfo, tokens, "Info", options);
         }
 
+        if (componentStyles.ButtonLight != null)
+        {
+            ExtractTokensFromButton(componentStyles.ButtonLight, tokens, "Light", options);
+        }
+
+        if (componentStyles.ButtonDark != null)
+        {
+            ExtractTokensFromButton(componentStyles.ButtonDark, tokens, "Dark", options);
+        }
+
         // Extract base spacing and borders from button base
         if (componentStyles.ButtonBase != null)
         {
@@ -421,6 +479,23 @@ public class BootstrapMapper
                 Value = NormalizeColorValue(textColor),
                 Purpose = $"Text color on {colorName} background"
             };
+        }
+        else
+        {
+            // If Bootstrap doesn't provide an explicit text color, derive one from the background.
+            if (!string.IsNullOrWhiteSpace(bgColor))
+            {
+                var derivedOn = TryGenerateOnColor(NormalizeColorValue(bgColor));
+                if (!string.IsNullOrWhiteSpace(derivedOn))
+                {
+                    tokens.Colors[$"Color.On{colorName}"] = new ColorToken
+                    {
+                        Key = $"Color.On{colorName}",
+                        Value = derivedOn,
+                        Purpose = $"Auto-generated text color on {colorName} background"
+                    };
+                }
+            }
         }
     }
 

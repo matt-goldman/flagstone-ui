@@ -59,6 +59,7 @@ public record ConvertToolOutput
     public string? Error { get; init; }
     public string? TokensXaml { get; init; }
     public string? ThemeXaml { get; init; }
+	public string? StylesXaml { get; init; }
     public ConversionSummary? Summary { get; init; }
 }
 
