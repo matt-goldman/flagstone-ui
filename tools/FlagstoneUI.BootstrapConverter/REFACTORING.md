@@ -21,7 +21,7 @@ This service orchestrates the complete conversion workflow:
 **Key Methods**:
 
 - `ConvertAsync(ConversionRequest)` - Execute conversion and return tokens + statistics
-- `ConvertAndGenerateFilesAsync(ConversionRequest, string)` - Convert and generate XAML files
+- `ConvertAndGenerateFilesAsync(ConversionRequest, string)` - Convert and generate resource dictionary files (XAML or C#)
 
 **Key Types**:
 
@@ -30,17 +30,52 @@ This service orchestrates the complete conversion workflow:
 - `ConversionStatistics` - Token counts, variables parsed, component styles extracted
 - `AnalysisStrategy` - Enum for CssOnly, VariablesOnly, Hybrid
 
+### New Class: `CSharpThemeGenerator`
+
+**Location**: `tools/FlagstoneUI.BootstrapConverter/CSharpThemeGenerator.cs`
+
+Generates C# ResourceDictionary classes as an alternative to XAML:
+
+- `GenerateTokensCs()` - Generate Tokens.cs with all token definitions
+- `GenerateThemeCs()` - Generate Theme.cs that merges tokens
+- `GenerateStylesCs()` - Generate Styles.cs (placeholder for styles)
+- `GenerateFilesAsync()` - Generate all three files
+
+**Benefits of C# ResourceDictionaries**:
+- ? Strongly-typed access to resources
+- ? No XAML compilation overhead
+- ? Easier to modify programmatically
+- ? Better for generated code scenarios
+
+### Updated: `ConversionOptions`
+
+**Location**: `tools/FlagstoneUI.BootstrapConverter/Models/ConversionOptions.cs`
+
+Added `OutputFormat` property with `ResourceDictionaryFormat` enum:
+
+```csharp
+public enum ResourceDictionaryFormat
+{
+    Xaml,    // Generate XAML resource dictionaries (default)
+    CSharp   // Generate C# resource dictionaries
+}
+```
+
 ### Updated: `ConvertCommand`
 
 **Location**: `tools/FlagstoneUI.BootstrapConverter.Cli/Commands/ConvertCommand.cs`
 
 The CLI command now:
 
-1. **Parses CLI options** (inputs, format, dark mode, analysis mode, etc.)
+1. **Parses CLI options** (inputs, format, dark mode, analysis mode, **output format**, etc.)
 2. **Creates ConversionRequest** from parsed options
 3. **Calls BootstrapConverterService** to execute conversion
-4. **Displays progress and statistics** (CLI-specific concern)
-5. **Generates XAML files** using `XamlThemeGenerator`
+4. **Chooses generator** based on output format (XAML or C#)
+5. **Displays progress and statistics** (CLI-specific concern)
+6. **Generates files** using appropriate generator
+
+**New Option**:
+- `--output-format` - Choose between `xaml` (default) or `csharp` for generated resource dictionaries
 
 **Responsibilities**:
 - CLI option parsing
@@ -68,7 +103,8 @@ var request = new BootstrapConverterService.ConversionRequest
     {
         DarkModeStrategy = DarkModeStrategy.Auto,
         IncludeComments = true,
-        Namespace = "MyApp.Themes"
+        Namespace = "MyApp.Themes",
+        OutputFormat = ResourceDictionaryFormat.CSharp  // or Xaml
     }
 };
 
@@ -76,13 +112,35 @@ var result = await service.ConvertAsync(request);
 // Use result.Tokens, result.Statistics, etc.
 ```
 
-### 2. **Separation of Concerns**
+### 2. **Output Format Flexibility**
+
+Users can now choose between XAML and C# resource dictionaries:
+
+```bash
+# Generate XAML (default)
+bootstrap-converter convert -i theme.scss -o ./output
+
+# Generate C# resource dictionaries
+bootstrap-converter convert -i theme.scss -o ./output --output-format csharp
+```
+
+**XAML Output**:
+- `Tokens.xaml` + `Tokens.xaml.cs`
+- `Theme.xaml` + `Theme.xaml.cs`
+- `Styles.xaml` + `Styles.xaml.cs` (with full control styles)
+
+**C# Output**:
+- `Tokens.cs` - All token definitions in code
+- `Theme.cs` - Theme that merges tokens
+- `Styles.cs` - Placeholder for programmatic styles
+
+### 3. **Separation of Concerns**
 
 - **Class Library**: Core conversion logic, reusable across platforms
 - **CLI**: User interaction, progress output, command-line parsing
 - **UI (future)**: Visual interaction, file pickers, live preview
 
-### 3. **Testability**
+### 4. **Testability**
 
 The service can be unit tested independently:
 
@@ -104,11 +162,11 @@ public async Task ConvertAsync_WithVariablesStrategy_ExtractsTokens()
 }
 ```
 
-### 4. **Consistency**
+### 5. **Consistency**
 
 Both CLI and UI will use the exact same conversion logic, ensuring consistent results regardless of the interface used.
 
-### 5. **Statistics & Reporting**
+### 6. **Statistics & Reporting**
 
 The service returns structured statistics that can be displayed differently in CLI (console output) vs. UI (dialog, progress bar, etc.).
 
@@ -138,7 +196,8 @@ public async Task ConvertThemeAsync()
         {
             DarkModeStrategy = SelectedDarkMode,
             IncludeComments = IncludeComments,
-            Namespace = ThemeNamespace
+            Namespace = ThemeNamespace,
+            OutputFormat = SelectedOutputFormat  // XAML or C#
         }
     };
 
@@ -152,23 +211,69 @@ public async Task ConvertThemeAsync()
 }
 ```
 
+## CLI Usage Examples
+
+### Generate XAML Resource Dictionaries (Default)
+
+```bash
+bootstrap-converter convert \
+  --input path/to/theme.scss \
+  --output ./MyTheme
+
+# Output:
+# - Tokens.xaml + Tokens.xaml.cs
+# - Theme.xaml + Theme.xaml.cs
+# - Styles.xaml + Styles.xaml.cs
+```
+
+### Generate C# Resource Dictionaries
+
+```bash
+bootstrap-converter convert \
+  --input path/to/theme.scss \
+  --output ./MyTheme \
+  --output-format csharp
+
+# Output:
+# - Tokens.cs
+# - Theme.cs
+# - Styles.cs
+```
+
+### When to Use Each Format
+
+**Use XAML when**:
+- You want full control styles with visual states (included)
+- You prefer declarative UI
+- You're following traditional MAUI patterns
+- You want hot reload support (XAML Hot Reload)
+
+**Use C# when**:
+- You prefer strongly-typed access to resources
+- You're generating themes programmatically
+- You want to avoid XAML compilation overhead
+- You need to modify resources at runtime
+
 ## Backward Compatibility
 
-No breaking changes to the CLI interface. All existing commands and options work exactly as before.
+No breaking changes to the CLI interface. All existing commands and options work exactly as before. The `--output-format` option is optional and defaults to XAML.
 
 ## Future Enhancements
 
-Possible additions to `BootstrapConverterService`:
+Possible additions:
 
 1. **Progress Reporting**: `IProgress<ConversionProgress>` parameter
 2. **Cancellation**: `CancellationToken` parameter
 3. **Validation**: Pre-conversion validation of inputs
 4. **Caching**: Cache parsed variables/styles for repeated conversions
 5. **Custom Mappings**: Allow users to override default Bootstrap ? Flagstone mappings
+6. **Hybrid ResourceDictionaries**: Generate both XAML (for styles) and C# (for tokens)
 
 ## Related Files
 
 - `tools/FlagstoneUI.BootstrapConverter/BootstrapConverterService.cs` - New service class
+- `tools/FlagstoneUI.BootstrapConverter/CSharpThemeGenerator.cs` - New C# generator
+- `tools/FlagstoneUI.BootstrapConverter/Models/ConversionOptions.cs` - Updated with OutputFormat
 - `tools/FlagstoneUI.BootstrapConverter.Cli/Commands/ConvertCommand.cs` - Updated CLI command
 - `tools/FlagstoneUI.BootstrapConverter/BootstrapParser.cs` - Variable parsing (unchanged)
 - `tools/FlagstoneUI.BootstrapConverter/BootstrapCssAnalyzer.cs` - CSS analysis (unchanged)
