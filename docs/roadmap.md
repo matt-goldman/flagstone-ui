@@ -36,26 +36,67 @@ The project is being positioned as a **preview/experimental release** to coincid
 4. MVP control coverage (Entry, Button, Card) is sufficient to prove the concept
 5. Tooling validates architecture before expanding control library
 
-### Next Milestone: Bootstrap Theme Converter 🚀
+### Completed Milestone: Bootstrap Theme Converter ✅
 
-**Target**: Functional MCP tool by .NET 10 launch (November 12, 2025)
+**Status**: COMPLETE (December 12, 2025)
 
-- [ ] **Bootstrap → Flagstone MCP Tool**
-  - Parse Bootstrap `_variables.scss` or CSS custom properties
-  - Generate `Tokens.xaml` with mapped colors, spacing, typography
-  - Generate theme variant (Bootstrap.xaml) or modify Material theme
-  - Document mapping strategy and supported variables
+- [x] **Bootstrap → Flagstone Converter Tool**
+  - ✅ Parse Bootstrap SCSS variables (`$primary`, `$font-size-base`, etc.)
+  - ✅ Parse CSS classes (`.btn-primary`, `.card`) - limited by ExCSS for Bootstrap 5+
+  - ✅ Multi-mode analysis: variables (recommended), css, hybrid
+  - ✅ Generate `Tokens.xaml` with 20+ mapped tokens (colors, spacing, typography, borders)
+  - ✅ Generate `Styles.xaml` with FsButton variants (Default, OutlinedButton, TextButton)
+  - ✅ Generate `Theme.xaml` with merged resource dictionaries
+  - ✅ Multi-file SCSS parsing with variable resolution
+  - ✅ Dark mode color variant generation
+  - ✅ Document mapping strategy and supported variables (ADR005)
+  - ✅ Validated with Bootswatch themes (Darkly, Flatly)
 
-- [ ] **Theme Switching Demo**
+- [x] **Converter Documentation**
+  - ✅ Library README with architecture, API, examples
+  - ✅ CLI README with usage, analysis modes, integration guide
+  - ✅ ADR005: Analysis modes architecture decision
+  - ✅ Known limitations documented (ExCSS CSS custom properties)
+
+- [ ] **Theme Switching Demo** (Next Priority)
   - Toggle between Material/Modern/Bootstrap-converted themes
   - Demonstrate runtime theme switching
   - Lives in ThemePlayground sample app
 
-- [ ] **Preview Release Documentation**
-  - Bootstrap converter usage guide
-  - Theme conversion examples
-  - MCP tool integration instructions
-  - Known limitations and roadmap
+### Next Milestone: Bootstrap Converter UI App 🚀
+
+**Target**: Q1 2026
+
+**Purpose**: .NET MAUI desktop app for visual Bootstrap theme conversion
+
+- [ ] **Visual Theme Converter**
+  - File picker for local SCSS/CSS files
+  - URL input for remote themes (Bootswatch, CDN)
+  - Analysis mode selection (variables/css/hybrid)
+  - Dark mode strategy selector (auto/manual/none)
+  - Real-time preview of converted theme
+  - Token inspection (colors, typography, spacing, borders)
+  - Export to XAML files
+
+- [ ] **Live Preview**
+  - Apply converted theme to sample Flagstone UI controls in-app
+  - Toggle between original Bootstrap and converted Flagstone theme
+  - Side-by-side comparison
+  - Control showcase (FsButton, FsEntry, FsCard, etc.)
+
+- [ ] **Bootswatch Integration**
+  - Browse Bootswatch theme catalog
+  - One-click theme download and conversion
+  - Preview before conversion
+  - Save favorite themes
+
+**Benefits**:
+- ✅ No command-line knowledge required
+- ✅ Visual feedback during conversion
+- ✅ Real-time theme validation with Flagstone UI controls
+- ✅ Demonstrates .NET MAUI desktop capabilities
+- ✅ Showcases Flagstone UI's theming system
+- ✅ Lower barrier to entry for designers/non-developers
 
 **Post-.NET 10 Priorities**:
 
