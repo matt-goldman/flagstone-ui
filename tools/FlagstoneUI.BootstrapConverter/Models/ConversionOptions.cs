@@ -24,6 +24,11 @@ public class ConversionOptions
     /// Output format for resource dictionaries (XAML or C#)
     /// </summary>
     public ResourceDictionaryFormat OutputFormat { get; set; } = ResourceDictionaryFormat.Xaml;
+
+    /// <summary>
+    /// Include font information in conversion result (default: false)
+    /// </summary>
+    public bool IncludeFonts { get; set; } = false;
 }
 
 /// <summary>
