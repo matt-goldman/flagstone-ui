@@ -1,31 +1,38 @@
-# Bootstrap Theme Converter MCP
+# Bootstrap Theme Converter
 
-> **⚠️ EXPERIMENTAL - WORK IN PROGRESS**  
-> This tool is experimental and under active development. The approach and viability are still being evaluated.  
-> An LLM-based approach may be more suitable than programmatic conversion due to inconsistencies in Bootstrap theme variables.  
-> This documentation reflects the current exploration and is incomplete.  
-> See [implementation-status.md](implementation-status.md) for current status.
+> **✅ PRODUCTION READY - Phase 1 Complete (December 12, 2025)**  
+> The Bootstrap to Flagstone UI converter is production-ready for SCSS-based themes.  
+> Variables mode provides excellent token extraction (11+ colors, 3+ typography, 5+ spacing).  
+> See [ADR005](Decisions/adr005-bootstrap-converter-analysis-modes.md) for architecture decisions.
 
 ## Overview
 
-A .NET-first tool that converts Bootstrap themes into Flagstone UI token definitions and theme files. Follows the proven architecture of the TailwindXamlThemeConverter - core functionality in a class library, wrapped in a console app for POC/testing, packaged as a .NET tool, and serving MCP via stdout.
+A .NET-first tool that converts Bootstrap themes into Flagstone UI token definitions and theme files. Follows proven architecture patterns - core functionality in a class library, wrapped in a console app for CLI access, with potential MCP integration in the future.
+
+**Current Status**:
+- ✅ Class library with SCSS parsing, CSS analysis, token mapping, XAML generation
+- ✅ CLI tool with convert/info commands
+- ✅ Multi-mode analysis: variables (recommended), css (limited), hybrid
+- ✅ Validated with Bootswatch themes (Darkly, Flatly)
+- ✅ Complete documentation and ADR
+- 📋 UI app planned for Q1 2026
 
 ## Goals
 
-1. **Primary**: Build robust .NET class library with conversion logic
-2. **Secondary**: Create console app wrapper for rapid testing/iteration
-3. **Tertiary**: Package as .NET global tool
-4. **Quaternary**: Serve MCP protocol via stdout (like .NET tool)
-5. **Future**: Easy migration path to TypeScript/Python if needed for VS Code extension
+1. **✅ Completed**: Build robust .NET class library with conversion logic
+2. **✅ Completed**: Create console app wrapper for rapid testing/iteration
+3. **📋 Planned**: Package as .NET global tool
+4. **📋 Future**: MCP protocol integration (if needed)
+5. **📋 Next**: .NET MAUI UI app for visual theme conversion with live preview
 
 ## Value Proposition
 
 - **Reuse existing Bootstrap themes** in .NET MAUI apps
 - **Consistent styling** across web and mobile applications
-- **Faster theme development** by leveraging Bootstrap ecosystem
-- **Demonstrates MCP tooling** as core differentiator for Flagstone UI
-- **Rapid iteration** with familiar .NET tooling and testing
-- **Migration-friendly** - solve functionality first, port later if needed
+- **Faster theme development** by leveraging Bootstrap ecosystem (26+ Bootswatch themes)
+- **Production-ready** for SCSS-based themes with excellent token coverage
+- **Clear limitations documented** (ExCSS doesn't parse CSS custom properties)
+- **Future UI app** will provide visual conversion and real-time preview
 
 ## Architecture
 
