@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FlagstoneUI.BootstrapConverter.UI.MainPage">
+             xmlns:vm="clr-namespace:FlagstoneUI.BootstrapConverter.UI.ViewModels"
+             x:Class="FlagstoneUI.BootstrapConverter.UI.MainPage"
+             x:DataType="vm:MainViewModel">
 
   <Grid ColumnDefinitions="300,*">
     
@@ -30,40 +32,37 @@
       
       <VerticalStackLayout Spacing="10" Padding="10">
         <Label Text="Options" FontSize="18" FontAttributes="Bold" />
-        <CheckBox Content="Include comments in output" IsChecked="True" />
-        <CheckBox Content="Include fonts" IsChecked="True" />
+        <Grid ColumnDefinitions="*, 30"
+              RowDefinitions="*,*">
+          <Label Grid.Row="0"
+                 Grid.Column="0"
+                 Text="Include comments in output"/>
+          <CheckBox Grid.Row="0"
+                    Grid.Column="1"
+                    IsChecked="{Binding IncludeComments}" />
+          <Label Grid.Row="1"
+                 Grid.Column="0"
+                 Text="Include fonts" />
+          <CheckBox Grid.Column="1"
+                    Grid.Row="1"
+                    IsChecked="{Binding IncludeFonts}" />
+        </Grid>
+
+        
         <Label Text="Output format" />
-        <Picker>
-          <Picker.Items>
-            <x:String>XAML</x:String>
-            <x:String>C#</x:String>
-          </Picker.Items>
-        </Picker>
+        <Picker ItemsSource="{Binding ResourceDictionaryFormats}"
+                SelectedItem="{Binding OutputType}" />
         <Label Text="Dark mode strategy" />
-        <Picker>
-          <Picker.Items>
-            <x:String>Separate ResourceDictionary</x:String>
-            <x:String>Merged ResourceDictionary</x:String>
-            <x:String>Inline</x:String>
-          </Picker.Items>
-        </Picker>
+        <Picker ItemsSource="{Binding DarkModeStrategies}"
+                SelectedItem="{Binding DarkModeStrategy}" />
         <Label Text="Namespace" />
         <Entry Placeholder="Enter namespace" Text="FlagstoneUI.Themes" />
         <Label Text="Analysis strategy" />
-        <Picker>
-          <Picker.Items>
-            <x:String>Comprehensive</x:String>
-            <x:String>Fast</x:String>
-          </Picker.Items>
-        </Picker>
+        <Picker ItemsSource="{Binding AnalysisStrategies}"
+                SelectedItem="{Binding AnalysisStrategy}" />
         <Label Text="CSS Format" />
-        <Picker>
-          <Picker.Items>
-            <x:String>Auto-detect</x:String>
-            <x:String>CSS</x:String>
-            <x:String>SCSS</x:String>
-          </Picker.Items>
-        </Picker>
+        <Picker ItemsSource="{Binding BootstrapFormats}"
+                SelectedItem="{Binding BootstrapFormat}" />
       </VerticalStackLayout>
 
       <VerticalStackLayout Spacing="10" Padding="10">
