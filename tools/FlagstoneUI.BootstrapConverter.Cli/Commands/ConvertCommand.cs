@@ -198,17 +198,17 @@ internal static class ConvertCommand
 		// Create conversion request
 		var request = new BootstrapConverterService.ConversionRequest
 		{
-			Inputs = inputs,
-			Format = format,
-			Strategy = strategy,
-			EnableDebugLogging = debug,
-			Options = new ConversionOptions
+			Inputs				= inputs,
+			Format				= format,
+			Strategy			= strategy,
+			EnableDebugLogging	= debug,
+			Options				= new ConversionOptions
 			{
-				DarkModeStrategy = darkMode,
-				IncludeComments = includeComments,
-				Namespace = ns,
-				OutputFormat = outputFormat,
-				IncludeFonts = includeFonts
+				DarkModeStrategy	= darkMode,
+				IncludeComments		= includeComments,
+				Namespace			= ns,
+				OutputFormat		= outputFormat,
+				IncludeFonts		= includeFonts
 			}
 		};
 

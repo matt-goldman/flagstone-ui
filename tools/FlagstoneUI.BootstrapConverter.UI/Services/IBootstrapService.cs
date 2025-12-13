@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace FlagstoneUI.BootstrapConverter.UI.Services;
 
-namespace FlagstoneUI.BootstrapConverter.UI.Services;
+public interface IBootstrapService
+{
+}
 
-interface IBootstrapService
+internal class BootstrapService : IBootstrapService
 {
 }
