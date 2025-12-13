@@ -53,15 +53,14 @@ public partial class FsBorder : ContentView
 
 	private void UpdateBorderLines(double width, double height)
 	{
+		var strokeCap = BorderStrokeCap;
+
 		// Top border
 		if (BorderTopThickness > 0)
 		{
 			if (_topLine == null)
 			{
-				_topLine = new Line
-				{
-					StrokeLineCap = BorderStrokeCap
-				};
+				_topLine = CreateBorderLine(strokeCap);
 				_layoutRoot.Children.Add(_topLine);
 			}
 			_topLine.X1 = 0;
@@ -82,10 +81,7 @@ public partial class FsBorder : ContentView
 		{
 			if (_bottomLine == null)
 			{
-				_bottomLine = new Line
-				{
-					StrokeLineCap = BorderStrokeCap
-				};
+				_bottomLine = CreateBorderLine(strokeCap);
 				_layoutRoot.Children.Add(_bottomLine);
 			}
 			_bottomLine.X1 = 0;
@@ -106,10 +102,7 @@ public partial class FsBorder : ContentView
 		{
 			if (_leftLine == null)
 			{
-				_leftLine = new Line
-				{
-					StrokeLineCap = BorderStrokeCap
-				};
+				_leftLine = CreateBorderLine(strokeCap);
 				_layoutRoot.Children.Add(_leftLine);
 			}
 			_leftLine.X1 = BorderLeftThickness / 2;
@@ -130,10 +123,7 @@ public partial class FsBorder : ContentView
 		{
 			if (_rightLine == null)
 			{
-				_rightLine = new Line
-				{
-					StrokeLineCap = BorderStrokeCap
-				};
+				_rightLine = CreateBorderLine(strokeCap);
 				_layoutRoot.Children.Add(_rightLine);
 			}
 			_rightLine.X1 = width - (BorderRightThickness / 2);
@@ -148,6 +138,14 @@ public partial class FsBorder : ContentView
 		{
 			_rightLine.IsVisible = false;
 		}
+	}
+
+	private Line CreateBorderLine(PenLineCap strokeCap)
+	{
+		return new Line
+		{
+			StrokeLineCap = strokeCap
+		};
 	}
 
 	#region BorderContent Property
@@ -242,7 +240,7 @@ public partial class FsBorder : ContentView
 		typeof(double),
 		typeof(FsBorder),
 		0d,
-		propertyChanged: OnBorderPropertyChanged);
+		propertyChanged: OnBorderThicknessPropertyChanged);
 
 	/// <summary>
 	/// Gets or sets the thickness of the top border.
@@ -263,7 +261,7 @@ public partial class FsBorder : ContentView
 		typeof(double),
 		typeof(FsBorder),
 		0d,
-		propertyChanged: OnBorderPropertyChanged);
+		propertyChanged: OnBorderThicknessPropertyChanged);
 
 	/// <summary>
 	/// Gets or sets the thickness of the right border.
@@ -284,7 +282,7 @@ public partial class FsBorder : ContentView
 		typeof(double),
 		typeof(FsBorder),
 		0d,
-		propertyChanged: OnBorderPropertyChanged);
+		propertyChanged: OnBorderThicknessPropertyChanged);
 
 	/// <summary>
 	/// Gets or sets the thickness of the bottom border.
@@ -305,7 +303,7 @@ public partial class FsBorder : ContentView
 		typeof(double),
 		typeof(FsBorder),
 		0d,
-		propertyChanged: OnBorderPropertyChanged);
+		propertyChanged: OnBorderThicknessPropertyChanged);
 
 	/// <summary>
 	/// Gets or sets the thickness of the left border.
@@ -326,7 +324,7 @@ public partial class FsBorder : ContentView
 		typeof(Brush),
 		typeof(FsBorder),
 		new SolidColorBrush(Colors.Transparent),
-		propertyChanged: OnBorderPropertyChanged);
+		propertyChanged: OnBorderVisualPropertyChanged);
 
 	/// <summary>
 	/// Gets or sets the brush for the top border.
@@ -347,7 +345,7 @@ public partial class FsBorder : ContentView
 		typeof(Brush),
 		typeof(FsBorder),
 		new SolidColorBrush(Colors.Transparent),
-		propertyChanged: OnBorderPropertyChanged);
+		propertyChanged: OnBorderVisualPropertyChanged);
 
 	/// <summary>
 	/// Gets or sets the brush for the right border.
@@ -368,7 +366,7 @@ public partial class FsBorder : ContentView
 		typeof(Brush),
 		typeof(FsBorder),
 		new SolidColorBrush(Colors.Transparent),
-		propertyChanged: OnBorderPropertyChanged);
+		propertyChanged: OnBorderVisualPropertyChanged);
 
 	/// <summary>
 	/// Gets or sets the brush for the bottom border.
@@ -389,7 +387,7 @@ public partial class FsBorder : ContentView
 		typeof(Brush),
 		typeof(FsBorder),
 		new SolidColorBrush(Colors.Transparent),
-		propertyChanged: OnBorderPropertyChanged);
+		propertyChanged: OnBorderVisualPropertyChanged);
 
 	/// <summary>
 	/// Gets or sets the brush for the left border.
@@ -410,7 +408,7 @@ public partial class FsBorder : ContentView
 		typeof(PenLineCap),
 		typeof(FsBorder),
 		PenLineCap.Flat,
-		propertyChanged: OnBorderPropertyChanged);
+		propertyChanged: OnBorderVisualPropertyChanged);
 
 	/// <summary>
 	/// Gets or sets the stroke line cap for border lines.
@@ -422,11 +420,21 @@ public partial class FsBorder : ContentView
 	}
 	#endregion
 
-	private static void OnBorderPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+	private static void OnBorderThicknessPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 	{
 		if (bindable is FsBorder border)
 		{
+			// Thickness changes can affect layout
 			border.InvalidateMeasure();
+		}
+	}
+
+	private static void OnBorderVisualPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is FsBorder border && border.Width > 0 && border.Height > 0)
+		{
+			// Visual-only changes don't affect layout, just update border rendering
+			border.UpdateBorderLines(border.Width, border.Height);
 		}
 	}
 }
