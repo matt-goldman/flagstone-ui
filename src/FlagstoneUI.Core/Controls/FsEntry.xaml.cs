@@ -53,51 +53,221 @@ public partial class FsEntry : ContentView
 	void OnUnfocused(object? sender, FocusEventArgs e) => Unfocused?.Invoke(this, e);
     #endregion
 
-	#region BorderBrushProperty
+	#region Per-Edge Border Thickness Properties
+	/// <summary>
+	/// Identifies the BorderTopThickness bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderTopThicknessProperty = BindableProperty.Create(
+		nameof(BorderTopThickness), typeof(double), typeof(FsEntry), 0d);
+
+	/// <summary>
+	/// Gets or sets the thickness of the top border.
+	/// </summary>
+	public double BorderTopThickness
+	{
+		get => (double)GetValue(BorderTopThicknessProperty);
+		set => SetValue(BorderTopThicknessProperty, value);
+	}
+
+	/// <summary>
+	/// Identifies the BorderRightThickness bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderRightThicknessProperty = BindableProperty.Create(
+		nameof(BorderRightThickness), typeof(double), typeof(FsEntry), 0d);
+
+	/// <summary>
+	/// Gets or sets the thickness of the right border.
+	/// </summary>
+	public double BorderRightThickness
+	{
+		get => (double)GetValue(BorderRightThicknessProperty);
+		set => SetValue(BorderRightThicknessProperty, value);
+	}
+
+	/// <summary>
+	/// Identifies the BorderBottomThickness bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderBottomThicknessProperty = BindableProperty.Create(
+		nameof(BorderBottomThickness), typeof(double), typeof(FsEntry), 0d);
+
+	/// <summary>
+	/// Gets or sets the thickness of the bottom border.
+	/// </summary>
+	public double BorderBottomThickness
+	{
+		get => (double)GetValue(BorderBottomThicknessProperty);
+		set => SetValue(BorderBottomThicknessProperty, value);
+	}
+
+	/// <summary>
+	/// Identifies the BorderLeftThickness bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderLeftThicknessProperty = BindableProperty.Create(
+		nameof(BorderLeftThickness), typeof(double), typeof(FsEntry), 0d);
+
+	/// <summary>
+	/// Gets or sets the thickness of the left border.
+	/// </summary>
+	public double BorderLeftThickness
+	{
+		get => (double)GetValue(BorderLeftThicknessProperty);
+		set => SetValue(BorderLeftThicknessProperty, value);
+	}
+	#endregion
+
+	#region Per-Edge Border Brush Properties
+	/// <summary>
+	/// Identifies the BorderTopBrush bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderTopBrushProperty = BindableProperty.Create(
+		nameof(BorderTopBrush), typeof(Brush), typeof(FsEntry), new SolidColorBrush(Colors.Transparent));
+
+	/// <summary>
+	/// Gets or sets the brush for the top border.
+	/// </summary>
+	public Brush BorderTopBrush
+	{
+		get => (Brush)GetValue(BorderTopBrushProperty);
+		set => SetValue(BorderTopBrushProperty, value);
+	}
+
+	/// <summary>
+	/// Identifies the BorderRightBrush bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderRightBrushProperty = BindableProperty.Create(
+		nameof(BorderRightBrush), typeof(Brush), typeof(FsEntry), new SolidColorBrush(Colors.Transparent));
+
+	/// <summary>
+	/// Gets or sets the brush for the right border.
+	/// </summary>
+	public Brush BorderRightBrush
+	{
+		get => (Brush)GetValue(BorderRightBrushProperty);
+		set => SetValue(BorderRightBrushProperty, value);
+	}
+
+	/// <summary>
+	/// Identifies the BorderBottomBrush bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderBottomBrushProperty = BindableProperty.Create(
+		nameof(BorderBottomBrush), typeof(Brush), typeof(FsEntry), new SolidColorBrush(Colors.Transparent));
+
+	/// <summary>
+	/// Gets or sets the brush for the bottom border.
+	/// </summary>
+	public Brush BorderBottomBrush
+	{
+		get => (Brush)GetValue(BorderBottomBrushProperty);
+		set => SetValue(BorderBottomBrushProperty, value);
+	}
+
+	/// <summary>
+	/// Identifies the BorderLeftBrush bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderLeftBrushProperty = BindableProperty.Create(
+		nameof(BorderLeftBrush), typeof(Brush), typeof(FsEntry), new SolidColorBrush(Colors.Transparent));
+
+	/// <summary>
+	/// Gets or sets the brush for the left border.
+	/// </summary>
+	public Brush BorderLeftBrush
+	{
+		get => (Brush)GetValue(BorderLeftBrushProperty);
+		set => SetValue(BorderLeftBrushProperty, value);
+	}
+	#endregion
+
+	#region BorderStrokeCap Property
+	/// <summary>
+	/// Identifies the BorderStrokeCap bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderStrokeCapProperty = BindableProperty.Create(
+		nameof(BorderStrokeCap), typeof(PenLineCap), typeof(FsEntry), PenLineCap.Flat);
+
+	/// <summary>
+	/// Gets or sets the stroke line cap for border lines.
+	/// </summary>
+	public PenLineCap BorderStrokeCap
+	{
+		get => (PenLineCap)GetValue(BorderStrokeCapProperty);
+		set => SetValue(BorderStrokeCapProperty, value);
+	}
+	#endregion
+
+	#region BorderBrushProperty (Backward Compatibility)
 	/// <summary>
 	/// Identifies the BorderBrush bindable property.
 	/// </summary>
 	/// <remarks>This property determines the brush used for the border of the <see cref="FsEntry"/> control.
-	/// The default value is a transparent solid color brush.</remarks>
+	/// The default value is a transparent solid color brush. This property is maintained for backward compatibility 
+	/// and sets all border edges.</remarks>
 	public static readonly BindableProperty BorderBrushProperty = BindableProperty.Create(
 		nameof(BorderBrush),
 		typeof(Brush),
 		typeof(FsEntry),
-		new SolidColorBrush(Colors.Transparent));
+		new SolidColorBrush(Colors.Transparent),
+		propertyChanged: OnBorderBrushChanged);
 
 	/// <summary>
 	/// Gets or sets the brush used to paint the border.
 	/// </summary>
 	/// <remarks>Setting this property updates the visual appearance of the border. The brush can be a solid color,
-	/// gradient, or other brush type. Ensure the brush is appropriate for the application's theme or design.</remarks>
+	/// gradient, or other brush type. This property sets all border edge brushes for backward compatibility.
+	/// For per-edge control, use BorderTopBrush, BorderRightBrush, BorderBottomBrush, and BorderLeftBrush.</remarks>
 	public Brush BorderBrush
 	{
 		get { return (Brush)GetValue(BorderBrushProperty); }
 		set { SetValue(BorderBrushProperty, value); }
 	}
+
+	private static void OnBorderBrushChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is FsEntry entry && newValue is Brush brush)
+		{
+			entry.BorderTopBrush = brush;
+			entry.BorderRightBrush = brush;
+			entry.BorderBottomBrush = brush;
+			entry.BorderLeftBrush = brush;
+		}
+	}
 	#endregion
 
-	#region BorderWidthProperty
+	#region BorderWidthProperty (Backward Compatibility)
 	/// <summary>
 	/// Identifies the BorderWidth bindable property.
 	/// </summary>
-	/// <remarks>This property specifies the width of the border for the control. The default value is 0.</remarks>
+	/// <remarks>This property specifies the width of the border for the control. The default value is 0.
+	/// This property is maintained for backward compatibility and sets all border edges.</remarks>
 	public static readonly BindableProperty BorderWidthProperty = BindableProperty.Create(
 		nameof(BorderWidth),
 		typeof(double),
 		typeof(FsEntry),
 		0d,
-		BindingMode.OneWay);
+		BindingMode.OneWay,
+		propertyChanged: OnBorderWidthChanged);
 
 	/// <summary>
 	/// Gets or sets the width of the border, in device-independent units (1/96th inch per unit).
 	/// </summary>
-	/// <remarks>A value of 0.0 indicates that the border is not visible. Values must be non-negative.</remarks>
+	/// <remarks>A value of 0.0 indicates that the border is not visible. Values must be non-negative.
+	/// This property sets all border edge thicknesses for backward compatibility.
+	/// For per-edge control, use BorderTopThickness, BorderRightThickness, BorderBottomThickness, and BorderLeftThickness.</remarks>
 	public double BorderWidth
 	{
 		get => (double)GetValue(BorderWidthProperty);
 		set => SetValue(BorderWidthProperty, value);
     }
+
+	private static void OnBorderWidthChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is FsEntry entry && newValue is double width)
+		{
+			entry.BorderTopThickness = width;
+			entry.BorderRightThickness = width;
+			entry.BorderBottomThickness = width;
+			entry.BorderLeftThickness = width;
+		}
+	}
 	#endregion
 
 	#region CornerRadiusProperty
