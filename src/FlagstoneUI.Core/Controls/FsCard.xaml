@@ -7,17 +7,24 @@
              x:Name="CardControl">
     <ContentView.ControlTemplate>
         <ControlTemplate x:Name="CardTemplate">
-            <Border BackgroundColor="{Binding Source={x:Reference CardControl}, Path=BackgroundColor}"
-                    Stroke="{Binding Source={x:Reference CardControl}, Path=BorderColor}"
-                    StrokeThickness="{Binding Source={x:Reference CardControl}, Path=BorderWidth}"
-                    Padding="{Binding Source={x:Reference CardControl}, Path=Padding}"
-                    x:Name="CardBorder">
-                <Border.StrokeShape>
+            <controls:FsBorder Background="{Binding Source={x:Reference CardControl}, Path=BackgroundBrush}"
+                              Padding="{Binding Source={x:Reference CardControl}, Path=Padding}"
+                              BorderTopThickness="{Binding Source={x:Reference CardControl}, Path=BorderTopThickness}"
+                              BorderRightThickness="{Binding Source={x:Reference CardControl}, Path=BorderRightThickness}"
+                              BorderBottomThickness="{Binding Source={x:Reference CardControl}, Path=BorderBottomThickness}"
+                              BorderLeftThickness="{Binding Source={x:Reference CardControl}, Path=BorderLeftThickness}"
+                              BorderTopBrush="{Binding Source={x:Reference CardControl}, Path=BorderTopBrush}"
+                              BorderRightBrush="{Binding Source={x:Reference CardControl}, Path=BorderRightBrush}"
+                              BorderBottomBrush="{Binding Source={x:Reference CardControl}, Path=BorderBottomBrush}"
+                              BorderLeftBrush="{Binding Source={x:Reference CardControl}, Path=BorderLeftBrush}"
+                              BorderStrokeCap="{Binding Source={x:Reference CardControl}, Path=BorderStrokeCap}"
+                              x:Name="CardBorder">
+                <controls:FsBorder.StrokeShape>
                     <RoundRectangle CornerRadius="{Binding Source={x:Reference CardControl}, Path=CornerRadius}"
                                     x:Name="CardBorderShape"/>
-                </Border.StrokeShape>
+                </controls:FsBorder.StrokeShape>
                 <ContentPresenter  />
-            </Border>
+            </controls:FsBorder>
         </ControlTemplate>
     </ContentView.ControlTemplate>
 </ContentView>

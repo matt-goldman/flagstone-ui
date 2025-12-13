@@ -1,4 +1,5 @@
-﻿
+﻿using Microsoft.Maui.Controls.Shapes;
+
 namespace FlagstoneUI.Core.Controls;
 
 /// <summary>
@@ -92,57 +93,250 @@ public partial class FsCard : ContentView
     }
     #endregion
 
-    #region BorderColor Property
-    /// <summary>
-    /// Identifies the <see cref="BorderColor"/> bindable property.
-    /// </summary>
-    /// <remarks>This property is used to define the border color of the <see cref="FsCard"/> control.  The
-    /// default value is <see langword="null"/>, which indicates no specific border color is set.</remarks>
-    public static readonly BindableProperty BorderColorProperty = BindableProperty.Create(
-        nameof(BorderColor), typeof(Color), typeof(FsCard), null);  
+	#region BackgroundBrush Property
+	/// <summary>
+	/// Identifies the bindable property for the <see cref="BackgroundBrush"/> property.
+	/// </summary>
+	/// <remarks>This property allows the background brush of the <see cref="FsCard"/> to be set or retrieved.
+	/// The default value is a transparent solid color brush.</remarks>
+	public static readonly BindableProperty BackgroundBrushProperty = BindableProperty.Create(
+		nameof(BackgroundBrush), typeof(Brush), typeof(FsCard), new SolidColorBrush(Colors.Transparent));
 
-    /// <summary>
-    /// Gets or sets the color of the border.
-    /// </summary>
-    public Color BorderColor
-    {
-        get => (Color)GetValue(BorderColorProperty);
-        set => SetValue(BorderColorProperty, value);
-    }
-    #endregion
+	public Brush BackgroundBrush
+	{
+		get => (Brush)GetValue(BackgroundBrushProperty);
+		set => SetValue(BackgroundBrushProperty, value);
+	}
+	#endregion
 
-    #region BackgroundColor Property
+    #region BackgroundColor Property (Backward Compatibility)
     /// <summary>
     /// Identifies the bindable property for the <see cref="BackgroundColor"/> property.
     /// </summary>
     /// <remarks>This property allows the background color of the <see cref="FsCard"/> to be set or retrieved.
-    /// The default value is <see cref="Colors.Transparent"/>.</remarks>
+    /// The default value is <see cref="Colors.Transparent"/>. This property is maintained for backward compatibility.</remarks>
     public new static readonly BindableProperty BackgroundColorProperty = BindableProperty.Create(
-        nameof(BackgroundColor), typeof(Color), typeof(FsCard), Colors.Transparent);
+        nameof(BackgroundColor), typeof(Color), typeof(FsCard), Colors.Transparent, propertyChanged: OnBackgroundColorChanged);
 
     public new Color BackgroundColor
     {
         get => (Color)GetValue(BackgroundColorProperty);
         set => SetValue(BackgroundColorProperty, value);
     }
+
+	private static void OnBackgroundColorChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is FsCard card && newValue is Color color)
+		{
+			card.BackgroundBrush = new SolidColorBrush(color);
+		}
+	}
     #endregion
 
-    #region BorderWidth Property
+	#region Per-Edge Border Thickness Properties
+	/// <summary>
+	/// Identifies the BorderTopThickness bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderTopThicknessProperty = BindableProperty.Create(
+		nameof(BorderTopThickness), typeof(double), typeof(FsCard), 0.0);
+
+	/// <summary>
+	/// Gets or sets the thickness of the top border.
+	/// </summary>
+	public double BorderTopThickness
+	{
+		get => (double)GetValue(BorderTopThicknessProperty);
+		set => SetValue(BorderTopThicknessProperty, value);
+	}
+
+	/// <summary>
+	/// Identifies the BorderRightThickness bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderRightThicknessProperty = BindableProperty.Create(
+		nameof(BorderRightThickness), typeof(double), typeof(FsCard), 0.0);
+
+	/// <summary>
+	/// Gets or sets the thickness of the right border.
+	/// </summary>
+	public double BorderRightThickness
+	{
+		get => (double)GetValue(BorderRightThicknessProperty);
+		set => SetValue(BorderRightThicknessProperty, value);
+	}
+
+	/// <summary>
+	/// Identifies the BorderBottomThickness bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderBottomThicknessProperty = BindableProperty.Create(
+		nameof(BorderBottomThickness), typeof(double), typeof(FsCard), 0.0);
+
+	/// <summary>
+	/// Gets or sets the thickness of the bottom border.
+	/// </summary>
+	public double BorderBottomThickness
+	{
+		get => (double)GetValue(BorderBottomThicknessProperty);
+		set => SetValue(BorderBottomThicknessProperty, value);
+	}
+
+	/// <summary>
+	/// Identifies the BorderLeftThickness bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderLeftThicknessProperty = BindableProperty.Create(
+		nameof(BorderLeftThickness), typeof(double), typeof(FsCard), 0.0);
+
+	/// <summary>
+	/// Gets or sets the thickness of the left border.
+	/// </summary>
+	public double BorderLeftThickness
+	{
+		get => (double)GetValue(BorderLeftThicknessProperty);
+		set => SetValue(BorderLeftThicknessProperty, value);
+	}
+	#endregion
+
+	#region Per-Edge Border Brush Properties
+	/// <summary>
+	/// Identifies the BorderTopBrush bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderTopBrushProperty = BindableProperty.Create(
+		nameof(BorderTopBrush), typeof(Brush), typeof(FsCard), new SolidColorBrush(Colors.Transparent));
+
+	/// <summary>
+	/// Gets or sets the brush for the top border.
+	/// </summary>
+	public Brush BorderTopBrush
+	{
+		get => (Brush)GetValue(BorderTopBrushProperty);
+		set => SetValue(BorderTopBrushProperty, value);
+	}
+
+	/// <summary>
+	/// Identifies the BorderRightBrush bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderRightBrushProperty = BindableProperty.Create(
+		nameof(BorderRightBrush), typeof(Brush), typeof(FsCard), new SolidColorBrush(Colors.Transparent));
+
+	/// <summary>
+	/// Gets or sets the brush for the right border.
+	/// </summary>
+	public Brush BorderRightBrush
+	{
+		get => (Brush)GetValue(BorderRightBrushProperty);
+		set => SetValue(BorderRightBrushProperty, value);
+	}
+
+	/// <summary>
+	/// Identifies the BorderBottomBrush bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderBottomBrushProperty = BindableProperty.Create(
+		nameof(BorderBottomBrush), typeof(Brush), typeof(FsCard), new SolidColorBrush(Colors.Transparent));
+
+	/// <summary>
+	/// Gets or sets the brush for the bottom border.
+	/// </summary>
+	public Brush BorderBottomBrush
+	{
+		get => (Brush)GetValue(BorderBottomBrushProperty);
+		set => SetValue(BorderBottomBrushProperty, value);
+	}
+
+	/// <summary>
+	/// Identifies the BorderLeftBrush bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderLeftBrushProperty = BindableProperty.Create(
+		nameof(BorderLeftBrush), typeof(Brush), typeof(FsCard), new SolidColorBrush(Colors.Transparent));
+
+	/// <summary>
+	/// Gets or sets the brush for the left border.
+	/// </summary>
+	public Brush BorderLeftBrush
+	{
+		get => (Brush)GetValue(BorderLeftBrushProperty);
+		set => SetValue(BorderLeftBrushProperty, value);
+	}
+	#endregion
+
+	#region BorderStrokeCap Property
+	/// <summary>
+	/// Identifies the BorderStrokeCap bindable property.
+	/// </summary>
+	public static readonly BindableProperty BorderStrokeCapProperty = BindableProperty.Create(
+		nameof(BorderStrokeCap), typeof(PenLineCap), typeof(FsCard), PenLineCap.Flat);
+
+	/// <summary>
+	/// Gets or sets the stroke line cap for border lines.
+	/// </summary>
+	public PenLineCap BorderStrokeCap
+	{
+		get => (PenLineCap)GetValue(BorderStrokeCapProperty);
+		set => SetValue(BorderStrokeCapProperty, value);
+	}
+	#endregion
+
+    #region BorderColor Property (Backward Compatibility)
+    /// <summary>
+    /// Identifies the <see cref="BorderColor"/> bindable property.
+    /// </summary>
+    /// <remarks>This property is used to define the border color of the <see cref="FsCard"/> control.  The
+    /// default value is <see langword="null"/>, which indicates no specific border color is set.
+    /// This property is maintained for backward compatibility and sets all border edges.</remarks>
+    public static readonly BindableProperty BorderColorProperty = BindableProperty.Create(
+        nameof(BorderColor), typeof(Color), typeof(FsCard), null, propertyChanged: OnBorderColorChanged);  
+
+    /// <summary>
+    /// Gets or sets the color of the border.
+    /// </summary>
+    /// <remarks>This property sets all border edge colors for backward compatibility. 
+    /// For per-edge control, use BorderTopBrush, BorderRightBrush, BorderBottomBrush, and BorderLeftBrush.</remarks>
+    public Color BorderColor
+    {
+        get => (Color)GetValue(BorderColorProperty);
+        set => SetValue(BorderColorProperty, value);
+    }
+
+	private static void OnBorderColorChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is FsCard card && newValue is Color color)
+		{
+			var brush = new SolidColorBrush(color);
+			card.BorderTopBrush = brush;
+			card.BorderRightBrush = brush;
+			card.BorderBottomBrush = brush;
+			card.BorderLeftBrush = brush;
+		}
+	}
+    #endregion
+
+    #region BorderWidth Property (Backward Compatibility)
     /// <summary>
     /// Gets or sets the width of the border surrounding the card.
     /// </summary>
+    /// <remarks>This property is maintained for backward compatibility and sets all border edges.
+    /// For per-edge control, use BorderTopThickness, BorderRightThickness, BorderBottomThickness, and BorderLeftThickness.</remarks>
     public static readonly BindableProperty BorderWidthProperty = BindableProperty.Create(
-        nameof(BorderWidth), typeof(double), typeof(FsCard), 1.0);
+        nameof(BorderWidth), typeof(double), typeof(FsCard), 1.0, propertyChanged: OnBorderWidthChanged);
 
     /// <summary>
     /// Gets or sets the width of the border, in device-independent units (1/96th inch per unit).
     /// </summary>
     /// <remarks>A value of 0.0 indicates that the border is not visible. Negative values are not
-    /// allowed.</remarks>
+    /// allowed. This property sets all border edge thicknesses for backward compatibility.</remarks>
     public double BorderWidth
     {
         get => (double)GetValue(BorderWidthProperty);
         set => SetValue(BorderWidthProperty, value);
     }
+
+	private static void OnBorderWidthChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is FsCard card && newValue is double width)
+		{
+			card.BorderTopThickness = width;
+			card.BorderRightThickness = width;
+			card.BorderBottomThickness = width;
+			card.BorderLeftThickness = width;
+		}
+	}
     #endregion
 }
