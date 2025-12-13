@@ -34,6 +34,44 @@
                 SemanticProperties.HeadingLevel="Level1" />
 
             <Label
+                Text="Per-Edge Borders"
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level2" />
+
+            <!-- Example 1: Bottom border only (underline style) -->
+            <fs:FsEntry 
+                Placeholder="Email (bottom border only)"
+                BorderBottomThickness="2"
+                BorderBottomBrush="{DynamicResource Color.Primary}"
+                Padding="8,4" />
+
+            <!-- Example 2: Card with 3D inset/outset effect -->
+            <fs:FsCard 
+                Padding="16"
+                CornerRadius="8"
+                BorderTopThickness="2"
+                BorderLeftThickness="2"
+                BorderRightThickness="2"
+                BorderBottomThickness="2"
+                BorderTopBrush="White"
+                BorderLeftBrush="White"
+                BorderRightBrush="Gray"
+                BorderBottomBrush="Gray">
+                <Label Text="Card with 3D raised effect" />
+            </fs:FsCard>
+
+            <!-- Example 3: Card with bottom border divider -->
+            <fs:FsCard 
+                Padding="16"
+                BorderBottomThickness="2"
+                BorderBottomBrush="{DynamicResource Color.Outline}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Card Title" FontAttributes="Bold" />
+                    <Label Text="This card has a bottom border divider" />
+                </VerticalStackLayout>
+            </fs:FsCard>
+
+            <Label
                 Text="Validation"
                 Style="{StaticResource SubHeadline}"
                 SemanticProperties.HeadingLevel="Level2" />
