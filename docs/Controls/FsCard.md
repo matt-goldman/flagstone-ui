@@ -1,25 +1,58 @@
 # FsCard Control
 
-The `FsCard` control is a customizable card view that provides a surface for displaying content with visual styling options including elevation, rounded corners, and borders.
+The `FsCard` control is a customizable card view that provides a surface for displaying content with visual styling options including elevation, rounded corners, and per-edge borders.
 
 ## Features
 
 - **Elevation**: Automatic shadow effects based on Material Design 3 specifications
 - **Corner Radius**: Customizable rounded corners
-- **Border Styling**: Configurable border color and width
+- **Per-Edge Borders**: Individual control over each border edge (top, right, bottom, left)
+- **Border Styling**: Configurable border color and width (uniform or per-edge)
 - **Background Color**: Themeable background color
 - **Content**: Can contain any .NET MAUI content
 
 ## Properties
 
+### Core Properties
+
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `Elevation` | `int` | `0` | Controls shadow depth. Values 0-5 recommended. 0 = no shadow. |
 | `CornerRadius` | `double` | `0.0` | Corner radius in device-independent units |
-| `BorderColor` | `Color` | `null` | Border color |
-| `BorderWidth` | `double` | `1.0` | Border width in device-independent units |
-| `BackgroundColor` | `Color` | `Transparent` | Background color of the card |
+| `BackgroundColor` | `Color` | `Transparent` | Background color of the card (backward compatibility) |
+| `BackgroundBrush` | `Brush` | `Transparent` | Background brush for advanced styling |
 | `Padding` | `Thickness` | `0` | Inner padding |
+
+### Uniform Border Properties (Backward Compatibility)
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `BorderColor` | `Color` | `null` | Border color (sets all edges) |
+| `BorderWidth` | `double` | `1.0` | Border width in device-independent units (sets all edges) |
+
+### Per-Edge Border Thickness Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `BorderTopThickness` | `double` | `0.0` | Thickness of the top border |
+| `BorderRightThickness` | `double` | `0.0` | Thickness of the right border |
+| `BorderBottomThickness` | `double` | `0.0` | Thickness of the bottom border |
+| `BorderLeftThickness` | `double` | `0.0` | Thickness of the left border |
+
+### Per-Edge Border Brush Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `BorderTopBrush` | `Brush` | `Transparent` | Brush for the top border |
+| `BorderRightBrush` | `Brush` | `Transparent` | Brush for the right border |
+| `BorderBottomBrush` | `Brush` | `Transparent` | Brush for the bottom border |
+| `BorderLeftBrush` | `Brush` | `Transparent` | Brush for the left border |
+
+### Other Border Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `BorderStrokeCap` | `PenLineCap` | `Flat` | Line cap style for border edges |
 
 ## Usage Examples
 
@@ -53,6 +86,60 @@ The `FsCard` control is a customizable card view that provides a surface for dis
     BackgroundColor="White"
     Padding="16">
     <Label Text="Fully styled card" />
+</fs:FsCard>
+```
+
+### Card with Per-Edge Border (Divider Style)
+
+```xaml
+<fs:FsCard 
+    BorderBottomThickness="2"
+    BorderBottomBrush="Gray"
+    Padding="16">
+    <Label Text="Card with bottom border only" />
+</fs:FsCard>
+```
+
+### Card with Inset/Outset Effect
+
+```xaml
+<fs:FsCard 
+    Elevation="0"
+    CornerRadius="8"
+    BorderTopThickness="2"
+    BorderLeftThickness="2"
+    BorderRightThickness="2"
+    BorderBottomThickness="2"
+    BorderTopBrush="White"
+    BorderLeftBrush="White"
+    BorderRightBrush="DarkGray"
+    BorderBottomBrush="DarkGray"
+    Padding="16">
+    <Label Text="3D raised effect card" />
+</fs:FsCard>
+```
+
+## Backward Compatibility
+
+The `BorderColor` and `BorderWidth` properties are maintained for backward compatibility. Setting these properties will automatically update all four edge-specific properties:
+
+```xaml
+<!-- This approach still works -->
+<fs:FsCard BorderColor="Blue" BorderWidth="2">
+    <Label Text="Uniform border" />
+</fs:FsCard>
+
+<!-- Equivalent to -->
+<fs:FsCard 
+    BorderTopBrush="Blue"
+    BorderRightBrush="Blue"
+    BorderBottomBrush="Blue"
+    BorderLeftBrush="Blue"
+    BorderTopThickness="2"
+    BorderRightThickness="2"
+    BorderBottomThickness="2"
+    BorderLeftThickness="2">
+    <Label Text="Uniform border" />
 </fs:FsCard>
 ```
 
@@ -129,6 +216,7 @@ Shadow rendering may vary slightly by platform but maintains consistent visual h
 
 ## See Also
 
+- [FsBorder Control](FsBorder.md) - Per-edge border control documentation
 - [FsButton Control](FsButton.md) - Button control
 - [FsEntry Control](FsEntry.md) - Text input control
 - [Theme Tokens](../tokens.md) - Available design tokens for styling

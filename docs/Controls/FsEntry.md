@@ -61,21 +61,53 @@ This gives Flagstone UI complete control over the Entry's appearance, allowing t
 
 ## Properties
 
+### Core Properties
+
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `Text` | `string` | `string.Empty` | Current text content |
 | `Placeholder` | `string` | `string.Empty` | Placeholder text when empty |
+| `PlaceholderColor` | `Color` | `Colors.Gray` | Color of the placeholder text |
 | `TextColor` | `Color` | `Colors.Black` | Color of the input text |
-| `BackgroundColor` | `Color` | `Colors.Transparent` | Background color of the entry |
-| `BorderColor` | `Color` | `Colors.Transparent` | Border color |
-| `BorderWidth` | `double` | `0` | Border width in device-independent units |
-| `CornerRadius` | `double` | `0` | Corner radius in device-independent units |
+| `Background` | `Brush` | `Transparent` | Background brush of the entry |
 | `Padding` | `Thickness` | `5` | Inner padding |
 | `FontSize` | `double` | `14.0` | Font size for text |
 | `HorizontalTextAlignment` | `TextAlignment` | `Start` | Horizontal text alignment |
 | `VerticalTextAlignment` | `TextAlignment` | `Center` | Vertical text alignment |
 | `IsPassword` | `bool` | `false` | Whether to mask text as password |
 | `Keyboard` | `Keyboard` | `Keyboard.Default` | Keyboard type to display |
+| `CornerRadius` | `double` | `0` | Corner radius in device-independent units |
+
+### Uniform Border Properties (Backward Compatibility)
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `BorderBrush` | `Brush` | `Transparent` | Border brush (sets all edges) |
+| `BorderWidth` | `double` | `0` | Border width in device-independent units (sets all edges) |
+
+### Per-Edge Border Thickness Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `BorderTopThickness` | `double` | `0.0` | Thickness of the top border |
+| `BorderRightThickness` | `double` | `0.0` | Thickness of the right border |
+| `BorderBottomThickness` | `double` | `0.0` | Thickness of the bottom border |
+| `BorderLeftThickness` | `double` | `0.0` | Thickness of the left border |
+
+### Per-Edge Border Brush Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `BorderTopBrush` | `Brush` | `Transparent` | Brush for the top border |
+| `BorderRightBrush` | `Brush` | `Transparent` | Brush for the right border |
+| `BorderBottomBrush` | `Brush` | `Transparent` | Brush for the bottom border |
+| `BorderLeftBrush` | `Brush` | `Transparent` | Brush for the left border |
+
+### Other Border Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `BorderStrokeCap` | `PenLineCap` | `Flat` | Line cap style for border edges |
 
 ## Usage Examples
 
@@ -90,13 +122,23 @@ This gives Flagstone UI complete control over the Entry's appearance, allowing t
 ```xaml
 <fs:FsEntry 
     Placeholder="Email Address"
-    BorderColor="{DynamicResource Color.Outline}"
+    BorderBrush="{DynamicResource Color.Outline}"
     BorderWidth="1"
     CornerRadius="8"
     Padding="12"
-    BackgroundColor="{DynamicResource Color.SurfaceVariant}"
+    Background="{DynamicResource Color.SurfaceVariant}"
     TextColor="{DynamicResource Color.OnSurface}"
     FontSize="16" />
+```
+
+### Entry with Bottom Border Only (Underline Style)
+
+```xaml
+<fs:FsEntry 
+    Placeholder="Enter text"
+    BorderBottomThickness="1"
+    BorderBottomBrush="{DynamicResource Color.Primary}"
+    Padding="8,4" />
 ```
 
 ### Password Entry
@@ -327,6 +369,7 @@ Platform handlers ensure consistent borderless rendering across all platforms, w
 
 ## See Also
 
+- [FsBorder Control](FsBorder.md) - Per-edge border control documentation
 - [FsButton Control](FsButton.md) - Simpler subclass approach for comparison
 - [FsCard Control](FsCard.md) - Container control for grouping UI elements
 - [ADR001: FsEntry Behavior](../Decisions/adr001-fsentry-behavior.md) - Design decisions and validation strategy
