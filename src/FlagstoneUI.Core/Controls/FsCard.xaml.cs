@@ -339,4 +339,68 @@ public partial class FsCard : ContentView
 		}
 	}
     #endregion
+
+	#region Border Shorthand Property
+	/// <summary>
+	/// Identifies the Border bindable property.
+	/// </summary>
+	/// <remarks>
+	/// This property provides a string shorthand for defining per-edge borders.
+	/// Syntax: "thickness color" values separated by commas.
+	/// - 1 value: applies to all edges (e.g., "1 Black")
+	/// - 2 values: vertical, horizontal (e.g., "1 Black, 2 Grey")
+	/// - 4 values: top, right, bottom, left (e.g., "1 White, 3 Black, 3 Black, 1 White")
+	/// </remarks>
+	public static readonly BindableProperty BorderProperty = BindableProperty.Create(
+		nameof(Border),
+		typeof(string),
+		typeof(FsCard),
+		null,
+		propertyChanged: OnBorderShorthandChanged);
+
+	/// <summary>
+	/// Gets or sets the border using shorthand syntax.
+	/// </summary>
+	/// <remarks>
+	/// Supports 1, 2, or 4 comma-separated values. Each value is "thickness color".
+	/// Examples:
+	/// - "1 Black" - uniform 1px black border
+	/// - "1 Black, 2 Grey" - 1px black top/bottom, 2px grey left/right
+	/// - "1 White, 3 Black, 3 Black, 1 White" - inset effect
+	/// For advanced scenarios (gradients, etc.), use the explicit per-edge properties.
+	/// </remarks>
+	public string? Border
+	{
+		get => (string?)GetValue(BorderProperty);
+		set => SetValue(BorderProperty, value);
+	}
+
+	private static void OnBorderShorthandChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is FsCard card && newValue is string shorthand && !string.IsNullOrWhiteSpace(shorthand))
+		{
+			try
+			{
+				var parsed = BorderShorthand.Parse(shorthand);
+				
+				// Set thickness properties
+				card.BorderTopThickness = parsed.Top.Thickness;
+				card.BorderRightThickness = parsed.Right.Thickness;
+				card.BorderBottomThickness = parsed.Bottom.Thickness;
+				card.BorderLeftThickness = parsed.Left.Thickness;
+
+				// Set brush properties
+				card.BorderTopBrush = new SolidColorBrush(parsed.Top.Color);
+				card.BorderRightBrush = new SolidColorBrush(parsed.Right.Color);
+				card.BorderBottomBrush = new SolidColorBrush(parsed.Bottom.Color);
+				card.BorderLeftBrush = new SolidColorBrush(parsed.Left.Color);
+			}
+			catch (ArgumentException ex)
+			{
+				// Log or handle parsing error
+				System.Diagnostics.Debug.WriteLine($"Error parsing border shorthand: {ex.Message}");
+			}
+		}
+	}
+	#endregion
 }

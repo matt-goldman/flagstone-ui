@@ -8,11 +8,34 @@ FsBorder is a control that provides per-edge border primitives, allowing develop
 
 - **Per-edge thickness control**: Set individual thickness for top, right, bottom, and left borders
 - **Per-edge brush control**: Use different brushes (solid colors, gradients) for each border edge
+- **Shorthand syntax**: Convenient string-based border definition following .NET MAUI conventions
 - **Line-based rendering**: Borders are rendered using Line elements for deterministic cross-platform behavior
 - **Lazy materialization**: Border lines are only created when their thickness > 0
 - **Stroke cap control**: Optional BorderStrokeCap property for line ending customization
 
 ## Properties
+
+### Border Shorthand Property
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Border` | `string` | null | Shorthand syntax for defining borders. Accepts 1, 2, or 4 comma-separated "thickness color" values. |
+
+The `Border` property provides a convenient shorthand syntax for defining per-edge borders, following .NET MAUI conventions (similar to `Thickness`, `Padding`, `ColumnDefinitions`).
+
+**Syntax Rules:**
+- **1 value**: Applies to all edges (e.g., `"2 Blue"`)
+- **2 values**: First for vertical (top/bottom), second for horizontal (left/right) (e.g., `"1 Black, 2 Grey"`)
+- **4 values**: Top, Right, Bottom, Left in TRBL order (e.g., `"1 White, 3 Black, 3 Black, 1 White"`)
+
+Each value consists of:
+- A thickness (double)
+- A color (parsed as solid color brush)
+
+**Constraints:**
+- Only solid colors are supported in shorthand (for gradients, use explicit per-edge properties)
+- Three-value syntax is not supported
+- Color must be a valid .NET MAUI color name or hex value
 
 ### Border Thickness Properties
 
@@ -44,7 +67,51 @@ FsBorder is a control that provides per-edge border primitives, allowing develop
 
 ## Usage Examples
 
-### Basic Uniform Border
+### Shorthand Syntax Examples
+
+#### Uniform Border (Single Value)
+
+```xaml
+<fs:FsBorder Border="2 Blue" Padding="10">
+    <fs:FsBorder.BorderContent>
+        <Label Text="Uniform border using shorthand" />
+    </fs:FsBorder.BorderContent>
+</fs:FsBorder>
+```
+
+#### Vertical/Horizontal Borders (Two Values)
+
+```xaml
+<fs:FsBorder Border="1 Black, 2 Grey" Padding="10">
+    <fs:FsBorder.BorderContent>
+        <Label Text="1px black top/bottom, 2px grey left/right" />
+    </fs:FsBorder.BorderContent>
+</fs:FsBorder>
+```
+
+#### Full TRBL Control (Four Values)
+
+```xaml
+<fs:FsBorder Border="1 White, 3 Black, 3 Black, 1 White" Padding="10">
+    <fs:FsBorder.BorderContent>
+        <Label Text="Inset effect with shorthand" />
+    </fs:FsBorder.BorderContent>
+</fs:FsBorder>
+```
+
+#### With Hex Colors
+
+```xaml
+<fs:FsBorder Border="2 #FF0000, 2 #00FF00, 2 #0000FF, 2 #FFFF00" Padding="10">
+    <fs:FsBorder.BorderContent>
+        <Label Text="Rainbow borders!" />
+    </fs:FsBorder.BorderContent>
+</fs:FsBorder>
+```
+
+### Explicit Property Examples
+
+#### Basic Uniform Border
 
 ```xaml
 <fs:FsBorder BorderTopThickness="2"

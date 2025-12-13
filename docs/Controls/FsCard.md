@@ -143,6 +143,29 @@ The `BorderColor` and `BorderWidth` properties are maintained for backward compa
 </fs:FsCard>
 ```
 
+## Border Shorthand Syntax
+
+FsCard supports the `Border` property for convenient border definition using string shorthand:
+
+```xaml
+<!-- Uniform border -->
+<fs:FsCard Border="2 Blue" Padding="16">
+    <Label Text="Simple border" />
+</fs:FsCard>
+
+<!-- Vertical/horizontal -->
+<fs:FsCard Border="1 Black, 2 Grey" Padding="16">
+    <Label Text="Thin top/bottom, thick left/right" />
+</fs:FsCard>
+
+<!-- Full TRBL control for 3D effects -->
+<fs:FsCard Border="2 White, 2 Gray, 2 Gray, 2 White" Padding="16">
+    <Label Text="Inset effect" />
+</fs:FsCard>
+```
+
+See [FsBorder documentation](FsBorder.md) for complete shorthand syntax details.
+
 ### Card with Custom Content
 
 ```xaml

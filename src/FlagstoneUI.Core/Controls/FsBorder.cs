@@ -16,7 +16,7 @@ namespace FlagstoneUI.Core.Controls;
 public partial class FsBorder : ContentView
 {
 	private readonly Grid _layoutRoot;
-	private readonly Border _innerBorder;
+	private readonly Microsoft.Maui.Controls.Border _innerBorder;
 	private readonly ContentPresenter _contentPresenter;
 	private Line? _topLine;
 	private Line? _rightLine;
@@ -26,7 +26,7 @@ public partial class FsBorder : ContentView
 	public FsBorder()
 	{
 		_layoutRoot = new Grid();
-		_innerBorder = new Border();
+		_innerBorder = new Microsoft.Maui.Controls.Border();
 		_contentPresenter = new ContentPresenter();
 
 		_innerBorder.Content = _contentPresenter;
@@ -36,9 +36,9 @@ public partial class FsBorder : ContentView
 
 		// Bind content presenter to this control's content
 		_contentPresenter.SetBinding(ContentPresenter.ContentProperty, new Binding(nameof(BorderContent), source: this));
-		_innerBorder.SetBinding(Border.BackgroundProperty, new Binding(nameof(Background), source: this));
-		_innerBorder.SetBinding(Border.PaddingProperty, new Binding(nameof(Padding), source: this));
-		_innerBorder.SetBinding(Border.StrokeShapeProperty, new Binding(nameof(StrokeShape), source: this));
+		_innerBorder.SetBinding(Microsoft.Maui.Controls.Border.BackgroundProperty, new Binding(nameof(Background), source: this));
+		_innerBorder.SetBinding(Microsoft.Maui.Controls.Border.PaddingProperty, new Binding(nameof(Padding), source: this));
+		_innerBorder.SetBinding(Microsoft.Maui.Controls.Border.StrokeShapeProperty, new Binding(nameof(StrokeShape), source: this));
 	}
 
 	protected override void OnSizeAllocated(double width, double height)
@@ -228,6 +228,70 @@ public partial class FsBorder : ContentView
 	{
 		get => (IShape?)GetValue(StrokeShapeProperty);
 		set => SetValue(StrokeShapeProperty, value);
+	}
+	#endregion
+
+	#region Border Shorthand Property
+	/// <summary>
+	/// Identifies the Border bindable property.
+	/// </summary>
+	/// <remarks>
+	/// This property provides a string shorthand for defining per-edge borders.
+	/// Syntax: "thickness color" values separated by commas.
+	/// - 1 value: applies to all edges (e.g., "1 Black")
+	/// - 2 values: vertical, horizontal (e.g., "1 Black, 2 Grey")
+	/// - 4 values: top, right, bottom, left (e.g., "1 White, 3 Black, 3 Black, 1 White")
+	/// </remarks>
+	public static readonly BindableProperty BorderProperty = BindableProperty.Create(
+		nameof(Border),
+		typeof(string),
+		typeof(FsBorder),
+		null,
+		propertyChanged: OnBorderShorthandChanged);
+
+	/// <summary>
+	/// Gets or sets the border using shorthand syntax.
+	/// </summary>
+	/// <remarks>
+	/// Supports 1, 2, or 4 comma-separated values. Each value is "thickness color".
+	/// Examples:
+	/// - "1 Black" - uniform 1px black border
+	/// - "1 Black, 2 Grey" - 1px black top/bottom, 2px grey left/right
+	/// - "1 White, 3 Black, 3 Black, 1 White" - inset effect
+	/// For advanced scenarios (gradients, etc.), use the explicit per-edge properties.
+	/// </remarks>
+	public string? Border
+	{
+		get => (string?)GetValue(BorderProperty);
+		set => SetValue(BorderProperty, value);
+	}
+
+	private static void OnBorderShorthandChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is FsBorder border && newValue is string shorthand && !string.IsNullOrWhiteSpace(shorthand))
+		{
+			try
+			{
+				var parsed = BorderShorthand.Parse(shorthand);
+				
+				// Set thickness properties
+				border.BorderTopThickness = parsed.Top.Thickness;
+				border.BorderRightThickness = parsed.Right.Thickness;
+				border.BorderBottomThickness = parsed.Bottom.Thickness;
+				border.BorderLeftThickness = parsed.Left.Thickness;
+
+				// Set brush properties
+				border.BorderTopBrush = new SolidColorBrush(parsed.Top.Color);
+				border.BorderRightBrush = new SolidColorBrush(parsed.Right.Color);
+				border.BorderBottomBrush = new SolidColorBrush(parsed.Bottom.Color);
+				border.BorderLeftBrush = new SolidColorBrush(parsed.Left.Color);
+			}
+			catch (ArgumentException ex)
+			{
+				// Log or handle parsing error
+				System.Diagnostics.Debug.WriteLine($"Error parsing border shorthand: {ex.Message}");
+			}
+		}
 	}
 	#endregion
 
