@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace FlagstoneUI.Core.Controls;
 
 /// <summary>
