@@ -129,7 +129,7 @@
                  FontSize="18"
                  FontAttributes="Bold" />
           <Grid ColumnDefinitions="*, 30"
-                RowDefinitions="*,*">
+                RowDefinitions="*,*,*">
             <Label Grid.Row="0"
                    Grid.Column="0"
                    Text="Include comments in output"/>
@@ -142,6 +142,13 @@
             <CheckBox Grid.Column="1"
                       Grid.Row="1"
                       IsChecked="{Binding IncludeFonts}" />
+            <Label Grid.Row="2"
+                  Grid.Column="0"
+                  Text="Download fonts (if URLs available)" />
+            <CheckBox Grid.Column="1"
+                      Grid.Row="2"
+                      IsChecked="{Binding DownloadFonts}"
+                      IsEnabled="{Binding IncludeFonts}" />
           </Grid>
 
 
@@ -164,13 +171,16 @@
         <VerticalStackLayout Spacing="10" Padding="10">
           <FsButton Style="{DynamicResource SlateProButton}"
                     Text="Convert Theme"
-                    Command="{Binding ConvertThemeCommand}"/>
+                    Command="{Binding ConvertThemeCommand}"
+                    IsEnabled="{Binding IsConvertButtonEnabled}"/>
           <Label Text="Conversion Results" FontSize="18" FontAttributes="Bold" />
           <ScrollView HeightRequest="200">
-            <Label Text="Conversion log will appear here..." />
+            <Label Text="{Binding ConversionResults}" />
           </ScrollView>
-          <FsButton Style="{DynamicResource SlateProButton}" Text="Save Output" IsEnabled="{Binding IsConvertButtonEnabled}" />
-          <FsButton Style="{DynamicResource SlateProButton}" Text="Select Output Directory" />
+          <FsButton Style="{DynamicResource SlateProButton}" 
+                    Text="Save Output" 
+                    Command="{Binding SaveOutputCommand}"
+                    IsEnabled="{Binding HasConversionResult}" />
         </VerticalStackLayout>
 
 
