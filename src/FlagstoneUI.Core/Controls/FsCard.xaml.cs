@@ -274,21 +274,23 @@ public partial class FsCard : ContentView
 	}
 	#endregion
 
-    #region BorderColor Property (Backward Compatibility)
+    #region BorderColor Property
     /// <summary>
     /// Identifies the <see cref="BorderColor"/> bindable property.
     /// </summary>
     /// <remarks>This property is used to define the border color of the <see cref="FsCard"/> control.  The
     /// default value is <see langword="null"/>, which indicates no specific border color is set.
-    /// This property is maintained for backward compatibility and sets all border edges.</remarks>
+    /// This property sets a uniform border on all edges. For per-edge borders (e.g., underlines, 3D effects),
+    /// use the per-edge properties instead.</remarks>
     public static readonly BindableProperty BorderColorProperty = BindableProperty.Create(
         nameof(BorderColor), typeof(Color), typeof(FsCard), null, propertyChanged: OnBorderColorChanged);  
 
     /// <summary>
     /// Gets or sets the color of the border.
     /// </summary>
-    /// <remarks>This property sets all border edge colors for backward compatibility. 
-    /// For per-edge control, use BorderTopBrush, BorderRightBrush, BorderBottomBrush, and BorderLeftBrush.</remarks>
+    /// <remarks>This property sets a uniform border color on all edges. 
+    /// For per-edge control (e.g., underlines, 3D effects), use BorderTopBrush, BorderRightBrush, BorderBottomBrush, and BorderLeftBrush.
+    /// Note: Using both this property and per-edge properties simultaneously may have unintended consequences.</remarks>
     public Color BorderColor
     {
         get => (Color)GetValue(BorderColorProperty);
@@ -308,20 +310,22 @@ public partial class FsCard : ContentView
 	}
     #endregion
 
-    #region BorderWidth Property (Backward Compatibility)
+    #region BorderWidth Property
     /// <summary>
     /// Gets or sets the width of the border surrounding the card.
     /// </summary>
-    /// <remarks>This property is maintained for backward compatibility and sets all border edges.
-    /// For per-edge control, use BorderTopThickness, BorderRightThickness, BorderBottomThickness, and BorderLeftThickness.</remarks>
+    /// <remarks>This property sets a uniform border width on all edges.
+    /// For per-edge control (e.g., underlines, 3D effects), use BorderTopThickness, BorderRightThickness, BorderBottomThickness, and BorderLeftThickness.</remarks>
     public static readonly BindableProperty BorderWidthProperty = BindableProperty.Create(
         nameof(BorderWidth), typeof(double), typeof(FsCard), 1.0, propertyChanged: OnBorderWidthChanged);
 
     /// <summary>
     /// Gets or sets the width of the border, in device-independent units (1/96th inch per unit).
     /// </summary>
-    /// <remarks>A value of 0.0 indicates that the border is not visible. Negative values are not
-    /// allowed. This property sets all border edge thicknesses for backward compatibility.</remarks>
+    /// <remarks>A value of 0.0 indicates that the border is not visible. Negative values are not allowed. 
+    /// This property sets a uniform border width on all edges.
+    /// For per-edge control (e.g., underlines, 3D effects), use the per-edge thickness properties.
+    /// Note: Using both this property and per-edge properties simultaneously may have unintended consequences.</remarks>
     public double BorderWidth
     {
         get => (double)GetValue(BorderWidthProperty);

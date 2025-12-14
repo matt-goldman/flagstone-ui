@@ -194,13 +194,13 @@ public partial class FsEntry : ContentView
 	}
 	#endregion
 
-	#region BorderBrushProperty (Backward Compatibility)
+	#region BorderBrush Property
 	/// <summary>
 	/// Identifies the BorderBrush bindable property.
 	/// </summary>
 	/// <remarks>This property determines the brush used for the border of the <see cref="FsEntry"/> control.
-	/// The default value is a transparent solid color brush. This property is maintained for backward compatibility 
-	/// and sets all border edges.</remarks>
+	/// The default value is a transparent solid color brush. This property sets a uniform border on all edges.
+	/// For per-edge borders (e.g., underlines, 3D effects), use the per-edge properties instead.</remarks>
 	public static readonly BindableProperty BorderBrushProperty = BindableProperty.Create(
 		nameof(BorderBrush),
 		typeof(Brush),
@@ -212,8 +212,9 @@ public partial class FsEntry : ContentView
 	/// Gets or sets the brush used to paint the border.
 	/// </summary>
 	/// <remarks>Setting this property updates the visual appearance of the border. The brush can be a solid color,
-	/// gradient, or other brush type. This property sets all border edge brushes for backward compatibility.
-	/// For per-edge control, use BorderTopBrush, BorderRightBrush, BorderBottomBrush, and BorderLeftBrush.</remarks>
+	/// gradient, or other brush type. This property sets a uniform border on all edges.
+	/// For per-edge control (e.g., underlines, 3D effects), use BorderTopBrush, BorderRightBrush, BorderBottomBrush, and BorderLeftBrush.
+	/// Note: Using both this property and per-edge properties simultaneously may have unintended consequences.</remarks>
 	public Brush BorderBrush
 	{
 		get { return (Brush)GetValue(BorderBrushProperty); }
@@ -232,12 +233,13 @@ public partial class FsEntry : ContentView
 	}
 	#endregion
 
-	#region BorderWidthProperty (Backward Compatibility)
+	#region BorderWidth Property
 	/// <summary>
 	/// Identifies the BorderWidth bindable property.
 	/// </summary>
 	/// <remarks>This property specifies the width of the border for the control. The default value is 0.
-	/// This property is maintained for backward compatibility and sets all border edges.</remarks>
+	/// This property sets a uniform border width on all edges.
+	/// For per-edge control (e.g., underlines, 3D effects), use the per-edge thickness properties.</remarks>
 	public static readonly BindableProperty BorderWidthProperty = BindableProperty.Create(
 		nameof(BorderWidth),
 		typeof(double),
@@ -250,8 +252,9 @@ public partial class FsEntry : ContentView
 	/// Gets or sets the width of the border, in device-independent units (1/96th inch per unit).
 	/// </summary>
 	/// <remarks>A value of 0.0 indicates that the border is not visible. Values must be non-negative.
-	/// This property sets all border edge thicknesses for backward compatibility.
-	/// For per-edge control, use BorderTopThickness, BorderRightThickness, BorderBottomThickness, and BorderLeftThickness.</remarks>
+	/// This property sets a uniform border width on all edges.
+	/// For per-edge control (e.g., underlines, 3D effects), use BorderTopThickness, BorderRightThickness, BorderBottomThickness, and BorderLeftThickness.
+	/// Note: Using both this property and per-edge properties simultaneously may have unintended consequences.</remarks>
 	public double BorderWidth
 	{
 		get => (double)GetValue(BorderWidthProperty);
