@@ -11,4 +11,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\FlagstoneUI.Blocks\FlagstoneUI.Blocks.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="xunit.runner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
