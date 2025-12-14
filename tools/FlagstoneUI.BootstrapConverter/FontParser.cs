@@ -159,11 +159,11 @@ public partial class FontParser
 		foreach (var fontStack in allMatches.Select(match => match.Groups[1].Value))
 		{
 			// Split by comma and get the first explicitly named font
-			var fonts = fontStack.Split(',');
-			foreach (var font in fonts)
+			var fonts = fontStack.Split(',')
+				.Select(f => f.Trim().Trim('\'', '"'));
+			
+			foreach (var trimmedFont in fonts)
 			{
-				var trimmedFont = font.Trim().Trim('\'', '"');
-
 				// Skip generic font families
 				if (IsGenericFontFamily(trimmedFont))
 					continue;
