@@ -1,4 +1,4 @@
-namespace FlagstoneUI.BootstrapConverter.Models;
+﻿namespace FlagstoneUI.BootstrapConverter.Models;
 
 /// <summary>
 /// Represents a computed CSS style with all properties resolved
@@ -13,7 +13,7 @@ public class ComputedStyle
 	/// <summary>
 	/// All CSS property declarations (property name → value)
 	/// </summary>
-	public Dictionary<string, string> Properties { get; set; } = new();
+	public Dictionary<string, string> Properties { get; set; } = [];
 
 	/// <summary>
 	/// Get a property value, or null if not found

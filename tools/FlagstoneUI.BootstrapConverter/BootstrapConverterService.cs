@@ -58,7 +58,7 @@ public class BootstrapConverterService
 			if (request.Inputs.Length == 1)
 			{
 				var input = request.Inputs[0];
-				if (Uri.TryCreate(input, UriKind.Absolute, out var uri))
+				if (Uri.TryCreate(input, UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
 				{
 					variables = await parser.ParseFromUrlAsync(uri.ToString(), request.Format);
 				}
@@ -138,7 +138,7 @@ public class BootstrapConverterService
 		foreach (var input in inputs)
 		{
 			string content;
-			if (Uri.TryCreate(input, UriKind.Absolute, out var uri))
+			if (Uri.TryCreate(input, UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
 			{
 				using var client = new HttpClient();
 				content = await client.GetStringAsync(uri);

@@ -1,21 +1,23 @@
-﻿using FlagstoneUI.BootstrapConverter.Models;
-using FlagstoneUI.BootstrapConverter;
-
-namespace FlagstoneUI.BootstrapConverter.UI.Services;
+﻿namespace FlagstoneUI.BootstrapConverter.UI.Services;
 
 public interface IBootstrapService
 {
-	Task<(string comments, ResourceDictionary dictionary)> ConvertAsync(ConversionRequest request);
+	Task<UIConversionResult> ConvertAsync(ConversionRequest request);
 }
 
 internal class BootstrapService : IBootstrapService
 {
-	private BootstrapConverterService service = new ();
+	private readonly BootstrapConverterService _service = new ();
+	private readonly XamlThemeGenerator _xamlThemeGenerator = new();
 
-	public async Task<(string comments, ResourceDictionary dictionary)> ConvertAsync(ConversionRequest request)
+	public async Task<UIConversionResult> ConvertAsync(ConversionRequest request)
 	{
-		var result = await service.ConvertAsync(request);
+		var result = await _service.ConvertAsync(request);
+		var tokens = _xamlThemeGenerator.GenerateTokensXaml(result.Tokens);
 
+		var dict = new ResourceDictionary();
+		dict.LoadFromXaml(tokens);
 
+		return new UIConversionResult(result.ThemeName, dict, result.Fonts);
 	}
 }

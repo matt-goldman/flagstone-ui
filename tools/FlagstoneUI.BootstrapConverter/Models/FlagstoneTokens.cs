@@ -1,4 +1,4 @@
-namespace FlagstoneUI.BootstrapConverter.Models;
+﻿namespace FlagstoneUI.BootstrapConverter.Models;
 
 /// <summary>
 /// Represents Flagstone UI tokens mapped from Bootstrap variables
@@ -8,27 +8,27 @@ public class FlagstoneTokens
     /// <summary>
     /// Color tokens
     /// </summary>
-    public Dictionary<string, ColorToken> Colors { get; set; } = new();
+    public Dictionary<string, ColorToken> Colors { get; set; } = [];
 
     /// <summary>
     /// Typography tokens
     /// </summary>
-    public Dictionary<string, TypographyToken> Typography { get; set; } = new();
+    public Dictionary<string, TypographyToken> Typography { get; set; } = [];
 
     /// <summary>
     /// Spacing tokens
     /// </summary>
-    public Dictionary<string, NumericToken> Spacing { get; set; } = new();
+    public Dictionary<string, NumericToken> Spacing { get; set; } = [];
 
     /// <summary>
     /// Border radius tokens
     /// </summary>
-    public Dictionary<string, NumericToken> BorderRadius { get; set; } = new();
+    public Dictionary<string, NumericToken> BorderRadius { get; set; } = [];
 
     /// <summary>
     /// Border width tokens
     /// </summary>
-    public Dictionary<string, NumericToken> BorderWidth { get; set; } = new();
+    public Dictionary<string, NumericToken> BorderWidth { get; set; } = [];
 }
 
 /// <summary>

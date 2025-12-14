@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage x:Class="FlagstoneUI.BootstrapConverter.UI.MainPage"
-             x:DataType="MainViewModel">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/maui/global"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlagstoneUI.BootstrapConverter.UI.MainPage"
+             xmlns:vm="clr-namespace:FlagstoneUI.BootstrapConverter.UI.ViewModels"
+             xmlns:ser="clr-namespace:FlagstoneUI.BootstrapConverter.UI.Services"
+             x:DataType="vm:MainViewModel">
 
   <Grid ColumnDefinitions="400,*">
     
@@ -15,61 +19,101 @@
         <!-- Theme source (file or URL) -->
         <!-- TODO: make this multiples as may include variables etc. -->
         <VerticalStackLayout Spacing="10" Padding="10">
-          <Label Text="Theme source" FontSize="18" FontAttributes="Bold" />
-          <FsButton Style="{DynamicResource SlateProButton}"  Text="Select Bootstrap CSS File" />
-          <FsButton Style="{DynamicResource SlateProButton}" Text="Select Output Directory" />
+          <VerticalStackLayout Spacing="5">
+            <Label Text="Theme source"
+                   FontSize="18"
+                   FontAttributes="Bold" />
+            <HorizontalStackLayout Spacing="10">
+              <HorizontalStackLayout Spacing="5">
+                <Label Text="URL"
+                       VerticalOptions="Center" />
+                <RadioButton GroupName="ThemeSourceType"
+                             IsChecked="{Binding IsFromUrl}" />
+              </HorizontalStackLayout>
+              <HorizontalStackLayout Spacing="5">
+                <Label Text="File"
+                       VerticalOptions="Center" />
+                <RadioButton GroupName="ThemeSourceType"
+                             IsChecked="{Binding IsFromFile}" />
+              </HorizontalStackLayout>
+            </HorizontalStackLayout>
+          </VerticalStackLayout>
+          
+          <Label Text="Theme source"
+                 FontSize="18"
+                 FontAttributes="Bold" />
+          <FsButton Style="{DynamicResource SlateProButton}"
+                    Text="Select Bootstrap CSS Files"
+                    Command="{Binding SelectInputFilesCommand}"/>
+
+          <CollectionView ItemsSource="{Binding SelectedFiles}">
+            <CollectionView.ItemTemplate>
+              <DataTemplate x:DataType="ser:SourceFile">
+                <Label Text="{Binding Path}" />
+              </DataTemplate>
+            </CollectionView.ItemTemplate>
+          </CollectionView>
         </VerticalStackLayout>
 
         <!-- Theme name -->
-        <VerticalStackLayout Spacing="10" Padding="10">
-          <Label Text="Theme name" FontSize="18" FontAttributes="Bold" />
-          <FsEntry Style="{DynamicResource SlateProEntry}"  Placeholder="Enter theme name" />
+        <VerticalStackLayout Spacing="10"
+                             Padding="10">
+          <Label Text="Theme name"
+                 FontSize="18"
+                 FontAttributes="Bold" />
+          <FsEntry Style="{DynamicResource SlateProEntry}"
+                   Placeholder="{Binding ThemeName}" />
         </VerticalStackLayout>
 
         <!-- Options -->
 
         <VerticalStackLayout Spacing="10" Padding="10">
-          <Label Text="Options" FontSize="18" FontAttributes="Bold" />
+          <Label Text="Options"
+                 FontSize="18"
+                 FontAttributes="Bold" />
           <Grid ColumnDefinitions="*, 30"
-          RowDefinitions="*,*">
+                RowDefinitions="*,*">
             <Label Grid.Row="0"
-             Grid.Column="0"
-             Text="Include comments in output"/>
+                   Grid.Column="0"
+                   Text="Include comments in output"/>
             <CheckBox Grid.Row="0"
-                Grid.Column="1"
-                IsChecked="{Binding IncludeComments}" />
+                      Grid.Column="1"
+                      IsChecked="{Binding IncludeComments}" />
             <Label Grid.Row="1"
-             Grid.Column="0"
-             Text="Include fonts" />
+                  Grid.Column="0"
+                  Text="Include fonts" />
             <CheckBox Grid.Column="1"
-                Grid.Row="1"
-                IsChecked="{Binding IncludeFonts}" />
+                      Grid.Row="1"
+                      IsChecked="{Binding IncludeFonts}" />
           </Grid>
 
 
           <Label Text="Output format" />
           <Picker ItemsSource="{Binding ResourceDictionaryFormats}"
-            SelectedItem="{Binding OutputType}" />
+                  SelectedItem="{Binding OutputType}" />
           <Label Text="Dark mode strategy" />
           <Picker ItemsSource="{Binding DarkModeStrategies}"
-            SelectedItem="{Binding DarkModeStrategy}" />
+                  SelectedItem="{Binding DarkModeStrategy}" />
           <Label Text="Namespace" />
-          <Entry Placeholder="Enter namespace" Text="FlagstoneUI.Themes" />
+          <Entry Placeholder="Enter namespace" Text="{Binding TargetNamespace}" />
           <Label Text="Analysis strategy" />
           <Picker ItemsSource="{Binding AnalysisStrategies}"
-            SelectedItem="{Binding AnalysisStrategy}" />
+                  SelectedItem="{Binding AnalysisStrategy}" />
           <Label Text="CSS Format" />
           <Picker ItemsSource="{Binding BootstrapFormats}"
-            SelectedItem="{Binding BootstrapFormat}" />
+                  SelectedItem="{Binding BootstrapFormat}" />
         </VerticalStackLayout>
 
         <VerticalStackLayout Spacing="10" Padding="10">
-          <FsButton Style="{DynamicResource SlateProButton}"  Text="Convert Theme" />
+          <FsButton Style="{DynamicResource SlateProButton}"
+                    Text="Convert Theme"
+                    Command="{Binding ConvertThemeCommand}"/>
           <Label Text="Conversion Results" FontSize="18" FontAttributes="Bold" />
           <ScrollView HeightRequest="200">
             <Label Text="Conversion log will appear here..." />
           </ScrollView>
-          <FsButton Style="{DynamicResource SlateProButton}" Text="Save Output" IsEnabled="False" />
+          <FsButton Style="{DynamicResource SlateProButton}" Text="Save Output" IsEnabled="{Binding IsConvertButtonEnabled}" />
+          <FsButton Style="{DynamicResource SlateProButton}" Text="Select Output Directory" />
         </VerticalStackLayout>
 
 
@@ -88,10 +132,15 @@
         <!-- FsButton -->
         <VerticalStackLayout Spacing="10" Padding="10">
           <Label Text="Buttons" FontSize="18" FontAttributes="Bold" />
-          <FlexLayout Direction="Row" AlignContent="Start" JustifyContent="SpaceEvenly">
-            <FsButton Text="Primary Button" />
-            <FsButton Style="{DynamicResource SecondaryButton}"  Text="Secondary Button" />
-            <FsButton Style="{DynamicResource SuccessButton}" Text="Success Button" />
+          <FlexLayout Direction="Row"
+                      AlignContent="Start"
+                      JustifyContent="SpaceEvenly"
+                      BindableLayout.ItemsSource="{Binding FsButtonStyleNames}">
+            <BindableLayout.ItemTemplate>
+              <DataTemplate>
+                <ButtonShowcase StyleName="{Binding}" />
+              </DataTemplate>
+            </BindableLayout.ItemTemplate>
           </FlexLayout>
         </VerticalStackLayout>
 

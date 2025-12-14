@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace FlagstoneUI.SampleApp.ViewModels;
@@ -30,15 +30,15 @@ public class ControlsShowcaseViewModel : INotifyPropertyChanged
 	public bool IsMaterialTheme => SelectedTheme == "Material";
 	public bool IsNotMaterialTheme => !IsMaterialTheme;
 
-	public List<string> AvailableThemes { get; } = new()
-	{
+	public List<string> AvailableThemes { get; } =
+	[
 		"Material",
 		"NovaPop",
 		"SlatePro",
 		"Litera",
 		"Minty",
 		"Brite"
-	};
+	];
 
 	protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
 	{
