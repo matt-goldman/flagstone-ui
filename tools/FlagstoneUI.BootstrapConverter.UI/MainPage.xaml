@@ -18,7 +18,6 @@
         </VerticalStackLayout>
 
         <!-- Theme source (file or URL) -->
-        <!-- TODO: make this multiples as may include variables etc. -->
         <VerticalStackLayout Spacing="10" Padding="10">
           <VerticalStackLayout Spacing="5">
             <Label Text="Theme source"
@@ -40,17 +39,74 @@
             </HorizontalStackLayout>
           </VerticalStackLayout>
           
-          <Label Text="Theme source"
-                 FontSize="18"
-                 FontAttributes="Bold" />
-          <FsButton Style="{DynamicResource SlateProButton}"
-                    Text="Select Bootstrap CSS Files"
-                    Command="{Binding SelectInputFilesCommand}"/>
+          <!-- File Mode -->
+          <VerticalStackLayout Spacing="10"
+                              IsVisible="{Binding IsFromFileComputed}">
+            <Label Text="Theme source files"
+                   FontSize="18"
+                   FontAttributes="Bold" />
+            
+            <HorizontalStackLayout Spacing="10">
+              <FsButton Style="{DynamicResource SlateProButton}"
+                        Text="Add Files"
+                        Command="{Binding AddFilesCommand}"/>
+              <FsButton Style="{DynamicResource SlateProButton}"
+                        Text="Clear All"
+                        Command="{Binding ClearFilesCommand}"
+                        IsEnabled="{Binding IsConvertButtonEnabled}"/>
+            </HorizontalStackLayout>
+          </VerticalStackLayout>
 
+          <!-- URL Mode -->
+          <VerticalStackLayout Spacing="10"
+                              IsVisible="{Binding IsFromUrl}">
+            <Label Text="Theme source URLs"
+                   FontSize="18"
+                   FontAttributes="Bold" />
+            
+            <FsEntry Style="{DynamicResource SlateProEntry}"
+                     Placeholder="Enter Bootstrap CSS/SCSS URL"
+                     Text="{Binding NewUrlInput}"/>
+            <HorizontalStackLayout Spacing="10">
+              <FsButton Style="{DynamicResource SlateProButton}"
+                        Text="Add URL"
+                        Command="{Binding AddUrlCommand}"/>
+              <FsButton Style="{DynamicResource SlateProButton}"
+                        Text="Clear All"
+                        Command="{Binding ClearFilesCommand}"
+                        IsEnabled="{Binding IsConvertButtonEnabled}"/>
+            </HorizontalStackLayout>
+          </VerticalStackLayout>
+
+          <!-- Source List (same for both modes) -->
           <CollectionView ItemsSource="{Binding SelectedFiles}">
             <CollectionView.ItemTemplate>
               <DataTemplate x:DataType="ser:SourceFile">
-                <Label Text="{Binding Path}" />
+                <Grid ColumnDefinitions="*,Auto" 
+                      Padding="5"
+                      ColumnSpacing="10">
+                  
+                  <!-- File mode: Label -->
+                  <Label Grid.Column="0"
+                         Text="{Binding Path}"
+                         VerticalOptions="Center"
+                         IsVisible="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=IsFromFileComputed}" />
+                  
+                  <!-- URL mode: Entry (read-only effect via IsEnabled) -->
+                  <FsEntry Grid.Column="0"
+                           Style="{DynamicResource SlateProEntry}"
+                           Text="{Binding Path}"
+                           IsEnabled="False"
+                           VerticalOptions="Center"
+                           IsVisible="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=IsFromUrl}" />
+                  
+                  <FsButton Grid.Column="1"
+                            Style="{DynamicResource SlateProButton}"
+                            Text="Remove"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=RemoveFileCommand}"
+                            CommandParameter="{Binding .}"
+                            VerticalOptions="Center"/>
+                </Grid>
               </DataTemplate>
             </CollectionView.ItemTemplate>
           </CollectionView>

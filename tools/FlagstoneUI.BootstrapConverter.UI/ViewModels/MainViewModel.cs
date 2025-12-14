@@ -71,18 +71,87 @@ public partial class MainViewModel(
 	public partial string TargetNamespace { get; set; } = "FlagstoneUI.Themes";
 
 	public ObservableCollection<SourceFile> SelectedFiles { get; set; } = [];
+	
+	private bool _isFromUrl;
+	public bool IsFromUrl
+	{
+		get => _isFromUrl;
+		set
+		{
+			if (SetProperty(ref _isFromUrl, value))
+			{
+				OnPropertyChanged(nameof(IsFromFileComputed));
+				OnPropertyChanged(nameof(IsFromFile));
+			}
+		}
+	}
+
+	public bool IsFromFileComputed => !IsFromUrl;
+	
+	public bool IsFromFile
+	{
+		get => !IsFromUrl;
+		set => IsFromUrl = !value;
+	}
+
+	private string _newUrlInput = string.Empty;
+	public string NewUrlInput
+	{
+		get => _newUrlInput;
+		set => SetProperty(ref _newUrlInput, value);
+	}
+
 	[RelayCommand]
 	public void SelectedFilesChanged()
 	{
 		IsConvertButtonEnabled = SelectedFiles.Count > 0;
 	}
 
+	[RelayCommand]
+	public async Task AddFiles()
+	{
+		var files = await file.GetFilePaths();
+		
+		foreach (var f in files)
+		{
+			if (!SelectedFiles.Any(existing => existing.Path == f.Path))
+			{
+				SelectedFiles.Add(f);
+			}
+		}
 
-	[ObservableProperty]
-	public partial bool IsFromUrl { get; set; }
+		IsConvertButtonEnabled = SelectedFiles.Count > 0;
+	}
 
-	[ObservableProperty]
-	public partial string IsFromFile { get; set; }
+	[RelayCommand]
+	public void AddUrl()
+	{
+		if (!string.IsNullOrWhiteSpace(NewUrlInput))
+		{
+			if (!SelectedFiles.Any(existing => existing.Path == NewUrlInput))
+			{
+				SelectedFiles.Add(new SourceFile(NewUrlInput));
+			}
+			NewUrlInput = string.Empty;
+		}
+		
+		IsConvertButtonEnabled = SelectedFiles.Count > 0;
+	}
+
+	[RelayCommand]
+	public void RemoveFile(SourceFile fileToRemove)
+	{
+		SelectedFiles.Remove(fileToRemove);
+		IsConvertButtonEnabled = SelectedFiles.Count > 0;
+	}
+
+	[RelayCommand]
+	public void ClearFiles()
+	{
+		SelectedFiles.Clear();
+		IsConvertButtonEnabled = false;
+	}
+
 
 	public ObservableCollection<string> FsButtonStyleNames { get; set; } = [];
 
