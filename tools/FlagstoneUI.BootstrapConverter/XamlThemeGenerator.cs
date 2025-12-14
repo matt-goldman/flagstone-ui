@@ -291,20 +291,64 @@ public class XamlThemeGenerator
 
         root.Add(new XComment($" ===== {categoryName} Tokens ===== "));
 
-        foreach (var (_, token) in tokens.OrderBy(kvp => kvp.Key))
+        // If this is Corner Radius tokens, generate both Double and Int32 versions
+        if (categoryName == "Corner Radius")
         {
-            // Add purpose as comment if available
-            if (options.IncludeComments && !string.IsNullOrWhiteSpace(token.Purpose))
+            // First add standard Double-typed radius tokens for FsCard, FsEntry, FsEditor
+            foreach (var (_, token) in tokens.OrderBy(kvp => kvp.Key))
             {
-                root.Add(new XComment($" {token.Key}: {token.Purpose} "));
+                if (options.IncludeComments && !string.IsNullOrWhiteSpace(token.Purpose))
+                {
+                    root.Add(new XComment($" {token.Key}: {token.Purpose} "));
+                }
+
+                var element = new XElement(xNs + "Double",
+                    new XAttribute(xNs + "Key", token.Key),
+                    token.Value.ToString(CultureInfo.InvariantCulture)
+                );
+
+                root.Add(element);
             }
 
-            var element = new XElement(xNs + "Double",
-                new XAttribute(xNs + "Key", token.Key),
-                token.Value.ToString(CultureInfo.InvariantCulture)
-            );
+            root.Add(new XText("\n"));
+            root.Add(new XComment(" Button-specific radius tokens (Int32 for Button.CornerRadius) "));
 
-            root.Add(element);
+            // Now add Int32-typed button radius tokens
+            foreach (var (key, token) in tokens.OrderBy(kvp => kvp.Key))
+            {
+                // Generate button-specific key (e.g., Radius.Small -> Radius.Button.Small)
+                var buttonKey = key.Replace("Radius.", "Radius.Button.", StringComparison.Ordinal);
+                
+                if (options.IncludeComments && !string.IsNullOrWhiteSpace(token.Purpose))
+                {
+                    root.Add(new XComment($" {buttonKey}: {token.Purpose} (for buttons) "));
+                }
+
+                var element = new XElement(xNs + "Int32",
+                    new XAttribute(xNs + "Key", buttonKey),
+                    ((int)token.Value).ToString(CultureInfo.InvariantCulture)
+                );
+
+                root.Add(element);
+            }
+        }
+        else
+        {
+            // For other numeric tokens (spacing, border width), just generate Double version
+            foreach (var (_, token) in tokens.OrderBy(kvp => kvp.Key))
+            {
+                if (options.IncludeComments && !string.IsNullOrWhiteSpace(token.Purpose))
+                {
+                    root.Add(new XComment($" {token.Key}: {token.Purpose} "));
+                }
+
+                var element = new XElement(xNs + "Double",
+                    new XAttribute(xNs + "Key", token.Key),
+                    token.Value.ToString(CultureInfo.InvariantCulture)
+                );
+
+                root.Add(element);
+            }
         }
 
         root.Add(new XText("\n"));
@@ -783,22 +827,31 @@ public class XamlThemeGenerator
 
     private static string? GetPreferredRadiusKey(FlagstoneTokens tokens)
     {
+        // For buttons, we need to use Radius.Button.* tokens (Int32) not Radius.* (Double)
         var preferredKeys = new[]
         {
-            "Radius.Button",
-            "Radius.Medium",
-            "Radius.Default",
-            "Radius.Small",
-            "Radius.Large"
+            "Radius.Button.Medium",  // Try button-specific tokens first
+            "Radius.Button.Small",
+            "Radius.Button.Large",
+            "Radius.Button.Default",
         };
 
         foreach (var key in preferredKeys)
         {
-            if (tokens.BorderRadius.ContainsKey(key))
+            // Check if a corresponding non-button radius exists and return button version
+            var baseKey = key.Replace("Radius.Button.", "Radius.", StringComparison.Ordinal);
+            if (tokens.BorderRadius.ContainsKey(baseKey))
                 return key;
         }
 
-        return tokens.BorderRadius.Count > 0 ? tokens.BorderRadius.Keys.First() : null;
+        // Fallback: if we have any border radius, use the button version of the first one
+        if (tokens.BorderRadius.Count > 0)
+        {
+            var firstKey = tokens.BorderRadius.Keys.First();
+            return firstKey.Replace("Radius.", "Radius.Button.", StringComparison.Ordinal);
+        }
+
+        return null;
     }
 
     private static double CssLengthToPixels(string value)
