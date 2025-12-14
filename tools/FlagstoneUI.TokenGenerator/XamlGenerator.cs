@@ -116,7 +116,9 @@ public class XamlGenerator
 		var xNs = root.GetNamespaceOfPrefix("x");
 
 		// Add category header
-		var categoryTitle = string.Concat(char.ToUpperInvariant(category[0]).ToString(), category.Substring(1));
+		Span<char> firstChar = stackalloc char[1];
+		firstChar[0] = char.ToUpperInvariant(category[0]);
+		var categoryTitle = string.Concat(firstChar, category.AsSpan(1));
 		root.Add(new XComment($" ===== {categoryTitle} Tokens ===== "));
 
 		foreach (var tokenProp in categoryTokens.EnumerateObject())
