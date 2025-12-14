@@ -6,29 +6,38 @@
              x:DataType="fs:FsEntry"
              x:Name="ViewWrapper">
     <!-- TODO: Add global XML usings -->
-  <Border x:Name="WrapperBorder"
+  <fs:FsBorder x:Name="WrapperBorder"
           Background="{Binding Background}"
-          Stroke="{Binding BorderBrush}"
-          StrokeThickness="{Binding BorderWidth}"
+          Padding="{Binding Padding}"
+          BorderTopThickness="{Binding BorderTopThickness}"
+          BorderRightThickness="{Binding BorderRightThickness}"
+          BorderBottomThickness="{Binding BorderBottomThickness}"
+          BorderLeftThickness="{Binding BorderLeftThickness}"
+          BorderTopBrush="{Binding BorderTopBrush}"
+          BorderRightBrush="{Binding BorderRightBrush}"
+          BorderBottomBrush="{Binding BorderBottomBrush}"
+          BorderLeftBrush="{Binding BorderLeftBrush}"
+          BorderStrokeCap="{Binding BorderStrokeCap}"
           StrokeShape="{Binding BorderShape}">
-    <Grid Padding="{Binding Padding}"
-          MinimumHeightRequest="44">
-      <fs:BorderlessEntry Text="{Binding Text}"
-                          Placeholder="{Binding Placeholder}"
-                          PlaceholderColor="{Binding PlaceholderColor}"
-                          TextColor="{Binding TextColor}"
-                          TextChanged="OnTextChanged"
-                          Completed="OnCompleted"
-                          FontSize="{Binding FontSize}"
-                          HorizontalTextAlignment="{Binding HorizontalTextAlignment}"
-                          VerticalTextAlignment="{Binding VerticalTextAlignment}"
-                          IsPassword="{Binding IsPassword}"
-                          Keyboard="{Binding Keyboard}"
-                          Margin="0"
-                          VerticalOptions="Center"
-                          Focused="BorderlessEntry_Focused"
-                          Unfocused="BorderlessEntry_Unfocused"
-                          x:Name="InnerEntry"/>
-    </Grid>
-  </Border>
+    <fs:FsBorder.BorderContent>
+      <Grid MinimumHeightRequest="44">
+        <fs:BorderlessEntry Text="{Binding Text}"
+                            Placeholder="{Binding Placeholder}"
+                            PlaceholderColor="{Binding PlaceholderColor}"
+                            TextColor="{Binding TextColor}"
+                            TextChanged="OnTextChanged"
+                            Completed="OnCompleted"
+                            FontSize="{Binding FontSize}"
+                            HorizontalTextAlignment="{Binding HorizontalTextAlignment}"
+                            VerticalTextAlignment="{Binding VerticalTextAlignment}"
+                            IsPassword="{Binding IsPassword}"
+                            Keyboard="{Binding Keyboard}"
+                            Margin="0"
+                            VerticalOptions="Center"
+                            Focused="BorderlessEntry_Focused"
+                            Unfocused="BorderlessEntry_Unfocused"
+                            x:Name="InnerEntry"/>
+      </Grid>
+    </fs:FsBorder.BorderContent>
+  </fs:FsBorder>
 </ContentView>

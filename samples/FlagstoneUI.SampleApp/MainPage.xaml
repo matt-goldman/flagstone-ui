@@ -34,6 +34,66 @@
                 SemanticProperties.HeadingLevel="Level1" />
 
             <Label
+                Text="Per-Edge Borders"
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level2" />
+
+            <!-- Example 1: Shorthand - Single value (uniform border) -->
+            <fs:FsCard 
+                Border="2 Blue"
+                Padding="16"
+                CornerRadius="8">
+                <Label Text="Uniform border using shorthand: Border=&quot;2 Blue&quot;" />
+            </fs:FsCard>
+
+            <!-- Example 2: Shorthand - Two values (vertical, horizontal) -->
+            <fs:FsEntry 
+                Placeholder="Email with shorthand"
+                Border="1 Black, 2 Grey"
+                Padding="8,4" />
+
+            <!-- Example 3: Shorthand - Four values (TRBL) for 3D effect -->
+            <fs:FsCard 
+                Border="2 White, 2 Gray, 2 Gray, 2 White"
+                Padding="16"
+                CornerRadius="8">
+                <Label Text="3D effect using shorthand (TRBL)" />
+            </fs:FsCard>
+
+            <!-- Example 4: Bottom border only (underline style) - explicit -->
+            <fs:FsEntry 
+                Placeholder="Email (bottom border only - explicit)"
+                BorderBottomThickness="2"
+                BorderBottomBrush="{DynamicResource Color.Primary}"
+                Padding="8,4" />
+
+            <!-- Example 5: Card with 3D inset/outset effect - explicit -->
+            <fs:FsCard 
+                Padding="16"
+                CornerRadius="8"
+                BorderTopThickness="2"
+                BorderLeftThickness="2"
+                BorderRightThickness="2"
+                BorderBottomThickness="2"
+                BorderTopBrush="White"
+                BorderLeftBrush="White"
+                BorderRightBrush="Gray"
+                BorderBottomBrush="Gray">
+                <Label Text="Card with 3D raised effect (explicit)" />
+            </fs:FsCard>
+
+            <!-- Example 6: Card with bottom border divider -->
+            <fs:FsCard 
+                Padding="16"
+                BorderBottomThickness="2"
+                BorderBottomBrush="{DynamicResource Color.Outline}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Card Title" FontAttributes="Bold" />
+                    <Label Text="This card has a bottom border divider" />
+                </VerticalStackLayout>
+            </fs:FsCard>
+
+            <Label
                 Text="Validation"
                 Style="{StaticResource SubHeadline}"
                 SemanticProperties.HeadingLevel="Level2" />

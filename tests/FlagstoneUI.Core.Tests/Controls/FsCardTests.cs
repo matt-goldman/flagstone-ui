@@ -1,4 +1,5 @@
 ﻿using FlagstoneUI.Core.Controls;
+using Microsoft.Maui.Controls.Shapes;
 using Shouldly;
 using Xunit;
 
@@ -80,5 +81,87 @@ public class FsCardTests : MauiTestBase
 	{
 		var card = new FsCard { BackgroundColor = Colors.Blue };
 		card.BackgroundColor.ShouldBe(Colors.Blue);
+	}
+
+	[Fact]
+	public void Card_border_color_sets_all_edge_brushes()
+	{
+		var card = new FsCard { BorderColor = Colors.Red };
+		
+		// Border color should set all edge brushes
+		var expectedBrush = card.BorderTopBrush as SolidColorBrush;
+		expectedBrush.ShouldNotBeNull();
+		expectedBrush.Color.ShouldBe(Colors.Red);
+		
+		(card.BorderRightBrush as SolidColorBrush)?.Color.ShouldBe(Colors.Red);
+		(card.BorderBottomBrush as SolidColorBrush)?.Color.ShouldBe(Colors.Red);
+		(card.BorderLeftBrush as SolidColorBrush)?.Color.ShouldBe(Colors.Red);
+	}
+
+	[Fact]
+	public void Card_border_width_sets_all_edge_thicknesses()
+	{
+		var card = new FsCard { BorderWidth = 3.0 };
+		
+		card.BorderTopThickness.ShouldBe(3.0);
+		card.BorderRightThickness.ShouldBe(3.0);
+		card.BorderBottomThickness.ShouldBe(3.0);
+		card.BorderLeftThickness.ShouldBe(3.0);
+	}
+
+	[Fact]
+	public void Card_per_edge_thickness_can_be_set()
+	{
+		var card = new FsCard
+		{
+			BorderTopThickness = 1.0,
+			BorderRightThickness = 2.0,
+			BorderBottomThickness = 3.0,
+			BorderLeftThickness = 4.0
+		};
+
+		card.BorderTopThickness.ShouldBe(1.0);
+		card.BorderRightThickness.ShouldBe(2.0);
+		card.BorderBottomThickness.ShouldBe(3.0);
+		card.BorderLeftThickness.ShouldBe(4.0);
+	}
+
+	[Fact]
+	public void Card_per_edge_brush_can_be_set()
+	{
+		var topBrush = new SolidColorBrush(Colors.Red);
+		var rightBrush = new SolidColorBrush(Colors.Blue);
+		var bottomBrush = new SolidColorBrush(Colors.Green);
+		var leftBrush = new SolidColorBrush(Colors.Yellow);
+
+		var card = new FsCard
+		{
+			BorderTopBrush = topBrush,
+			BorderRightBrush = rightBrush,
+			BorderBottomBrush = bottomBrush,
+			BorderLeftBrush = leftBrush
+		};
+
+		card.BorderTopBrush.ShouldBe(topBrush);
+		card.BorderRightBrush.ShouldBe(rightBrush);
+		card.BorderBottomBrush.ShouldBe(bottomBrush);
+		card.BorderLeftBrush.ShouldBe(leftBrush);
+	}
+
+	[Fact]
+	public void Card_background_color_sets_background_brush()
+	{
+		var card = new FsCard { BackgroundColor = Colors.Blue };
+		
+		var brush = card.BackgroundBrush as SolidColorBrush;
+		brush.ShouldNotBeNull();
+		brush.Color.ShouldBe(Colors.Blue);
+	}
+
+	[Fact]
+	public void Card_border_stroke_cap_can_be_set()
+	{
+		var card = new FsCard { BorderStrokeCap = PenLineCap.Round };
+		card.BorderStrokeCap.ShouldBe(PenLineCap.Round);
 	}
 }
