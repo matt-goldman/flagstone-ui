@@ -4,6 +4,7 @@
              x:Class="FlagstoneUI.BootstrapConverter.UI.MainPage"
              xmlns:vm="clr-namespace:FlagstoneUI.BootstrapConverter.UI.ViewModels"
              xmlns:ser="clr-namespace:FlagstoneUI.BootstrapConverter.UI.Services"
+             xmlns:controls="clr-namespace:FlagstoneUI.BootstrapConverter.UI.Controls"
              x:DataType="vm:MainViewModel">
 
   <Grid ColumnDefinitions="400,*">
@@ -137,7 +138,7 @@
                       BindableLayout.ItemsSource="{Binding FsButtonStyleNames}">
             <BindableLayout.ItemTemplate>
               <DataTemplate x:DataType="x:String">
-                <ButtonShowcase StyleName="{Binding}" />
+                <controls:ButtonShowcase StyleName="{Binding}" />
               </DataTemplate>
             </BindableLayout.ItemTemplate>
           </FlexLayout>
@@ -146,28 +147,42 @@
         <!-- FsEntry -->
         <VerticalStackLayout Spacing="10" Padding="10">
           <Label Text="Entries" FontSize="18" FontAttributes="Bold" />
-          <FlexLayout Direction="Row" AlignContent="Start" JustifyContent="SpaceEvenly">
-            <FsEntry Placeholder="Default Entry" WidthRequest="200" />
-            <FsEntry Placeholder="Disabled Entry" IsEnabled="False" WidthRequest="200" />
+          <FlexLayout Direction="Row"
+                      Wrap="Wrap"
+                      BindableLayout.ItemsSource="{Binding FsEntryStyleNames}">
+            <BindableLayout.ItemTemplate>
+              <DataTemplate x:DataType="x:String">
+                <controls:EntryShowcase StyleName="{Binding}" />
+              </DataTemplate>
+            </BindableLayout.ItemTemplate>
           </FlexLayout>
         </VerticalStackLayout>
 
         <!-- FsEditor -->
         <VerticalStackLayout Spacing="10" Padding="10">
           <Label Text="Editors" FontSize="18" FontAttributes="Bold" />
-          <FlexLayout Direction="Row" AlignContent="Start" JustifyContent="SpaceEvenly">
-            <FsEditor Placeholder="Default Editor" WidthRequest="200" HeightRequest="100" />
-            <FsEditor Placeholder="Disabled Editor" IsEnabled="False" WidthRequest="200" HeightRequest="100" />
+          <FlexLayout Direction="Row"
+                      Wrap="Wrap"
+                      BindableLayout.ItemsSource="{Binding FsEditorStyleNames}">
+            <BindableLayout.ItemTemplate>
+              <DataTemplate x:DataType="x:String">
+                <controls:EditorShowcase StyleName="{Binding}" />
+              </DataTemplate>
+            </BindableLayout.ItemTemplate>
           </FlexLayout>
         </VerticalStackLayout>
         
         <!-- FsCard -->
         <VerticalStackLayout Spacing="10" Padding="10">
           <Label Text="Cards" FontSize="18" FontAttributes="Bold" />
-          <FlexLayout Direction="Row" AlignContent="Start" JustifyContent="SpaceEvenly">
-            <!-- TODO: add cards here -->
-
-            
+          <FlexLayout Direction="Row"
+                      Wrap="Wrap"
+                      BindableLayout.ItemsSource="{Binding FsCardStyleNames}">
+            <BindableLayout.ItemTemplate>
+              <DataTemplate x:DataType="x:String">
+                <controls:CardShowcase StyleName="{Binding}" />
+              </DataTemplate>
+            </BindableLayout.ItemTemplate>
           </FlexLayout>
         </VerticalStackLayout>
 

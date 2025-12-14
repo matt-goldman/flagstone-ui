@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/maui/global"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlagstoneUI.BootstrapConverter.UI.Controls.CardShowcase">
+  <FsCard Style="{DynamicResource SlateProCard}">
+    <VerticalStackLayout Spacing="20">
+      <Label x:Name="StyleNameLabel"
+             TextColor="White"
+             Text="This will be the style name"/>
+
+      <FsCard x:Name="NormalCard"
+              WidthRequest="200"
+              Padding="16">
+        <Label Text="Normal Card Content"
+               TextColor="Black" />
+      </FsCard>
+
+      <FsCard x:Name="DisabledCard"
+              WidthRequest="200"
+              Padding="16"
+              IsEnabled="False">
+        <Label Text="Disabled Card Content"
+               TextColor="Black" />
+      </FsCard>
+    </VerticalStackLayout>
+  </FsCard>
+</ContentView>

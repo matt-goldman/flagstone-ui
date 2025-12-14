@@ -14,45 +14,45 @@
   <!-- ======================================================= -->
 
   <!-- Primary (Enterprise Blue) -->
-  <Color x:Key="Color.SlatePro.Primary">#0B62A4</Color>
-  <Color x:Key="Color.SlatePro.OnPrimary">#FFFFFF</Color>
-  <Color x:Key="Color.SlatePro.PrimaryContainer">#D5E8F8</Color>
-  <Color x:Key="Color.SlatePro.OnPrimaryContainer">#06273E</Color>
+  <Color x:Key="Sp.Color.Primary">#0B62A4</Color>
+  <Color x:Key="Sp.Color.OnPrimary">#FFFFFF</Color>
+  <Color x:Key="Sp.Color.PrimaryContainer">#D5E8F8</Color>
+  <Color x:Key="Sp.Color.OnPrimaryContainer">#06273E</Color>
 
   <!-- Secondary (Neutral Slate Gray) -->
-  <Color x:Key="Color.SlatePro.Secondary">#6E7782</Color>
-  <Color x:Key="Color.SlatePro.OnSecondary">#FFFFFF</Color>
-  <Color x:Key="Color.SlatePro.SecondaryContainer">#E1E5EB</Color>
-  <Color x:Key="Color.SlatePro.OnSecondaryContainer">#22272E</Color>
+  <Color x:Key="Sp.Color.Secondary">#6E7782</Color>
+  <Color x:Key="Sp.Color.OnSecondary">#FFFFFF</Color>
+  <Color x:Key="Sp.Color.SecondaryContainer">#E1E5EB</Color>
+  <Color x:Key="Sp.Color.OnSecondaryContainer">#22272E</Color>
 
   <!-- Tertiary (Teal Accent, sparingly used) -->
-  <Color x:Key="Color.SlatePro.Tertiary">#2A8F78</Color>
-  <Color x:Key="Color.SlatePro.OnTertiary">#FFFFFF</Color>
-  <Color x:Key="Color.SlatePro.TertiaryContainer">#C5F2E6</Color>
-  <Color x:Key="Color.SlatePro.OnTertiaryContainer">#06382F</Color>
+  <Color x:Key="Sp.Color.Tertiary">#2A8F78</Color>
+  <Color x:Key="Sp.Color.OnTertiary">#FFFFFF</Color>
+  <Color x:Key="Sp.Color.TertiaryContainer">#C5F2E6</Color>
+  <Color x:Key="Sp.Color.OnTertiaryContainer">#06382F</Color>
 
   <!-- Error -->
-  <Color x:Key="Color.SlatePro.Error">#B3261E</Color>
-  <Color x:Key="Color.SlatePro.OnError">#FFFFFF</Color>
-  <Color x:Key="Color.SlatePro.ErrorContainer">#F9DEDC</Color>
-  <Color x:Key="Color.SlatePro.OnErrorContainer">#410002</Color>
+  <Color x:Key="Sp.Color.Error">#B3261E</Color>
+  <Color x:Key="Sp.Color.OnError">#FFFFFF</Color>
+  <Color x:Key="Sp.Color.ErrorContainer">#F9DEDC</Color>
+  <Color x:Key="Sp.Color.OnErrorContainer">#410002</Color>
 
   <!-- Surface / Background -->
-  <Color x:Key="Color.SlatePro.Surface">#FFFFFF</Color>
-  <Color x:Key="Color.SlatePro.OnSurface">#1B1B1F</Color>
-  <Color x:Key="Color.SlatePro.SurfaceVariant">#E6E8EC</Color>
-  <Color x:Key="Color.SlatePro.OnSurfaceVariant">#494D53</Color>
-  <Color x:Key="Color.SlatePro.Background">#F5F6F7</Color>
-  <Color x:Key="Color.SlatePro.OnBackground">#1B1B1F</Color>
+  <Color x:Key="Sp.Color.Surface">#FFFFFF</Color>
+  <Color x:Key="Sp.Color.OnSurface">#1B1B1F</Color>
+  <Color x:Key="Sp.Color.SurfaceVariant">#E6E8EC</Color>
+  <Color x:Key="Sp.Color.OnSurfaceVariant">#494D53</Color>
+  <Color x:Key="Sp.Color.Background">#F5F6F7</Color>
+  <Color x:Key="Sp.Color.OnBackground">#1B1B1F</Color>
 
   <!-- Outline -->
-  <Color x:Key="Color.SlatePro.Outline">#75777D</Color>
-  <Color x:Key="Color.SlatePro.OutlineVariant">#C4C6CC</Color>
+  <Color x:Key="Sp.Color.Outline">#75777D</Color>
+  <Color x:Key="Sp.Color.OutlineVariant">#C4C6CC</Color>
 
   <!-- Inverse -->
-  <Color x:Key="Color.SlatePro.InverseSurface">#2F3135</Color>
-  <Color x:Key="Color.SlatePro.InverseOnSurface">#F2F3F5</Color>
-  <Color x:Key="Color.SlatePro.InversePrimary">#93C9F4</Color>
+  <Color x:Key="Sp.Color.InverseSurface">#2F3135</Color>
+  <Color x:Key="Sp.Color.InverseOnSurface">#F2F3F5</Color>
+  <Color x:Key="Sp.Color.InversePrimary">#93C9F4</Color>
 
   <!-- ======================================================= -->
   <!--  CONTROL STYLES                                         -->
@@ -60,8 +60,8 @@
 
   <!-- ========== FsButton (Minimal Professional - implicit default) ========== -->
   <Style x:Key="SlateProButton" TargetType="fs:FsButton">
-    <Setter Property="BackgroundColor" Value="{DynamicResource Color.SlatePro.Primary}" />
-    <Setter Property="TextColor" Value="{DynamicResource Color.SlatePro.OnPrimary}" />
+    <Setter Property="BackgroundColor" Value="{DynamicResource Sp.Color.Primary}" />
+    <Setter Property="TextColor" Value="{DynamicResource Sp.Color.OnPrimary}" />
     <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Small}" />
     <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
     <Setter Property="Padding" Value="20,10" />
@@ -84,8 +84,8 @@
 
   <!-- ========== Secondary Button ========== -->
   <Style x:Key="SlateProSecondaryButton" TargetType="fs:FsButton">
-    <Setter Property="BackgroundColor" Value="{DynamicResource Color.SlatePro.Secondary}" />
-    <Setter Property="TextColor" Value="{DynamicResource Color.SlatePro.OnSecondary}" />
+    <Setter Property="BackgroundColor" Value="{DynamicResource Sp.Color.Secondary}" />
+    <Setter Property="TextColor" Value="{DynamicResource Sp.Color.OnSecondary}" />
     <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Small}" />
     <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
     <Setter Property="Padding" Value="20,10" />
@@ -108,8 +108,8 @@
 
   <!-- ========== Tertiary Button ========== -->
   <Style x:Key="SlateProTertiaryButton" TargetType="fs:FsButton">
-    <Setter Property="BackgroundColor" Value="{DynamicResource Color.SlatePro.Tertiary}" />
-    <Setter Property="TextColor" Value="{DynamicResource Color.SlatePro.OnTertiary}" />
+    <Setter Property="BackgroundColor" Value="{DynamicResource Sp.Color.Tertiary}" />
+    <Setter Property="TextColor" Value="{DynamicResource Sp.Color.OnTertiary}" />
     <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Small}" />
     <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
     <Setter Property="Padding" Value="20,10" />
@@ -132,9 +132,9 @@
 
   <!-- ========== FsCard (implicit default) ========== -->
   <Style x:Key="SlateProCard" TargetType="fs:FsCard">
-    <Setter Property="BackgroundColor" Value="{DynamicResource Color.SlatePro.Surface}" />
+    <Setter Property="BackgroundColor" Value="{DynamicResource Sp.Color.Surface}" />
     <!-- subtle LOB outline instead of elevation -->
-    <Setter Property="BorderColor" Value="{DynamicResource Color.SlatePro.OutlineVariant}" />
+    <Setter Property="BorderColor" Value="{DynamicResource Sp.Color.OutlineVariant}" />
     <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
     <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
     <Setter Property="Padding" Value="{DynamicResource Space.16}" />
@@ -145,18 +145,18 @@
   <Style x:Key="SlateProEntry" TargetType="fs:FsEntry">
     <Setter Property="Background">
       <Setter.Value>
-        <SolidColorBrush Color="{DynamicResource Color.SlatePro.Surface}" />
+        <SolidColorBrush Color="{DynamicResource Sp.Color.Surface}" />
       </Setter.Value>
     </Setter>
-    <Setter Property="TextColor" Value="{DynamicResource Color.SlatePro.OnSurface}" />
-    <Setter Property="PlaceholderColor" Value="{DynamicResource Color.SlatePro.OnSurfaceVariant}" />
+    <Setter Property="TextColor" Value="{DynamicResource Sp.Color.OnSurface}" />
+    <Setter Property="PlaceholderColor" Value="{DynamicResource Sp.Color.OnSurfaceVariant}" />
     <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
     <Setter Property="FontSize" Value="{DynamicResource FontSize.BodyMedium}" />
     <Setter Property="Padding" Value="12" />
     <Setter Property="HeightRequest" Value="40" />
     <Setter Property="BorderBrush">
       <Setter.Value>
-        <SolidColorBrush Color="{DynamicResource Color.SlatePro.Outline}" />
+        <SolidColorBrush Color="{DynamicResource Sp.Color.Outline}" />
       </Setter.Value>
     </Setter>
     <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
@@ -166,18 +166,18 @@
   <Style x:Key="SlateProEditor" TargetType="fs:FsEditor">
     <Setter Property="Background">
       <Setter.Value>
-        <SolidColorBrush Color="{DynamicResource Color.SlatePro.Surface}" />
+        <SolidColorBrush Color="{DynamicResource Sp.Color.Surface}" />
       </Setter.Value>
     </Setter>
-    <Setter Property="TextColor" Value="{DynamicResource Color.SlatePro.OnSurface}" />
-    <Setter Property="PlaceholderColor" Value="{DynamicResource Color.SlatePro.OnSurfaceVariant}" />
+    <Setter Property="TextColor" Value="{DynamicResource Sp.Color.OnSurface}" />
+    <Setter Property="PlaceholderColor" Value="{DynamicResource Sp.Color.OnSurfaceVariant}" />
     <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
     <Setter Property="FontSize" Value="{DynamicResource FontSize.BodyMedium}" />
     <Setter Property="Padding" Value="12" />
     <Setter Property="MinimumHeightRequest" Value="120" />
     <Setter Property="BorderBrush">
       <Setter.Value>
-        <SolidColorBrush Color="{DynamicResource Color.SlatePro.Outline}" />
+        <SolidColorBrush Color="{DynamicResource Sp.Color.Outline}" />
       </Setter.Value>
     </Setter>
     <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
@@ -190,15 +190,15 @@
                 <SolidColorBrush Color="Transparent" />
             </Setter.Value>
         </Setter>
-        <Setter Property="TextColor" Value="{DynamicResource Color.SlatePro.OnBackground}" />
-        <Setter Property="PlaceholderColor" Value="{DynamicResource Color.SlatePro.Secondary}" />
+        <Setter Property="TextColor" Value="{DynamicResource Sp.Color.OnBackground}" />
+        <Setter Property="PlaceholderColor" Value="{DynamicResource Sp.Color.Secondary}" />
         <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
         <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
         <Setter Property="Padding" Value="16" />
         <Setter Property="MinimumHeightRequest" Value="120" />
         <Setter Property="BorderBrush">
             <Setter.Value>
-                <SolidColorBrush Color="{DynamicResource Color.SlatePro.Primary}" />
+                <SolidColorBrush Color="{DynamicResource Sp.Color.Primary}" />
             </Setter.Value>
         </Setter>
         <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
