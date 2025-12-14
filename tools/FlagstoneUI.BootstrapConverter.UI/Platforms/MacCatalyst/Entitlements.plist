@@ -10,18 +10,8 @@
         <key>com.apple.security.network.client</key>
         <true/>
         
-        <!-- Entitlements to enable file access -->
-        <key>com.apple.security.assets.movies.read-only</key>
-        <true/>
-        <key>com.apple.security.assets.music.read-only</key>
-        <true/>
-        <key>com.apple.security.assets.pictures.read-only</key>
-        <true/>
-        <key>com.apple.security.files.downloads.read-only</key>
-        <true/>
+        <!-- Allow access to files explicitly selected by the user via file picker dialogs -->
         <key>com.apple.security.files.user-selected.read-only</key>
-        <true/>
-        <key>com.apple.security.personal-information.photos-library</key>
         <true/>
     </dict>
 </plist>
