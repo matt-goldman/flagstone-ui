@@ -41,9 +41,7 @@ public partial class FontParser
 		// Match: @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 		var matches = GoogleFontImportRegex().Matches(content);
 
-		var urls = matches.Select(match => match.Groups[1].Value);
-
-		foreach (var url in urls)
+		foreach (var url in matches.Select(match => match.Groups[1].Value))
 		{
 			fontInfo.DownloadUrls.Add(url);
 
@@ -89,9 +87,7 @@ public partial class FontParser
 		// Match: @font-face { font-family: 'FontName'; src: url('...'); }
 		var matches = FontFaceRegex().Matches(content);
 
-		var fontFaceContents = matches.Select(match => match.Groups[1].Value);
-
-		foreach (var fontFaceContent in fontFaceContents)
+		foreach (var fontFaceContent in matches.Select(match => match.Groups[1].Value))
 		{
 			// Extract font-family name
 			var familyMatch = FontFamilyInFontFaceRegex().Match(fontFaceContent);
@@ -162,9 +158,8 @@ public partial class FontParser
 		var cssMatches = CssFontFamilyVariableRegex().Matches(content);
 
 		var allMatches = scssMatches.Cast<Match>().Concat(cssMatches.Cast<Match>());
-		var fontStacks = allMatches.Select(match => match.Groups[1].Value);
 
-		foreach (var fontStack in fontStacks)
+		foreach (var fontStack in allMatches.Select(match => match.Groups[1].Value))
 		{
 			// Split by comma and get the first explicitly named font
 			var fonts = fontStack.Split(',');
