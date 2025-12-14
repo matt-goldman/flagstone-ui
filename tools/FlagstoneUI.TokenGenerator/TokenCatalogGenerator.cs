@@ -179,13 +179,13 @@ public class TokenCatalogGenerator
         controls = controlFiles
             .Select(file => Path.GetFileNameWithoutExtension(file))
             .Where(controlName => controlName.StartsWith("Fs", StringComparison.Ordinal) && !controlName.Contains("BorderlessEntry", StringComparison.Ordinal))
-            .ToDictionary<string, string, object>(
+            .ToDictionary(
                 controlName =>
                 {
                     Console.WriteLine($"   → Analyzing {controlName}...");
                     return controlName;
                 },
-                controlName => new
+                controlName => (object)new
                 {
                     InheritsFrom = "Microsoft.Maui.Controls.Button", // TODO: Detect from code
                     Architecture = "subclass", // TODO: Detect from code
