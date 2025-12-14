@@ -63,12 +63,13 @@ public partial class FontParser
 				if (!string.IsNullOrWhiteSpace(weightsStr))
 				{
 					var weightParts = weightsStr.Split(';', ',');
-					foreach (var weight in weightParts)
+					var validWeights = weightParts
+						.Where(w => int.TryParse(w, out _))
+						.Select(w => int.Parse(w));
+					
+					foreach (var weightValue in validWeights)
 					{
-						if (int.TryParse(weight, out var weightValue))
-						{
-							family.Weights.Add(weightValue);
-						}
+						family.Weights.Add(weightValue);
 					}
 				}
 
