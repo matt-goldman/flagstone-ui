@@ -47,11 +47,5 @@
     	<Description>Flagstone UI Core library providing a unified styling surface for .NET MAUI controls at the API layer.</Description>
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <MauiXaml Update="Controls\FsEditor.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	</ItemGroup>
-
 
 </Project>
