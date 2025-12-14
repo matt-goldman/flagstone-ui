@@ -10,11 +10,11 @@
   "preEnumerateTheories": true,
   "shadowCopy": false,
   "stopOnFail": false,
-  "longRunningTestSeconds": 10,
+  "longRunningTestSeconds": 5,
   "assembly": {
-    "timeout": 300000
+    "timeout": 120000
   },
   "test": {
-    "timeout": 30000
+    "timeout": 10000
   }
 }

@@ -30,4 +30,4 @@ jobs:
         run: dotnet build --no-restore
       - name: Test
         timeout-minutes: 5
-        run: dotnet test --no-build --verbosity normal --framework net10.0-android --logger "console;verbosity=detailed"
+        run: dotnet test --no-build --verbosity normal --framework net10.0-windows10.0.19041.0 --logger "console;verbosity=detailed"

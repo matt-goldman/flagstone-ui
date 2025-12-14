@@ -48,8 +48,8 @@
 
   <!-- Test project configuration for timeouts -->
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
-    <!-- VSTest timeout settings: 5 minutes per test assembly -->
-    <VSTestTimeout>300000</VSTestTimeout>
+    <!-- VSTest timeout settings: 2 minutes per test assembly -->
+    <VSTestTimeout>120000</VSTestTimeout>
     <!-- Disable parallel test execution to prevent resource contention -->
     <VSTestParallel>false</VSTestParallel>
   </PropertyGroup>
