@@ -79,6 +79,15 @@
 	  <MauiXaml Update="Controls\ButtonShowcase.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Controls\CardShowcase.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\EditorShowcase.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\EntryShowcase.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\SlatePro.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -86,6 +86,12 @@ public partial class MainViewModel(
 
 	public ObservableCollection<string> FsButtonStyleNames { get; set; } = [];
 
+	public ObservableCollection<string> FsEntryStyleNames { get; set; } = [];
+
+	public ObservableCollection<string> FsEditorStyleNames { get; set; } = [];
+
+	public ObservableCollection<string> FsCardStyleNames { get; set; } = [];
+
 	public bool IsConvertButtonEnabled
 	{
 		get => field = SelectedFiles.Count > 0;
@@ -117,32 +123,47 @@ public partial class MainViewModel(
 		var result = await bootstrapService.ConvertAsync(request);
 		ThemeName = result.ThemeName;
 
-		// clear collection before clearing the current theme and adding a new one
+		// clear collections before clearing the current theme and adding a new one
 		FsButtonStyleNames.Clear();
+		FsEntryStyleNames.Clear();
+		FsEditorStyleNames.Clear();
+		FsCardStyleNames.Clear();
 
 		themeService.ReloadThemes(result.Style);
 
-		// get button style names from the result resource dictionary
+		// get style names from the result resource dictionary
 		foreach (var resource in result.Style)
 		{
 			if (resource.Value is Style style)
 			{
-				if (style.TargetType == typeof(FsButton))
+				string key = "default";
+				
+				try
 				{
-					string key = "default";
-					
-					try
-					{
-						key = resource.Key.ToString();
-					}
-					catch (Exception)
-					{
-						// no-op
-					}
+					key = resource.Key.ToString();
+				}
+				catch (Exception)
+				{
+					// no-op
+				}
 
-					if (key != null)
+				if (key != null)
+				{
+					if (style.TargetType == typeof(FsButton))
 					{
 						FsButtonStyleNames.Add(key);
+					}
+					else if (style.TargetType == typeof(FsEntry))
+					{
+						FsEntryStyleNames.Add(key);
+					}
+					else if (style.TargetType == typeof(FsEditor))
+					{
+						FsEditorStyleNames.Add(key);
+					}
+					else if (style.TargetType == typeof(FsCard))
+					{
+						FsCardStyleNames.Add(key);
 					}
 				}
 			}

@@ -1,22 +1,18 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿namespace FlagstoneUI.BootstrapConverter.UI.Controls;
 
-namespace FlagstoneUI.BootstrapConverter.UI.Controls;
-
-public partial class ButtonShowcase : ContentView
+public partial class EntryShowcase : ContentView
 {
-	public ButtonShowcase()
+	public EntryShowcase()
 	{
 		InitializeComponent();
 	}
-
-	// TODO: replace with source generator when MAUI Community Toolkit releases it
 
 	#region StyleName Bindable Property
 	public static readonly BindableProperty StyleNameProperty =
 		BindableProperty.Create(
 			nameof(StyleName),
 			typeof(string),
-			typeof(ButtonShowcase),
+			typeof(EntryShowcase),
 			string.Empty,
 			propertyChanged: OnStyleNameChanged);
 
@@ -28,16 +24,16 @@ public partial class ButtonShowcase : ContentView
 
 	public static void OnStyleNameChanged(BindableObject bindable, object oldValue, object newValue)
 	{
-		if (bindable is ButtonShowcase buttonShowcase && newValue is string styleName)
+		if (bindable is EntryShowcase entryShowcase && newValue is string styleName)
 		{
-			var fullyQualifiedFsButtonName = typeof(FsButton).FullName;
+			var fullyQualifiedFsEntryName = typeof(FsEntry).FullName;
 
-			if (styleName == fullyQualifiedFsButtonName)
+			if (styleName == fullyQualifiedFsEntryName)
 			{
 				styleName = "default";
 			}
 
-			buttonShowcase.StyleNameLabel.Text = styleName;
+			entryShowcase.StyleNameLabel.Text = styleName;
 
 			if (string.IsNullOrEmpty(styleName) || styleName == "default")
 			{
@@ -50,8 +46,8 @@ public partial class ButtonShowcase : ContentView
 
 			if (style is not null)
 			{
-				buttonShowcase.NormalButton.Style = style;
-				buttonShowcase.DisabledButton.Style = style;
+				entryShowcase.NormalEntry.Style = style;
+				entryShowcase.DisabledEntry.Style = style;
 			}
 		}
 	}
