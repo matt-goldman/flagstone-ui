@@ -1,5 +1,4 @@
 ﻿using FlagstoneUI.BootstrapConverter.UI.Resources.Styles;
-using Colors = FlagstoneUI.BootstrapConverter.UI.Resources.Styles.Colors;
 
 namespace FlagstoneUI.BootstrapConverter.UI.Services;
 
@@ -20,13 +19,23 @@ internal class ThemeService : IThemeService
 			return;
 		}
 
-		// clear existing merged dictionaries
-		app.Resources.MergedDictionaries.Clear();
+		// Define the core resource dictionary sources that should always be present
+		var coreSources = new HashSet<string>
+		{
+			"Resources/Styles/Colors.xaml",
+			"Resources/Styles/Styles.xaml",
+			"Resources/Styles/SlatePro.xaml"
+		};
 
-		// reload default resources
-		app.Resources.MergedDictionaries.Add(new Colors());
-		app.Resources.MergedDictionaries.Add(new Styles());
-		app.Resources.MergedDictionaries.Add(new SlatePro());
+		// Remove only non-core dictionaries (i.e., preview themes)
+		var toRemove = app.Resources.MergedDictionaries
+			.Where(d => d.Source != null && !coreSources.Contains(d.Source.OriginalString))
+			.ToList();
+
+		foreach (var dict in toRemove)
+		{
+			app.Resources.MergedDictionaries.Remove(dict);
+		}
 
 		// add preview theme
 		app.Resources.MergedDictionaries.Add(dictionary);

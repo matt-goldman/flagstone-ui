@@ -135,9 +135,10 @@
           <FlexLayout Direction="Row"
                       AlignContent="Start"
                       JustifyContent="SpaceEvenly"
-                      BindableLayout.ItemsSource="{Binding FsButtonStyleNames}">
+                      BindableLayout.ItemsSource="{Binding FsButtonStyleNames}"
+                      Wrap="Wrap">
             <BindableLayout.ItemTemplate>
-              <DataTemplate>
+              <DataTemplate x:DataType="x:String">
                 <ButtonShowcase StyleName="{Binding}" />
               </DataTemplate>
             </BindableLayout.ItemTemplate>

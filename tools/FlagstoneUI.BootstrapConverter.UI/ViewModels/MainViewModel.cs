@@ -129,7 +129,17 @@ public partial class MainViewModel(
 			{
 				if (style.TargetType == typeof(FsButton))
 				{
-					var key = resource.Key.ToString();
+					string key = "default";
+					
+					try
+					{
+						key = resource.Key.ToString();
+					}
+					catch (Exception)
+					{
+						// no-op
+					}
+
 					if (key != null)
 					{
 						FsButtonStyleNames.Add(key);
