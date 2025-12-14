@@ -64,8 +64,9 @@ public partial class FontParser
 				{
 					var weightParts = weightsStr.Split(';', ',');
 					var validWeights = weightParts
-						.Where(w => int.TryParse(w, out _))
-						.Select(w => int.Parse(w));
+						.Select(w => (success: int.TryParse(w, out var value), value))
+						.Where(x => x.success)
+						.Select(x => x.value);
 					
 					foreach (var weightValue in validWeights)
 					{
