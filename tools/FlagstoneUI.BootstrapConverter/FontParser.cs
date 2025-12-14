@@ -63,13 +63,10 @@ public partial class FontParser
 				if (!string.IsNullOrWhiteSpace(weightsStr))
 				{
 					var weightParts = weightsStr.Split(';', ',');
-					foreach (var weight in weightParts)
-					{
-						if (int.TryParse(weight, out var weightValue))
-						{
-							family.Weights.Add(weightValue);
-						}
-					}
+					family.Weights.AddRange(
+						weightParts
+							.Where(w => int.TryParse(w, out _))
+							.Select(int.Parse));
 				}
 
 				// Check for italic
