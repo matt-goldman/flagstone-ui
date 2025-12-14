@@ -40,7 +40,7 @@ public partial class EntryShowcase : ContentView
 				return;
 			}
 
-			var style = Application.Current?.Resources?.TryGetValue(styleName, out var foundStyle) == true
+			var style = (Application.Current?.Resources?.TryGetValue(styleName, out var foundStyle) ?? false)
 				? foundStyle as Style
 				: null;
 
