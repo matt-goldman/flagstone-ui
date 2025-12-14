@@ -359,8 +359,9 @@ public class XamlThemeGenerator
     /// <param name="themeName">Theme name</param>
     /// <param name="componentStyles">Optional computed Bootstrap component styles (used for size/padding defaults where available)</param>
     /// <param name="options">Conversion options</param>
+    /// <param name="includeMergedDictionaries">If true, includes MergedDictionaries reference to Tokens.xaml. Set to false for in-memory operations.</param>
     /// <returns>XAML content as string</returns>
-    public string GenerateStylesXaml(FlagstoneTokens tokens, string themeName, BootstrapComponentStyles? componentStyles, ConversionOptions? options = null)
+    public string GenerateStylesXaml(FlagstoneTokens tokens, string themeName, BootstrapComponentStyles? componentStyles, ConversionOptions? options, bool includeMergedDictionaries)
     {
         options ??= new ConversionOptions();
 
@@ -377,14 +378,17 @@ public class XamlThemeGenerator
         root.Add(new XComment(" Control styles that use theme tokens "));
         root.Add(new XText("\n\n"));
 
-        // Merge Tokens.xaml to avoid duplication
-        var mauiNs = root.Name.Namespace;
-        var mergedDictionaries = new XElement(mauiNs + "ResourceDictionary.MergedDictionaries");
-        var tokensDictionary = new XElement(mauiNs + "ResourceDictionary",
-            new XAttribute("Source", "Tokens.xaml"));
-        mergedDictionaries.Add(tokensDictionary);
-        root.AddFirst(mergedDictionaries);
-        root.AddFirst(new XText("\n"));
+        // Merge Tokens.xaml to avoid duplication (only if generating files)
+        if (includeMergedDictionaries)
+        {
+            var mauiNs = root.Name.Namespace;
+            var mergedDictionaries = new XElement(mauiNs + "ResourceDictionary.MergedDictionaries");
+            var tokensDictionary = new XElement(mauiNs + "ResourceDictionary",
+                new XAttribute("Source", "Tokens.xaml"));
+            mergedDictionaries.Add(tokensDictionary);
+            root.AddFirst(mergedDictionaries);
+            root.AddFirst(new XText("\n"));
+        }
 
         // Add control styles
         AddButtonStyles(root, tokens, componentStyles, options);
@@ -393,6 +397,19 @@ public class XamlThemeGenerator
         AddCardStyles(root, tokens, componentStyles, options);
 
         return FormatXamlDocument(doc);
+    }
+
+    /// <summary>
+    /// Generate Styles.xaml file with styles for FlagstoneUI controls.
+    /// </summary>
+    /// <param name="tokens">Flagstone tokens</param>
+    /// <param name="themeName">Theme name</param>
+    /// <param name="componentStyles">Optional computed Bootstrap component styles (used for size/padding defaults where available)</param>
+    /// <param name="options">Conversion options</param>
+    /// <returns>XAML content as string</returns>
+    public string GenerateStylesXaml(FlagstoneTokens tokens, string themeName, BootstrapComponentStyles? componentStyles, ConversionOptions? options = null)
+    {
+        return GenerateStylesXaml(tokens, themeName, componentStyles, options, includeMergedDictionaries: true);
     }
 
     private void AddButtonStyles(XElement root, FlagstoneTokens tokens, BootstrapComponentStyles? componentStyles, ConversionOptions options)

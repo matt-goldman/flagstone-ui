@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage x:Class="FlagstoneUI.BootstrapConverter.UI.Controls.ButtonShowcase"
-             Title="ButtonShowcase">
+<ContentView x:Class="FlagstoneUI.BootstrapConverter.UI.Controls.ButtonShowcase">
   <FsCard Style="{DynamicResource SlateProCard}">
     <VerticalStackLayout Spacing="20">
       <Label x:Name="StyleNameLabel" />
@@ -13,4 +12,4 @@
                 IsEnabled="False" />
     </VerticalStackLayout>
   </FsCard>
-</ContentPage>
+</ContentView>
