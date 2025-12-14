@@ -17,7 +17,8 @@ public partial class ButtonShowcase : ContentView
 			nameof(StyleName),
 			typeof(string),
 			typeof(ButtonShowcase),
-			string.Empty);
+			string.Empty,
+			propertyChanged: OnStyleNameChanged);
 
 	public string StyleName
 	{

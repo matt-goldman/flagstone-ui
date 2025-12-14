@@ -133,10 +133,8 @@
         <VerticalStackLayout Spacing="10" Padding="10">
           <Label Text="Buttons" FontSize="18" FontAttributes="Bold" />
           <FlexLayout Direction="Row"
-                      AlignContent="Start"
-                      JustifyContent="SpaceEvenly"
-                      BindableLayout.ItemsSource="{Binding FsButtonStyleNames}"
-                      Wrap="Wrap">
+                      Wrap="Wrap"
+                      BindableLayout.ItemsSource="{Binding FsButtonStyleNames}">
             <BindableLayout.ItemTemplate>
               <DataTemplate x:DataType="x:String">
                 <ButtonShowcase StyleName="{Binding}" />

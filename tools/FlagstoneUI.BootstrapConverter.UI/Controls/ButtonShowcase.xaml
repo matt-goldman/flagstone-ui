@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView x:Class="FlagstoneUI.BootstrapConverter.UI.Controls.ButtonShowcase">
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/maui/global"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlagstoneUI.BootstrapConverter.UI.Controls.ButtonShowcase">
   <FsCard Style="{DynamicResource SlateProCard}">
     <VerticalStackLayout Spacing="20">
-      <Label x:Name="StyleNameLabel" />
+      <Label x:Name="StyleNameLabel"
+             TextColor="White"
+             Text="This will be the style name"/>
 
       <FsButton x:Name="NormalButton"
+                WidthRequest="200"
                 Text="Normal" />
 
       <FsButton x:Name="DisabledButton"
                 Text="Disabled"
+                WidthRequest="200"
                 IsEnabled="False" />
     </VerticalStackLayout>
   </FsCard>
