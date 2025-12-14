@@ -162,16 +162,16 @@ public partial class FontParser
 
 		var allMatches = scssMatches.Cast<Match>().Concat(cssMatches.Cast<Match>());
 
-		foreach (var match in allMatches)
-		{
-			var fontStack = match.Groups[1].Value;
+		var fontStacks = allMatches.Select(match => match.Groups[1].Value);
 
+		foreach (var fontStack in fontStacks)
+		{
 			// Split by comma and get the first explicitly named font
 			var fonts = fontStack.Split(',');
-			foreach (var font in fonts)
-			{
-				var trimmedFont = font.Trim().Trim('\'', '"');
+			var trimmedFonts = fonts.Select(font => font.Trim().Trim('\'', '"'));
 
+			foreach (var trimmedFont in trimmedFonts)
+			{
 				// Skip generic font families
 				if (IsGenericFontFamily(trimmedFont))
 					continue;
