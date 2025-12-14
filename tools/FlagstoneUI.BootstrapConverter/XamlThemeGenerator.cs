@@ -1,4 +1,4 @@
-using FlagstoneUI.BootstrapConverter.Models;
+﻿using FlagstoneUI.BootstrapConverter.Models;
 using System.Globalization;
 using System.Text;
 using System.Xml;
@@ -11,7 +11,8 @@ namespace FlagstoneUI.BootstrapConverter;
 /// </summary>
 public class XamlThemeGenerator
 {
-    private const string MauiNamespace = "http://schemas.microsoft.com/dotnet/2021/maui";
+	// TODO: Replace with the new single global MAUI namespace
+    private const string MauiNamespace = "http://schemas.microsoft.com/dotnet/maui/global";
     private const string XamlNamespace = "http://schemas.microsoft.com/winfx/2009/xaml";
 
     /// <summary>
@@ -20,9 +21,11 @@ public class XamlThemeGenerator
     private static string SanitizeThemeName(string themeName)
     {
         if (string.IsNullOrWhiteSpace(themeName))
-            return "Theme";
+		{
+			return "Theme";
+		}
 
-        var sanitized = new StringBuilder();
+		var sanitized = new StringBuilder();
         var needsCapital = true;
 
         foreach (var ch in themeName)
@@ -48,9 +51,11 @@ public class XamlThemeGenerator
         
         // Ensure it starts with a letter or underscore
         if (result.Length > 0 && char.IsDigit(result[0]))
-            result = "_" + result;
+		{
+			result = "_" + result;
+		}
 
-        return string.IsNullOrEmpty(result) ? "Theme" : result;
+		return string.IsNullOrEmpty(result) ? "Theme" : result;
     }
 
     /// <summary>
@@ -147,6 +152,7 @@ public class XamlThemeGenerator
     /// <param name="outputDirectory">Output directory path</param>
     /// <param name="options">Conversion options</param>
     /// <param name="componentStyles">Optional Bootstrap component computed styles (used to better match sizing/padding where available)</param>
+    [Obsolete("File I/O should be handled by consumers. Use GenerateTokensXaml(), GenerateThemeXaml(), GenerateStylesXaml(), and GenerateCodeBehind() to get strings, then write files as needed.")]
     public async Task GenerateFilesAsync(FlagstoneTokens tokens, string themeName, string outputDirectory, ConversionOptions? options = null, BootstrapComponentStyles? componentStyles = null)
     {
         options ??= new ConversionOptions();

@@ -67,4 +67,6 @@ public partial class MainViewModel(IFileService file, IBootstrapService bootstra
 
 	public ObservableCollection<string> SelectedFiles { get; set; } = [];
 
+	public ObservableCollection<string> FsButtonStyleNames { get; set; } = [];
+
 }

@@ -94,7 +94,7 @@ The UI app can now use the same conversion logic:
 
 ```csharp
 var service = new BootstrapConverterService();
-var request = new BootstrapConverterService.ConversionRequest
+var request = new ConversionRequest
 {
     Inputs = ["path/to/theme.scss"],
     Format = BootstrapFormat.Scss,
@@ -186,7 +186,7 @@ Example:
 // In UI ViewModel
 public async Task ConvertThemeAsync()
 {
-    var request = new BootstrapConverterService.ConversionRequest
+    var request = new ConversionRequest
     {
         Inputs = SelectedFiles.ToArray(),
         Format = SelectedFormat,

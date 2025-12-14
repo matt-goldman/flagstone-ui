@@ -284,6 +284,7 @@ public class CSharpThemeGenerator
 	/// <summary>
 	/// Generate all theme files (Tokens.cs, Theme.cs, Styles.cs)
 	/// </summary>
+	[Obsolete("File I/O should be handled by consumers. Use GenerateTokensCs(), GenerateThemeCs(), and GenerateStylesCs() to get strings, then write files as needed.")]
 	public async Task GenerateFilesAsync(FlagstoneTokens tokens, string themeName, string outputDirectory, ConversionOptions? options = null)
 	{
 		options ??= new ConversionOptions();

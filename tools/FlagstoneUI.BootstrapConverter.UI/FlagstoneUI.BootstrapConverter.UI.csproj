@@ -19,6 +19,8 @@
 		<Nullable>enable</Nullable>
 
     <LangVersion>preview</LangVersion>
+    <DefineConstants>$(DefineConstants);MauiAllowImplicitXmlnsDeclaration</DefineConstants>
+    <EnablePreviewFeatures>true</EnablePreviewFeatures>
 
 		<!-- Display name -->
 		<ApplicationTitle>FlagstoneUI.BootstrapConverter.UI</ApplicationTitle>
@@ -67,6 +69,15 @@
 	  <ProjectReference Include="..\..\src\FlagstoneUI.Core\FlagstoneUI.Core.csproj" />
 	  <ProjectReference Include="..\..\src\FlagstoneUI.Integrations.MCT\FlagstoneUI.Integrations.MCT.csproj" />
 	  <ProjectReference Include="..\FlagstoneUI.BootstrapConverter\FlagstoneUI.BootstrapConverter.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Controls\ButtonShowcase.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\SlatePro.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>
