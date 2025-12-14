@@ -149,16 +149,8 @@ public class BootstrapCssAnalyzer
 		// Split by comma for grouped selectors
 		var selectors = selectorText.Split(',', StringSplitOptions.TrimEntries);
 
-		foreach (var sel in selectors)
-		{
-			// Check if this selector contains our target class
-			if (sel.Contains(targetSelector, StringComparison.OrdinalIgnoreCase))
-			{
-				return true;
-			}
-		}
-
-		return false;
+		// Filter selectors that contain the target selector
+		return selectors.Any(sel => sel.Contains(targetSelector, StringComparison.OrdinalIgnoreCase));
 	}
 
 	/// <summary>
