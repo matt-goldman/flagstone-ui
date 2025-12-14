@@ -119,6 +119,12 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 
 ## Important Notes
 
+### Documentation and Comments
+
+The following nomenclature is used in code comments and documentation:
+- "FlagstoneUI" - not "Flagstone UI" or "Flagstone"
+- ".NET MAUI" - always capitalized, with a space, not "MAUI"
+
 ### Update Instructions
 🔄 **Remember to update this `copilot-instructions.md` file with new instructions as the project evolves.** This includes:
 - New architectural decisions
