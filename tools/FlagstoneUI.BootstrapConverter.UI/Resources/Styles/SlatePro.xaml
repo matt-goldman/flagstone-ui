@@ -1,0 +1,207 @@
+<?xaml-comp compile="true"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
+                    xmlns:tokens="clr-namespace:FlagstoneUI.Core.Styles;assembly=FlagstoneUI.Core"
+                    x:Class="FlagstoneUI.BootstrapConverter.UI.Resources.Styles.SlatePro">
+
+  <ResourceDictionary.MergedDictionaries>
+    <tokens:Tokens />
+  </ResourceDictionary.MergedDictionaries>
+
+ <!-- ======================================================= -->
+  <!--  COLOR TOKENS (SlatePro Professional Palette)           -->
+  <!-- ======================================================= -->
+
+  <!-- Primary (Enterprise Blue) -->
+  <Color x:Key="Color.SlatePro.Primary">#0B62A4</Color>
+  <Color x:Key="Color.SlatePro.OnPrimary">#FFFFFF</Color>
+  <Color x:Key="Color.SlatePro.PrimaryContainer">#D5E8F8</Color>
+  <Color x:Key="Color.SlatePro.OnPrimaryContainer">#06273E</Color>
+
+  <!-- Secondary (Neutral Slate Gray) -->
+  <Color x:Key="Color.SlatePro.Secondary">#6E7782</Color>
+  <Color x:Key="Color.SlatePro.OnSecondary">#FFFFFF</Color>
+  <Color x:Key="Color.SlatePro.SecondaryContainer">#E1E5EB</Color>
+  <Color x:Key="Color.SlatePro.OnSecondaryContainer">#22272E</Color>
+
+  <!-- Tertiary (Teal Accent, sparingly used) -->
+  <Color x:Key="Color.SlatePro.Tertiary">#2A8F78</Color>
+  <Color x:Key="Color.SlatePro.OnTertiary">#FFFFFF</Color>
+  <Color x:Key="Color.SlatePro.TertiaryContainer">#C5F2E6</Color>
+  <Color x:Key="Color.SlatePro.OnTertiaryContainer">#06382F</Color>
+
+  <!-- Error -->
+  <Color x:Key="Color.SlatePro.Error">#B3261E</Color>
+  <Color x:Key="Color.SlatePro.OnError">#FFFFFF</Color>
+  <Color x:Key="Color.SlatePro.ErrorContainer">#F9DEDC</Color>
+  <Color x:Key="Color.SlatePro.OnErrorContainer">#410002</Color>
+
+  <!-- Surface / Background -->
+  <Color x:Key="Color.SlatePro.Surface">#FFFFFF</Color>
+  <Color x:Key="Color.SlatePro.OnSurface">#1B1B1F</Color>
+  <Color x:Key="Color.SlatePro.SurfaceVariant">#E6E8EC</Color>
+  <Color x:Key="Color.SlatePro.OnSurfaceVariant">#494D53</Color>
+  <Color x:Key="Color.SlatePro.Background">#F5F6F7</Color>
+  <Color x:Key="Color.SlatePro.OnBackground">#1B1B1F</Color>
+
+  <!-- Outline -->
+  <Color x:Key="Color.SlatePro.Outline">#75777D</Color>
+  <Color x:Key="Color.SlatePro.OutlineVariant">#C4C6CC</Color>
+
+  <!-- Inverse -->
+  <Color x:Key="Color.SlatePro.InverseSurface">#2F3135</Color>
+  <Color x:Key="Color.SlatePro.InverseOnSurface">#F2F3F5</Color>
+  <Color x:Key="Color.SlatePro.InversePrimary">#93C9F4</Color>
+
+  <!-- ======================================================= -->
+  <!--  CONTROL STYLES                                         -->
+  <!-- ======================================================= -->
+
+  <!-- ========== FsButton (Minimal Professional - implicit default) ========== -->
+  <Style x:Key="SlateProButton" TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="{DynamicResource Color.SlatePro.Primary}" />
+    <Setter Property="TextColor" Value="{DynamicResource Color.SlatePro.OnPrimary}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Small}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
+    <Setter Property="Padding" Value="20,10" />
+    <Setter Property="HeightRequest" Value="40" />
+    <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.None}" />
+    <Setter Property="BorderColor" Value="Transparent" />
+    <Setter Property="VisualStateManager.VisualStateGroups">
+      <VisualStateGroupList>
+        <VisualStateGroup x:Name="CommonStates">
+          <VisualState x:Name="Normal"/>
+          <VisualState x:Name="Disabled">
+            <VisualState.Setters>
+              <Setter Property="Opacity" Value="{DynamicResource Opacity.Disabled}" />
+            </VisualState.Setters>
+          </VisualState>
+        </VisualStateGroup>
+      </VisualStateGroupList>
+    </Setter>
+  </Style>
+
+  <!-- ========== Secondary Button ========== -->
+  <Style x:Key="SlateProSecondaryButton" TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="{DynamicResource Color.SlatePro.Secondary}" />
+    <Setter Property="TextColor" Value="{DynamicResource Color.SlatePro.OnSecondary}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Small}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
+    <Setter Property="Padding" Value="20,10" />
+    <Setter Property="HeightRequest" Value="40" />
+    <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.None}" />
+    <Setter Property="BorderColor" Value="Transparent" />
+    <Setter Property="VisualStateManager.VisualStateGroups">
+      <VisualStateGroupList>
+        <VisualStateGroup x:Name="CommonStates">
+          <VisualState x:Name="Normal"/>
+          <VisualState x:Name="Disabled">
+            <VisualState.Setters>
+              <Setter Property="Opacity" Value="{DynamicResource Opacity.Disabled}" />
+            </VisualState.Setters>
+          </VisualState>
+        </VisualStateGroup>
+      </VisualStateGroupList>
+    </Setter>
+  </Style>
+
+  <!-- ========== Tertiary Button ========== -->
+  <Style x:Key="SlateProTertiaryButton" TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="{DynamicResource Color.SlatePro.Tertiary}" />
+    <Setter Property="TextColor" Value="{DynamicResource Color.SlatePro.OnTertiary}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Small}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontSize.LabelLarge}" />
+    <Setter Property="Padding" Value="20,10" />
+    <Setter Property="HeightRequest" Value="40" />
+    <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.None}" />
+    <Setter Property="BorderColor" Value="Transparent" />
+    <Setter Property="VisualStateManager.VisualStateGroups">
+      <VisualStateGroupList>
+        <VisualStateGroup x:Name="CommonStates">
+          <VisualState x:Name="Normal"/>
+          <VisualState x:Name="Disabled">
+            <VisualState.Setters>
+              <Setter Property="Opacity" Value="{DynamicResource Opacity.Disabled}" />
+            </VisualState.Setters>
+          </VisualState>
+        </VisualStateGroup>
+      </VisualStateGroupList>
+    </Setter>
+  </Style>
+
+  <!-- ========== FsCard (implicit default) ========== -->
+  <Style x:Key="SlateProCard" TargetType="fs:FsCard">
+    <Setter Property="BackgroundColor" Value="{DynamicResource Color.SlatePro.Surface}" />
+    <!-- subtle LOB outline instead of elevation -->
+    <Setter Property="BorderColor" Value="{DynamicResource Color.SlatePro.OutlineVariant}" />
+    <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
+    <Setter Property="Padding" Value="{DynamicResource Space.16}" />
+    <Setter Property="Elevation" Value="0" />
+  </Style>
+
+  <!-- ========== FsEntry (implicit default) ========== -->
+  <Style x:Key="SlateProEntry" TargetType="fs:FsEntry">
+    <Setter Property="Background">
+      <Setter.Value>
+        <SolidColorBrush Color="{DynamicResource Color.SlatePro.Surface}" />
+      </Setter.Value>
+    </Setter>
+    <Setter Property="TextColor" Value="{DynamicResource Color.SlatePro.OnSurface}" />
+    <Setter Property="PlaceholderColor" Value="{DynamicResource Color.SlatePro.OnSurfaceVariant}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontSize.BodyMedium}" />
+    <Setter Property="Padding" Value="12" />
+    <Setter Property="HeightRequest" Value="40" />
+    <Setter Property="BorderBrush">
+      <Setter.Value>
+        <SolidColorBrush Color="{DynamicResource Color.SlatePro.Outline}" />
+      </Setter.Value>
+    </Setter>
+    <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+  </Style>
+
+  <!-- ========== FsEditor (implicit default) ========== -->
+  <Style x:Key="SlateProEditor" TargetType="fs:FsEditor">
+    <Setter Property="Background">
+      <Setter.Value>
+        <SolidColorBrush Color="{DynamicResource Color.SlatePro.Surface}" />
+      </Setter.Value>
+    </Setter>
+    <Setter Property="TextColor" Value="{DynamicResource Color.SlatePro.OnSurface}" />
+    <Setter Property="PlaceholderColor" Value="{DynamicResource Color.SlatePro.OnSurfaceVariant}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontSize.BodyMedium}" />
+    <Setter Property="Padding" Value="12" />
+    <Setter Property="MinimumHeightRequest" Value="120" />
+    <Setter Property="BorderBrush">
+      <Setter.Value>
+        <SolidColorBrush Color="{DynamicResource Color.SlatePro.Outline}" />
+      </Setter.Value>
+    </Setter>
+    <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+  </Style>
+
+  <!--  Outlined Editor Style  -->
+    <Style x:Key="SlateProOutlinedEditor" TargetType="fs:FsEditor">
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Color="Transparent" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextColor" Value="{DynamicResource Color.SlatePro.OnBackground}" />
+        <Setter Property="PlaceholderColor" Value="{DynamicResource Color.SlatePro.Secondary}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Radius.Small}" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
+        <Setter Property="Padding" Value="16" />
+        <Setter Property="MinimumHeightRequest" Value="120" />
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <SolidColorBrush Color="{DynamicResource Color.SlatePro.Primary}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+    </Style>
+
+</ResourceDictionary>

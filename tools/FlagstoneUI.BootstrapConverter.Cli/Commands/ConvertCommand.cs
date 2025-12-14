@@ -177,9 +177,9 @@ internal static class ConvertCommand
 		// Parse analysis strategy
 		var strategy = analysisMode.ToLowerInvariant() switch
 		{
-			"css" => BootstrapConverterService.AnalysisStrategy.CssOnly,
-			"variables" => BootstrapConverterService.AnalysisStrategy.VariablesOnly,
-			_ => BootstrapConverterService.AnalysisStrategy.Hybrid
+			"css" => AnalysisStrategy.CssOnly,
+			"variables" => AnalysisStrategy.VariablesOnly,
+			_ => AnalysisStrategy.Hybrid
 		};
 
 		if (verbose)
@@ -196,7 +196,7 @@ internal static class ConvertCommand
 		}
 
 		// Create conversion request
-		var request = new BootstrapConverterService.ConversionRequest
+		var request = new ConversionRequest
 		{
 			Inputs				= inputs,
 			Format				= format,
@@ -247,17 +247,28 @@ internal static class ConvertCommand
 		if (outputFormat == ResourceDictionaryFormat.CSharp)
 		{
 			var generator = new CSharpThemeGenerator();
-			await generator.GenerateFilesAsync(result.Tokens, result.ThemeName, output, request.Options);
+			var tokensCs = generator.GenerateTokensCs(result.Tokens, request.Options);
+			var themeCs = generator.GenerateThemeCs(result.Tokens, result.ThemeName, request.Options);
+			var stylesCs = generator.GenerateStylesCs(result.Tokens, result.ThemeName, request.Options);
+			
+			await File.WriteAllTextAsync(Path.Combine(output, "Tokens.cs"), tokensCs);
+			await File.WriteAllTextAsync(Path.Combine(output, "Theme.cs"), themeCs);
+			await File.WriteAllTextAsync(Path.Combine(output, "Styles.cs"), stylesCs);
 		}
 		else
 		{
 			var generator = new XamlThemeGenerator();
-			await generator.GenerateFilesAsync(
-				result.Tokens, 
-				result.ThemeName, 
-				output, 
-				request.Options!, 
-				result.ComponentStyles);
+			var tokensXaml = generator.GenerateTokensXaml(result.Tokens, request.Options);
+			var themeXaml = generator.GenerateThemeXaml(result.Tokens, result.ThemeName, request.Options);
+			var stylesXaml = generator.GenerateStylesXaml(result.Tokens, result.ThemeName, result.ComponentStyles, request.Options);
+			var themeCodeBehind = generator.GenerateCodeBehind($"{request.Options!.Namespace}.{SanitizeThemeName(result.ThemeName)}", result.ThemeName);
+			var stylesCodeBehind = generator.GenerateCodeBehind($"{request.Options.Namespace}.{SanitizeThemeName(result.ThemeName)}Styles", $"{result.ThemeName} Styles");
+			
+			await File.WriteAllTextAsync(Path.Combine(output, "Tokens.xaml"), tokensXaml);
+			await File.WriteAllTextAsync(Path.Combine(output, "Theme.xaml"), themeXaml);
+			await File.WriteAllTextAsync(Path.Combine(output, "Theme.xaml.cs"), themeCodeBehind);
+			await File.WriteAllTextAsync(Path.Combine(output, "Styles.xaml"), stylesXaml);
+			await File.WriteAllTextAsync(Path.Combine(output, "Styles.xaml.cs"), stylesCodeBehind);
 		}
 		
 		Console.ForegroundColor = ConsoleColor.Green;
@@ -339,5 +350,41 @@ internal static class ConvertCommand
 			Console.WriteLine("⚠ Always verify font licenses before using downloaded fonts in your application.");
 			Console.ResetColor();
 		}
+	}
+
+	private static string SanitizeThemeName(string themeName)
+	{
+		if (string.IsNullOrWhiteSpace(themeName))
+			return "Theme";
+
+		var sanitized = new System.Text.StringBuilder();
+		var needsCapital = true;
+
+		foreach (var ch in themeName)
+		{
+			if (char.IsLetterOrDigit(ch))
+			{
+				sanitized.Append(needsCapital ? char.ToUpper(ch) : ch);
+				needsCapital = false;
+			}
+			else if (ch == '_')
+			{
+				sanitized.Append('_');
+				needsCapital = false;
+			}
+			else
+			{
+				// Skip invalid characters and capitalize next letter
+				needsCapital = true;
+			}
+		}
+
+		var result = sanitized.ToString();
+		
+		// Ensure it starts with a letter or underscore
+		if (result.Length > 0 && char.IsDigit(result[0]))
+			result = "_" + result;
+
+		return string.IsNullOrEmpty(result) ? "Theme" : result;
 	}
 }

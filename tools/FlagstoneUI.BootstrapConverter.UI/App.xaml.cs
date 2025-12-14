@@ -1,16 +1,17 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace FlagstoneUI.BootstrapConverter.UI;
+﻿namespace FlagstoneUI.BootstrapConverter.UI;
 
 public partial class App : Application
 {
-	public App()
+	readonly MainPage _page;
+
+	public App(MainPage page)
 	{
 		InitializeComponent();
+		_page = page;
 	}
 
 	protected override Window CreateWindow(IActivationState? activationState)
 	{
-		return new Window(new AppShell());
+		return new Window(_page);
 	}
 }

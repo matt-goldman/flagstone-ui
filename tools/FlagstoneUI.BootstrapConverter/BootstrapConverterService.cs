@@ -9,103 +9,6 @@ namespace FlagstoneUI.BootstrapConverter;
 public class BootstrapConverterService
 {
 	/// <summary>
-	/// Configuration for the conversion process
-	/// </summary>
-	public record ConversionRequest
-	{
-		/// <summary>
-		/// Input file paths or URLs
-		/// </summary>
-		public required string[] Inputs { get; init; }
-
-		/// <summary>
-		/// Bootstrap format (CSS, SCSS, or Auto-detect)
-		/// </summary>
-		public BootstrapFormat Format { get; init; } = BootstrapFormat.Auto;
-
-		/// <summary>
-		/// Analysis strategy to use
-		/// </summary>
-		public AnalysisStrategy Strategy { get; init; } = AnalysisStrategy.Hybrid;
-
-		/// <summary>
-		/// Conversion options (dark mode, comments, namespace)
-		/// </summary>
-		public ConversionOptions? Options { get; init; }
-
-		/// <summary>
-		/// Enable debug logging
-		/// </summary>
-		public bool EnableDebugLogging { get; init; }
-	}
-
-	/// <summary>
-	/// Result of the conversion process
-	/// </summary>
-	public record ConversionResult
-	{
-		/// <summary>
-		/// Extracted/generated tokens
-		/// </summary>
-		public required FlagstoneTokens Tokens { get; init; }
-
-		/// <summary>
-		/// Component styles (if CSS analysis was used)
-		/// </summary>
-		public BootstrapComponentStyles? ComponentStyles { get; init; }
-
-		/// <summary>
-		/// Theme name extracted from input
-		/// </summary>
-		public required string ThemeName { get; init; }
-
-		/// <summary>
-		/// Statistics about the conversion
-		/// </summary>
-		public required ConversionStatistics Statistics { get; init; }
-
-		/// <summary>
-		/// Font information (if IncludeFonts option was enabled)
-		/// </summary>
-		public FontInformation? Fonts { get; init; }
-	}
-
-	/// <summary>
-	/// Statistics about the conversion process
-	/// </summary>
-	public record ConversionStatistics
-	{
-		public int ColorTokens { get; init; }
-		public int TypographyTokens { get; init; }
-		public int SpacingTokens { get; init; }
-		public int BorderRadiusTokens { get; init; }
-		public int BorderWidthTokens { get; init; }
-		public int ComponentStylesExtracted { get; init; }
-		public int VariablesParsed { get; init; }
-	}
-
-	/// <summary>
-	/// Analysis strategy for conversion
-	/// </summary>
-	public enum AnalysisStrategy
-	{
-		/// <summary>
-		/// Use only CSS class analysis (top-down)
-		/// </summary>
-		CssOnly,
-
-		/// <summary>
-		/// Use only variable parsing (bottom-up)
-		/// </summary>
-		VariablesOnly,
-
-		/// <summary>
-		/// Use both CSS and variables (recommended)
-		/// </summary>
-		Hybrid
-	}
-
-	/// <summary>
 	/// Convert Bootstrap theme to Flagstone tokens
 	/// </summary>
 	/// <param name="request">Conversion request configuration</param>
@@ -221,44 +124,8 @@ public class BootstrapConverterService
 			ComponentStyles = componentStyles,
 			ThemeName = themeName,
 			Statistics = statistics,
-			Fonts = fontInfo
+				Fonts = fontInfo
 		};
-	}
-
-	/// <summary>
-	/// Convert and generate XAML files
-	/// </summary>
-	/// <param name="request">Conversion request</param>
-	/// <param name="outputDirectory">Directory to write XAML files to</param>
-	public async Task ConvertAndGenerateFilesAsync(ConversionRequest request, string outputDirectory)
-	{
-		var result = await ConvertAsync(request);
-
-		// Ensure output directory exists
-		Directory.CreateDirectory(outputDirectory);
-
-		// Choose generator based on format
-		if (request.Options?.OutputFormat == ResourceDictionaryFormat.CSharp)
-		{
-			var generator = new CSharpThemeGenerator();
-			await generator.GenerateFilesAsync(
-				result.Tokens,
-				result.ThemeName,
-				outputDirectory,
-				request.Options
-			);
-		}
-		else
-		{
-			var generator = new XamlThemeGenerator();
-			await generator.GenerateFilesAsync(
-				result.Tokens,
-				result.ThemeName,
-				outputDirectory,
-				request.Options ?? new ConversionOptions(),
-				result.ComponentStyles
-			);
-		}
 	}
 
 	/// <summary>
@@ -354,4 +221,101 @@ public class BootstrapConverterService
 			}
 		}
 	}
+}
+
+/// <summary>
+/// Configuration for the conversion process
+/// </summary>
+public record ConversionRequest
+{
+	/// <summary>
+	/// Input file paths or URLs
+	/// </summary>
+	public required string[] Inputs { get; init; }
+
+	/// <summary>
+	/// Bootstrap format (CSS, SCSS, or Auto-detect)
+	/// </summary>
+	public BootstrapFormat Format { get; init; } = BootstrapFormat.Auto;
+
+	/// <summary>
+	/// Analysis strategy to use
+	/// </summary>
+	public AnalysisStrategy Strategy { get; init; } = AnalysisStrategy.Hybrid;
+
+	/// <summary>
+	/// Conversion options (dark mode, comments, namespace)
+	/// </summary>
+	public ConversionOptions? Options { get; init; }
+
+	/// <summary>
+	/// Enable debug logging
+	/// </summary>
+	public bool EnableDebugLogging { get; init; }
+}
+
+/// <summary>
+/// Result of the conversion process
+/// </summary>
+public record ConversionResult
+{
+	/// <summary>
+	/// Extracted/generated tokens
+	/// </summary>
+	public required FlagstoneTokens Tokens { get; init; }
+
+	/// <summary>
+	/// Component styles (if CSS analysis was used)
+	/// </summary>
+	public BootstrapComponentStyles? ComponentStyles { get; init; }
+
+	/// <summary>
+	/// Theme name extracted from input
+	/// </summary>
+	public required string ThemeName { get; init; }
+
+	/// <summary>
+	/// Statistics about the conversion
+	/// </summary>
+	public required ConversionStatistics Statistics { get; init; }
+
+	/// <summary>
+	/// Font information (if IncludeFonts option was enabled)
+	/// </summary>
+	public FontInformation? Fonts { get; init; }
+}
+
+/// <summary>
+/// Statistics about the conversion process
+/// </summary>
+public record ConversionStatistics
+{
+	public int ColorTokens { get; init; }
+	public int TypographyTokens { get; init; }
+	public int SpacingTokens { get; init; }
+	public int BorderRadiusTokens { get; init; }
+	public int BorderWidthTokens { get; init; }
+	public int ComponentStylesExtracted { get; init; }
+	public int VariablesParsed { get; init; }
+}
+
+/// <summary>
+/// Analysis strategy for conversion
+/// </summary>
+public enum AnalysisStrategy
+{
+	/// <summary>
+	/// Use only CSS class analysis (top-down)
+	/// </summary>
+	CssOnly,
+
+	/// <summary>
+	/// Use only variable parsing (bottom-up)
+	/// </summary>
+	VariablesOnly,
+
+	/// <summary>
+	/// Use both CSS and variables (recommended)
+	/// </summary>
+	Hybrid
 }

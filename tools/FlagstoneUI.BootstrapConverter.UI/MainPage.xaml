@@ -1,85 +1,84 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:FlagstoneUI.BootstrapConverter.UI.ViewModels"
-             x:Class="FlagstoneUI.BootstrapConverter.UI.MainPage"
-             x:DataType="vm:MainViewModel">
+<ContentPage x:Class="FlagstoneUI.BootstrapConverter.UI.MainPage"
+             x:DataType="MainViewModel">
 
-  <Grid ColumnDefinitions="300,*">
+  <Grid ColumnDefinitions="400,*">
     
     <!-- Input options -->
-    <VerticalStackLayout Spacing="20">
-      <VerticalStackLayout Spacing="10" Padding="10">
-        <Label Text="Bootstrap Converter" FontSize="24" FontAttributes="Bold" />
-        <Label Text="Convert Bootstrap themes to Flagstone UI XAML resources." FontSize="14" />
-      </VerticalStackLayout>
-
-      <!-- Theme source (file or URL) -->
-      <!-- TODO: make this multiples as may include variables etc. -->
-      <VerticalStackLayout Spacing="10" Padding="10">
-        <Label Text="Theme source" FontSize="18" FontAttributes="Bold" />
-        <Button Text="Select Bootstrap CSS File" />
-        <Button Text="Select Output Directory" />
-      </VerticalStackLayout>
-
-      <!-- Theme name -->
-      <VerticalStackLayout Spacing="10" Padding="10">
-        <Label Text="Theme name" FontSize="18" FontAttributes="Bold" />
-        <Entry Placeholder="Enter theme name" />
-      </VerticalStackLayout>
-      
-      <!-- Options -->
-      
-      <VerticalStackLayout Spacing="10" Padding="10">
-        <Label Text="Options" FontSize="18" FontAttributes="Bold" />
-        <Grid ColumnDefinitions="*, 30"
-              RowDefinitions="*,*">
-          <Label Grid.Row="0"
-                 Grid.Column="0"
-                 Text="Include comments in output"/>
-          <CheckBox Grid.Row="0"
-                    Grid.Column="1"
-                    IsChecked="{Binding IncludeComments}" />
-          <Label Grid.Row="1"
-                 Grid.Column="0"
-                 Text="Include fonts" />
-          <CheckBox Grid.Column="1"
-                    Grid.Row="1"
-                    IsChecked="{Binding IncludeFonts}" />
-        </Grid>
-
-        
-        <Label Text="Output format" />
-        <Picker ItemsSource="{Binding ResourceDictionaryFormats}"
-                SelectedItem="{Binding OutputType}" />
-        <Label Text="Dark mode strategy" />
-        <Picker ItemsSource="{Binding DarkModeStrategies}"
-                SelectedItem="{Binding DarkModeStrategy}" />
-        <Label Text="Namespace" />
-        <Entry Placeholder="Enter namespace" Text="FlagstoneUI.Themes" />
-        <Label Text="Analysis strategy" />
-        <Picker ItemsSource="{Binding AnalysisStrategies}"
-                SelectedItem="{Binding AnalysisStrategy}" />
-        <Label Text="CSS Format" />
-        <Picker ItemsSource="{Binding BootstrapFormats}"
-                SelectedItem="{Binding BootstrapFormat}" />
-      </VerticalStackLayout>
-
-      <VerticalStackLayout Spacing="10" Padding="10">
-        <Button Text="Convert Theme" BackgroundColor="#512BD4" TextColor="White" />
-        <Label Text="Conversion Results" FontSize="18" FontAttributes="Bold" />
-        <ScrollView HeightRequest="200">
-          <Label Text="Conversion log will appear here..." />
-        </ScrollView>
-        <Button Text="Save Output" IsEnabled="False" BackgroundColor="#512BD4" TextColor="White" />
-      </VerticalStackLayout>
-
-
-    </VerticalStackLayout>
-
-    <!-- Controls showcase -->
     <ScrollView>
       <VerticalStackLayout Spacing="20">
+        <VerticalStackLayout Spacing="10" Padding="10">
+          <Label Text="Bootstrap Converter" FontSize="24" FontAttributes="Bold" />
+          <Label Text="Convert Bootstrap themes to Flagstone UI XAML resources." FontSize="14" />
+        </VerticalStackLayout>
+
+        <!-- Theme source (file or URL) -->
+        <!-- TODO: make this multiples as may include variables etc. -->
+        <VerticalStackLayout Spacing="10" Padding="10">
+          <Label Text="Theme source" FontSize="18" FontAttributes="Bold" />
+          <FsButton Style="{DynamicResource SlateProButton}"  Text="Select Bootstrap CSS File" />
+          <FsButton Style="{DynamicResource SlateProButton}" Text="Select Output Directory" />
+        </VerticalStackLayout>
+
+        <!-- Theme name -->
+        <VerticalStackLayout Spacing="10" Padding="10">
+          <Label Text="Theme name" FontSize="18" FontAttributes="Bold" />
+          <FsEntry Style="{DynamicResource SlateProEntry}"  Placeholder="Enter theme name" />
+        </VerticalStackLayout>
+
+        <!-- Options -->
+
+        <VerticalStackLayout Spacing="10" Padding="10">
+          <Label Text="Options" FontSize="18" FontAttributes="Bold" />
+          <Grid ColumnDefinitions="*, 30"
+          RowDefinitions="*,*">
+            <Label Grid.Row="0"
+             Grid.Column="0"
+             Text="Include comments in output"/>
+            <CheckBox Grid.Row="0"
+                Grid.Column="1"
+                IsChecked="{Binding IncludeComments}" />
+            <Label Grid.Row="1"
+             Grid.Column="0"
+             Text="Include fonts" />
+            <CheckBox Grid.Column="1"
+                Grid.Row="1"
+                IsChecked="{Binding IncludeFonts}" />
+          </Grid>
+
+
+          <Label Text="Output format" />
+          <Picker ItemsSource="{Binding ResourceDictionaryFormats}"
+            SelectedItem="{Binding OutputType}" />
+          <Label Text="Dark mode strategy" />
+          <Picker ItemsSource="{Binding DarkModeStrategies}"
+            SelectedItem="{Binding DarkModeStrategy}" />
+          <Label Text="Namespace" />
+          <Entry Placeholder="Enter namespace" Text="FlagstoneUI.Themes" />
+          <Label Text="Analysis strategy" />
+          <Picker ItemsSource="{Binding AnalysisStrategies}"
+            SelectedItem="{Binding AnalysisStrategy}" />
+          <Label Text="CSS Format" />
+          <Picker ItemsSource="{Binding BootstrapFormats}"
+            SelectedItem="{Binding BootstrapFormat}" />
+        </VerticalStackLayout>
+
+        <VerticalStackLayout Spacing="10" Padding="10">
+          <FsButton Style="{DynamicResource SlateProButton}"  Text="Convert Theme" />
+          <Label Text="Conversion Results" FontSize="18" FontAttributes="Bold" />
+          <ScrollView HeightRequest="200">
+            <Label Text="Conversion log will appear here..." />
+          </ScrollView>
+          <FsButton Style="{DynamicResource SlateProButton}" Text="Save Output" IsEnabled="False" />
+        </VerticalStackLayout>
+
+
+      </VerticalStackLayout>
+    </ScrollView>
+
+    <!-- Controls showcase -->
+    <ScrollView Grid.Column="1">
+      <VerticalStackLayout Spacing="30">
         <!-- Heading section-->
         <VerticalStackLayout Spacing="10" Padding="10">
           <Label Text="Controls Preview" FontSize="24" FontAttributes="Bold" />
@@ -90,9 +89,9 @@
         <VerticalStackLayout Spacing="10" Padding="10">
           <Label Text="Buttons" FontSize="18" FontAttributes="Bold" />
           <FlexLayout Direction="Row" AlignContent="Start" JustifyContent="SpaceEvenly">
-            <Button Text="Primary Button" />
-            <Button Text="Secondary Button" BackgroundColor="Gray" TextColor="White" />
-            <Button Text="Success Button" BackgroundColor="Green" TextColor="White" />
+            <FsButton Text="Primary Button" />
+            <FsButton Style="{DynamicResource SecondaryButton}"  Text="Secondary Button" />
+            <FsButton Style="{DynamicResource SuccessButton}" Text="Success Button" />
           </FlexLayout>
         </VerticalStackLayout>
 
@@ -100,8 +99,8 @@
         <VerticalStackLayout Spacing="10" Padding="10">
           <Label Text="Entries" FontSize="18" FontAttributes="Bold" />
           <FlexLayout Direction="Row" AlignContent="Start" JustifyContent="SpaceEvenly">
-            <Entry Placeholder="Default Entry" WidthRequest="200" />
-            <Entry Placeholder="Disabled Entry" IsEnabled="False" WidthRequest="200" />
+            <FsEntry Placeholder="Default Entry" WidthRequest="200" />
+            <FsEntry Placeholder="Disabled Entry" IsEnabled="False" WidthRequest="200" />
           </FlexLayout>
         </VerticalStackLayout>
 
@@ -109,8 +108,8 @@
         <VerticalStackLayout Spacing="10" Padding="10">
           <Label Text="Editors" FontSize="18" FontAttributes="Bold" />
           <FlexLayout Direction="Row" AlignContent="Start" JustifyContent="SpaceEvenly">
-            <Editor Placeholder="Default Editor" WidthRequest="200" HeightRequest="100" />
-            <Editor Placeholder="Disabled Editor" IsEnabled="False" WidthRequest="200" HeightRequest="100" />
+            <FsEditor Placeholder="Default Editor" WidthRequest="200" HeightRequest="100" />
+            <FsEditor Placeholder="Disabled Editor" IsEnabled="False" WidthRequest="200" HeightRequest="100" />
           </FlexLayout>
         </VerticalStackLayout>
         
