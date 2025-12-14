@@ -1,5 +1,5 @@
-﻿using CommunityToolkit.Maui.Storage;
-using System.Text;
+﻿using System.Text;
+using CommunityToolkit.Maui.Storage;
 
 namespace FlagstoneUI.BootstrapConverter.UI.Services;
 
@@ -47,7 +47,7 @@ internal class FileService : IFileService
 		{
 			// First, pick a folder to save to
 			var folderResult = await FolderPicker.Default.PickAsync(CancellationToken.None);
-			
+
 			if (!folderResult.IsSuccessful || folderResult.Folder == null)
 			{
 				return new SaveResult(false, "Folder selection cancelled");
@@ -63,9 +63,9 @@ internal class FileService : IFileService
 				{
 					var filePath = Path.Combine(folderResult.Folder.Path, fileName);
 					var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
-					
+
 					var saveResult = await _fileSaver.SaveAsync(filePath, stream, CancellationToken.None);
-					
+
 					if (saveResult.IsSuccessful)
 					{
 						savedFiles.Add(fileName);
