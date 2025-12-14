@@ -62,7 +62,7 @@ internal class FileService : IFileService
 				try
 				{
 					var filePath = Path.Combine(folderResult.Folder.Path, fileName);
-					var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+					using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
 					
 					var saveResult = await _fileSaver.SaveAsync(filePath, stream, CancellationToken.None);
 					
