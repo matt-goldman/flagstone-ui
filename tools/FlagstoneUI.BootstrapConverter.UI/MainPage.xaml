@@ -135,6 +135,8 @@
           <Label Text="Buttons" FontSize="18" FontAttributes="Bold" />
           <FlexLayout Direction="Row"
                       Wrap="Wrap"
+                      JustifyContent="SpaceEvenly"
+                      AlignItems="Center"
                       BindableLayout.ItemsSource="{Binding FsButtonStyleNames}">
             <BindableLayout.ItemTemplate>
               <DataTemplate x:DataType="x:String">
