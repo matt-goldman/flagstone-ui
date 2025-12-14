@@ -122,12 +122,12 @@ public partial class MainViewModel(
 	{
 		var files = await file.GetFilePaths();
 		
-		foreach (var f in files)
+		// Filter files that are not already in SelectedFiles
+		var newFiles = files.Where(f => !SelectedFiles.Any(existing => existing.Path == f.Path));
+		
+		foreach (var f in newFiles)
 		{
-			if (!SelectedFiles.Any(existing => existing.Path == f.Path))
-			{
-				SelectedFiles.Add(f);
-			}
+			SelectedFiles.Add(f);
 		}
 
 		IsConvertButtonEnabled = SelectedFiles.Count > 0;
