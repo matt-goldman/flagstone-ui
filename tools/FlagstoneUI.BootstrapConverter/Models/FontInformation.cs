@@ -8,12 +8,12 @@ public class FontInformation
 	/// <summary>
 	/// Font families discovered in the theme
 	/// </summary>
-	public List<FontFamily> Families { get; set; } = new();
+	public List<FontFamily> Families { get; set; } = [];
 
 	/// <summary>
 	/// URLs to download fonts (e.g., Google Fonts)
 	/// </summary>
-	public List<string> DownloadUrls { get; set; } = new();
+	public List<string> DownloadUrls { get; set; } = [];
 
 	/// <summary>
 	/// Whether fonts were found in the theme
@@ -39,7 +39,7 @@ public class FontFamily
 	/// <summary>
 	/// Font weights discovered (e.g., 400, 700)
 	/// </summary>
-	public List<int> Weights { get; set; } = new();
+	public List<int> Weights { get; set; } = [];
 
 	/// <summary>
 	/// Whether italic variant was found

@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Xml.Linq;
 
 namespace FlagstoneUI.TokenGenerator;
@@ -67,14 +67,14 @@ public class TokenCatalogGenerator
 
         var baseTokens = new Dictionary<string, Dictionary<string, object>>
         {
-            ["colors"] = new(),
-            ["spacing"] = new(),
-            ["typography"] = new(),
-            ["borderRadius"] = new(),
-            ["borderWidth"] = new(),
-            ["elevation"] = new(),
-            ["padding"] = new(),
-            ["opacity"] = new()
+            ["colors"] = [],
+            ["spacing"] = [],
+            ["typography"] = [],
+            ["borderRadius"] = [],
+            ["borderWidth"] = [],
+            ["elevation"] = [],
+            ["padding"] = [],
+            ["opacity"] = []
         };
 
         // Parse all resources - Color elements

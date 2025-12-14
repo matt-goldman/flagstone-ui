@@ -1,6 +1,4 @@
 ﻿using CommunityToolkit.Maui;
-using FlagstoneUI.BootstrapConverter.UI.Services;
-using FlagstoneUI.BootstrapConverter.UI.ViewModels;
 using Microsoft.Extensions.Logging;
 
 namespace FlagstoneUI.BootstrapConverter.UI;
@@ -25,6 +23,7 @@ public static class MauiProgram
 
 		builder.Services.AddSingleton<IFileService, FileService>();
 		builder.Services.AddSingleton<IBootstrapService, BootstrapService>();
+		builder.Services.AddSingleton<IThemeService, ThemeService>();
 
 		builder.Services.AddSingleton<MainPage>();
 

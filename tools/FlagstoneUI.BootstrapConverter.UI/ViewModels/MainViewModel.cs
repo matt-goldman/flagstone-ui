@@ -1,12 +1,14 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using FlagstoneUI.BootstrapConverter.Models;
-using FlagstoneUI.BootstrapConverter.UI.Services;
-using static FlagstoneUI.BootstrapConverter.BootstrapConverterService;
 
 namespace FlagstoneUI.BootstrapConverter.UI.ViewModels;
 
-public partial class MainViewModel(IFileService file, IBootstrapService bootstrapService) : ObservableObject
+public partial class MainViewModel(
+	IFileService file,
+	IBootstrapService bootstrapService,
+	IThemeService themeService) : ObservableObject
 {
 	public ObservableCollection<ResourceDictionaryFormat> ResourceDictionaryFormats { get; set; } = 
 	[
@@ -20,8 +22,8 @@ public partial class MainViewModel(IFileService file, IBootstrapService bootstra
 
 	public ObservableCollection<DarkModeStrategy> DarkModeStrategies { get; set; } =
 	[
-			DarkModeStrategy.Auto,
-			DarkModeStrategy.Manual,
+		DarkModeStrategy.Auto,
+		DarkModeStrategy.Manual,
 		DarkModeStrategy.None
 
 	];
@@ -65,8 +67,91 @@ public partial class MainViewModel(IFileService file, IBootstrapService bootstra
 	[ObservableProperty]
 	public partial bool IncludeFonts { get; set; }
 
-	public ObservableCollection<string> SelectedFiles { get; set; } = [];
+	[ObservableProperty]
+	public partial string TargetNamespace { get; set; } = "FlagstoneUI.Themes";
+
+	public ObservableCollection<SourceFile> SelectedFiles { get; set; } = [];
+	[RelayCommand]
+	public void SelectedFilesChanged()
+	{
+		IsConvertButtonEnabled = SelectedFiles.Count > 0;
+	}
+
+
+	[ObservableProperty]
+	public partial bool IsFromUrl { get; set; }
+
+	[ObservableProperty]
+	public partial string IsFromFile { get; set; }
 
 	public ObservableCollection<string> FsButtonStyleNames { get; set; } = [];
+
+	public bool IsConvertButtonEnabled
+	{
+		get => field = SelectedFiles.Count > 0;
+		set
+		{
+			SetProperty(ref field, value);
+		}
+	}
+
+	[RelayCommand]
+	public async Task ConvertThemeAsync()
+	{
+		var request = new ConversionRequest
+		{
+			Inputs				= [ ..SelectedFiles.Select(static f => f.Path)],
+			Format				= BootstrapFormat,
+			EnableDebugLogging	= false,
+			Strategy			= AnalysisStrategy,
+			Options				= new ConversionOptions
+			{
+				DarkModeStrategy	= DarkModeStrategy,
+				IncludeComments		= IncludeComments,
+				IncludeFonts		= IncludeFonts,
+				Namespace			= TargetNamespace,
+				OutputFormat		= OutputType
+			}
+		};
+
+		var result = await bootstrapService.ConvertAsync(request);
+		ThemeName = result.ThemeName;
+
+		// clear collection before clearing the current theme and adding a new one
+		FsButtonStyleNames.Clear();
+
+		themeService.ReloadThemes(result.Style);
+
+		// get button style names from the result resource dictionary
+		foreach (var resource in result.Style)
+		{
+			if (resource.Value is Style style)
+			{
+				if (style.TargetType == typeof(FsButton))
+				{
+					var key = resource.Key.ToString();
+					if (key != null)
+					{
+						FsButtonStyleNames.Add(key);
+					}
+				}
+			}
+		}
+	}
+
+	[RelayCommand]
+	public async Task SelectInputFiles()
+	{
+		var files = await file.GetFilePaths();
+		
+		SelectedFiles.Clear();
+		
+		foreach (var f in files)
+		{
+			SelectedFiles.Add(f);
+		}
+
+		IsConvertButtonEnabled = SelectedFiles.Count > 0;
+	}
 
 }
