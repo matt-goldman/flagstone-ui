@@ -7,18 +7,18 @@
              x:Name="ViewWrapper">
     <!-- TODO: Add global XML usings -->
   <fs:FsBorder x:Name="WrapperBorder"
-          Background="{Binding Background}"
-          Padding="{Binding Padding}"
-          BorderTopThickness="{Binding BorderTopThickness}"
-          BorderRightThickness="{Binding BorderRightThickness}"
-          BorderBottomThickness="{Binding BorderBottomThickness}"
-          BorderLeftThickness="{Binding BorderLeftThickness}"
-          BorderTopBrush="{Binding BorderTopBrush}"
-          BorderRightBrush="{Binding BorderRightBrush}"
-          BorderBottomBrush="{Binding BorderBottomBrush}"
-          BorderLeftBrush="{Binding BorderLeftBrush}"
-          BorderStrokeCap="{Binding BorderStrokeCap}"
-          StrokeShape="{Binding BorderShape}">
+               Background="{Binding Background}"
+               Padding="{Binding Padding}"
+               BorderTopThickness="{Binding BorderTopThickness}"
+               BorderRightThickness="{Binding BorderRightThickness}"
+               BorderBottomThickness="{Binding BorderBottomThickness}"
+               BorderLeftThickness="{Binding BorderLeftThickness}"
+               BorderTopBrush="{Binding BorderTopBrush}"
+               BorderRightBrush="{Binding BorderRightBrush}"
+               BorderBottomBrush="{Binding BorderBottomBrush}"
+               BorderLeftBrush="{Binding BorderLeftBrush}"
+               BorderStrokeCap="{Binding BorderStrokeCap}"
+               StrokeShape="{Binding BorderShape}">
     <fs:FsBorder.BorderContent>
       <Grid MinimumHeightRequest="44">
         <fs:BorderlessEntry Text="{Binding Text}"
