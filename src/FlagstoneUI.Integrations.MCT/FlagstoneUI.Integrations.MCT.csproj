@@ -21,12 +21,8 @@
 		<Description>Flagstone UI integration library for MAUI Community Toolkit.</Description>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(Configuration)'=='Debug'">
+	<ItemGroup>
 	  <ProjectReference Include="..\FlagstoneUI.Core\FlagstoneUI.Core.csproj" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(Configuration)'=='Release'">
-	  <PackageReference Include="FlagstoneUI.Core" />
 	</ItemGroup>
 
 	<ItemGroup>
