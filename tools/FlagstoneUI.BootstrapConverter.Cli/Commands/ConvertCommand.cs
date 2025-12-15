@@ -1,5 +1,4 @@
-using System.CommandLine;
-using FlagstoneUI.BootstrapConverter;
+﻿using System.CommandLine;
 using FlagstoneUI.BootstrapConverter.Models;
 
 namespace FlagstoneUI.BootstrapConverter.Cli.Commands;
@@ -29,6 +28,11 @@ internal static class ConvertCommand
 			description: "Input format: css, scss, or auto (default: auto)",
 			getDefaultValue: () => "auto");
 
+		var outputFormatOption = new Option<string>(
+			aliases: ["--output-format"],
+			description: "Output format: xaml or csharp (default: xaml)",
+			getDefaultValue: () => "xaml");
+
 		var darkModeOption = new Option<string>(
 			aliases: ["--dark-mode", "-d"],
 			description: "Dark mode generation: auto, manual, or none (default: auto)",
@@ -44,6 +48,11 @@ internal static class ConvertCommand
 			description: "Include purpose comments in generated XAML",
 			getDefaultValue: () => true);
 
+		var includeFontsOption = new Option<bool>(
+			aliases: ["--include-fonts"],
+			description: "Include font information in conversion result",
+			getDefaultValue: () => false);
+
 		var verboseOption = new Option<bool>(
 			aliases: ["--verbose", "-v"],
 			description: "Enable verbose output");
@@ -52,16 +61,24 @@ internal static class ConvertCommand
 			aliases: ["--debug"],
 			description: "Enable debug logging (shows all discovered variables)");
 
+		var analysisMode = new Option<string>(
+			aliases: ["--analysis-mode", "-a"],
+			description: "Analysis mode: css (top-down CSS class analysis), variables (bottom-up variable mapping), or hybrid (both, default)",
+			getDefaultValue: () => "hybrid");
+
 		var command = new Command("convert", "Convert Bootstrap theme to Flagstone UI XAML")
 		{
 			inputOption,
 			outputOption,
 			formatOption,
+			outputFormatOption,
 			darkModeOption,
 			namespaceOption,
 			commentsOption,
+			includeFontsOption,
 			verboseOption,
-			debugOption
+			debugOption,
+			analysisMode
 		};
 
 		command.SetHandler(async (context) =>
@@ -69,15 +86,18 @@ internal static class ConvertCommand
 			var input = context.ParseResult.GetValueForOption(inputOption)!;
 			var output = context.ParseResult.GetValueForOption(outputOption)!;
 			var format = context.ParseResult.GetValueForOption(formatOption)!;
+			var outputFormat = context.ParseResult.GetValueForOption(outputFormatOption)!;
 			var darkMode = context.ParseResult.GetValueForOption(darkModeOption)!;
 			var ns = context.ParseResult.GetValueForOption(namespaceOption)!;
 			var comments = context.ParseResult.GetValueForOption(commentsOption);
+			var includeFonts = context.ParseResult.GetValueForOption(includeFontsOption);
 			var verbose = context.ParseResult.GetValueForOption(verboseOption);
 			var debug = context.ParseResult.GetValueForOption(debugOption);
+			var mode = context.ParseResult.GetValueForOption(analysisMode)!;
 
 			try
 			{
-				await ExecuteConvertAsync(input, output, format, darkMode, ns, comments, verbose, debug);
+				await ExecuteConvertAsync(input, output, format, outputFormat, darkMode, ns, comments, includeFonts, verbose, debug, mode);
 				context.ExitCode = 0;
 			}
 			catch (FileNotFoundException ex)
@@ -122,25 +142,28 @@ internal static class ConvertCommand
 		string[] inputs,
 		string output,
 		string formatStr,
+		string outputFormatStr,
 		string darkModeStr,
 		string ns,
 		bool includeComments,
+		bool includeFonts,
 		bool verbose,
-		bool debug)
+		bool debug,
+		string analysisMode)
 	{
-		// Enable logging if debug is requested
-		if (debug)
-		{
-			ConverterLogger.IsEnabled = true;
-			ConverterLogger.Info("Debug logging enabled");
-		}
-
 		// Parse format
 		var format = formatStr.ToLowerInvariant() switch
 		{
 			"css" => BootstrapFormat.Css,
 			"scss" => BootstrapFormat.Scss,
 			_ => BootstrapFormat.Auto
+		};
+
+		// Parse output format
+		var outputFormat = outputFormatStr.ToLowerInvariant() switch
+		{
+			"csharp" or "cs" => ResourceDictionaryFormat.CSharp,
+			_ => ResourceDictionaryFormat.Xaml
 		};
 
 		// Parse dark mode strategy
@@ -151,98 +174,103 @@ internal static class ConvertCommand
 			_ => DarkModeStrategy.Auto
 		};
 
+		// Parse analysis strategy
+		var strategy = analysisMode.ToLowerInvariant() switch
+		{
+			"css" => AnalysisStrategy.CssOnly,
+			"variables" => AnalysisStrategy.VariablesOnly,
+			_ => AnalysisStrategy.Hybrid
+		};
+
 		if (verbose)
 		{
 			Console.WriteLine($"Input files: {string.Join(", ", inputs)}");
 			Console.WriteLine($"Output: {output}");
 			Console.WriteLine($"Format: {format}");
+			Console.WriteLine($"Output Format: {outputFormat}");
 			Console.WriteLine($"Dark Mode: {darkMode}");
 			Console.WriteLine($"Namespace: {ns}");
 			Console.WriteLine($"Comments: {includeComments}");
+			Console.WriteLine($"Analysis Mode: {strategy}");
 			Console.WriteLine();
 		}
 
-		// Step 1: Parse Bootstrap theme (supports multiple files)
-		Console.Write($"Parsing Bootstrap theme{(inputs.Length > 1 ? "s" : "")}... ");
-		var parser = new BootstrapParser();
-		
-		BootstrapVariables variables;
-		if (inputs.Length == 1)
+		// Create conversion request
+		var request = new ConversionRequest
 		{
-			// Single file - use existing logic
-			var input = inputs[0];
-			if (Uri.TryCreate(input, UriKind.Absolute, out var uri))
+			Inputs				= inputs,
+			Format				= format,
+			Strategy			= strategy,
+			EnableDebugLogging	= debug,
+			Options				= new ConversionOptions
 			{
-				variables = await parser.ParseFromUrlAsync(uri.ToString(), format);
+				DarkModeStrategy	= darkMode,
+				IncludeComments		= includeComments,
+				Namespace			= ns,
+				OutputFormat		= outputFormat,
+				IncludeFonts		= includeFonts
 			}
-			else if (File.Exists(input))
+		};
+
+		// Execute conversion using the service
+		var service = new BootstrapConverterService();
+		
+		Console.Write("Converting Bootstrap theme... ");
+		var result = await service.ConvertAsync(request);
+		Console.ForegroundColor = ConsoleColor.Green;
+		Console.WriteLine("✓");
+		Console.ResetColor();
+
+		if (verbose)
+		{
+			Console.WriteLine($"  Color tokens: {result.Statistics.ColorTokens}");
+			Console.WriteLine($"  Typography tokens: {result.Statistics.TypographyTokens}");
+			Console.WriteLine($"  Spacing tokens: {result.Statistics.SpacingTokens}");
+			Console.WriteLine($"  Border radius tokens: {result.Statistics.BorderRadiusTokens}");
+			Console.WriteLine($"  Border width tokens: {result.Statistics.BorderWidthTokens}");
+			if (result.Statistics.ComponentStylesExtracted > 0)
 			{
-				variables = await parser.ParseFromFileAsync(input, format);
+				Console.WriteLine($"  Component styles extracted: {result.Statistics.ComponentStylesExtracted}");
 			}
-			else
+			if (result.Statistics.VariablesParsed > 0)
 			{
-				throw new FileNotFoundException($"Input file not found: {input}");
+				Console.WriteLine($"  Variables parsed: {result.Statistics.VariablesParsed}");
 			}
+		}
+
+		// Generate files
+		var fileType = outputFormat == ResourceDictionaryFormat.CSharp ? "C# files" : "XAML files";
+		Console.Write($"Generating {fileType}... ");
+		
+		Directory.CreateDirectory(output);
+
+		if (outputFormat == ResourceDictionaryFormat.CSharp)
+		{
+			var generator = new CSharpThemeGenerator();
+			var tokensCs = generator.GenerateTokensCs(result.Tokens, request.Options);
+			var themeCs = generator.GenerateThemeCs(result.Tokens, result.ThemeName, request.Options);
+			var stylesCs = generator.GenerateStylesCs(result.Tokens, result.ThemeName, request.Options);
+			
+			await File.WriteAllTextAsync(Path.Combine(output, "Tokens.cs"), tokensCs);
+			await File.WriteAllTextAsync(Path.Combine(output, "Theme.cs"), themeCs);
+			await File.WriteAllTextAsync(Path.Combine(output, "Styles.cs"), stylesCs);
 		}
 		else
 		{
-			// Multiple files - merge them
-			variables = await parser.ParseMultipleFilesAsync(inputs, format);
+			var generator = new XamlThemeGenerator();
+			var tokensXaml = generator.GenerateTokensXaml(result.Tokens, request.Options);
+			var themeXaml = generator.GenerateThemeXaml(result.Tokens, result.ThemeName, request.Options);
+			var stylesXaml = generator.GenerateStylesXaml(result.Tokens, result.ThemeName, result.ComponentStyles, request.Options);
+			var themeCodeBehind = generator.GenerateCodeBehind($"{request.Options!.Namespace}.{SanitizeThemeName(result.ThemeName)}", result.ThemeName);
+			var stylesCodeBehind = generator.GenerateCodeBehind($"{request.Options.Namespace}.{SanitizeThemeName(result.ThemeName)}Styles", $"{result.ThemeName} Styles");
+			
+			await File.WriteAllTextAsync(Path.Combine(output, "Tokens.xaml"), tokensXaml);
+			await File.WriteAllTextAsync(Path.Combine(output, "Theme.xaml"), themeXaml);
+			await File.WriteAllTextAsync(Path.Combine(output, "Theme.xaml.cs"), themeCodeBehind);
+			await File.WriteAllTextAsync(Path.Combine(output, "Styles.xaml"), stylesXaml);
+			await File.WriteAllTextAsync(Path.Combine(output, "Styles.xaml.cs"), stylesCodeBehind);
 		}
 		
-		Console.ForegroundColor = ConsoleColor.Green;
-		Console.WriteLine("✓");
-		Console.ResetColor();
-
-		if (verbose)
-		{
-			Console.WriteLine($"  Colors: {variables.Colors.Count}");
-			Console.WriteLine($"  Typography: {variables.Typography.Count}");
-			Console.WriteLine($"  Spacing: {variables.Spacing.Count}");
-			Console.WriteLine($"  Borders: {variables.Borders.Count}");
-			Console.WriteLine($"  Other: {variables.Other.Count}");
-		}
-
-		// Step 2: Map to Flagstone tokens
-		Console.Write("Mapping to Flagstone UI tokens... ");
-		var mapper = new BootstrapMapper();
-		var options = new ConversionOptions
-		{
-			DarkModeStrategy = darkMode,
-			IncludeComments = includeComments,
-			Namespace = ns
-		};
-		
-		var tokens = mapper.MapToFlagstoneTokens(variables, options);
-		Console.ForegroundColor = ConsoleColor.Green;
-		Console.WriteLine("✓");
-		Console.ResetColor();
-
-		if (verbose)
-		{
-			Console.WriteLine($"  Color tokens: {tokens.Colors.Count}");
-			Console.WriteLine($"  Typography tokens: {tokens.Typography.Count}");
-			Console.WriteLine($"  Spacing tokens: {tokens.Spacing.Count}");
-			Console.WriteLine($"  Border radius tokens: {tokens.BorderRadius.Count}");
-			Console.WriteLine($"  Border width tokens: {tokens.BorderWidth.Count}");
-		}
-
-		// Step 3: Generate XAML files
-		Console.Write("Generating XAML files... ");
-		var generator = new XamlThemeGenerator();
-		
-		// Ensure output directory exists
-		Directory.CreateDirectory(output);
-		
-		// Extract theme name from first input file or use default
-		var firstInput = inputs[0];
-		var themeName = Path.GetFileNameWithoutExtension(firstInput);
-		if (string.IsNullOrWhiteSpace(themeName) || Uri.TryCreate(firstInput, UriKind.Absolute, out _))
-		{
-			themeName = "Bootstrap";
-		}
-		
-		await generator.GenerateFilesAsync(tokens, themeName, output, options);
 		Console.ForegroundColor = ConsoleColor.Green;
 		Console.WriteLine("✓");
 		Console.ResetColor();
@@ -252,7 +280,111 @@ internal static class ConvertCommand
 		Console.ForegroundColor = ConsoleColor.Cyan;
 		Console.WriteLine("Conversion complete!");
 		Console.ResetColor();
-		Console.WriteLine($"  Tokens.xaml: {Path.Combine(output, "Tokens.xaml")}");
-		Console.WriteLine($"  Theme.xaml:  {Path.Combine(output, "Theme.xaml")}");
+
+		var fileExtension = outputFormat == ResourceDictionaryFormat.CSharp ? "cs" : "xaml";
+		Console.WriteLine($"  Tokens.{fileExtension}: {Path.Combine(output, $"Tokens.{fileExtension}")}");
+		Console.WriteLine($"  Theme.{fileExtension}:  {Path.Combine(output, $"Theme.{fileExtension}")}");
+		Console.WriteLine($"  Styles.{fileExtension}: {Path.Combine(output, $"Styles.{fileExtension}")}");
+
+		// Display font information if requested
+		if (includeFonts && result.Fonts != null && result.Fonts.HasFonts)
+		{
+			Console.WriteLine();
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.WriteLine("⚠ Font Setup Required");
+			Console.ResetColor();
+
+			foreach (var family in result.Fonts.Families)
+			{
+				Console.WriteLine();
+				Console.WriteLine($"Font: {family.Name}");
+				Console.WriteLine($"  Source: {family.Source}");
+
+				if (family.Weights.Count > 0)
+				{
+					Console.WriteLine($"  Weights: {string.Join(", ", family.Weights.OrderBy(w => w))}");
+				}
+
+				if (family.HasItalic)
+				{
+					Console.WriteLine($"  Italic: Yes");
+				}
+
+				Console.WriteLine($"  Suggested Alias: \"{family.SuggestedAlias}\"");
+			}
+
+			// Display download URLs
+			if (result.Fonts.DownloadUrls.Count > 0)
+			{
+				Console.WriteLine();
+				Console.ForegroundColor = ConsoleColor.Cyan;
+				Console.WriteLine("Download fonts from:");
+				Console.ResetColor();
+				foreach (var url in result.Fonts.DownloadUrls)
+				{
+					Console.WriteLine($"  {url}");
+				}
+			}
+
+			// Display registration instructions
+			Console.WriteLine();
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine("Registration Instructions:");
+			Console.ResetColor();
+			Console.WriteLine("1. Download font files (.ttf or .otf format)");
+			Console.WriteLine("2. Add fonts to your project (e.g., Resources/Fonts/)");
+			Console.WriteLine("3. Register in MauiProgram.cs:");
+			Console.WriteLine();
+			Console.WriteLine("   builder.ConfigureFonts(fonts =>");
+			Console.WriteLine("   {");
+			
+			foreach (var family in result.Fonts.Families.Where(f => f.Source != FontSource.System))
+			{
+				var fileName = $"{family.SuggestedAlias}-Regular.ttf";
+				Console.WriteLine($"       fonts.AddFont(\"{fileName}\", \"{family.SuggestedAlias}\");");
+			}
+			
+			Console.WriteLine("   });");
+			Console.WriteLine();
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.WriteLine("⚠ Always verify font licenses before using downloaded fonts in your application.");
+			Console.ResetColor();
+		}
+	}
+
+	private static string SanitizeThemeName(string themeName)
+	{
+		if (string.IsNullOrWhiteSpace(themeName))
+			return "Theme";
+
+		var sanitized = new System.Text.StringBuilder();
+		var needsCapital = true;
+
+		foreach (var ch in themeName)
+		{
+			if (char.IsLetterOrDigit(ch))
+			{
+				sanitized.Append(needsCapital ? char.ToUpper(ch) : ch);
+				needsCapital = false;
+			}
+			else if (ch == '_')
+			{
+				sanitized.Append('_');
+				needsCapital = false;
+			}
+			else
+			{
+				// Skip invalid characters and capitalize next letter
+				needsCapital = true;
+			}
+		}
+
+		var result = sanitized.ToString();
+		
+		// Ensure it starts with a letter or underscore
+		if (result.Length > 0 && char.IsDigit(result[0]))
+			result = "_" + result;
+
+		return string.IsNullOrEmpty(result) ? "Theme" : result;
 	}
 }

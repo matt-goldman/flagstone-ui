@@ -23,10 +23,12 @@ jobs:
           global-json-file: global.json
 
       - name: Install MAUI Workload
-        run: dotnet workload restore
+        run: dotnet workload install maui-windows maui-android --skip-sign-check
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore Flagstone.UI.CI.slnf --locked-mode
       - name: Build
-        run: dotnet build --no-restore
+        timeout-minutes: 10
+        run: dotnet build Flagstone.UI.CI.slnf --configuration Release --no-restore
       - name: Test
-        run: dotnet test --no-build --verbosity normal --framework net10.0
+        timeout-minutes: 5
+        run: dotnet test Flagstone.UI.CI.slnf --configuration Release --no-build --verbosity normal --logger "console;verbosity=detailed"

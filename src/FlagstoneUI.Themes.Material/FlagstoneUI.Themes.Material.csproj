@@ -44,12 +44,8 @@
     	<Description>Flagstone UI Material theme library providing Material Design styling for .NET MAUI controls.</Description>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(Configuration)'=='Debug'">
+	<ItemGroup>
 	  <ProjectReference Include="..\FlagstoneUI.Core\FlagstoneUI.Core.csproj" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(Configuration)'=='Release'">
-	  <PackageReference Include="FlagstoneUI.Core" />
 	</ItemGroup>
 
 </Project>

@@ -46,6 +46,14 @@
     <PackageReference Include="coverlet.collector" PrivateAssets="all" />
   </ItemGroup>
 
+  <!-- Test project configuration for timeouts -->
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+    <!-- VSTest timeout settings: 2 minutes per test assembly -->
+    <VSTestTimeout>120000</VSTestTimeout>
+    <!-- Disable parallel test execution to prevent resource contention -->
+    <VSTestParallel>false</VSTestParallel>
+  </PropertyGroup>
+
   <!-- Web project package references -->
   <ItemGroup Condition="'$(IsWebProject)' == 'true'">
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />

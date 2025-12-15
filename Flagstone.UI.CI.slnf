@@ -1,0 +1,15 @@
+{
+  "solution": {
+    "path": "Flagstone.UI.slnx",
+    "projects": [
+      "src\\FlagstoneUI.Core\\FlagstoneUI.Core.csproj",
+      "src\\FlagstoneUI.Blocks\\FlagstoneUI.Blocks.csproj",
+      "src\\FlagstoneUI.Themes.Material\\FlagstoneUI.Themes.Material.csproj",
+      "tools\\FlagstoneUI.BootstrapConverter\\FlagstoneUI.BootstrapConverter.csproj",
+      "tests\\FlagstoneUI.Core.Tests\\FlagstoneUI.Core.Tests.csproj",
+      "tests\\FlagstoneUI.Blocks.Tests\\FlagstoneUI.Blocks.Tests.csproj",
+      "tests\\FlagstoneUI.Themes.Material.Tests\\FlagstoneUI.Themes.Material.Tests.csproj",
+      "tests\\FlagstoneUI.BootstrapConverter.Tests\\FlagstoneUI.BootstrapConverter.Tests.csproj"
+    ]
+  }
+}

@@ -4,15 +4,36 @@ A .NET class library for converting Bootstrap themes to Flagstone UI tokens and 
 
 ## Overview
 
-This library provides the core functionality for parsing Bootstrap CSS/SCSS files, mapping variables to Flagstone UI tokens, and generating XAML theme files.
+This library provides the core functionality for parsing Bootstrap CSS/SCSS files, extracting computed styles from CSS classes, mapping to Flagstone UI tokens, and generating XAML theme files.
 
 ## Features
 
 - **Parse Bootstrap themes** from CSS, SCSS, URLs, or files
-- **Map Bootstrap variables** to Flagstone UI token system
-- **Generate XAML** token and theme files
+- **Top-down CSS analysis** - extract computed styles from Bootstrap component classes
+- **Bottom-up variable mapping** - map Bootstrap variables to Flagstone UI tokens
+- **Hybrid mode** - combine both approaches for maximum coverage
+- **Generate XAML** token and theme files with proper ResourceDictionary structure
 - **Auto-generate dark mode** color variants
 - **Extensible** architecture for custom mappings
+
+## Quick Start
+
+**Recommended for Bootstrap 5+ Themes (Bootswatch):**
+
+```bash
+# Using the CLI (variables mode - production ready)
+dotnet run --project tools/FlagstoneUI.BootstrapConverter.Cli -- convert \
+  --input path/to/_variables.scss path/to/_bootswatch.scss \
+  --output ./output \
+  --analysis-mode variables \
+  --verbose
+```
+
+**Why SCSS source files?**
+
+- ✅ Bootstrap 5+ uses CSS custom properties (`--bs-*`) in compiled CSS
+- ⚠️ ExCSS 4.2.3 doesn't parse CSS custom properties
+- ✅ SCSS source files contain actual values and work perfectly with `variables` mode
 
 ## Installation
 
@@ -123,24 +144,99 @@ await File.WriteAllTextAsync("Tokens.xaml", tokensXaml);
   - `ParseFromFileAsync()` - Parse from local file
   - `ParseMultipleFilesAsync()` - Parse and merge multiple files with variable resolution
 
-- **`BootstrapMapper`**: Maps Bootstrap variables to Flagstone tokens
-  - `MapToFlagstoneTokens()` - Convert variables to tokens
+- **`BootstrapCssAnalyzer`**: Analyzes Bootstrap CSS classes (top-down approach)
+  - `AnalyzeComponents()` - Extract computed styles from CSS classes
+  - `ExtractStyle()` - Aggregate properties for a selector using CSS cascade
+  - Supports 25+ Bootstrap component classes (buttons, forms, cards)
+
+- **`BootstrapMapper`**: Maps Bootstrap variables/styles to Flagstone tokens
+  - `MapToFlagstoneTokens()` - Convert SCSS variables to tokens (recommended for Bootstrap 5+)
+  - `MapComponentStylesToTokens()` - Convert CSS component styles to tokens
   - Handles color, typography, spacing, and border mapping
   - Auto-generates dark mode variants
 
 - **`XamlThemeGenerator`**: Generates XAML theme files
   - `GenerateTokensXaml()` - Generate Tokens.xaml
   - `GenerateThemeXaml()` - Generate Theme.xaml
-  - `GenerateFilesAsync()` - Generate both files
+  - `GenerateStylesXaml()` - Generate Styles.xaml with FsButton styles
+  - `GenerateFilesAsync()` - Generate all theme files
 
 ### Models
 
 - **`BootstrapVariables`**: Parsed Bootstrap variables
 - **`FlagstoneTokens`**: Mapped Flagstone tokens
+- **`ComputedStyle`**: CSS class selector + computed property values
+- **`BootstrapComponentStyles`**: Container for all component styles (buttons, forms, cards)
 - **`ColorToken`**: Color token with optional dark variant
 - **`TypographyToken`**: Typography token (fonts, sizes)
 - **`NumericToken`**: Numeric token (spacing, borders)
 - **`ConversionOptions`**: Configuration for conversion
+
+## Analysis Modes
+
+The converter supports three analysis strategies (configured via CLI `--analysis-mode`):
+
+### Variables Mode (Recommended for Bootstrap 5+)
+
+**Best for:** Bootswatch themes, Bootstrap 5+ SCSS source files
+
+```csharp
+var parser = new BootstrapParser();
+var variables = await parser.ParseMultipleFilesAsync(
+    new[] { "_variables.scss", "_bootswatch.scss" },
+    BootstrapFormat.Scss
+);
+var tokens = mapper.MapToFlagstoneTokens(variables, options);
+```
+
+**Advantages:**
+- ✅ Works perfectly with Bootstrap 5+ (CSS custom properties irrelevant)
+- ✅ Excellent token coverage (11+ colors, 3+ typography, 5+ spacing)
+- ✅ Production-ready and well-tested
+- ✅ Resolves variable references across multiple files
+
+**Example Output (Bootswatch Darkly):**
+- 11 color tokens (Primary, Secondary, Success, Error, Warning, Info, Background, Surface, etc.)
+- 3 typography tokens (FontFamily, FontSize, LineHeight)
+- 5 spacing tokens (ExtraSmall to ExtraLarge)
+- 3 border radius tokens (Small, Medium, Large)
+- 1 border width token
+
+### CSS Mode (Limited - Bootstrap 4 Only)
+
+**Best for:** Bootstrap 4 themes with explicit CSS property values
+
+```csharp
+var analyzer = new BootstrapCssAnalyzer();
+var styles = analyzer.AnalyzeComponents(cssContent);
+var tokens = mapper.MapComponentStylesToTokens(styles, options);
+```
+
+**Limitations:**
+- ⚠️ ExCSS 4.2.3 doesn't parse CSS custom properties (`--bs-*`)
+- ⚠️ Bootstrap 5+ uses CSS custom properties exclusively
+- ⚠️ Minified CSS has minimal explicit values
+- ✅ Works for Bootstrap 4 with hardcoded property values
+
+### Hybrid Mode (Fallback Strategy)
+
+**Best for:** Maximum coverage when both CSS and SCSS are available
+
+```csharp
+// CSS analysis first
+var cssTokens = mapper.MapComponentStylesToTokens(styles, options);
+
+// Variables analysis second
+var varTokens = mapper.MapToFlagstoneTokens(variables, options);
+
+// Merge (CSS takes precedence)
+var tokens = MergeTokens(cssTokens, varTokens);
+```
+
+**When to use:**
+- When you have both compiled CSS and SCSS source files
+- As a fallback strategy for incomplete SCSS themes
+- For validation/comparison between approaches
 
 ## Bootstrap → Flagstone Mappings
 

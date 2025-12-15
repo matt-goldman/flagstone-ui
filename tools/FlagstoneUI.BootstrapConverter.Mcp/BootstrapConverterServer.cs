@@ -284,12 +284,14 @@ public class BootstrapConverterServer
             }
             
             var themeXaml = generator.GenerateThemeXaml(tokens, themeName, options);
+			var stylesXaml = generator.GenerateStylesXaml(tokens, themeName, options);
 
             return new ConvertToolOutput
             {
                 Success = true,
                 TokensXaml = tokensXaml,
                 ThemeXaml = themeXaml,
+				StylesXaml = stylesXaml,
                 Summary = new ConversionSummary
                 {
                     ColorTokens = tokens.Colors.Count,

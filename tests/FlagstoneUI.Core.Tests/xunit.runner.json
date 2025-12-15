@@ -1,0 +1,17 @@
+{
+  "$schema": "https://xunit.net/schema/current/xunit.runner.schema.json",
+  "methodDisplay": "method",
+  "diagnosticMessages": true,
+  "internalDiagnosticMessages": false,
+  "methodDisplayOptions": "all",
+  "preEnumerateTheories": true,
+  "shadowCopy": false,
+  "stopOnFail": false,
+  "longRunningTestSeconds": 5,
+  "assembly": {
+    "timeout": 120000
+  },
+  "test": {
+    "timeout": 10000
+  }
+}

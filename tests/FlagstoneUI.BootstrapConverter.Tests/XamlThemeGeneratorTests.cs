@@ -267,15 +267,20 @@ public class XamlThemeGeneratorTests
             // Assert
             var tokensPath = Path.Combine(outputDir, "Tokens.xaml");
             var themePath = Path.Combine(outputDir, "Theme.xaml");
+			var stylesPath = Path.Combine(outputDir, "Styles.xaml");
 
             File.Exists(tokensPath).ShouldBeTrue();
             File.Exists(themePath).ShouldBeTrue();
+			File.Exists(stylesPath).ShouldBeTrue();
 
             var tokensContent = await File.ReadAllTextAsync(tokensPath);
             tokensContent.ShouldContain("Color.Primary");
 
             var themeContent = await File.ReadAllTextAsync(themePath);
             themeContent.ShouldContain("Test Theme");
+
+			var stylesContent = await File.ReadAllTextAsync(stylesPath);
+			stylesContent.ShouldContain("FsButton");
         }
         finally
         {
@@ -285,6 +290,78 @@ public class XamlThemeGeneratorTests
                 Directory.Delete(outputDir, true);
             }
         }
+    }
+
+    [Fact]
+    public void GenerateStylesXaml_ShouldIncludeAllControlSections()
+    {
+        // Arrange
+        var tokens = new FlagstoneTokens
+        {
+            Colors = new Dictionary<string, ColorToken>
+            {
+                ["Color.Primary"] = new ColorToken { Key = "Color.Primary", Value = "#0D6EFD" },
+                ["Color.OnPrimary"] = new ColorToken { Key = "Color.OnPrimary", Value = "#FFFFFF" },
+                ["Color.Secondary"] = new ColorToken { Key = "Color.Secondary", Value = "#6C757D" },
+                ["Color.OnSecondary"] = new ColorToken { Key = "Color.OnSecondary", Value = "#FFFFFF" },
+                ["Color.Success"] = new ColorToken { Key = "Color.Success", Value = "#198754" },
+                ["Color.OnSuccess"] = new ColorToken { Key = "Color.OnSuccess", Value = "#FFFFFF" },
+                ["Color.Error"] = new ColorToken { Key = "Color.Error", Value = "#DC3545" },
+                ["Color.OnError"] = new ColorToken { Key = "Color.OnError", Value = "#FFFFFF" },
+                ["Color.Warning"] = new ColorToken { Key = "Color.Warning", Value = "#FFC107" },
+                ["Color.OnWarning"] = new ColorToken { Key = "Color.OnWarning", Value = "#000000" },
+                ["Color.Info"] = new ColorToken { Key = "Color.Info", Value = "#0DCAF0" },
+                ["Color.OnInfo"] = new ColorToken { Key = "Color.OnInfo", Value = "#000000" },
+                ["Color.Background"] = new ColorToken { Key = "Color.Background", Value = "#FFFFFF" },
+                ["Color.OnBackground"] = new ColorToken { Key = "Color.OnBackground", Value = "#212529" },
+                ["Color.Outline"] = new ColorToken { Key = "Color.Outline", Value = "#DEE2E6" }
+            },
+            BorderRadius = new Dictionary<string, NumericToken>
+            {
+                ["Radius.Medium"] = new NumericToken { Key = "Radius.Medium", Value = 6 }
+            },
+            BorderWidth = new Dictionary<string, NumericToken>
+            {
+                ["BorderWidth.Default"] = new NumericToken { Key = "BorderWidth.Default", Value = 1 }
+            },
+            Typography = new Dictionary<string, TypographyToken>
+            {
+                ["FontSize.Body"] = new TypographyToken { Key = "FontSize.Body", Value = "16" }
+            }
+        };
+
+        // Act
+        var xaml = _generator.GenerateStylesXaml(tokens, "Test");
+        var doc = XDocument.Parse(xaml);
+
+        // Assert (sections exist)
+        xaml.ShouldContain("FsButton Styles");
+        xaml.ShouldContain("FsEntry Styles");
+        xaml.ShouldContain("FsEditor Styles");
+        xaml.ShouldContain("FsCard Styles");
+
+        // Assert (required style keys exist)
+        xaml.ShouldContain("x:Key=\"OutlinedButton\"");
+        xaml.ShouldContain("x:Key=\"TextButton\"");
+        xaml.ShouldContain("x:Key=\"ButtonSecondary\"");
+        xaml.ShouldContain("x:Key=\"ButtonOutlinePrimary\"");
+        xaml.ShouldContain("x:Key=\"ButtonSmall\"");
+        xaml.ShouldContain("x:Key=\"ButtonLarge\"");
+        xaml.ShouldContain("x:Key=\"EntryValid\"");
+        xaml.ShouldContain("x:Key=\"EntryInvalid\"");
+        xaml.ShouldContain("x:Key=\"EditorValid\"");
+        xaml.ShouldContain("x:Key=\"EditorInvalid\"");
+
+        // Assert (visual states exist)
+        xaml.ShouldContain("x:Name=\"Disabled\"");
+        xaml.ShouldContain("x:Name=\"Pressed\"");
+        xaml.ShouldContain("x:Name=\"Focused\"");
+
+        // Assert (default TargetType styles exist)
+        var styles = doc.Descendants().Where(e => e.Name.LocalName == "Style").ToList();
+        styles.Any(s => (string?)s.Attribute("TargetType") == "fs:FsEntry").ShouldBeTrue();
+        styles.Any(s => (string?)s.Attribute("TargetType") == "fs:FsEditor").ShouldBeTrue();
+        styles.Any(s => (string?)s.Attribute("TargetType") == "fs:FsCard").ShouldBeTrue();
     }
 
     [Fact]
