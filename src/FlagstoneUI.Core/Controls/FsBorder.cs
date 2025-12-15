@@ -1,3 +1,4 @@
+﻿using MauiBorder = Microsoft.Maui.Controls.Border;
 using Microsoft.Maui.Controls.Shapes;
 
 namespace FlagstoneUI.Core.Controls;
@@ -16,7 +17,7 @@ namespace FlagstoneUI.Core.Controls;
 public partial class FsBorder : ContentView
 {
 	private readonly Grid _layoutRoot;
-	private readonly Microsoft.Maui.Controls.Border _innerBorder;
+	private readonly MauiBorder _innerBorder;
 	private readonly ContentPresenter _contentPresenter;
 	private Line? _topLine;
 	private Line? _rightLine;
@@ -25,8 +26,8 @@ public partial class FsBorder : ContentView
 
 	public FsBorder()
 	{
-		_layoutRoot = new Grid();
-		_innerBorder = new Microsoft.Maui.Controls.Border
+		_layoutRoot = [];
+		_innerBorder = new MauiBorder
 		{
 			// Disable stroke - we use per-edge Lines for borders instead
 			Stroke = Colors.Transparent,
@@ -41,9 +42,9 @@ public partial class FsBorder : ContentView
 
 		// Bind content presenter to this control's content
 		_contentPresenter.SetBinding(ContentPresenter.ContentProperty, new Binding(nameof(BorderContent), source: this));
-		_innerBorder.SetBinding(Microsoft.Maui.Controls.Border.BackgroundProperty, new Binding(nameof(Background), source: this));
-		_innerBorder.SetBinding(Microsoft.Maui.Controls.Border.PaddingProperty, new Binding(nameof(Padding), source: this));
-		_innerBorder.SetBinding(Microsoft.Maui.Controls.Border.StrokeShapeProperty, new Binding(nameof(StrokeShape), source: this));
+		_innerBorder.SetBinding(VisualElement.BackgroundProperty, new Binding(nameof(Background), source: this));
+		_innerBorder.SetBinding(MauiBorder.PaddingProperty, new Binding(nameof(Padding), source: this));
+		_innerBorder.SetBinding(MauiBorder.StrokeShapeProperty, new Binding(nameof(StrokeShape), source: this));
 	}
 
 	protected override void OnSizeAllocated(double width, double height)
@@ -76,9 +77,9 @@ public partial class FsBorder : ContentView
 			_topLine.StrokeThickness = BorderTopThickness;
 			_topLine.IsVisible = true;
 		}
-		else if (_topLine != null)
+		else
 		{
-			_topLine.IsVisible = false;
+			_topLine?.IsVisible = false;
 		}
 
 		// Bottom border
@@ -97,9 +98,9 @@ public partial class FsBorder : ContentView
 			_bottomLine.StrokeThickness = BorderBottomThickness;
 			_bottomLine.IsVisible = true;
 		}
-		else if (_bottomLine != null)
+		else
 		{
-			_bottomLine.IsVisible = false;
+			_bottomLine?.IsVisible = false;
 		}
 
 		// Left border
@@ -118,9 +119,9 @@ public partial class FsBorder : ContentView
 			_leftLine.StrokeThickness = BorderLeftThickness;
 			_leftLine.IsVisible = true;
 		}
-		else if (_leftLine != null)
+		else
 		{
-			_leftLine.IsVisible = false;
+			_leftLine?.IsVisible = false;
 		}
 
 		// Right border
@@ -139,9 +140,9 @@ public partial class FsBorder : ContentView
 			_rightLine.StrokeThickness = BorderRightThickness;
 			_rightLine.IsVisible = true;
 		}
-		else if (_rightLine != null)
+		else
 		{
-			_rightLine.IsVisible = false;
+			_rightLine?.IsVisible = false;
 		}
 	}
 
