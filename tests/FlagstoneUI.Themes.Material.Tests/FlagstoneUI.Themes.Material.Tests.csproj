@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!-- Always present -->
-    <TargetFrameworks>net10.0;net10.0-android</TargetFrameworks>
+    <!-- Only use net10.0 for cross-platform testing -->
+    <TargetFrameworks>net10.0</TargetFrameworks>
 
-    <!-- Only add Windows TFM on Windows runners -->
+    <!-- Add Windows TFM on Windows runners for platform-specific tests if needed -->
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">
       $(TargetFrameworks);net10.0-windows10.0.19041.0
     </TargetFrameworks>
