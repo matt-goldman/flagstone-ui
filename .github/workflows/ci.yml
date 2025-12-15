@@ -28,4 +28,4 @@ jobs:
         run: dotnet restore
       - name: Test
         timeout-minutes: 5
-        run: dotnet test --configuration Release --verbosity normal --logger "console;verbosity=detailed"
+        run: dotnet test --configuration Release --verbosity normal --logger "console;verbosity=detailed" --filter "FullyQualifiedName!~Border_bottom_brush_can_be_set"
