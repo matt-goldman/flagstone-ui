@@ -468,6 +468,110 @@ This section shows what properties are themable for each Flagstone UI control.
 - **Filled** (default): Solid subtle background, no border
 - **Outlined**: Transparent background with border
 
+## Border Property Patterns
+
+Flagstone UI controls (FsCard, FsEntry, FsEditor, FsBorder) support three mechanisms for setting borders. **All are equally valid** - choose the approach that best fits your use case. **Do not use multiple mechanisms together** on the same control.
+
+### 1. Convenience Properties
+
+Use these for **uniform borders** where all edges have the same thickness and color:
+
+**FsCard:**
+- `BorderColor` - Sets color for all four edges
+- `BorderWidth` - Sets thickness for all four edges
+
+**FsEntry / FsEditor:**
+- `BorderBrush` - Sets brush for all four edges
+- `BorderWidth` - Sets thickness for all four edges
+
+**Example:**
+```xml
+<Style TargetType="fs:FsCard">
+    <Setter Property="BorderColor" Value="{DynamicResource Color.Outline}" />
+    <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+</Style>
+```
+
+> **✅ Good for**: Uniform borders, theme definitions, when clarity is preferred over brevity
+
+### 2. Individual Edge Properties
+
+Use these for **asymmetric borders** like underlines, 3D effects, or custom edge styling:
+
+**All Controls:**
+- `BorderTopThickness` / `BorderTopBrush`
+- `BorderRightThickness` / `BorderRightBrush`
+- `BorderBottomThickness` / `BorderBottomBrush`
+- `BorderLeftThickness` / `BorderLeftBrush`
+
+**Example - Underline Only:**
+```xml
+<fs:FsEntry BorderBottomThickness="2" 
+            BorderBottomBrush="{DynamicResource Color.Primary}" />
+```
+
+**Example - 3D Inset Effect:**
+```xml
+<fs:FsCard BorderTopThickness="1" 
+           BorderTopBrush="White"
+           BorderRightThickness="2"
+           BorderRightBrush="Black"
+           BorderBottomThickness="2"
+           BorderBottomBrush="Black"
+           BorderLeftThickness="1"
+           BorderLeftBrush="White" />
+```
+
+> **✅ Good for**: Per-edge styling, asymmetric borders, special effects
+
+### 3. Border Shorthand Property
+
+Use the `Border` property with shorthand syntax for quick, code-efficient border definitions:
+
+**Syntax:** `"thickness color"` values separated by commas
+
+**Examples:**
+- `Border="1 Black"` - Uniform 1px black border
+- `Border="1 Black, 2 Grey"` - 1px top/bottom, 2px left/right
+- `Border="1 White, 3 Black, 3 Black, 1 White"` - 3D inset effect
+
+```xml
+<fs:FsCard Border="2 {DynamicResource Color.Primary}" />
+```
+
+> **✅ Good for**: Quick prototyping, concise XAML, when you prefer compact syntax
+
+### Best Practices
+
+**DO:**
+- ✅ Choose one approach per control style (convenience, individual edges, or shorthand)
+- ✅ Use convenience properties (`BorderColor`/`BorderWidth` or `BorderBrush`/`BorderWidth`) for uniform borders
+- ✅ Use individual edge properties when you need asymmetric styling
+- ✅ Use Border shorthand when you want concise syntax
+- ✅ Ensure controls have zero border defaults (they do: thickness=0, brush=transparent)
+
+**DON'T:**
+- ❌ Mix different border mechanisms in the same style (e.g., don't use both `BorderWidth` and `BorderTopThickness`)
+- ❌ Use individual edge properties when all edges are the same (use convenience or shorthand instead)
+
+> **💡 All approaches are equivalent** - choose based on your specific needs (uniform vs asymmetric, verbosity vs brevity).
+
+### How They Work Together
+
+All three mechanisms set the same underlying per-edge properties. For example:
+
+```xml
+<!-- These are equivalent: -->
+<fs:FsCard BorderColor="Red" BorderWidth="2" />
+<fs:FsCard BorderTopBrush="Red" BorderRightBrush="Red" 
+           BorderBottomBrush="Red" BorderLeftBrush="Red"
+           BorderTopThickness="2" BorderRightThickness="2"
+           BorderBottomThickness="2" BorderLeftThickness="2" />
+<fs:FsCard Border="2 Red" />
+```
+
+The convenience properties and Border shorthand internally set all four edge properties. This ensures consistency regardless of which approach you use.
+
 ### Common Patterns
 
 **Primary Action Button:**

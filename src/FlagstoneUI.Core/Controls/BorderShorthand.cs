@@ -1,6 +1,4 @@
-using System.Linq;
-
-namespace FlagstoneUI.Core.Controls;
+﻿namespace FlagstoneUI.Core.Controls;
 
 /// <summary>
 /// Represents a parsed border shorthand value with thickness and color.
@@ -20,20 +18,12 @@ public class BorderEdgeValue
 /// <summary>
 /// Represents the parsed border shorthand with values for all four edges.
 /// </summary>
-public class BorderShorthand
+public class BorderShorthand(BorderEdgeValue top, BorderEdgeValue right, BorderEdgeValue bottom, BorderEdgeValue left)
 {
-	public BorderEdgeValue Top { get; set; }
-	public BorderEdgeValue Right { get; set; }
-	public BorderEdgeValue Bottom { get; set; }
-	public BorderEdgeValue Left { get; set; }
-
-	public BorderShorthand(BorderEdgeValue top, BorderEdgeValue right, BorderEdgeValue bottom, BorderEdgeValue left)
-	{
-		Top = top;
-		Right = right;
-		Bottom = bottom;
-		Left = left;
-	}
+	public BorderEdgeValue Top { get; set; } = top;
+	public BorderEdgeValue Right { get; set; } = right;
+	public BorderEdgeValue Bottom { get; set; } = bottom;
+	public BorderEdgeValue Left { get; set; } = left;
 
 	/// <summary>
 	/// Parses a border shorthand string into a BorderShorthand object.

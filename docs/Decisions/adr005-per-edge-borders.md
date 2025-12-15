@@ -14,7 +14,7 @@ FlagstoneUI aims to expose **low-level, token-friendly primitives** for styling 
 - Dividers implemented as borders
 - Retro, high-contrast, or accessibility-focused themes
 
-These scenarios are commonplace on the web and in historical native UI systems. While they can be messy (particularly when combined with rounded corners), the goal is not to make them “perfect”, but to ensure FlagstoneUI does not block them and that any unavoidable complexity is encapsulated within the framework rather than repeated in every consuming application.
+These scenarios are commonplace on the web and in historical native UI systems. While some combinations (notably per-edge borders combined with rounded corners) are inherently messy, the goal is not to make them “perfect”, but to ensure FlagstoneUI does not block them and that any unavoidable complexity is encapsulated within the framework rather than repeated in every consuming application.
 
 ## Decision
 
@@ -27,6 +27,37 @@ Specifically:
   - Any such meaning is the responsibility of themes and styles.
 - Internally, borders are rendered using **edge primitives** (e.g. one line per edge), sized and positioned based on the control's allocated layout.
 - Controls are wrapped where necessary (e.g. via `ContentView`) to fully encapsulate layout and rendering logic.
+
+### Unified Border Abstraction
+
+All border rendering logic in FlagstoneUI is owned by a single, reusable primitive (`FsBorder`).
+
+- `FsBorder` encapsulates all border behaviour, including:
+  - Uniform borders
+  - Per-edge borders
+  - Shorthand parsing
+  - Layout-aware sizing and positioning
+- FlagstoneUI controls compose `FsBorder` rather than implementing border logic themselves.
+- `FsBorder` is a public primitive and may be consumed directly by application code.
+
+This ensures a single rendering model for borders across the framework and avoids duplicating or diverging border behaviour between controls.
+
+### Border Rendering Modes
+
+This decision introduces two mutually exclusive border rendering modes:
+
+#### Uniform Border Mode
+- Uses a single `BorderBrush` and uniform border thickness.
+- Supports `CornerRadius`.
+- Renders a closed outline.
+
+#### Per-Edge Border Mode
+- Activated as soon as **any per-edge border property is set**.
+- Renders borders as independent edge primitives (lines).
+- **Disables the uniform `BorderBrush` and uniform border thickness.**
+- **`CornerRadius` does not apply**, as per-edge borders are rendered as lines and do not form corners.
+
+This mode distinction is explicit and intentional, avoiding ambiguous blending of rendering models.
 
 This decision intentionally avoids reliance on .NET MAUI's `Border` or `Shape` abstractions, which do not align with the required level of control.
 
@@ -45,7 +76,6 @@ The shorthand accepts **1, 2, or 4 values**, expanded as follows:
 
 ```xml
 Border="1 Black"
-```
 
 - **2 values (Vertical, Horizontal)**  
 First value applies to Top and Bottom, second to Left and Right.
@@ -85,7 +115,7 @@ These constraints are intentional, keeping the shorthand predictable, debuggable
 - Provides a stable foundation for theme-driven visual systems.
 
 ### Trade-offs / Limitations
-- Rounded corners combined with per-edge borders are inherently messy; the initial implementation may clip or approximate corners.
+- Per-edge borders do not support corner radius.
 - Advanced corner join geometry (e.g. angled bevel joins) is explicitly out of scope.
 - Some controls (e.g. `FsButton`) must be wrapped rather than subclassed to maintain a consistent rendering model.
 
@@ -94,6 +124,7 @@ These limitations are considered acceptable and consistent with similar trade-of
 ## Non-Goals
 
 - Encoding visual semantics (e.g. raised/sunken) in FlagstoneUI primitives.
+- Blending uniform and per-edge border rendering models.
 - Perfect mathematical handling of rounded corners with asymmetric borders.
 - Supporting complex brush grammars or vector join styles via shorthand syntax.
 

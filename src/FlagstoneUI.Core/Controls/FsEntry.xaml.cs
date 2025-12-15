@@ -199,7 +199,7 @@ public partial class FsEntry : ContentView
 	/// Identifies the BorderBrush bindable property.
 	/// </summary>
 	/// <remarks>This property determines the brush used for the border of the <see cref="FsEntry"/> control.
-	/// The default value is a transparent solid color brush. This property sets a uniform border on all edges.
+	/// The default value is a transparent solid color brush. This property sets a uniform border and supports corner radius.
 	/// For per-edge borders (e.g., underlines, 3D effects), use the per-edge properties instead.</remarks>
 	public static readonly BindableProperty BorderBrushProperty = BindableProperty.Create(
 		nameof(BorderBrush),
@@ -212,9 +212,9 @@ public partial class FsEntry : ContentView
 	/// Gets or sets the brush used to paint the border.
 	/// </summary>
 	/// <remarks>Setting this property updates the visual appearance of the border. The brush can be a solid color,
-	/// gradient, or other brush type. This property sets a uniform border on all edges.
+	/// gradient, or other brush type. This property sets a uniform border and supports corner radius.
 	/// For per-edge control (e.g., underlines, 3D effects), use BorderTopBrush, BorderRightBrush, BorderBottomBrush, and BorderLeftBrush.
-	/// Note: Using both this property and per-edge properties simultaneously may have unintended consequences.</remarks>
+	/// Do not mix uniform and per-edge border properties.</remarks>
 	public Brush BorderBrush
 	{
 		get { return (Brush)GetValue(BorderBrushProperty); }
@@ -225,10 +225,8 @@ public partial class FsEntry : ContentView
 	{
 		if (bindable is FsEntry entry && newValue is Brush brush)
 		{
-			entry.BorderTopBrush = brush;
-			entry.BorderRightBrush = brush;
-			entry.BorderBottomBrush = brush;
-			entry.BorderLeftBrush = brush;
+			// Set uniform border stroke (not per-edge)
+			entry.Stroke = brush;
 		}
 	}
 	#endregion
@@ -238,7 +236,7 @@ public partial class FsEntry : ContentView
 	/// Identifies the BorderWidth bindable property.
 	/// </summary>
 	/// <remarks>This property specifies the width of the border for the control. The default value is 0.
-	/// This property sets a uniform border width on all edges.
+	/// This property sets a uniform border width and supports corner radius.
 	/// For per-edge control (e.g., underlines, 3D effects), use the per-edge thickness properties.</remarks>
 	public static readonly BindableProperty BorderWidthProperty = BindableProperty.Create(
 		nameof(BorderWidth),
@@ -252,9 +250,9 @@ public partial class FsEntry : ContentView
 	/// Gets or sets the width of the border, in device-independent units (1/96th inch per unit).
 	/// </summary>
 	/// <remarks>A value of 0.0 indicates that the border is not visible. Values must be non-negative.
-	/// This property sets a uniform border width on all edges.
+	/// This property sets a uniform border width and supports corner radius.
 	/// For per-edge control (e.g., underlines, 3D effects), use BorderTopThickness, BorderRightThickness, BorderBottomThickness, and BorderLeftThickness.
-	/// Note: Using both this property and per-edge properties simultaneously may have unintended consequences.</remarks>
+	/// Do not mix uniform and per-edge border properties.</remarks>
 	public double BorderWidth
 	{
 		get => (double)GetValue(BorderWidthProperty);
@@ -265,11 +263,51 @@ public partial class FsEntry : ContentView
 	{
 		if (bindable is FsEntry entry && newValue is double width)
 		{
-			entry.BorderTopThickness = width;
-			entry.BorderRightThickness = width;
-			entry.BorderBottomThickness = width;
-			entry.BorderLeftThickness = width;
+			// Set uniform border thickness (not per-edge)
+			entry.StrokeThickness = width;
 		}
+	}
+	#endregion
+
+	#region Uniform Border Properties (Stroke/StrokeThickness)
+	/// <summary>
+	/// Identifies the Stroke bindable property.
+	/// </summary>
+	public static readonly BindableProperty StrokeProperty = BindableProperty.Create(
+		nameof(Stroke), typeof(Brush), typeof(FsEntry), null);
+
+	/// <summary>
+	/// Gets or sets the brush for the uniform border.
+	/// </summary>
+	/// <remarks>
+	/// This property is used for uniform borders and supports corner radius.
+	/// When any per-edge border property is set, uniform border mode is disabled.
+	/// Use BorderBrush for convenience.
+	/// </remarks>
+	public Brush? Stroke
+	{
+		get => (Brush?)GetValue(StrokeProperty);
+		set => SetValue(StrokeProperty, value);
+	}
+
+	/// <summary>
+	/// Identifies the StrokeThickness bindable property.
+	/// </summary>
+	public static readonly BindableProperty StrokeThicknessProperty = BindableProperty.Create(
+		nameof(StrokeThickness), typeof(double), typeof(FsEntry), 0.0);
+
+	/// <summary>
+	/// Gets or sets the thickness for the uniform border.
+	/// </summary>
+	/// <remarks>
+	/// This property is used for uniform borders and supports corner radius.
+	/// When any per-edge border property is set, uniform border mode is disabled.
+	/// Use BorderWidth for convenience.
+	/// </remarks>
+	public double StrokeThickness
+	{
+		get => (double)GetValue(StrokeThicknessProperty);
+		set => SetValue(StrokeThicknessProperty, value);
 	}
 	#endregion
 
