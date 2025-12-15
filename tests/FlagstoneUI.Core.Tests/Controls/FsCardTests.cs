@@ -88,14 +88,10 @@ public class FsCardTests : MauiTestBase
 	{
 		var card = new FsCard { BorderColor = Colors.Red };
 		
-		// Border color should set all edge brushes
-		var expectedBrush = card.BorderTopBrush as SolidColorBrush;
-		expectedBrush.ShouldNotBeNull();
-		expectedBrush.Color.ShouldBe(Colors.Red);
-		
-		(card.BorderRightBrush as SolidColorBrush)?.Color.ShouldBe(Colors.Red);
-		(card.BorderBottomBrush as SolidColorBrush)?.Color.ShouldBe(Colors.Red);
-		(card.BorderLeftBrush as SolidColorBrush)?.Color.ShouldBe(Colors.Red);
+		// BorderColor sets the uniform Stroke property (not per-edge brushes)
+		var strokeBrush = card.Stroke as SolidColorBrush;
+		strokeBrush.ShouldNotBeNull();
+		strokeBrush.Color.ShouldBe(Colors.Red);
 	}
 
 	[Fact]
@@ -103,10 +99,8 @@ public class FsCardTests : MauiTestBase
 	{
 		var card = new FsCard { BorderWidth = 3.0 };
 		
-		card.BorderTopThickness.ShouldBe(3.0);
-		card.BorderRightThickness.ShouldBe(3.0);
-		card.BorderBottomThickness.ShouldBe(3.0);
-		card.BorderLeftThickness.ShouldBe(3.0);
+		// BorderWidth sets the uniform StrokeThickness property (not per-edge thicknesses)
+		card.StrokeThickness.ShouldBe(3.0);
 	}
 
 	[Fact]
@@ -163,5 +157,92 @@ public class FsCardTests : MauiTestBase
 	{
 		var card = new FsCard { BorderStrokeCap = PenLineCap.Round };
 		card.BorderStrokeCap.ShouldBe(PenLineCap.Round);
+	}
+
+	[Fact]
+	public void Card_background_brush_can_be_set_directly()
+	{
+		var brush = new LinearGradientBrush(
+			new GradientStopCollection
+			{
+				new GradientStop(Colors.Red, 0.0f),
+				new GradientStop(Colors.Blue, 1.0f)
+			},
+			new Point(0, 0),
+			new Point(1, 1));
+
+		var card = new FsCard { BackgroundBrush = brush };
+		card.BackgroundBrush.ShouldBe(brush);
+	}
+
+	[Fact]
+	public void Card_stroke_can_be_set_directly()
+	{
+		var brush = new SolidColorBrush(Colors.Purple);
+		var card = new FsCard { Stroke = brush };
+		card.Stroke.ShouldBe(brush);
+	}
+
+	[Fact]
+	public void Card_stroke_thickness_can_be_set_directly()
+	{
+		var card = new FsCard { StrokeThickness = 5.0 };
+		card.StrokeThickness.ShouldBe(5.0);
+	}
+
+	[Fact]
+	public void Card_per_edge_properties_default_to_zero_or_transparent()
+	{
+		var card = new FsCard();
+		
+		card.BorderTopThickness.ShouldBe(0.0);
+		card.BorderRightThickness.ShouldBe(0.0);
+		card.BorderBottomThickness.ShouldBe(0.0);
+		card.BorderLeftThickness.ShouldBe(0.0);
+		
+		(card.BorderTopBrush as SolidColorBrush)?.Color.ShouldBe(Colors.Transparent);
+		(card.BorderRightBrush as SolidColorBrush)?.Color.ShouldBe(Colors.Transparent);
+		(card.BorderBottomBrush as SolidColorBrush)?.Color.ShouldBe(Colors.Transparent);
+		(card.BorderLeftBrush as SolidColorBrush)?.Color.ShouldBe(Colors.Transparent);
+	}
+
+	[Fact]
+	public void Card_shadow_removed_when_elevation_changed_to_zero()
+	{
+		var card = new FsCard { Elevation = 3 };
+		card.Shadow.ShouldNotBeNull();
+
+		card.Elevation = 0;
+		card.Shadow.ShouldBeNull();
+	}
+
+	[Fact]
+	public void Card_shadow_added_when_elevation_increased_from_zero()
+	{
+		var card = new FsCard { Elevation = 0 };
+		card.Shadow.ShouldBeNull();
+
+		card.Elevation = 2;
+		card.Shadow.ShouldNotBeNull();
+	}
+
+	[Fact]
+	public void Card_uniform_stroke_and_per_edge_borders_independent()
+	{
+		var card = new FsCard
+		{
+			BorderColor = Colors.Red,
+			BorderWidth = 2.0,
+			BorderTopBrush = new SolidColorBrush(Colors.Blue),
+			BorderTopThickness = 4.0
+		};
+
+		// Uniform border properties should be set
+		card.StrokeThickness.ShouldBe(2.0);
+		(card.Stroke as SolidColorBrush)?.Color.ShouldBe(Colors.Red);
+
+		// Per-edge properties should remain independent
+		card.BorderTopThickness.ShouldBe(4.0);
+		(card.BorderTopBrush as SolidColorBrush)?.Color.ShouldBe(Colors.Blue);
 	}
 }
