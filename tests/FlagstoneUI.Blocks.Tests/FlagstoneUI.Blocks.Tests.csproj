@@ -1,12 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!-- Only use net10.0 for cross-platform testing -->
-    <TargetFrameworks>net10.0</TargetFrameworks>
-    
-    <!-- Add Windows TFM on Windows runners for platform-specific tests if needed -->
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">
-      $(TargetFrameworks);net10.0-windows10.0.19041.0
-    </TargetFrameworks>
+    <!-- Use net10.0 for cross-platform testing - works on all platforms -->
+    <TargetFramework>net10.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
 
