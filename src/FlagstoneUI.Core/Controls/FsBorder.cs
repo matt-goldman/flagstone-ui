@@ -591,8 +591,8 @@ public partial class FsBorder : ContentView
 	/// </remarks>
 	private void UpdateBorderMode()
 	{
-		bool isPerEdgeMode = BorderTopThickness > 0 || BorderRightThickness > 0 || 
-		                     BorderBottomThickness > 0 || BorderLeftThickness > 0;
+		bool isPerEdgeMode = BorderTopThickness > 0 || BorderRightThickness > 0 ||
+			BorderBottomThickness > 0 || BorderLeftThickness > 0;
 
 		if (isPerEdgeMode)
 		{
@@ -606,10 +606,10 @@ public partial class FsBorder : ContentView
 			// The bindings will handle this automatically, so just ensure per-edge lines are hidden
 			if (Width > 0 && Height > 0)
 			{
-				_topLine?.SetValue(IsVisibleProperty, false);
-				_rightLine?.SetValue(IsVisibleProperty, false);
-				_bottomLine?.SetValue(IsVisibleProperty, false);
-				_leftLine?.SetValue(IsVisibleProperty, false);
+				if (_topLine != null) _topLine.IsVisible = false;
+				if (_rightLine != null) _rightLine.IsVisible = false;
+				if (_bottomLine != null) _bottomLine.IsVisible = false;
+				if (_leftLine != null) _leftLine.IsVisible = false;
 			}
 		}
 
