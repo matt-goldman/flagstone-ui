@@ -27,7 +27,7 @@ jobs:
       - name: Restore
         run: dotnet restore
       - name: Build
-        run: dotnet build --no-restore
+        run: dotnet build --no-restore --configuration Release
       - name: Test
         timeout-minutes: 5
-        run: dotnet test --no-build --verbosity normal --logger "console;verbosity=detailed"
+        run: dotnet test --no-build --configuration Release --verbosity normal --logger "console;verbosity=detailed"
