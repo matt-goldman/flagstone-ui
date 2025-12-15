@@ -544,7 +544,7 @@ Use the `Border` property with shorthand syntax for quick, code-efficient border
 ### Best Practices
 
 **DO:**
-- ✅ Choose ONE approach per control style (convenience, individual edges, OR shorthand)
+- ✅ Choose one approach per control style (convenience, individual edges, or shorthand)
 - ✅ Use convenience properties (`BorderColor`/`BorderWidth` or `BorderBrush`/`BorderWidth`) for uniform borders
 - ✅ Use individual edge properties when you need asymmetric styling
 - ✅ Use Border shorthand when you want concise syntax
@@ -553,7 +553,8 @@ Use the `Border` property with shorthand syntax for quick, code-efficient border
 **DON'T:**
 - ❌ Mix different border mechanisms in the same style (e.g., don't use both `BorderWidth` and `BorderTopThickness`)
 - ❌ Use individual edge properties when all edges are the same (use convenience or shorthand instead)
-- ❌ Assume one approach is "better" - they're equivalent, just different syntaxes
+
+> **💡 All approaches are equivalent** - choose based on your specific needs (uniform vs asymmetric, verbosity vs brevity).
 
 ### How They Work Together
 
