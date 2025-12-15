@@ -280,17 +280,17 @@ public partial class FsCard : ContentView
     /// </summary>
     /// <remarks>This property is used to define the border color of the <see cref="FsCard"/> control.  The
     /// default value is <see langword="null"/>, which indicates no specific border color is set.
-    /// This property sets a uniform border on all edges. For per-edge borders (e.g., underlines, 3D effects),
-    /// use the per-edge properties instead.</remarks>
+    /// This property sets a uniform border and supports corner radius.
+    /// For per-edge borders (e.g., underlines, 3D effects), use the per-edge properties instead.</remarks>
     public static readonly BindableProperty BorderColorProperty = BindableProperty.Create(
         nameof(BorderColor), typeof(Color), typeof(FsCard), null, propertyChanged: OnBorderColorChanged);  
 
     /// <summary>
     /// Gets or sets the color of the border.
     /// </summary>
-    /// <remarks>This property sets a uniform border color on all edges. 
+    /// <remarks>This property sets a uniform border color and supports corner radius.
     /// For per-edge control (e.g., underlines, 3D effects), use BorderTopBrush, BorderRightBrush, BorderBottomBrush, and BorderLeftBrush.
-    /// Note: Using both this property and per-edge properties simultaneously may have unintended consequences.</remarks>
+    /// Do not mix uniform and per-edge border properties.</remarks>
     public Color BorderColor
     {
         get => (Color)GetValue(BorderColorProperty);
@@ -301,11 +301,8 @@ public partial class FsCard : ContentView
 	{
 		if (bindable is FsCard card && newValue is Color color)
 		{
-			var brush = new SolidColorBrush(color);
-			card.BorderTopBrush = brush;
-			card.BorderRightBrush = brush;
-			card.BorderBottomBrush = brush;
-			card.BorderLeftBrush = brush;
+			// Set uniform border stroke (not per-edge)
+			card.Stroke = new SolidColorBrush(color);
 		}
 	}
     #endregion
@@ -314,18 +311,18 @@ public partial class FsCard : ContentView
     /// <summary>
     /// Gets or sets the width of the border surrounding the card.
     /// </summary>
-    /// <remarks>This property sets a uniform border width on all edges.
+    /// <remarks>This property sets a uniform border width and supports corner radius.
     /// For per-edge control (e.g., underlines, 3D effects), use BorderTopThickness, BorderRightThickness, BorderBottomThickness, and BorderLeftThickness.</remarks>
     public static readonly BindableProperty BorderWidthProperty = BindableProperty.Create(
-        nameof(BorderWidth), typeof(double), typeof(FsCard), 1.0, propertyChanged: OnBorderWidthChanged);
+        nameof(BorderWidth), typeof(double), typeof(FsCard), 0.0, propertyChanged: OnBorderWidthChanged);
 
     /// <summary>
     /// Gets or sets the width of the border, in device-independent units (1/96th inch per unit).
     /// </summary>
     /// <remarks>A value of 0.0 indicates that the border is not visible. Negative values are not allowed. 
-    /// This property sets a uniform border width on all edges.
+    /// This property sets a uniform border width and supports corner radius.
     /// For per-edge control (e.g., underlines, 3D effects), use the per-edge thickness properties.
-    /// Note: Using both this property and per-edge properties simultaneously may have unintended consequences.</remarks>
+    /// Do not mix uniform and per-edge border properties.</remarks>
     public double BorderWidth
     {
         get => (double)GetValue(BorderWidthProperty);
@@ -336,13 +333,54 @@ public partial class FsCard : ContentView
 	{
 		if (bindable is FsCard card && newValue is double width)
 		{
-			card.BorderTopThickness = width;
-			card.BorderRightThickness = width;
-			card.BorderBottomThickness = width;
-			card.BorderLeftThickness = width;
+			// Set uniform border thickness (not per-edge)
+			card.StrokeThickness = width;
 		}
 	}
     #endregion
+
+	#region Uniform Border Properties (Stroke/StrokeThickness)
+	/// <summary>
+	/// Identifies the Stroke bindable property.
+	/// </summary>
+	public static readonly BindableProperty StrokeProperty = BindableProperty.Create(
+		nameof(Stroke), typeof(Brush), typeof(FsCard), null);
+
+	/// <summary>
+	/// Gets or sets the brush for the uniform border.
+	/// </summary>
+	/// <remarks>
+	/// This property is used for uniform borders and supports corner radius.
+	/// When any per-edge border property is set, uniform border mode is disabled.
+	/// Use BorderColor for convenience when setting a solid color.
+	/// </remarks>
+	public Brush? Stroke
+	{
+		get => (Brush?)GetValue(StrokeProperty);
+		set => SetValue(StrokeProperty, value);
+	}
+
+	/// <summary>
+	/// Identifies the StrokeThickness bindable property.
+	/// </summary>
+	public static readonly BindableProperty StrokeThicknessProperty = BindableProperty.Create(
+		nameof(StrokeThickness), typeof(double), typeof(FsCard), 0.0);
+
+	/// <summary>
+	/// Gets or sets the thickness for the uniform border.
+	/// </summary>
+	/// <remarks>
+	/// This property is used for uniform borders and supports corner radius.
+	/// When any per-edge border property is set, uniform border mode is disabled.
+	/// Use BorderWidth for convenience.
+	/// </remarks>
+	public double StrokeThickness
+	{
+		get => (double)GetValue(StrokeThicknessProperty);
+		set => SetValue(StrokeThicknessProperty, value);
+	}
+	#endregion
+
 
 	#region Border Shorthand Property
 	/// <summary>
