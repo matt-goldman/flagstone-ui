@@ -23,12 +23,12 @@ jobs:
           global-json-file: global.json
 
       - name: Install MAUI Workload
-        run: dotnet workload restore
+        run: dotnet workload restore Flagstone.UI.CI.slnf
       - name: Restore
-        run: dotnet restore --locked-mode
+        run: dotnet restore Flagstone.UI.CI.slnf --locked-mode
       - name: Build
         timeout-minutes: 10
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build Flagstone.UI.CI.slnf --configuration Release --no-restore
       - name: Test
         timeout-minutes: 5
-        run: dotnet test --configuration Release --no-build --verbosity normal --logger "console;verbosity=detailed"
+        run: dotnet test Flagstone.UI.CI.slnf --configuration Release --no-build --verbosity normal --logger "console;verbosity=detailed"

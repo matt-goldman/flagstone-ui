@@ -1,4 +1,4 @@
-using FlagstoneUI.Integrations.MCT.Animations;
+﻿using FlagstoneUI.Integrations.MCT.Animations;
 using FlagstoneUI.SampleApp.ViewModels;
 
 namespace FlagstoneUI.SampleApp.Pages;
@@ -15,7 +15,7 @@ public partial class ControlsShowcasePage : ContentPage
 	{
 		if (sender is Button button)
 		{
-			await DisplayAlert("Button Clicked", $"You clicked: {button.Text}", "OK");
+			await DisplayAlertAsync("Button Clicked", $"You clicked: {button.Text}", "OK");
 		}
 	}
 
@@ -23,7 +23,7 @@ public partial class ControlsShowcasePage : ContentPage
 	{
 		if (sender is Button button)
 		{
-			await DisplayAlert("Card Action", $"You clicked: {button.Text}", "OK");
+			await DisplayAlertAsync("Card Action", $"You clicked: {button.Text}", "OK");
 		}
 	}
 
@@ -34,21 +34,17 @@ public partial class ControlsShowcasePage : ContentPage
 			var message = $"Text changed: '{e.NewTextValue}' (Length: {e.NewTextValue?.Length ?? 0})";
 
 			// Update both feedback labels (only one will be visible at a time)
-			if (EntryFeedbackLabel != null)
-			{
-				EntryFeedbackLabel.Text = message;
-			}
-			if (EntryFeedbackLabelAlt != null)
-			{
-				EntryFeedbackLabelAlt.Text = message;
-			}
+			EntryFeedbackLabel?.Text = message;
+			EntryFeedbackLabelAlt?.Text = message;
 		}
 	}
 
-	readonly FsEditorBorderAnimation _animation = new FsEditorBorderAnimation
+	readonly FsEditorBorderAnimation _animation = new()
 	{
 		Length = 2000,
-		Gradient = App.Current!.Resources["AiGradientBrush"] as LinearGradientBrush,
+#pragma warning disable CS8601 // Possible null reference assignment. - Resource is expected to exist.
+		Gradient = Application.Current!.Resources["AiGradientBrush"] as LinearGradientBrush,
+#pragma warning restore CS8601 // Possible null reference assignment.
 	};
 
 	private CancellationTokenSource? _cts;
