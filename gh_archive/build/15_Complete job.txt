@@ -1,0 +1,6 @@
+﻿2025-12-15T07:20:26.5170631Z Cleaning up orphan processes
+2025-12-15T07:20:26.5330729Z Terminate orphan process: pid (6240) (dotnet)
+2025-12-15T07:20:26.5700678Z Terminate orphan process: pid (8540) (dotnet)
+2025-12-15T07:20:26.5777451Z Terminate orphan process: pid (8840) (dotnet)
+2025-12-15T07:20:26.5980230Z Terminate orphan process: pid (4308) (VBCSCompiler)
+2025-12-15T07:20:26.6079201Z Terminate orphan process: pid (3504) (conhost)
