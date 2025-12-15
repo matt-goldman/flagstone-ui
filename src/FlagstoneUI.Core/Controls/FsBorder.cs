@@ -39,6 +39,10 @@ public partial class FsBorder : ContentView
 		_innerBorder.SetBinding(Microsoft.Maui.Controls.Border.BackgroundProperty, new Binding(nameof(Background), source: this));
 		_innerBorder.SetBinding(Microsoft.Maui.Controls.Border.PaddingProperty, new Binding(nameof(Padding), source: this));
 		_innerBorder.SetBinding(Microsoft.Maui.Controls.Border.StrokeShapeProperty, new Binding(nameof(StrokeShape), source: this));
+		
+		// Disable the inner border's stroke - we use per-edge Lines for borders instead
+		_innerBorder.Stroke = Colors.Transparent;
+		_innerBorder.StrokeThickness = 0;
 	}
 
 	protected override void OnSizeAllocated(double width, double height)
