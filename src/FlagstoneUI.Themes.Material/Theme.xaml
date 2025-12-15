@@ -58,6 +58,14 @@
     <!-- ========================================= -->
     <!-- Control Styles                            -->
     <!-- ========================================= -->
+    
+    <!-- Border Property Pattern -->
+    <!-- This theme uses BorderColor/BorderWidth (FsCard) and BorderBrush/BorderWidth (FsEntry/FsEditor) -->
+    <!-- for UNIFORM borders. These convenience properties internally set all four edge properties. -->
+    <!-- For ASYMMETRIC borders (e.g., underlines, 3D effects), use individual edge properties: -->
+    <!-- BorderTopThickness, BorderRightThickness, BorderBottomThickness, BorderLeftThickness, -->
+    <!-- BorderTopBrush, BorderRightBrush, BorderBottomBrush, BorderLeftBrush -->
+    <!-- The Border shorthand property is reserved for XAML usage by app developers, not theme files. -->
 
     <!-- ========== FsButton Styles ========== -->
 
@@ -206,6 +214,9 @@
     </Style>
 
     <!-- ========== FsCard Styles ========== -->
+    
+    <!-- Note: FsCard styles use BorderColor and BorderWidth for uniform borders. -->
+    <!-- These properties set all four edge properties internally for consistency. -->
 
     <!-- Base Card Style (Material Filled Card) -->
     <Style TargetType="fs:FsCard">
@@ -238,6 +249,9 @@
     </Style>
 
     <!-- ========== FsEntry Styles ========== -->
+    
+    <!-- Note: FsEntry styles use BorderBrush and BorderWidth for uniform borders. -->
+    <!-- These properties set all four edge properties internally for consistency. -->
 
     <!-- Base Entry Style (Material Filled Text Field) -->
     <Style TargetType="fs:FsEntry">
@@ -316,6 +330,9 @@
     </Style>
 
     <!-- ========== FsEditor Styles ========== -->
+    
+    <!-- Note: FsEditor styles use BorderBrush and BorderWidth for uniform borders. -->
+    <!-- These properties set all four edge properties internally for consistency. -->
 
     <!-- Base Editor Style (Material Filled Text Field) -->
     <Style TargetType="fs:FsEditor">

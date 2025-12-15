@@ -468,6 +468,106 @@ This section shows what properties are themable for each Flagstone UI control.
 - **Filled** (default): Solid subtle background, no border
 - **Outlined**: Transparent background with border
 
+## Border Property Patterns
+
+Flagstone UI controls (FsCard, FsEntry, FsEditor, FsBorder) support three mechanisms for setting borders:
+
+### 1. Convenience Properties (Recommended for Themes)
+
+Use these for **uniform borders** where all edges have the same thickness and color:
+
+**FsCard:**
+- `BorderColor` - Sets color for all four edges
+- `BorderWidth` - Sets thickness for all four edges
+
+**FsEntry / FsEditor:**
+- `BorderBrush` - Sets brush for all four edges
+- `BorderWidth` - Sets thickness for all four edges
+
+**Example in Theme.xaml:**
+```xml
+<Style TargetType="fs:FsCard">
+    <Setter Property="BorderColor" Value="{DynamicResource Color.Outline}" />
+    <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Thin}" />
+</Style>
+```
+
+> **✅ Recommended**: Use convenience properties in theme files for clarity and simplicity.
+
+### 2. Individual Edge Properties (For Asymmetric Borders)
+
+Use these for **asymmetric borders** like underlines, 3D effects, or custom edge styling:
+
+**All Controls:**
+- `BorderTopThickness` / `BorderTopBrush`
+- `BorderRightThickness` / `BorderRightBrush`
+- `BorderBottomThickness` / `BorderBottomBrush`
+- `BorderLeftThickness` / `BorderLeftBrush`
+
+**Example - Underline Only:**
+```xml
+<fs:FsEntry BorderBottomThickness="2" 
+            BorderBottomBrush="{DynamicResource Color.Primary}" />
+```
+
+**Example - 3D Inset Effect:**
+```xml
+<fs:FsCard BorderTopThickness="1" 
+           BorderTopBrush="White"
+           BorderRightThickness="2"
+           BorderRightBrush="Black"
+           BorderBottomThickness="2"
+           BorderBottomBrush="Black"
+           BorderLeftThickness="1"
+           BorderLeftBrush="White" />
+```
+
+### 3. Border Shorthand Property (For App Developers)
+
+Use the `Border` property with shorthand syntax for quick, code-efficient border definitions:
+
+**Syntax:** `"thickness color"` values separated by commas
+
+**Examples:**
+- `Border="1 Black"` - Uniform 1px black border
+- `Border="1 Black, 2 Grey"` - 1px top/bottom, 2px left/right
+- `Border="1 White, 3 Black, 3 Black, 1 White"` - 3D inset effect
+
+```xml
+<fs:FsCard Border="2 {DynamicResource Color.Primary}" />
+```
+
+> **⚠️ Note**: The Border shorthand is intended for app XAML usage, not theme ResourceDictionaries. In themes, prefer explicit convenience properties for better readability.
+
+### Best Practices
+
+**DO:**
+- ✅ Use `BorderColor`/`BorderWidth` (or `BorderBrush`/`BorderWidth`) in theme files for uniform borders
+- ✅ Use individual edge properties when you need asymmetric styling
+- ✅ Use Border shorthand in app XAML for quick prototyping
+- ✅ Be consistent within a single style definition
+
+**DON'T:**
+- ❌ Mix convenience properties with individual edge properties in the same style
+- ❌ Set Border shorthand in theme files (reduces readability)
+- ❌ Use individual edge properties when all edges are the same (use convenience instead)
+
+### How They Work Together
+
+All three mechanisms set the same underlying per-edge properties. For example:
+
+```xml
+<!-- These are equivalent: -->
+<fs:FsCard BorderColor="Red" BorderWidth="2" />
+<fs:FsCard BorderTopBrush="Red" BorderRightBrush="Red" 
+           BorderBottomBrush="Red" BorderLeftBrush="Red"
+           BorderTopThickness="2" BorderRightThickness="2"
+           BorderBottomThickness="2" BorderLeftThickness="2" />
+<fs:FsCard Border="2 Red" />
+```
+
+The convenience properties and Border shorthand internally set all four edge properties. This ensures consistency regardless of which approach you use.
+
 ### Common Patterns
 
 **Primary Action Button:**
