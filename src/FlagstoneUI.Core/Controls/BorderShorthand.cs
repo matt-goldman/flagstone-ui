@@ -92,7 +92,16 @@ public class BorderShorthand
 		Color color;
 		try
 		{
-			color = Color.FromArgb(colorString);
+			// Try hex color first
+			if (colorString.StartsWith("#"))
+			{
+				color = Color.FromRgba(colorString);
+			}
+			// Try named color by looking it up in Colors static class
+			else
+			{
+				color = ParseNamedColor(colorString);
+			}
 		}
 		catch
 		{
@@ -100,5 +109,19 @@ public class BorderShorthand
 		}
 
 		return new BorderEdgeValue(thickness, color);
+	}
+
+	/// <summary>
+	/// Parses a named color string (e.g., "Red", "Blue") using reflection on the Colors class.
+	/// </summary>
+	private static Color ParseNamedColor(string colorName)
+	{
+		var colorField = typeof(Colors).GetField(colorName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.IgnoreCase);
+		if (colorField != null && colorField.FieldType == typeof(Color))
+		{
+			return (Color)colorField.GetValue(null)!;
+		}
+		
+		throw new ArgumentException($"Unknown color name: {colorName}");
 	}
 }

@@ -5,12 +5,31 @@ Accepted
 
 ## Context
 
-During CI implementation, we discovered that certain MAUI UI component tests hang indefinitely in GitHub Actions' headless Windows environment. Specifically:
+During CI implementation, we discovered that certain .NET MAUI UI component tests hang indefinitely in GitHub Actions' headless Windows environment.
 
-- Test: `Border_bottom_brush_can_be_set` (and potentially other tests creating visual components)
-- Symptom: Test hangs for 4+ minutes until CI timeout (5 minute limit)
-- Root Cause: Creating `SolidColorBrush` instances in headless CI environment without proper MAUI UI thread/dispatcher initialization
+### Root Cause Analysis
+
+**Initial Finding**: Tests creating `SolidColorBrush` instances hung in CI
+- Test: `Border_bottom_brush_can_be_set` hung for 4+ minutes until CI timeout (5 minute limit)
+- Hypothesis: Brush creation requires UI thread/dispatcher initialization
+
+**Deeper Investigation**: The problem is architectural, not brush-specific
+- **Actual Root Cause**: FsBorder control overrides `OnSizeAllocated()` method
+- Creating **any** FsBorder instance (even without brushes) triggers size allocation
+- Headless CI environment lacks layout/rendering infrastructure to complete layout passes
+- Control initialization waits indefinitely for size allocation that never completes
+- `MauiTestBase` with `TestDispatcher` is insufficient for controls with layout overrides
+
+**Impact**:
+- All FsBorderTests (17 tests) disabled - ANY FsBorder instantiation hangs
+- Affects controls that override: `OnSizeAllocated`, `Measure`, `Arrange`, or similar layout methods
 - Local Behavior: All tests pass successfully in ~1-2 seconds with full UI environment
+- CI Behavior: Indefinite hang on first `new FsBorder()` call
+
+**Why Compiler Directives Won't Help**:
+- Layout infrastructure is fundamental to control behavior
+- Cannot conditionally disable layout without breaking the control
+- Problem is environmental (headless), not code logic
 
 ### Investigation Summary
 
@@ -32,43 +51,58 @@ During CI implementation, we discovered that certain MAUI UI component tests han
 ### Problem Scope
 
 The issue affects tests that:
-- Create MAUI visual components (`SolidColorBrush`, potentially `Border`, `Line` elements)
+- Instantiate controls with layout method overrides (`OnSizeAllocated`, `Measure`, `Arrange`)
+- Create MAUI visual components (`SolidColorBrush`, `Border`, `Line` elements, etc.)
 - Rely on platform-specific UI rendering infrastructure
 - Need actual UI thread context beyond what `TestDispatcher` provides
 
+**Controls Known to Hang in Headless CI**:
+- `FsBorder` - Overrides `OnSizeAllocated()` - ALL tests disabled (17 tests)
+- Potentially other FlagstoneUI controls if they override layout methods
+
+**Action Required**: Audit FsButton, FsCard, FsEntry, FsEditor for similar patterns
+
 ## Decision
 
-### Short-term: Test Filtering in CI
+### Short-term: Comment Out Problematic Test Classes
 
-Filter out known problematic tests using xUnit's test filtering:
+Entire test classes for controls with layout dependencies are commented out with multi-line comments:
 
-```yaml
-dotnet test --filter "FullyQualifiedName!~Border_bottom_brush_can_be_set"
+```csharp
+// DISABLED: FsBorder instantiation hangs in headless CI environment
+// FsBorder.OnSizeAllocated() requires layout/rendering infrastructure
+// See ADR007 (docs/Decisions/adr007-ci-ui-test-strategy.md)
+// TODO: Re-enable when proper UI testing infrastructure is in place
+public class FsBorderTests : MauiTestBase
+{
+    /* ... all tests commented out ... */
+}
 ```
 
 **Rationale**:
 - Unblocks CI pipeline immediately
 - Maintains test coverage for non-UI tests (majority of test suite)
-- Tests still run locally where they work
-- Minimal configuration change
+- Tests remain in codebase for local development/debugging
+- Clear documentation of why tests are disabled
+- TODO markers for future re-enablement
 
 **Limitations**:
-- Reduces CI test coverage
-- Manual maintenance of filter list
+- Reduces CI test coverage for UI controls
+- Manual audit needed for each new control
 - Doesn't solve underlying problem
-- May hide regressions in UI component behavior
+- May hide regressions in UI component layout behavior
 
 ### Long-term: Proper UI Testing Infrastructure
 
-Implement visual/UI testing using appropriate tools for MAUI applications:
+Implement visual/UI testing using appropriate tools for .NET MAUI applications:
 
-#### Option 1: Appium + MAUI (Recommended)
+#### Option 1: Appium + .NET MAUI (Recommended)
 - **Tool**: Appium with WinAppDriver for Windows
 - **Scope**: End-to-end UI testing of actual app screens
 - **Coverage**: User interactions, visual regression, cross-platform behavior
 - **Timeline**: Post-MVP, as part of comprehensive testing strategy
 
-#### Option 2: MAUI DeviceTests Framework
+#### Option 2: .NET MAUI DeviceTests Framework
 - **Tool**: Microsoft's `Microsoft.Maui.TestUtils.DeviceTests` 
 - **Scope**: Component-level UI tests on actual devices/emulators
 - **Coverage**: Control rendering, layout, platform-specific behavior
