@@ -57,10 +57,18 @@ The issue affects tests that:
 - Need actual UI thread context beyond what `TestDispatcher` provides
 
 **Controls Known to Hang in Headless CI**:
-- `FsBorder` - Overrides `OnSizeAllocated()` - ALL tests disabled (17 tests)
-- Potentially other FlagstoneUI controls if they override layout methods
+- `FsBorder` - Overrides `OnSizeAllocated()` - 22 tests disabled across multiple test classes:
+  - FsBorderTests.cs: 17 tests (entire class commented out)
+  - BorderShorthandTests.cs: 3 FsBorder application tests, 1 FsCard test, 1 FsEntry test
+- `FsCard` - Property setter tests PASS (does not override layout methods)
+- `FsEntry` - Disabled preemptively (not verified if hangs)
 
-**Action Required**: Audit FsButton, FsCard, FsEntry, FsEditor for similar patterns
+**Additional Issues Found**:
+- BorderShorthand color parsing failed for named colors ("Red", "Blue", etc.)
+- Fixed by using reflection on `Colors` class to support both hex and named colors
+- This was a separate code bug unrelated to CI environment
+
+**Key Learning**: ANY test that instantiates FsBorder hangs, regardless of which test file it's in
 
 ## Decision
 
@@ -124,22 +132,25 @@ Implement visual/UI testing using appropriate tools for .NET MAUI applications:
 - ✅ Maintains fast feedback loop for code changes
 
 ### Negative
-- ❌ Reduced CI test coverage (1 test filtered currently, potentially more)
-- ❌ UI component behavior not validated in CI
-- ❌ Requires manual maintenance of filter list
-- ❌ Potential for regressions in UI components to slip through
-- ❌ Additional complexity in test infrastructure
+- ❌ Reduced CI test coverage (22 tests disabled: 17 FsBorderTests + 5 application tests)
+- ❌ UI component layout behavior not validated in CI
+- ❌ May hide regressions in FsBorder, potentially FsEntry if they override layout methods
+- ❌ Additional burden on developers to verify UI tests locally before merging
 
 ### Neutral
 - ℹ️ Deferred comprehensive UI testing to later phase
-- ℹ️ Current filter is minimal (1 test), may expand as more UI components added
-- ℹ️ Local development workflow unchanged
+- ℹ️ Current approach scales: any control with layout overrides gets commented out with ADR reference
+- ℹ️ Local development workflow unchanged (tests run fine locally)
+- ℹ️ FsCard verified safe (property tests pass, no layout overrides)
 
 ## Implementation Plan
 
-### Phase 1: Immediate (Current)
-- [x] Filter `Border_bottom_brush_can_be_set` in CI workflow
-- [ ] Document filtered tests and reasoning
+### Phase 1: Immediate (Completed)
+- [x] Commented out FsBorderTests.cs (17 tests)
+- [x] Commented out BorderShorthand application tests (5 tests)
+- [x] Fixed color parsing in BorderShorthand for named colors
+- [x] Documented decision in ADR007
+- [x] Verified FsCard safe (tests pass)
 - [ ] Add local-only test category/trait for UI tests
 - [ ] Update testing documentation
 
