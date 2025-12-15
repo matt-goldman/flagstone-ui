@@ -65,7 +65,7 @@
     <!-- For ASYMMETRIC borders (e.g., underlines, 3D effects), use individual edge properties: -->
     <!-- BorderTopThickness, BorderRightThickness, BorderBottomThickness, BorderLeftThickness, -->
     <!-- BorderTopBrush, BorderRightBrush, BorderBottomBrush, BorderLeftBrush -->
-    <!-- The Border shorthand property is reserved for XAML usage by app developers, not theme files. -->
+    <!-- NOTE: Do not use both mechanisms together - choose one approach per control style. -->
 
     <!-- ========== FsButton Styles ========== -->
 

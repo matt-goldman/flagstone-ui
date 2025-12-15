@@ -470,9 +470,9 @@ This section shows what properties are themable for each Flagstone UI control.
 
 ## Border Property Patterns
 
-Flagstone UI controls (FsCard, FsEntry, FsEditor, FsBorder) support three mechanisms for setting borders:
+Flagstone UI controls (FsCard, FsEntry, FsEditor, FsBorder) support three mechanisms for setting borders. **All are equally valid** - choose the approach that best fits your use case. **Do not use multiple mechanisms together** on the same control.
 
-### 1. Convenience Properties (Recommended for Themes)
+### 1. Convenience Properties
 
 Use these for **uniform borders** where all edges have the same thickness and color:
 
@@ -484,7 +484,7 @@ Use these for **uniform borders** where all edges have the same thickness and co
 - `BorderBrush` - Sets brush for all four edges
 - `BorderWidth` - Sets thickness for all four edges
 
-**Example in Theme.xaml:**
+**Example:**
 ```xml
 <Style TargetType="fs:FsCard">
     <Setter Property="BorderColor" Value="{DynamicResource Color.Outline}" />
@@ -492,9 +492,9 @@ Use these for **uniform borders** where all edges have the same thickness and co
 </Style>
 ```
 
-> **✅ Recommended**: Use convenience properties in theme files for clarity and simplicity.
+> **✅ Good for**: Uniform borders, theme definitions, when clarity is preferred over brevity
 
-### 2. Individual Edge Properties (For Asymmetric Borders)
+### 2. Individual Edge Properties
 
 Use these for **asymmetric borders** like underlines, 3D effects, or custom edge styling:
 
@@ -522,7 +522,9 @@ Use these for **asymmetric borders** like underlines, 3D effects, or custom edge
            BorderLeftBrush="White" />
 ```
 
-### 3. Border Shorthand Property (For App Developers)
+> **✅ Good for**: Per-edge styling, asymmetric borders, special effects
+
+### 3. Border Shorthand Property
 
 Use the `Border` property with shorthand syntax for quick, code-efficient border definitions:
 
@@ -537,20 +539,21 @@ Use the `Border` property with shorthand syntax for quick, code-efficient border
 <fs:FsCard Border="2 {DynamicResource Color.Primary}" />
 ```
 
-> **⚠️ Note**: The Border shorthand is intended for app XAML usage, not theme ResourceDictionaries. In themes, prefer explicit convenience properties for better readability.
+> **✅ Good for**: Quick prototyping, concise XAML, when you prefer compact syntax
 
 ### Best Practices
 
 **DO:**
-- ✅ Use `BorderColor`/`BorderWidth` (or `BorderBrush`/`BorderWidth`) in theme files for uniform borders
+- ✅ Choose ONE approach per control style (convenience, individual edges, OR shorthand)
+- ✅ Use convenience properties (`BorderColor`/`BorderWidth` or `BorderBrush`/`BorderWidth`) for uniform borders
 - ✅ Use individual edge properties when you need asymmetric styling
-- ✅ Use Border shorthand in app XAML for quick prototyping
-- ✅ Be consistent within a single style definition
+- ✅ Use Border shorthand when you want concise syntax
+- ✅ Ensure controls have zero border defaults (they do: thickness=0, brush=transparent)
 
 **DON'T:**
-- ❌ Mix convenience properties with individual edge properties in the same style
-- ❌ Set Border shorthand in theme files (reduces readability)
-- ❌ Use individual edge properties when all edges are the same (use convenience instead)
+- ❌ Mix different border mechanisms in the same style (e.g., don't use both `BorderWidth` and `BorderTopThickness`)
+- ❌ Use individual edge properties when all edges are the same (use convenience or shorthand instead)
+- ❌ Assume one approach is "better" - they're equivalent, just different syntaxes
 
 ### How They Work Together
 
