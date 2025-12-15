@@ -23,7 +23,7 @@ jobs:
           global-json-file: global.json
 
       - name: Install MAUI Workload
-        run: dotnet workload install maui-windows --skip-sign-check
+        run: dotnet workload install maui-windows maui-android --skip-sign-check
       - name: Restore
         run: dotnet restore Flagstone.UI.CI.slnf --locked-mode
       - name: Build
