@@ -27,12 +27,7 @@ public partial class FsBorder : ContentView
 	public FsBorder()
 	{
 		_layoutRoot = [];
-		_innerBorder = new MauiBorder
-		{
-			// Disable stroke - we use per-edge Lines for borders instead
-			Stroke = Colors.Transparent,
-			StrokeThickness = 0
-		};
+		_innerBorder = new MauiBorder();
 		_contentPresenter = new ContentPresenter();
 
 		_innerBorder.Content = _contentPresenter;
@@ -45,6 +40,11 @@ public partial class FsBorder : ContentView
 		_innerBorder.SetBinding(VisualElement.BackgroundProperty, new Binding(nameof(Background), source: this));
 		_innerBorder.SetBinding(MauiBorder.PaddingProperty, new Binding(nameof(Padding), source: this));
 		_innerBorder.SetBinding(MauiBorder.StrokeShapeProperty, new Binding(nameof(StrokeShape), source: this));
+		
+		// Bind uniform border properties to inner border
+		// These will be disabled when per-edge mode is active
+		_innerBorder.SetBinding(MauiBorder.StrokeProperty, new Binding(nameof(Stroke), source: this));
+		_innerBorder.SetBinding(MauiBorder.StrokeThicknessProperty, new Binding(nameof(StrokeThickness), source: this));
 	}
 
 	protected override void OnSizeAllocated(double width, double height)
@@ -469,6 +469,71 @@ public partial class FsBorder : ContentView
 	}
 	#endregion
 
+	#region Uniform Border Properties
+	/// <summary>
+	/// Identifies the Stroke bindable property.
+	/// </summary>
+	/// <remarks>
+	/// This property defines the brush used for uniform borders.
+	/// When any per-edge border property is set, this property is ignored and per-edge mode is activated.
+	/// </remarks>
+	public static readonly BindableProperty StrokeProperty = BindableProperty.Create(
+		nameof(Stroke),
+		typeof(Brush),
+		typeof(FsBorder),
+		null,
+		propertyChanged: OnUniformBorderPropertyChanged);
+
+	/// <summary>
+	/// Gets or sets the brush used for uniform borders.
+	/// </summary>
+	/// <remarks>
+	/// This property is only active when no per-edge border properties are set.
+	/// Setting any per-edge border activates per-edge mode and disables this property.
+	/// Supports corner radius via StrokeShape.
+	/// </remarks>
+	public Brush? Stroke
+	{
+		get => (Brush?)GetValue(StrokeProperty);
+		set => SetValue(StrokeProperty, value);
+	}
+
+	/// <summary>
+	/// Identifies the StrokeThickness bindable property.
+	/// </summary>
+	/// <remarks>
+	/// This property defines the thickness used for uniform borders.
+	/// When any per-edge border property is set, this property is ignored and per-edge mode is activated.
+	/// </remarks>
+	public static readonly BindableProperty StrokeThicknessProperty = BindableProperty.Create(
+		nameof(StrokeThickness),
+		typeof(double),
+		typeof(FsBorder),
+		0d,
+		propertyChanged: OnUniformBorderPropertyChanged);
+
+	/// <summary>
+	/// Gets or sets the thickness used for uniform borders.
+	/// </summary>
+	/// <remarks>
+	/// This property is only active when no per-edge border properties are set.
+	/// Setting any per-edge border activates per-edge mode and disables this property.
+	/// </remarks>
+	public double StrokeThickness
+	{
+		get => (double)GetValue(StrokeThicknessProperty);
+		set => SetValue(StrokeThicknessProperty, value);
+	}
+
+	private static void OnUniformBorderPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is FsBorder border)
+		{
+			border.UpdateBorderMode();
+		}
+	}
+	#endregion
+
 	#region BorderStrokeCap Property
 	/// <summary>
 	/// Identifies the BorderStrokeCap bindable property.
@@ -494,6 +559,8 @@ public partial class FsBorder : ContentView
 	{
 		if (bindable is FsBorder border)
 		{
+			// Per-edge thickness changes activate per-edge mode
+			border.UpdateBorderMode();
 			// Thickness changes can affect layout
 			border.InvalidateMeasure();
 		}
@@ -501,10 +568,55 @@ public partial class FsBorder : ContentView
 
 	private static void OnBorderVisualPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 	{
-		if (bindable is FsBorder border && border.Width > 0 && border.Height > 0)
+		if (bindable is FsBorder border)
 		{
-			// Visual-only changes don't affect layout, just update border rendering
-			border.UpdateBorderLines(border.Width, border.Height);
+			// Per-edge brush changes activate per-edge mode
+			border.UpdateBorderMode();
+			
+			if (border.Width > 0 && border.Height > 0)
+			{
+				// Visual-only changes don't affect layout, just update border rendering
+				border.UpdateBorderLines(border.Width, border.Height);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Determines whether per-edge border mode is active and updates the inner border accordingly.
+	/// </summary>
+	/// <remarks>
+	/// Per-edge mode is active when any per-edge border property has a non-zero thickness.
+	/// When active, the uniform border (Stroke/StrokeThickness) is disabled.
+	/// When inactive, per-edge lines are hidden and uniform border is enabled.
+	/// </remarks>
+	private void UpdateBorderMode()
+	{
+		bool isPerEdgeMode = BorderTopThickness > 0 || BorderRightThickness > 0 || 
+		                     BorderBottomThickness > 0 || BorderLeftThickness > 0;
+
+		if (isPerEdgeMode)
+		{
+			// Per-edge mode: disable uniform border stroke
+			_innerBorder.Stroke = Colors.Transparent;
+			_innerBorder.StrokeThickness = 0;
+		}
+		else
+		{
+			// Uniform mode: use Stroke and StrokeThickness properties
+			// The bindings will handle this automatically, so just ensure per-edge lines are hidden
+			if (Width > 0 && Height > 0)
+			{
+				_topLine?.SetValue(IsVisibleProperty, false);
+				_rightLine?.SetValue(IsVisibleProperty, false);
+				_bottomLine?.SetValue(IsVisibleProperty, false);
+				_leftLine?.SetValue(IsVisibleProperty, false);
+			}
+		}
+
+		// Trigger re-render if size is allocated
+		if (Width > 0 && Height > 0)
+		{
+			UpdateBorderLines(Width, Height);
 		}
 	}
 }

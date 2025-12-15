@@ -9,6 +9,8 @@
   <fs:FsBorder x:Name="WrapperBorder"
                Background="{Binding Background}"
                Padding="{Binding Padding}"
+               Stroke="{Binding Stroke}"
+               StrokeThickness="{Binding StrokeThickness}"
                BorderTopThickness="{Binding BorderTopThickness}"
                BorderRightThickness="{Binding BorderRightThickness}"
                BorderBottomThickness="{Binding BorderBottomThickness}"

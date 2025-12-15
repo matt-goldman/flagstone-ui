@@ -9,6 +9,8 @@
         <ControlTemplate x:Name="CardTemplate">
             <controls:FsBorder Background="{Binding Source={x:Reference CardControl}, Path=BackgroundBrush}"
                                Padding="{Binding Source={x:Reference CardControl}, Path=Padding}"
+                               Stroke="{Binding Source={x:Reference CardControl}, Path=Stroke}"
+                               StrokeThickness="{Binding Source={x:Reference CardControl}, Path=StrokeThickness}"
                                BorderTopThickness="{Binding Source={x:Reference CardControl}, Path=BorderTopThickness}"
                                BorderRightThickness="{Binding Source={x:Reference CardControl}, Path=BorderRightThickness}"
                                BorderBottomThickness="{Binding Source={x:Reference CardControl}, Path=BorderBottomThickness}"
