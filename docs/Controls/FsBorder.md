@@ -193,6 +193,8 @@ FsBorder uses up to four Line elements to render borders:
 
 Lines are positioned and sized in `OnSizeAllocated` and are only materialized when the corresponding edge thickness > 0.
 
+**Input Transparency**: All border Line elements have `InputTransparent = true` to ensure they do not intercept hit testing or block user interaction with the underlying content.
+
 ### Corner Radius Behavior
 
 When using rounded corners (via `StrokeShape` with `RoundRectangle`), the border lines may clip or approximate corners. This is an acceptable limitation documented in the design.
@@ -217,6 +219,8 @@ When these properties are set, they automatically update all four edge-specific 
 3. **Brush over Color**: Using Brush type allows for gradients and other advanced brush types, not just solid colors.
 
 4. **Separate thickness and brush properties**: Keeping these separate provides maximum flexibility, though this could be revisited based on usage patterns.
+
+5. **Input transparency**: Border lines are set to `InputTransparent = true` to ensure they render visually without blocking user interaction with the content inside the border.
 
 ## Accessibility Considerations
 
