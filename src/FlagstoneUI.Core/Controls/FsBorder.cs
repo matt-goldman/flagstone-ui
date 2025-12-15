@@ -150,7 +150,8 @@ public partial class FsBorder : ContentView
 	{
 		return new Line
 		{
-			StrokeLineCap = strokeCap
+			StrokeLineCap = strokeCap,
+			InputTransparent = true
 		};
 	}
 
