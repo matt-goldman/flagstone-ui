@@ -25,7 +25,7 @@ jobs:
       - name: Install MAUI Workload
         run: dotnet workload restore
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore --locked-mode
       - name: Build
         timeout-minutes: 10
         run: dotnet build --configuration Release --no-restore
