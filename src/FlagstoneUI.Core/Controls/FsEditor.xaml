@@ -15,7 +15,7 @@
       <fs:BorderlessEditor Text="{Binding Text}"
                            Placeholder="{Binding Placeholder}"
                            PlaceholderColor="{Binding PlaceholderColor}"
-                           Background="{Binding Background}"
+                           Background="Transparent"
                            TextColor="{Binding TextColor}"
                            TextChanged="OnTextChanged"
                            Completed="OnCompleted"
