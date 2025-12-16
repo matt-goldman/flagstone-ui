@@ -76,6 +76,13 @@ This document tracks the current implementation status of Flagstone UI component
 - ✅ Save/export with folder picker
 - ✅ Real-time conversion results display
 
+**Advanced Features (December 2025)**:
+- ✅ **Per-edge border support**: Extracts and generates BorderTopWidth/RightWidth/BottomWidth/LeftWidth tokens from Bootstrap multi-value border-width properties
+- ✅ **Shadow support**: Extracts box-shadow from Bootstrap variables and CSS, generates MAUI Shadow resources with OffsetX/Y, Radius, Color, Opacity
+- ✅ **AppThemeBinding for adaptive themes**: Extracts light/dark mode CSS custom properties from Bootstrap 5+ themes, generates .Dark suffix tokens, uses AppThemeBinding syntax in styles
+  - Workaround for ExCSS 4.2.3 limitation (doesn't parse CSS custom properties) via regex-based parsing
+  - Tested with Brite theme: 127 light mode + 67 dark mode properties extracted
+
 ### Next Milestone: FlagstoneUI MCP Server 🎯
 
 - **Target**: Enable AI agent-assisted FlagstoneUI development

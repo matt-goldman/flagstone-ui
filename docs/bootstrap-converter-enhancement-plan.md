@@ -4,7 +4,12 @@
 
 The Bootstrap converter now generates a **complete `Styles.xaml`** for the currently implemented FlagstoneUI controls (`FsButton`, `FsEntry`, `FsEditor`, `FsCard`), including Bootstrap-inspired **valid/invalid** form control styles. This document tracks what’s implemented and what remains.
 
-**Status (2025-12-12):** Phase 1–4 baseline complete (variants + validation + tests); deeper Bootstrap fidelity (hover/active/focus parity, card subparts, etc.) remains.
+**Status (2025-12-16):** Phase 1–5 complete (variants + validation + tests + advanced features):
+- ✅ **Per-edge borders**: Full support for BorderTopWidth/RightWidth/BottomWidth/LeftWidth extraction and generation
+- ✅ **Shadow support**: Box-shadow extraction from Bootstrap variables and CSS, MAUI Shadow resource generation
+- ✅ **AppThemeBinding**: Light/dark mode adaptive themes with CSS custom property extraction (Bootstrap 5+)
+
+Deeper Bootstrap fidelity (hover/active/focus parity, card subparts, etc.) remains for future enhancement.
 
 ## Current State Analysis
 
@@ -177,7 +182,30 @@ FormControlInvalidFocus = ExtractStyle(stylesheet, ".form-control.is-invalid:foc
 - [x] Regenerate `test-output/` fixtures to include expanded `Styles.xaml`
 - [ ] Add a Darkly validation run (optional fixture update)
 - [ ] Improve state fidelity for focus/hover/pressed/disabled (see “Future Enhancements”)
+#### Phase 5: Advanced Features (December 2025)
+- [x] **Per-Edge Border Support**
+  - Added BorderTopWidth, BorderRightWidth, BorderBottomWidth, BorderLeftWidth to FlagstoneTokens
+  - BootstrapMapper extracts multi-value border-width properties (e.g., "1px 2px 3px 4px")
+  - XamlThemeGenerator generates separate token resources for each edge
+  - Supports Bootstrap's asymmetric border patterns
 
+- [x] **Shadow Support**
+  - ShadowToken model (OffsetX, OffsetY, Radius, Color, Opacity) with dark mode support
+  - Extract from Bootstrap variables ($btn-box-shadow, $box-shadow-sm, etc.)
+  - Extract from CSS box-shadow properties (with CSS variable detection)
+  - Parse multi-shadow values and filter inset shadows
+  - Generate MAUI Shadow resources in XAML
+  - Apply shadows to button and card styles with fallback logic
+  - **Known limitation**: Windows MAUI has limited shadow support (ignores offset, uniform blur)
+
+- [x] **AppThemeBinding for Light/Dark Mode**
+  - Extract CSS custom properties from `[data-bs-theme="light"]` and `[data-bs-theme="dark"]` blocks
+  - **Workaround for ExCSS limitation**: Regex-based parsing (ExCSS 4.2.3 doesn't support CSS custom properties)
+  - Map to ColorToken.DarkValue (ShadowToken.Dark* properties ready but not yet extracted)
+  - Generate `.Dark` suffix tokens (e.g., Color.Background.Dark)
+  - CreateColorResourceReference helper generates AppThemeBinding syntax automatically
+  - Styles use `{AppThemeBinding Light={DynamicResource Color.X}, Dark={DynamicResource Color.X.Dark}}`
+  - Tested with Brite theme: extracts 127 light mode + 67 dark mode properties
 ## Expected Output
 
 ### Complete Styles.xaml Structure
@@ -300,10 +328,25 @@ The validation styles (`EntryValid`, `EntryInvalid`) will work seamlessly with t
 
 ## Future Enhancements
 
-- Badge styles (when FsBadge is implemented)
-- Alert styles (when FsAlert is implemented)
-- Navigation styles (when FsTabBar, FsNavigationBar are implemented)
-- Size modifier styles that can be combined with semantic styles (composable style approach)
-- Higher-fidelity interactive states (Pressed/PointerOver/Disabled parity with Bootstrap pseudo-classes)
-- Form-control focus styling parity (e.g., focus ring/outline equivalents where feasible in MAUI)
-- Card subparts (header/body/footer) once Flagstone has explicit parts or conventions
+### High Priority
+- **Shadow dark mode extraction**: Extract dark mode shadow values from `[data-bs-theme="dark"]` CSS custom properties
+- **Expand color token mapping**: Currently maps ~11 common Bootstrap variables; expand to cover more semantic colors from 127+ extracted properties
+- **Typography dark mode support**: Similar to colors, support dark mode font colors/weights
+- **XAML formatting**: Pretty-print generated XAML for human readability (currently minified)
+
+### Medium Priority
+- **Unit tests for new features**: Shadow parsing, AppThemeBinding generation, per-edge border tests, theme custom property extraction
+- **Badge styles** (when FsBadge is implemented)
+- **Alert styles** (when FsAlert is implemented)
+- **Navigation styles** (when FsTabBar, FsNavigationBar are implemented)
+- **Size modifier styles** that can be combined with semantic styles (composable style approach)
+
+### Lower Priority
+- **Higher-fidelity interactive states**: Pressed/PointerOver/Disabled parity with Bootstrap pseudo-classes
+- **Form-control focus styling parity**: Focus ring/outline equivalents where feasible in MAUI
+- **Card subparts**: Header/body/footer once Flagstone has explicit parts or conventions
+
+### Known Limitations
+- **ExCSS 4.2.3**: Doesn't parse CSS custom properties (`--bs-*`). Implemented regex-based workaround for theme blocks.
+- **Windows Shadow Rendering**: MAUI platform limitation - ignores offset, renders uniform blur. Android works correctly.
+- **CSS Variable References in Shadows**: Shadows containing CSS variables (e.g., `rgba(var(--bs-primary-rgb), 0.5)`) cannot be parsed and are skipped.

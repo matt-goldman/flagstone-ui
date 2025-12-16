@@ -201,6 +201,9 @@ dotnet run -- convert \
 - ✅ 5 spacing tokens (ExtraSmall → ExtraLarge)
 - ✅ 3 border radius tokens (Small, Medium, Large)
 - ✅ 1 border width token
+- ✅ Per-edge border tokens (BorderTopWidth, BorderRightWidth, BorderBottomWidth, BorderLeftWidth)
+- ✅ Shadow tokens (Shadow.Button, Shadow.Small, Shadow.Default with OffsetX/Y, Radius, Color, Opacity)
+- ✅ AppThemeBinding support for light/dark mode (Color.Background + Color.Background.Dark)
 - ✅ Generated complete XAML theme with FsButton styles (Default, OutlinedButton, TextButton)
 - ✅ Proper `DynamicResource` bindings to tokens
 - ✅ VisualStateGroups for Normal/Disabled states
@@ -212,6 +215,55 @@ dotnet run -- convert \
 # Result: 0 color tokens extracted
 # Cause: .btn-primary has color: var(--bs-btn-color) - ExCSS returns 0 declarations
 ```
+
+## Addendum: AppThemeBinding Implementation (December 2025)
+
+### Challenge: Bootstrap 5+ Adaptive Themes
+
+Bootstrap 5+ themes use CSS custom properties in `[data-bs-theme="light"]` and `[data-bs-theme="dark"]` blocks for adaptive theming:
+
+```css
+[data-bs-theme=light] {
+  --bs-body-bg: #ffffff;
+  --bs-body-color: #212529;
+  --bs-border-color: #dee2e6;
+}
+
+[data-bs-theme=dark] {
+  --bs-body-bg: #212529;
+  --bs-body-color: #dee2e6;
+  --bs-border-color: #000000;
+}
+```
+
+**ExCSS 4.2.3 Limitation**: Parser returns 0 declarations for rules with CSS custom properties.
+
+### Solution: Regex-Based CSS Custom Property Parser
+
+Implemented manual parsing in `BootstrapCssAnalyzer.ExtractThemeCustomProperties()`:
+
+```csharp
+// Manual parsing since ExCSS doesn't support CSS custom properties
+var lightPattern = @"(?:^|\n)\s*(?::root|(?:\:root,)?\[data-bs-theme\s*=\s*['""]?light['""]?\])[^{]*\{([^}]*)\}";
+var darkPattern = @"(?:^|\n)\s*\[data-bs-theme\s*=\s*['""]?dark['""]?\][^{]*\{([^}]*)\}";
+
+// Extract and parse --property-name: value; declarations
+```
+
+**Results** (Brite theme):
+- ✅ Extracted 127 light mode CSS custom properties
+- ✅ Extracted 67 dark mode CSS custom properties
+- ✅ Mapped to ColorToken.DarkValue
+- ✅ Generated `.Dark` suffix tokens (e.g., Color.Background.Dark)
+- ✅ Styles use AppThemeBinding syntax: `{AppThemeBinding Light={DynamicResource Color.X}, Dark={DynamicResource Color.X.Dark}}`
+
+### Implementation Details
+
+1. **Data Model**: `ColorToken.DarkValue` property stores dark mode color value
+2. **Extraction**: Regex-based parser in `BootstrapCssAnalyzer`
+3. **Mapping**: `BootstrapConverterService.MapCustomPropertiesToColorTokens()` maps common Bootstrap variables
+4. **Token Generation**: `XamlThemeGenerator.AddColorTokens()` generates both base and `.Dark` tokens
+5. **Style Generation**: `CreateColorResourceReference()` helper generates AppThemeBinding when DarkValue exists
 
 ## Related Decisions
 

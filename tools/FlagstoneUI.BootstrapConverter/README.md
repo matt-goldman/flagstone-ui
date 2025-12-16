@@ -13,7 +13,11 @@ This library provides the core functionality for parsing Bootstrap CSS/SCSS file
 - **Bottom-up variable mapping** - map Bootstrap variables to Flagstone UI tokens
 - **Hybrid mode** - combine both approaches for maximum coverage
 - **Generate XAML** token and theme files with proper ResourceDictionary structure
-- **Auto-generate dark mode** color variants
+- **Auto-generate dark mode** color variants with **AppThemeBinding support** for light/dark adaptive themes
+- **Light/dark mode CSS custom property extraction** from `[data-bs-theme="light"]` and `[data-bs-theme="dark"]` blocks (Bootstrap 5+)
+- **Shadow support** - extract and map `box-shadow` properties to MAUI Shadow resources
+- **Per-edge border support** - extract multi-value `border-width` properties (e.g., `1px 0 0 0`) to BorderTopWidth/RightWidth/BottomWidth/LeftWidth
+- **Font detection** with download URLs and registration instructions
 - **Extensible** architecture for custom mappings
 
 ## Quick Start
@@ -147,27 +151,40 @@ await File.WriteAllTextAsync("Tokens.xaml", tokensXaml);
 - **`BootstrapCssAnalyzer`**: Analyzes Bootstrap CSS classes (top-down approach)
   - `AnalyzeComponents()` - Extract computed styles from CSS classes
   - `ExtractStyle()` - Aggregate properties for a selector using CSS cascade
+  - `ExtractShadows()` - Extract box-shadow properties from component styles
+  - `ExtractThemeCustomProperties()` - Extract CSS custom properties from `[data-bs-theme="light/dark"]` blocks (regex-based workaround for ExCSS limitation)
   - Supports 25+ Bootstrap component classes (buttons, forms, cards)
 
 - **`BootstrapMapper`**: Maps Bootstrap variables/styles to Flagstone tokens
   - `MapToFlagstoneTokens()` - Convert SCSS variables to tokens (recommended for Bootstrap 5+)
   - `MapComponentStylesToTokens()` - Convert CSS component styles to tokens
-  - Handles color, typography, spacing, and border mapping
+  - `MapShadowVariables()` - Extract shadow tokens from Bootstrap shadow variables
+  - `ParseBoxShadow()` - Parse CSS box-shadow values (handles multi-shadow, inset filtering, rgba extraction)
+  - `MapPerEdgeBorders()` - Parse multi-value border-width properties to individual edge tokens
+  - Handles color, typography, spacing, border, and shadow mapping
   - Auto-generates dark mode variants
+  - AppThemeBinding support via `MapCustomPropertiesToColorTokens()` for light/dark adaptive themes
 
 - **`XamlThemeGenerator`**: Generates XAML theme files
-  - `GenerateTokensXaml()` - Generate Tokens.xaml
+  - `GenerateTokensXaml()` - Generate Tokens.xaml with color, typography, spacing, border, and shadow tokens
   - `GenerateThemeXaml()` - Generate Theme.xaml
-  - `GenerateStylesXaml()` - Generate Styles.xaml with FsButton styles
+  - `GenerateStylesXaml()` - Generate Styles.xaml with FsButton, FsCard, FsEntry, FsEditor styles
+  - `AddShadowTokens()` - Generate MAUI Shadow resources with Offset, Radius, Brush properties
+  - `CreateColorResourceReference()` - Generate AppThemeBinding syntax when dark mode values exist
   - `GenerateFilesAsync()` - Generate all theme files
+  - Supports both XAML and C# output formats
 
 ### Models
 
 - **`BootstrapVariables`**: Parsed Bootstrap variables
 - **`FlagstoneTokens`**: Mapped Flagstone tokens
+  - Colors, Typography, Spacing, BorderRadius, BorderWidth dictionaries
+  - **Shadows** dictionary (ShadowToken with OffsetX/Y, Radius, Color, Opacity)
+  - **Per-edge borders**: BorderTopWidth, BorderRightWidth, BorderBottomWidth, BorderLeftWidth
 - **`ComputedStyle`**: CSS class selector + computed property values
 - **`BootstrapComponentStyles`**: Container for all component styles (buttons, forms, cards)
-- **`ColorToken`**: Color token with optional dark variant
+- **`ColorToken`**: Color token with optional dark variant (DarkValue for AppThemeBinding)
+- **`ShadowToken`**: Shadow token with offset, radius, color, opacity (dark mode properties ready)
 - **`TypographyToken`**: Typography token (fonts, sizes)
 - **`NumericToken`**: Numeric token (spacing, borders)
 - **`ConversionOptions`**: Configuration for conversion
@@ -201,6 +218,9 @@ var tokens = mapper.MapToFlagstoneTokens(variables, options);
 - 5 spacing tokens (ExtraSmall to ExtraLarge)
 - 3 border radius tokens (Small, Medium, Large)
 - 1 border width token
+- Shadow tokens (Shadow.Button, Shadow.Small, Shadow.Default, etc.)
+- Per-edge border tokens when multi-value border-width properties exist
+- AppThemeBinding support when `[data-bs-theme="light/dark"]` blocks detected (Bootstrap 5+ themes)
 
 ### CSS Mode (Limited - Bootstrap 4 Only)
 
@@ -285,6 +305,41 @@ var tokens = MergeTokens(cssTokens, varTokens);
 | `--bs-border-width` | `BorderWidth.Default` | |
 
 > **Note**: Button-specific radius values (`btn-border-radius-*`) are preferred over generic values to ensure buttons match the theme's intended appearance. For example, the Litera theme uses fully-rounded pill-shaped buttons.
+
+### Per-Edge Borders
+
+| Bootstrap | Flagstone | Notes |
+|-----------|-----------|-------|
+| `border-width: 1px 0 0 0` | `BorderTopWidth.Default: 1`<br>`BorderRightWidth.Default: 0`<br>`BorderBottomWidth.Default: 0`<br>`BorderLeftWidth.Default: 0` | Top-only border |
+| `border-width: 1px 2px 3px 4px` | Individual edge tokens | All edges different |
+
+Multi-value `border-width` properties are parsed according to CSS standard:
+- 1 value: all edges
+- 2 values: [top/bottom] [left/right]
+- 3 values: [top] [left/right] [bottom]
+- 4 values: [top] [right] [bottom] [left]
+
+### Shadows
+
+| Bootstrap Variable | Flagstone | Example Values |
+|-------------------|-----------|----------------|
+| `$box-shadow` | `Shadow.Default` | offset: 0,8 / radius: 16 |
+| `$box-shadow-sm` | `Shadow.Small` | offset: 0,2 / radius: 4 |
+| `$box-shadow-lg` | `Shadow.Large` | offset: 0,16 / radius: 48 |
+| `$btn-box-shadow` | `Shadow.Button` | offset: 0,2 / radius: 4 |
+| `$toast-box-shadow` | `Shadow.Toast.Default` | offset: 3,3 / radius: 0 |
+
+**Shadow Properties**:
+- OffsetX, OffsetY (double)
+- Radius (blur radius)
+- Color (hex or rgb/rgba)
+- Opacity (0.0 to 1.0)
+- Dark mode variants (DarkOffsetX, DarkOffsetY, etc.) - data model ready, extraction TODO
+
+**Platform Notes**:
+- ✅ Android: Full support with correct offset and blur
+- ⚠️ iOS/macOS: Always applies some blur even when radius=0
+- ❌ Windows: Broken rendering - ignores offset, uniform blur only (MAUI platform limitation)
 
 ## Dependencies
 

@@ -63,7 +63,10 @@ The project has successfully completed the Bootstrap Converter UI app as a quali
   - ✅ Dark mode color variant generation
   - ✅ Font detection with download URLs and registration instructions
   - ✅ Output format options: XAML and C#
-  - ✅ Validated with Bootswatch themes (Darkly, Flatly, and others)
+  - ✅ Validated with Bootswatch themes (Darkly, Flatly, Brite, and others)
+  - ✅ **Per-edge border support**: BorderTopWidth/RightWidth/BottomWidth/LeftWidth extraction and generation
+  - ✅ **Shadow support**: Box-shadow extraction from variables and CSS, MAUI Shadow resource generation
+  - ✅ **AppThemeBinding for light/dark mode**: CSS custom property extraction, .Dark token generation, adaptive theme bindings
 
 - [x] **Bootstrap Converter CLI**
   - ✅ Convert command with comprehensive options
