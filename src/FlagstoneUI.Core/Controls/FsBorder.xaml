@@ -14,7 +14,7 @@
                         Stroke="{Binding Source={x:Reference BorderControl}, Path=Stroke}"
                         StrokeThickness="{Binding Source={x:Reference BorderControl}, Path=StrokeThickness}"
                         StrokeShape="{Binding Source={x:Reference BorderControl}, Path=StrokeShape}">
-                    <ContentPresenter />
+                    <ContentPresenter Content="{TemplateBinding Content}" />
                 </Border>
             </Grid>
         </ControlTemplate>

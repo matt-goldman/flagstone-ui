@@ -169,10 +169,10 @@ public partial class FsBorder : ContentView
 
 	private static void OnBorderContentChanged(BindableObject bindable, object oldValue, object newValue)
 	{
-		if (bindable is FsBorder border)
+		if (bindable is FsBorder border && newValue is View view)
 		{
 			// Sync BorderContent to Content so ControlTemplate's ContentPresenter picks it up
-			border.Content = newValue as View;
+			border.Content = view;
 		}
 	}
 	#endregion
