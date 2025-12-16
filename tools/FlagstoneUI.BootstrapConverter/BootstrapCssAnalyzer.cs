@@ -1,5 +1,6 @@
 using ExCSS;
 using FlagstoneUI.BootstrapConverter.Models;
+using System.Text.RegularExpressions;
 
 namespace FlagstoneUI.BootstrapConverter;
 
@@ -9,6 +10,47 @@ namespace FlagstoneUI.BootstrapConverter;
 /// </summary>
 public class BootstrapCssAnalyzer
 {
+	/// <summary>
+	/// Regex pattern for matching CSS theme blocks with light mode properties.
+	/// Matches :root or [data-bs-theme=light] selectors and captures the content within curly braces.
+	/// Pattern structure: (?:^|\n)\s*(?::root|(?::root,)?\[data-bs-theme\s*=\s*['""]?light['""]?\])[^{]*\{([^}]*)\}
+	/// - (?:^|\n)\s*: Match start of line or newline followed by optional whitespace
+	/// - (?::root|(?::root,)?\[data-bs-theme\s*=\s*['""]?light['""]?\]): Match :root or [data-bs-theme=light] selector
+	/// - [^{]*\{: Match any characters up to opening brace
+	/// - ([^}]*): Capture group 1 - the declarations block content
+	/// - \}: Match closing brace
+	/// </summary>
+	private static readonly Regex ThemeLightPattern = new(
+		@"(?:^|\n)\s*(?::root|(?:\:root,)?\[data-bs-theme\s*=\s*['""]?light['""]?\])[^{]*\{([^}]*)\}",
+		RegexOptions.Compiled | RegexOptions.Singleline);
+
+	/// <summary>
+	/// Regex pattern for matching CSS theme blocks with dark mode properties.
+	/// Matches [data-bs-theme=dark] selectors and captures the content within curly braces.
+	/// Pattern structure: (?:^|\n)\s*\[data-bs-theme\s*=\s*['""]?dark['""]?\][^{]*\{([^}]*)\}
+	/// - (?:^|\n)\s*: Match start of line or newline followed by optional whitespace
+	/// - \[data-bs-theme\s*=\s*['""]?dark['""]?\]: Match [data-bs-theme=dark] selector
+	/// - [^{]*\{: Match any characters up to opening brace
+	/// - ([^}]*): Capture group 1 - the declarations block content
+	/// - \}: Match closing brace
+	/// </summary>
+	private static readonly Regex ThemeDarkPattern = new(
+		@"(?:^|\n)\s*\[data-bs-theme\s*=\s*['""]?dark['""]?\][^{]*\{([^}]*)\}",
+		RegexOptions.Compiled | RegexOptions.Singleline);
+
+	/// <summary>
+	/// Regex pattern for matching CSS custom property declarations.
+	/// Matches --property-name: value; syntax and captures both the property name and value.
+	/// Pattern structure: (--[a-z0-9-]+)\s*:\s*([^;]+);
+	/// - (--[a-z0-9-]+): Capture group 1 - custom property name (starts with --, followed by lowercase letters, digits, or hyphens)
+	/// - \s*:\s*: Match colon with optional surrounding whitespace
+	/// - ([^;]+): Capture group 2 - property value (any characters except semicolon)
+	/// - ;: Match trailing semicolon
+	/// </summary>
+	private static readonly Regex CustomPropertyPattern = new(
+		@"(--[a-z0-9-]+)\s*:\s*([^;]+);",
+		RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
 	/// <summary>
 	/// Analyze Bootstrap CSS and extract component styles
 	/// </summary>
@@ -370,21 +412,15 @@ public class BootstrapCssAnalyzer
 		};
 
 		// Manual parsing since ExCSS doesn't support CSS custom properties
-		// Match theme blocks: [data-bs-theme=light] { ... } or :root { ... }
-		var lightPattern = @"(?:^|\n)\s*(?::root|(?:\:root,)?\[data-bs-theme\s*=\s*['""]?light['""]?\])[^{]*\{([^}]*)\}";
-		var darkPattern = @"(?:^|\n)\s*\[data-bs-theme\s*=\s*['""]?dark['""]?\][^{]*\{([^}]*)\}";
-		
 		// Extract light mode properties
-		foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(
-			cssContent, lightPattern, System.Text.RegularExpressions.RegexOptions.Singleline))
+		foreach (Match match in ThemeLightPattern.Matches(cssContent))
 		{
 			var declarations = match.Groups[1].Value;
 			ParseCustomProperties(declarations, result["light"]);
 		}
 
 		// Extract dark mode properties
-		foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(
-			cssContent, darkPattern, System.Text.RegularExpressions.RegexOptions.Singleline))
+		foreach (Match match in ThemeDarkPattern.Matches(cssContent))
 		{
 			var declarations = match.Groups[1].Value;
 			ParseCustomProperties(declarations, result["dark"]);
@@ -399,11 +435,7 @@ public class BootstrapCssAnalyzer
 	/// </summary>
 	private static void ParseCustomProperties(string declarationsBlock, Dictionary<string, string> target)
 	{
-		// Match CSS custom property declarations: --property-name: value;
-		var propertyPattern = @"(--[a-z0-9-]+)\s*:\s*([^;]+);";
-		
-		foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(
-			declarationsBlock, propertyPattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+		foreach (Match match in CustomPropertyPattern.Matches(declarationsBlock))
 		{
 			var propertyName = match.Groups[1].Value.Trim();
 			var propertyValue = match.Groups[2].Value.Trim();
