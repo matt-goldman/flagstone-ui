@@ -3,7 +3,7 @@
     <!-- ===== Color Tokens ===== -->
     <!-- Color.Background: Body background color -->
     <Color x:Key="Color.Background">#212529</Color>
-    <!-- Dark mode: #2A3035 -->
+    <Color x:Key="Color.Background.Dark">#212529</Color>
     <!-- Color.Dark: Dark color from Bootstrap .btn-dark -->
     <Color x:Key="Color.Dark">rgb(0, 0, 0)</Color>
     <!-- Color.Error: Error color from Bootstrap .btn-error -->
@@ -14,7 +14,7 @@
     <Color x:Key="Color.Light">rgb(233, 236, 239)</Color>
     <!-- Color.OnBackground: Body text color -->
     <Color x:Key="Color.OnBackground">#DEE2E6</Color>
-    <!-- Dark mode: #9B9EA1 -->
+    <Color x:Key="Color.OnBackground.Dark">#dee2e6</Color>
     <!-- Color.OnError: Auto-generated on-color for Color.Error -->
     <Color x:Key="Color.OnError">#000000</Color>
     <!-- Color.OnInfo: Auto-generated on-color for Color.Info -->
@@ -31,6 +31,7 @@
     <Color x:Key="Color.OnWarning">#000000</Color>
     <!-- Color.Outline: Border color -->
     <Color x:Key="Color.Outline">#000</Color>
+    <Color x:Key="Color.Outline.Dark">#000</Color>
     <!-- Color.Primary: Primary color from Bootstrap .btn-primary -->
     <Color x:Key="Color.Primary">rgb(162, 228, 54)</Color>
     <!-- Color.Secondary: Secondary color from Bootstrap .btn-secondary -->
@@ -39,7 +40,7 @@
     <Color x:Key="Color.Success">rgb(104, 211, 145)</Color>
     <!-- Color.Surface: Light surface color -->
     <Color x:Key="Color.Surface">#E9ECEF</Color>
-    <!-- Dark mode: #A3A5A7 -->
+    <Color x:Key="Color.Surface.Dark">#A3A5A7</Color>
     <!-- Color.SurfaceVariant.Dark: Dark surface variant -->
     <Color x:Key="Color.SurfaceVariant.Dark">#000</Color>
     <!-- Color.Warning: Warning color from Bootstrap .btn-warning -->

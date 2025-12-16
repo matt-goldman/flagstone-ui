@@ -249,6 +249,26 @@ public class XamlThemeGenerator
         return doc;
     }
 
+    /// <summary>
+    /// Create a resource reference for a color token, using AppThemeBinding if dark mode values exist
+    /// </summary>
+    /// <param name="tokenKey">Color token key (e.g., "Color.Primary")</param>
+    /// <param name="tokens">Flagstone tokens to check for dark mode values</param>
+    /// <returns>XAML value string - either DynamicResource or AppThemeBinding</returns>
+    private string CreateColorResourceReference(string tokenKey, FlagstoneTokens tokens)
+    {
+        // Check if this token has a dark mode value
+        if (tokens.Colors.TryGetValue(tokenKey, out var colorToken) && 
+            !string.IsNullOrWhiteSpace(colorToken.DarkValue))
+        {
+            // Use AppThemeBinding
+            return $"{{AppThemeBinding Light={{DynamicResource {tokenKey}}}, Dark={{DynamicResource {tokenKey}.Dark}}}}";
+        }
+        
+        // Use simple DynamicResource
+        return $"{{DynamicResource {tokenKey}}}";
+    }
+
     private void AddColorTokens(XElement root, Dictionary<string, ColorToken> colors, ConversionOptions options)
     {
         var mauiNs = root.Name.Namespace;
@@ -264,17 +284,21 @@ public class XamlThemeGenerator
                 root.Add(new XComment($" {token.Key}: {token.Purpose} "));
             }
 
+            // Add light mode color
             var colorElement = new XElement(mauiNs + "Color",
                 new XAttribute(xNs + "Key", token.Key),
                 token.Value
             );
-
             root.Add(colorElement);
 
-            // Add dark mode value as comment if available
-            if (options.IncludeComments && !string.IsNullOrWhiteSpace(token.DarkValue))
+            // Add dark mode color if available
+            if (!string.IsNullOrWhiteSpace(token.DarkValue))
             {
-                root.Add(new XComment($" Dark mode: {token.DarkValue} "));
+                var darkColorElement = new XElement(mauiNs + "Color",
+                    new XAttribute(xNs + "Key", $"{token.Key}.Dark"),
+                    token.DarkValue
+                );
+                root.Add(darkColorElement);
             }
         }
 
@@ -548,11 +572,11 @@ public class XamlThemeGenerator
         );
 
         // Background and text colors
-        defaultStyle.Add(CreateSetter(mauiNs, "BackgroundColor", "{DynamicResource Color.Primary}"));
+        defaultStyle.Add(CreateSetter(mauiNs, "BackgroundColor", CreateColorResourceReference("Color.Primary", tokens)));
         
         // Try to find OnPrimary color, fallback to white
         var textColor = tokens.Colors.ContainsKey("Color.OnPrimary") 
-            ? "{DynamicResource Color.OnPrimary}" 
+            ? CreateColorResourceReference("Color.OnPrimary", tokens)
             : "#FFFFFF";
         defaultStyle.Add(CreateSetter(mauiNs, "TextColor", textColor));
 
@@ -610,12 +634,12 @@ public class XamlThemeGenerator
         );
 
         outlinedStyle.Add(CreateSetter(mauiNs, "BackgroundColor", "Transparent"));
-        outlinedStyle.Add(CreateSetter(mauiNs, "TextColor", "{DynamicResource Color.Primary}"));
+        outlinedStyle.Add(CreateSetter(mauiNs, "TextColor", CreateColorResourceReference("Color.Primary", tokens)));
         
         // Border
         var borderColor = tokens.Colors.ContainsKey("Color.Outline") 
-            ? "{DynamicResource Color.Outline}" 
-            : "{DynamicResource Color.Primary}";
+            ? CreateColorResourceReference("Color.Outline", tokens)
+            : CreateColorResourceReference("Color.Primary", tokens);
         outlinedStyle.Add(CreateSetter(mauiNs, "BorderColor", borderColor));
         
         if (tokens.BorderWidth.ContainsKey("BorderWidth.Thin"))
@@ -1204,11 +1228,11 @@ public class XamlThemeGenerator
         // Bootstrap cards are typically surface containers with borders
         if (tokens.Colors.ContainsKey("Color.Background"))
         {
-            baseStyle.Add(CreateSetter(mauiNs, "BackgroundColor", "{DynamicResource Color.Background}"));
+            baseStyle.Add(CreateSetter(mauiNs, "BackgroundColor", CreateColorResourceReference("Color.Background", tokens)));
         }
         if (tokens.Colors.ContainsKey("Color.Outline"))
         {
-            baseStyle.Add(CreateSetter(mauiNs, "BorderColor", "{DynamicResource Color.Outline}"));
+            baseStyle.Add(CreateSetter(mauiNs, "BorderColor", CreateColorResourceReference("Color.Outline", tokens)));
         }
         baseStyle.Add(CreateSetter(mauiNs, "BorderWidth", GetPreferredBorderWidth(tokens)));
 

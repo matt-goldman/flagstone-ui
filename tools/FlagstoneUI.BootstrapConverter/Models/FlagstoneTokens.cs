@@ -145,29 +145,54 @@ public class ShadowToken
     public required string Key { get; set; }
 
     /// <summary>
-    /// Horizontal offset
+    /// Horizontal offset (light mode)
     /// </summary>
     public double OffsetX { get; set; }
 
     /// <summary>
-    /// Vertical offset
+    /// Vertical offset (light mode)
     /// </summary>
     public double OffsetY { get; set; }
 
     /// <summary>
-    /// Blur radius
+    /// Blur radius (light mode)
     /// </summary>
     public double Radius { get; set; }
 
     /// <summary>
-    /// Shadow color (hex or rgba)
+    /// Shadow color (hex or rgba, light mode)
     /// </summary>
     public required string Color { get; set; }
 
     /// <summary>
-    /// Shadow opacity (0-1)
+    /// Shadow opacity (0-1, light mode)
     /// </summary>
     public double Opacity { get; set; } = 1.0;
+
+    /// <summary>
+    /// Dark mode horizontal offset (optional)
+    /// </summary>
+    public double? DarkOffsetX { get; set; }
+
+    /// <summary>
+    /// Dark mode vertical offset (optional)
+    /// </summary>
+    public double? DarkOffsetY { get; set; }
+
+    /// <summary>
+    /// Dark mode blur radius (optional)
+    /// </summary>
+    public double? DarkRadius { get; set; }
+
+    /// <summary>
+    /// Dark mode shadow color (optional)
+    /// </summary>
+    public string? DarkColor { get; set; }
+
+    /// <summary>
+    /// Dark mode shadow opacity (optional)
+    /// </summary>
+    public double? DarkOpacity { get; set; }
 
     /// <summary>
     /// Purpose/description of this token

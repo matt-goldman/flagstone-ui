@@ -350,4 +350,66 @@ public class BootstrapCssAnalyzer
 
 		return typography;
 	}
+
+	/// <summary>
+	/// Extract CSS custom properties from :root and theme-specific blocks
+	/// </summary>
+	/// <param name="cssContent">Bootstrap CSS content</param>
+	/// <returns>Dictionary with 'light' and 'dark' theme custom properties</returns>
+	/// <remarks>
+	/// NOTE: ExCSS 4.2.3 does not parse CSS custom properties (--*), so we use manual regex parsing
+	/// </remarks>
+	public Dictionary<string, Dictionary<string, string>> ExtractThemeCustomProperties(string cssContent)
+	{
+		ConverterLogger.Info("Extracting theme-specific CSS custom properties...");
+
+		var result = new Dictionary<string, Dictionary<string, string>>
+		{
+			["light"] = [],
+			["dark"] = []
+		};
+
+		// Manual parsing since ExCSS doesn't support CSS custom properties
+		// Match theme blocks: [data-bs-theme=light] { ... } or :root { ... }
+		var lightPattern = @"(?:^|\n)\s*(?::root|(?:\:root,)?\[data-bs-theme\s*=\s*['""]?light['""]?\])[^{]*\{([^}]*)\}";
+		var darkPattern = @"(?:^|\n)\s*\[data-bs-theme\s*=\s*['""]?dark['""]?\][^{]*\{([^}]*)\}";
+		
+		// Extract light mode properties
+		foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(
+			cssContent, lightPattern, System.Text.RegularExpressions.RegexOptions.Singleline))
+		{
+			var declarations = match.Groups[1].Value;
+			ParseCustomProperties(declarations, result["light"]);
+		}
+
+		// Extract dark mode properties
+		foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(
+			cssContent, darkPattern, System.Text.RegularExpressions.RegexOptions.Singleline))
+		{
+			var declarations = match.Groups[1].Value;
+			ParseCustomProperties(declarations, result["dark"]);
+		}
+
+		ConverterLogger.Info($"Extracted {result["light"].Count} light mode properties, {result["dark"].Count} dark mode properties");
+		return result;
+	}
+
+	/// <summary>
+	/// Parse CSS custom properties from a declarations block
+	/// </summary>
+	private static void ParseCustomProperties(string declarationsBlock, Dictionary<string, string> target)
+	{
+		// Match CSS custom property declarations: --property-name: value;
+		var propertyPattern = @"(--[a-z0-9-]+)\s*:\s*([^;]+);";
+		
+		foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(
+			declarationsBlock, propertyPattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+		{
+			var propertyName = match.Groups[1].Value.Trim();
+			var propertyValue = match.Groups[2].Value.Trim();
+			
+			target[propertyName] = propertyValue;
+			ConverterLogger.Debug($"    {propertyName}: {propertyValue}");
+		}
+	}
 }

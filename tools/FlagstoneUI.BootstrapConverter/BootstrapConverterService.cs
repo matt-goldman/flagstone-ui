@@ -101,6 +101,12 @@ public class BootstrapConverterService
 			fontInfo = fontParser.ParseFonts(request.Inputs, [.. cssContents]);
 		}
 
+		// Extract and apply theme-specific custom properties (light/dark mode)
+		if (cssContents.Count > 0)
+		{
+			ApplyThemeCustomProperties(tokens, cssContents);
+		}
+
 		// Extract theme name
 		var themeName = ExtractThemeName(request.Inputs[0]);
 
@@ -265,6 +271,98 @@ public class BootstrapConverterService
 			if (!target.Shadows.ContainsKey(key))
 			{
 				target.Shadows[key] = value;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Extract theme-specific CSS custom properties and apply to tokens (light/dark mode)
+	/// </summary>
+	private static void ApplyThemeCustomProperties(FlagstoneTokens tokens, List<string> cssContents)
+	{
+		ConverterLogger.Info("Extracting theme-specific CSS custom properties for light/dark mode...");
+		
+		var analyzer = new BootstrapCssAnalyzer();
+		var allThemeProps = new Dictionary<string, Dictionary<string, string>>
+		{
+			["light"] = [],
+			["dark"] = []
+		};
+
+		// Extract from all CSS files
+		foreach (var css in cssContents)
+		{
+			var themeProps = analyzer.ExtractThemeCustomProperties(css);
+			
+			// Merge light mode properties
+			foreach (var (key, value) in themeProps["light"])
+			{
+				allThemeProps["light"][key] = value;
+			}
+			
+			// Merge dark mode properties
+			foreach (var (key, value) in themeProps["dark"])
+			{
+				allThemeProps["dark"][key] = value;
+			}
+		}
+
+		// Map CSS custom properties to color tokens
+		MapCustomPropertiesToColorTokens(tokens, allThemeProps);
+		
+		ConverterLogger.Info($"Applied {allThemeProps["light"].Count} light mode, {allThemeProps["dark"].Count} dark mode custom properties");
+	}
+
+	/// <summary>
+	/// Map Bootstrap CSS custom properties to FlagstoneUI color tokens with dark mode values
+	/// </summary>
+	private static void MapCustomPropertiesToColorTokens(FlagstoneTokens tokens, Dictionary<string, Dictionary<string, string>> themeProps)
+	{
+		var lightProps = themeProps["light"];
+		var darkProps = themeProps["dark"];
+
+		// Map common color custom properties
+		var colorMappings = new Dictionary<string, string>
+		{
+			["--bs-primary"] = "Color.Primary",
+			["--bs-secondary"] = "Color.Secondary",
+			["--bs-success"] = "Color.Success",
+			["--bs-danger"] = "Color.Error",
+			["--bs-warning"] = "Color.Warning",
+			["--bs-info"] = "Color.Info",
+			["--bs-light"] = "Color.Light",
+			["--bs-dark"] = "Color.Dark",
+			["--bs-body-bg"] = "Color.Background",
+			["--bs-body-color"] = "Color.OnBackground",
+			["--bs-border-color"] = "Color.Outline"
+		};
+
+		foreach (var (cssVar, tokenKey) in colorMappings)
+		{
+			if (lightProps.TryGetValue(cssVar, out var lightValue))
+			{
+				// Update existing token or create new one
+				if (tokens.Colors.TryGetValue(tokenKey, out var existingToken))
+				{
+					// Check if dark mode value exists
+					if (darkProps.TryGetValue(cssVar, out var darkValue))
+					{
+						existingToken.DarkValue = darkValue;
+						ConverterLogger.Debug($"Updated {tokenKey} with dark mode value: {darkValue}");
+					}
+				}
+				else
+				{
+					// Create new token
+					tokens.Colors[tokenKey] = new ColorToken
+					{
+						Key = tokenKey,
+						Value = lightValue,
+						DarkValue = darkProps.TryGetValue(cssVar, out var darkValue) ? darkValue : null,
+						Purpose = $"Extracted from {cssVar}"
+					};
+					ConverterLogger.Debug($"Created {tokenKey} from {cssVar}");
+				}
 			}
 		}
 	}
