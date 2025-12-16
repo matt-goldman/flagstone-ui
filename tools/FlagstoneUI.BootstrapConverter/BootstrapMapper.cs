@@ -315,7 +315,9 @@ public class BootstrapMapper
 
 		// Clean up and ensure proper casing
 		var parts = normalized.Split('.', StringSplitOptions.RemoveEmptyEntries);
-		var capitalizedParts = parts.Select(p => char.ToUpper(p[0], CultureInfo.InvariantCulture) + p.Substring(1).ToLower(CultureInfo.InvariantCulture));
+		var capitalizedParts = parts
+			.Where(p => !string.IsNullOrEmpty(p))
+			.Select(p => char.ToUpper(p[0], CultureInfo.InvariantCulture) + p.Substring(1).ToLower(CultureInfo.InvariantCulture));
 		var result = string.Join(".", capitalizedParts);
 
 		return result.StartsWith("Shadow.", StringComparison.Ordinal) ? result : $"Shadow.{result}";
