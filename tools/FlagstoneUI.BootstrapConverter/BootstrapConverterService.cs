@@ -9,6 +9,24 @@ namespace FlagstoneUI.BootstrapConverter;
 public class BootstrapConverterService
 {
 	/// <summary>
+	/// Mapping of Bootstrap CSS custom properties to FlagstoneUI color tokens
+	/// </summary>
+	private static readonly Dictionary<string, string> ColorMappings = new()
+	{
+		["--bs-primary"] = "Color.Primary",
+		["--bs-secondary"] = "Color.Secondary",
+		["--bs-success"] = "Color.Success",
+		["--bs-danger"] = "Color.Error",
+		["--bs-warning"] = "Color.Warning",
+		["--bs-info"] = "Color.Info",
+		["--bs-light"] = "Color.Light",
+		["--bs-dark"] = "Color.Dark",
+		["--bs-body-bg"] = "Color.Background",
+		["--bs-body-color"] = "Color.OnBackground",
+		["--bs-border-color"] = "Color.Outline"
+	};
+
+	/// <summary>
 	/// Convert Bootstrap theme to Flagstone tokens
 	/// </summary>
 	/// <param name="request">Conversion request configuration</param>
@@ -321,23 +339,7 @@ public class BootstrapConverterService
 		var lightProps = themeProps["light"];
 		var darkProps = themeProps["dark"];
 
-		// Map common color custom properties
-		var colorMappings = new Dictionary<string, string>
-		{
-			["--bs-primary"] = "Color.Primary",
-			["--bs-secondary"] = "Color.Secondary",
-			["--bs-success"] = "Color.Success",
-			["--bs-danger"] = "Color.Error",
-			["--bs-warning"] = "Color.Warning",
-			["--bs-info"] = "Color.Info",
-			["--bs-light"] = "Color.Light",
-			["--bs-dark"] = "Color.Dark",
-			["--bs-body-bg"] = "Color.Background",
-			["--bs-body-color"] = "Color.OnBackground",
-			["--bs-border-color"] = "Color.Outline"
-		};
-
-		foreach (var (cssVar, tokenKey) in colorMappings)
+		foreach (var (cssVar, tokenKey) in ColorMappings)
 		{
 			if (lightProps.TryGetValue(cssVar, out var lightValue))
 			{
