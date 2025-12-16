@@ -1,5 +1,4 @@
-﻿using MauiBorder = Microsoft.Maui.Controls.Border;
-using Microsoft.Maui.Controls.Shapes;
+﻿using Microsoft.Maui.Controls.Shapes;
 
 namespace FlagstoneUI.Core.Controls;
 
@@ -16,9 +15,8 @@ namespace FlagstoneUI.Core.Controls;
 /// </remarks>
 public partial class FsBorder : ContentView
 {
-	private readonly Grid _layoutRoot;
-	private readonly MauiBorder _innerBorder;
-	private readonly ContentPresenter _contentPresenter;
+	private Grid? _layoutRoot;
+	private Border? _innerBorder;
 	private Line? _topLine;
 	private Line? _rightLine;
 	private Line? _bottomLine;
@@ -26,25 +24,16 @@ public partial class FsBorder : ContentView
 
 	public FsBorder()
 	{
-		_layoutRoot = [];
-		_innerBorder = new MauiBorder();
-		_contentPresenter = new ContentPresenter();
+		InitializeComponent();
+	}
 
-		_innerBorder.Content = _contentPresenter;
-		_layoutRoot.Children.Add(_innerBorder);
+	protected override void OnApplyTemplate()
+	{
+		base.OnApplyTemplate();
 
-		Content = _layoutRoot;
-
-		// Bind content presenter to this control's content
-		_contentPresenter.SetBinding(ContentPresenter.ContentProperty, new Binding(nameof(BorderContent), source: this));
-		_innerBorder.SetBinding(VisualElement.BackgroundProperty, new Binding(nameof(Background), source: this));
-		_innerBorder.SetBinding(MauiBorder.PaddingProperty, new Binding(nameof(Padding), source: this));
-		_innerBorder.SetBinding(MauiBorder.StrokeShapeProperty, new Binding(nameof(StrokeShape), source: this));
-		
-		// Bind uniform border properties to inner border
-		// These will be disabled when per-edge mode is active
-		_innerBorder.SetBinding(MauiBorder.StrokeProperty, new Binding(nameof(Stroke), source: this));
-		_innerBorder.SetBinding(MauiBorder.StrokeThicknessProperty, new Binding(nameof(StrokeThickness), source: this));
+		// Get template children
+		_layoutRoot = GetTemplateChild("LayoutRoot") as Grid;
+		_innerBorder = GetTemplateChild("InnerBorder") as Border;
 	}
 
 	protected override void OnSizeAllocated(double width, double height)
@@ -59,6 +48,8 @@ public partial class FsBorder : ContentView
 
 	private void UpdateBorderLines(double width, double height)
 	{
+		if (_layoutRoot == null) return;
+
 		var strokeCap = BorderStrokeCap;
 
 		// Top border
@@ -150,7 +141,9 @@ public partial class FsBorder : ContentView
 	{
 		return new Line
 		{
-			StrokeLineCap = strokeCap
+			StrokeLineCap = strokeCap,
+			InputTransparent = true,
+			ZIndex = -1  // Render behind content (use negative ZIndex)
 		};
 	}
 
@@ -162,7 +155,8 @@ public partial class FsBorder : ContentView
 		nameof(BorderContent),
 		typeof(View),
 		typeof(FsBorder),
-		null);
+		null,
+		propertyChanged: OnBorderContentChanged);
 
 	/// <summary>
 	/// Gets or sets the content displayed within the border.
@@ -171,6 +165,15 @@ public partial class FsBorder : ContentView
 	{
 		get => (View?)GetValue(BorderContentProperty);
 		set => SetValue(BorderContentProperty, value);
+	}
+
+	private static void OnBorderContentChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is FsBorder border && newValue is View view)
+		{
+			// Sync BorderContent to Content so ControlTemplate's ContentPresenter picks it up
+			border.Content = view;
+		}
 	}
 	#endregion
 
@@ -597,8 +600,11 @@ public partial class FsBorder : ContentView
 		if (isPerEdgeMode)
 		{
 			// Per-edge mode: disable uniform border stroke
-			_innerBorder.Stroke = Colors.Transparent;
-			_innerBorder.StrokeThickness = 0;
+			if (_innerBorder != null)
+			{
+				_innerBorder.Stroke = Colors.Transparent;
+				_innerBorder.StrokeThickness = 0;
+			}
 		}
 		else
 		{

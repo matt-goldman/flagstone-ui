@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:FlagstoneUI.Core.Controls"
+             x:DataType="controls:FsBorder"
+             x:Class="FlagstoneUI.Core.Controls.FsBorder"
+             x:Name="BorderControl">
+    <ContentView.ControlTemplate>
+        <ControlTemplate>
+            <Grid x:Name="LayoutRoot">
+                <Border x:Name="InnerBorder"
+                        Background="{Binding Source={x:Reference BorderControl}, Path=Background}"
+                        Padding="{Binding Source={x:Reference BorderControl}, Path=Padding}"
+                        Stroke="{Binding Source={x:Reference BorderControl}, Path=Stroke}"
+                        StrokeThickness="{Binding Source={x:Reference BorderControl}, Path=StrokeThickness}"
+                        StrokeShape="{Binding Source={x:Reference BorderControl}, Path=StrokeShape}">
+                    <ContentPresenter Content="{TemplateBinding Content}" />
+                </Border>
+            </Grid>
+        </ControlTemplate>
+    </ContentView.ControlTemplate>
+</ContentView>
