@@ -140,6 +140,11 @@ public record ConversionStatistics
 	public int SpacingTokens { get; init; }
 	public int BorderRadiusTokens { get; init; }
 	public int BorderWidthTokens { get; init; }
+	public int BorderTopWidthTokens { get; init; }
+	public int BorderRightWidthTokens { get; init; }
+	public int BorderBottomWidthTokens { get; init; }
+	public int BorderLeftWidthTokens { get; init; }
+	public int ShadowTokens { get; init; }
 	public int ComponentStylesExtracted { get; init; }
 	public int VariablesParsed { get; init; }
 }

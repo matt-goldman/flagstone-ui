@@ -63,7 +63,10 @@ The project has successfully completed the Bootstrap Converter UI app as a quali
   - ✅ Dark mode color variant generation
   - ✅ Font detection with download URLs and registration instructions
   - ✅ Output format options: XAML and C#
-  - ✅ Validated with Bootswatch themes (Darkly, Flatly, and others)
+  - ✅ Validated with Bootswatch themes (Darkly, Flatly, Brite, and others)
+  - ✅ **Per-edge border support**: BorderTopWidth/RightWidth/BottomWidth/LeftWidth extraction and generation
+  - ✅ **Shadow support**: Box-shadow extraction from variables and CSS, MAUI Shadow resource generation
+  - ✅ **AppThemeBinding for light/dark mode**: CSS custom property extraction, .Dark token generation, adaptive theme bindings
 
 - [x] **Bootstrap Converter CLI**
   - ✅ Convert command with comprehensive options
@@ -91,62 +94,61 @@ The project has successfully completed the Bootstrap Converter UI app as a quali
   - ✅ Font handling documentation
   - ✅ Token mapping reference
 
-### Next Milestone: FlagstoneUI MCP Server 🚀
+### Next Milestone: Agent Guidance & Developer Experience 🚀
 
 **Target**: Q1 2026
 
-**Purpose**: Comprehensive MCP server for agent-assisted FlagstoneUI development
+**Purpose**: Enable AI-assisted and human developer productivity with FlagstoneUI
 
-**Goals**:
-1. Enable AI agents to generate complete FlagstoneUI interfaces
-2. Provide theme conversion tools (Bootstrap, future: Tailwind)
-3. Make FlagstoneUI documentation accessible to agents
-4. Show examples of converted themes
-5. Assist with theme analysis and validation
+**Strategy Decision**: AGENTS.md documentation file instead of MCP server (see ADR009)
 
-**Planned Tools**:
+**Rationale**:
+- ✅ Works with ANY AI tool (not just MCP-compatible clients)
+- ✅ Lives in repo (discoverable, version-controlled)
+- ✅ Can be included in .NET templates
+- ✅ Zero infrastructure to maintain
+- ✅ Easier to update as patterns evolve
 
-- [ ] **Bootstrap Converter Tool**
-  - Integrate existing Bootstrap converter library
-  - Support all conversion options (formats, strategies, dark mode)
-  - Return complete theme files (Tokens, Styles, Theme, code-behind)
+**Planned Deliverables**:
+
+- [ ] **AGENTS.md Documentation**
+  - Architecture overview (token-first design, available controls)
+  - Code generation patterns (semantic color usage, token bindings)
+  - Real code examples of common patterns
+  - Available CLI tools (Bootstrap converter, Tailwind palette converter)
+  - DO/DON'T anti-patterns
+  - Integration guidance (Crosswind, design tools)
   
-- [ ] **Documentation Tool**
-  - Provide access to tokens.md (token reference)
-  - Provide access to control-implementation-guide.md
-  - Provide access to architecture.md
-  - Provide access to theming-guide.md
-  - Search documentation by topic
-  - Return comprehensive context for agents
+- [ ] **Bootstrap Converter as .NET CLI Tool**
+  - Already complete as library and CLI
+  - Publish as global tool: `dotnet tool install -g flagstone-bootstrap`
+  - Update documentation for global tool usage
+  
+- [ ] **.NET Project Templates**
+  - FlagstoneUI app template with sample content
+  - Include AGENTS.md
+  - Opinionated patterns and best practices
+  - Integration with broader full-stack solution
 
-- [ ] **Example Provider Tool**
-  - Show Bootstrap → FlagstoneUI conversion examples
-  - Demonstrate control usage patterns
-  - Provide token binding examples
-  - Help agents learn FlagstoneUI patterns
+**Future Considerations**:
 
-- [ ] **Theme Analyzer Tool**
-  - Analyze existing FlagstoneUI themes
-  - Validate token completeness
-  - Suggest missing tokens
-  - Compare themes
-
-- [ ] **UI Generator Tool** (Future)
-  - Generate XAML pages from natural language descriptions
-  - Use appropriate FlagstoneUI controls
-  - Apply proper token bindings
-  - Follow best practices
+- [ ] **Figma → FlagstoneUI Converter** (Q2 2026)
+  - Convert Figma design tokens to FlagstoneUI themes
+  - Bridge designer → developer workflow
+  - Figma is industry-standard design tool
+  - More valuable than Bootstrap converter for real-world design systems
+  - Implementation: Figma Plugin + .NET CLI tool, or Figma API client
+  
+- [ ] **Crosswind Integration**
+  - Document integration patterns in AGENTS.md
+  - Leverage Steven Thewissen's Tailwind-to-MAUI work
+  - Complementary to FlagstoneUI (utility classes + design tokens)
 
 **Benefits**:
-- ✅ Vibe-code FlagstoneUI interfaces through AI
-- ✅ Rapid theme conversion and customization
-- ✅ Comprehensive system understanding for agents
-- ✅ Learning through examples
-- ✅ Accelerated development workflow
-
-**Post-Q1 Priorities**:
-
-1. UI Generator tool for complete page generation
-2. Tailwind → XAML MCP tool
+- ✅ Universal AI tool compatibility
+- ✅ Template-based rapid project setup
+- ✅ Designer-developer workflow (Figma converter)
+- ✅ Comprehensive guidance for humans and AI
+- ✅ No infrastructure maintenance burden
 3. Theme marketplace integration
 4. VS Code extension (MCP-based)

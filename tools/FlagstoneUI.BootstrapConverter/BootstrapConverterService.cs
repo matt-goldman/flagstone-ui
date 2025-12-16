@@ -9,6 +9,24 @@ namespace FlagstoneUI.BootstrapConverter;
 public class BootstrapConverterService
 {
 	/// <summary>
+	/// Mapping of Bootstrap CSS custom properties to FlagstoneUI color tokens
+	/// </summary>
+	private static readonly Dictionary<string, string> ColorMappings = new()
+	{
+		["--bs-primary"] = "Color.Primary",
+		["--bs-secondary"] = "Color.Secondary",
+		["--bs-success"] = "Color.Success",
+		["--bs-danger"] = "Color.Error",
+		["--bs-warning"] = "Color.Warning",
+		["--bs-info"] = "Color.Info",
+		["--bs-light"] = "Color.Light",
+		["--bs-dark"] = "Color.Dark",
+		["--bs-body-bg"] = "Color.Background",
+		["--bs-body-color"] = "Color.OnBackground",
+		["--bs-border-color"] = "Color.Outline"
+	};
+
+	/// <summary>
 	/// Convert Bootstrap theme to Flagstone tokens
 	/// </summary>
 	/// <param name="request">Conversion request configuration</param>
@@ -101,6 +119,12 @@ public class BootstrapConverterService
 			fontInfo = fontParser.ParseFonts(request.Inputs, [.. cssContents]);
 		}
 
+		// Extract and apply theme-specific custom properties (light/dark mode)
+		if (cssContents.Count > 0)
+		{
+			ApplyThemeCustomProperties(tokens, cssContents);
+		}
+
 		// Extract theme name
 		var themeName = ExtractThemeName(request.Inputs[0]);
 
@@ -112,6 +136,11 @@ public class BootstrapConverterService
 			SpacingTokens = tokens.Spacing.Count,
 			BorderRadiusTokens = tokens.BorderRadius.Count,
 			BorderWidthTokens = tokens.BorderWidth.Count,
+			BorderTopWidthTokens = tokens.BorderTopWidth.Count,
+			BorderRightWidthTokens = tokens.BorderRightWidth.Count,
+			BorderBottomWidthTokens = tokens.BorderBottomWidth.Count,
+			BorderLeftWidthTokens = tokens.BorderLeftWidth.Count,
+			ShadowTokens = tokens.Shadows.Count,
 			ComponentStylesExtracted = componentStyles != null
 				? typeof(BootstrapComponentStyles).GetProperties().Count(p => p.GetValue(componentStyles) != null)
 				: 0,
@@ -220,6 +249,124 @@ public class BootstrapConverterService
 				target.BorderWidth[key] = value;
 			}
 		}
+
+		// Merge per-edge border widths
+		foreach (var (key, value) in source.BorderTopWidth)
+		{
+			if (!target.BorderTopWidth.ContainsKey(key))
+			{
+				target.BorderTopWidth[key] = value;
+			}
+		}
+
+		foreach (var (key, value) in source.BorderRightWidth)
+		{
+			if (!target.BorderRightWidth.ContainsKey(key))
+			{
+				target.BorderRightWidth[key] = value;
+			}
+		}
+
+		foreach (var (key, value) in source.BorderBottomWidth)
+		{
+			if (!target.BorderBottomWidth.ContainsKey(key))
+			{
+				target.BorderBottomWidth[key] = value;
+			}
+		}
+
+		foreach (var (key, value) in source.BorderLeftWidth)
+		{
+			if (!target.BorderLeftWidth.ContainsKey(key))
+			{
+				target.BorderLeftWidth[key] = value;
+			}
+		}
+
+		// Merge shadows
+		foreach (var (key, value) in source.Shadows)
+		{
+			if (!target.Shadows.ContainsKey(key))
+			{
+				target.Shadows[key] = value;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Extract theme-specific CSS custom properties and apply to tokens (light/dark mode)
+	/// </summary>
+	private static void ApplyThemeCustomProperties(FlagstoneTokens tokens, List<string> cssContents)
+	{
+		ConverterLogger.Info("Extracting theme-specific CSS custom properties for light/dark mode...");
+		
+		var analyzer = new BootstrapCssAnalyzer();
+		var allThemeProps = new Dictionary<string, Dictionary<string, string>>
+		{
+			["light"] = [],
+			["dark"] = []
+		};
+
+		// Extract from all CSS files
+		foreach (var css in cssContents)
+		{
+			var themeProps = analyzer.ExtractThemeCustomProperties(css);
+			
+			// Merge light mode properties
+			foreach (var (key, value) in themeProps["light"])
+			{
+				allThemeProps["light"][key] = value;
+			}
+			
+			// Merge dark mode properties
+			foreach (var (key, value) in themeProps["dark"])
+			{
+				allThemeProps["dark"][key] = value;
+			}
+		}
+
+		// Map CSS custom properties to color tokens
+		MapCustomPropertiesToColorTokens(tokens, allThemeProps);
+		
+		ConverterLogger.Info($"Applied {allThemeProps["light"].Count} light mode, {allThemeProps["dark"].Count} dark mode custom properties");
+	}
+
+	/// <summary>
+	/// Map Bootstrap CSS custom properties to FlagstoneUI color tokens with dark mode values
+	/// </summary>
+	private static void MapCustomPropertiesToColorTokens(FlagstoneTokens tokens, Dictionary<string, Dictionary<string, string>> themeProps)
+	{
+		var lightProps = themeProps["light"];
+		var darkProps = themeProps["dark"];
+
+		foreach (var (cssVar, tokenKey) in ColorMappings)
+		{
+			if (lightProps.TryGetValue(cssVar, out var lightValue))
+			{
+				// Update existing token or create new one
+				if (tokens.Colors.TryGetValue(tokenKey, out var existingToken))
+				{
+					// Check if dark mode value exists
+					if (darkProps.TryGetValue(cssVar, out var darkValue))
+					{
+						existingToken.DarkValue = darkValue;
+						ConverterLogger.Debug($"Updated {tokenKey} with dark mode value: {darkValue}");
+					}
+				}
+				else
+				{
+					// Create new token
+					tokens.Colors[tokenKey] = new ColorToken
+					{
+						Key = tokenKey,
+						Value = lightValue,
+						DarkValue = darkProps.TryGetValue(cssVar, out var darkValue) ? darkValue : null,
+						Purpose = $"Extracted from {cssVar}"
+					};
+					ConverterLogger.Debug($"Created {tokenKey} from {cssVar}");
+				}
+			}
+		}
 	}
 }
 
@@ -295,6 +442,11 @@ public record ConversionStatistics
 	public int SpacingTokens { get; init; }
 	public int BorderRadiusTokens { get; init; }
 	public int BorderWidthTokens { get; init; }
+	public int BorderTopWidthTokens { get; init; }
+	public int BorderRightWidthTokens { get; init; }
+	public int BorderBottomWidthTokens { get; init; }
+	public int BorderLeftWidthTokens { get; init; }
+	public int ShadowTokens { get; init; }
 	public int ComponentStylesExtracted { get; init; }
 	public int VariablesParsed { get; init; }
 }

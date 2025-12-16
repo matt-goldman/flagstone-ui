@@ -1,5 +1,6 @@
 using ExCSS;
 using FlagstoneUI.BootstrapConverter.Models;
+using System.Text.RegularExpressions;
 
 namespace FlagstoneUI.BootstrapConverter;
 
@@ -9,6 +10,47 @@ namespace FlagstoneUI.BootstrapConverter;
 /// </summary>
 public class BootstrapCssAnalyzer
 {
+	/// <summary>
+	/// Regex pattern for matching CSS theme blocks with light mode properties.
+	/// Matches :root or [data-bs-theme=light] selectors and captures the content within curly braces.
+	/// Pattern structure: (?:^|\n)\s*(?::root|(?::root,)?\[data-bs-theme\s*=\s*['""]?light['""]?\])[^{]*\{([^}]*)\}
+	/// - (?:^|\n)\s*: Match start of line or newline followed by optional whitespace
+	/// - (?::root|(?::root,)?\[data-bs-theme\s*=\s*['""]?light['""]?\]): Match :root or [data-bs-theme=light] selector
+	/// - [^{]*\{: Match any characters up to opening brace
+	/// - ([^}]*): Capture group 1 - the declarations block content
+	/// - \}: Match closing brace
+	/// </summary>
+	private static readonly Regex ThemeLightPattern = new(
+		@"(?:^|\n)\s*(?::root|(?:\:root,)?\[data-bs-theme\s*=\s*['""]?light['""]?\])[^{]*\{([^}]*)\}",
+		RegexOptions.Compiled | RegexOptions.Singleline);
+
+	/// <summary>
+	/// Regex pattern for matching CSS theme blocks with dark mode properties.
+	/// Matches [data-bs-theme=dark] selectors and captures the content within curly braces.
+	/// Pattern structure: (?:^|\n)\s*\[data-bs-theme\s*=\s*['""]?dark['""]?\][^{]*\{([^}]*)\}
+	/// - (?:^|\n)\s*: Match start of line or newline followed by optional whitespace
+	/// - \[data-bs-theme\s*=\s*['""]?dark['""]?\]: Match [data-bs-theme=dark] selector
+	/// - [^{]*\{: Match any characters up to opening brace
+	/// - ([^}]*): Capture group 1 - the declarations block content
+	/// - \}: Match closing brace
+	/// </summary>
+	private static readonly Regex ThemeDarkPattern = new(
+		@"(?:^|\n)\s*\[data-bs-theme\s*=\s*['""]?dark['""]?\][^{]*\{([^}]*)\}",
+		RegexOptions.Compiled | RegexOptions.Singleline);
+
+	/// <summary>
+	/// Regex pattern for matching CSS custom property declarations.
+	/// Matches --property-name: value; syntax and captures both the property name and value.
+	/// Pattern structure: (--[a-z0-9-]+)\s*:\s*([^;]+);
+	/// - (--[a-z0-9-]+): Capture group 1 - custom property name (starts with --, followed by lowercase letters, digits, or hyphens)
+	/// - \s*:\s*: Match colon with optional surrounding whitespace
+	/// - ([^;]+): Capture group 2 - property value (any characters except semicolon)
+	/// - ;: Match trailing semicolon
+	/// </summary>
+	private static readonly Regex CustomPropertyPattern = new(
+		@"(--[a-z0-9-]+)\s*:\s*([^;]+);",
+		RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
 	/// <summary>
 	/// Analyze Bootstrap CSS and extract component styles
 	/// </summary>
@@ -260,7 +302,24 @@ public class BootstrapCssAnalyzer
 			"border-top-left-radius",
 			"border-top-right-radius",
 			"border-bottom-right-radius",
-			"border-bottom-left-radius"
+			"border-bottom-left-radius",
+			// Per-edge border properties
+			"border-top",
+			"border-right",
+			"border-bottom",
+			"border-left",
+			"border-top-width",
+			"border-right-width",
+			"border-bottom-width",
+			"border-left-width",
+			"border-top-color",
+			"border-right-color",
+			"border-bottom-color",
+			"border-left-color",
+			"border-top-style",
+			"border-right-style",
+			"border-bottom-style",
+			"border-left-style"
 		];
 
 		foreach (var prop in borderProperties)
@@ -273,6 +332,33 @@ public class BootstrapCssAnalyzer
 		}
 
 		return borders;
+	}
+
+	/// <summary>
+	/// Extract shadow properties from a computed style
+	/// </summary>
+	public Dictionary<string, string> ExtractShadows(ComputedStyle style)
+	{
+		var shadows = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+		// Shadow properties
+		string[] shadowProperties = [
+			"box-shadow",
+			"--bs-btn-box-shadow",
+			"--bs-box-shadow",
+			"text-shadow"
+		];
+
+		foreach (var prop in shadowProperties)
+		{
+			var value = style.GetProperty(prop);
+			if (!string.IsNullOrWhiteSpace(value))
+			{
+				shadows[prop] = value;
+			}
+		}
+
+		return shadows;
 	}
 
 	/// <summary>
@@ -305,5 +391,57 @@ public class BootstrapCssAnalyzer
 		}
 
 		return typography;
+	}
+
+	/// <summary>
+	/// Extract CSS custom properties from :root and theme-specific blocks
+	/// </summary>
+	/// <param name="cssContent">Bootstrap CSS content</param>
+	/// <returns>Dictionary with 'light' and 'dark' theme custom properties</returns>
+	/// <remarks>
+	/// NOTE: ExCSS 4.2.3 does not parse CSS custom properties (--*), so we use manual regex parsing
+	/// </remarks>
+	public Dictionary<string, Dictionary<string, string>> ExtractThemeCustomProperties(string cssContent)
+	{
+		ConverterLogger.Info("Extracting theme-specific CSS custom properties...");
+
+		var result = new Dictionary<string, Dictionary<string, string>>
+		{
+			["light"] = [],
+			["dark"] = []
+		};
+
+		// Manual parsing since ExCSS doesn't support CSS custom properties
+		// Extract light mode properties
+		foreach (Match match in ThemeLightPattern.Matches(cssContent))
+		{
+			var declarations = match.Groups[1].Value;
+			ParseCustomProperties(declarations, result["light"]);
+		}
+
+		// Extract dark mode properties
+		foreach (Match match in ThemeDarkPattern.Matches(cssContent))
+		{
+			var declarations = match.Groups[1].Value;
+			ParseCustomProperties(declarations, result["dark"]);
+		}
+
+		ConverterLogger.Info($"Extracted {result["light"].Count} light mode properties, {result["dark"].Count} dark mode properties");
+		return result;
+	}
+
+	/// <summary>
+	/// Parse CSS custom properties from a declarations block
+	/// </summary>
+	private static void ParseCustomProperties(string declarationsBlock, Dictionary<string, string> target)
+	{
+		foreach (Match match in CustomPropertyPattern.Matches(declarationsBlock))
+		{
+			var propertyName = match.Groups[1].Value.Trim();
+			var propertyValue = match.Groups[2].Value.Trim();
+			
+			target[propertyName] = propertyValue;
+			ConverterLogger.Debug($"    {propertyName}: {propertyValue}");
+		}
 	}
 }

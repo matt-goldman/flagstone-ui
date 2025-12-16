@@ -29,6 +29,31 @@ public class FlagstoneTokens
     /// Border width tokens
     /// </summary>
     public Dictionary<string, NumericToken> BorderWidth { get; set; } = [];
+
+    /// <summary>
+    /// Per-edge border width tokens (e.g., BorderTopWidth.Default)
+    /// </summary>
+    public Dictionary<string, NumericToken> BorderTopWidth { get; set; } = [];
+
+    /// <summary>
+    /// Per-edge border width tokens (e.g., BorderRightWidth.Default)
+    /// </summary>
+    public Dictionary<string, NumericToken> BorderRightWidth { get; set; } = [];
+
+    /// <summary>
+    /// Per-edge border width tokens (e.g., BorderBottomWidth.Default)
+    /// </summary>
+    public Dictionary<string, NumericToken> BorderBottomWidth { get; set; } = [];
+
+    /// <summary>
+    /// Per-edge border width tokens (e.g., BorderLeftWidth.Default)
+    /// </summary>
+    public Dictionary<string, NumericToken> BorderLeftWidth { get; set; } = [];
+
+    /// <summary>
+    /// Shadow tokens
+    /// </summary>
+    public Dictionary<string, ShadowToken> Shadows { get; set; } = [];
 }
 
 /// <summary>
@@ -102,6 +127,72 @@ public class NumericToken
     /// Unit (e.g., "px", "rem")
     /// </summary>
     public string Unit { get; set; } = "px";
+
+    /// <summary>
+    /// Purpose/description of this token
+    /// </summary>
+    public string? Purpose { get; set; }
+}
+
+/// <summary>
+/// Represents a shadow token (box-shadow)
+/// </summary>
+public class ShadowToken
+{
+    /// <summary>
+    /// Token key (e.g., "Shadow.Button", "Shadow.Card")
+    /// </summary>
+    public required string Key { get; set; }
+
+    /// <summary>
+    /// Horizontal offset (light mode)
+    /// </summary>
+    public double OffsetX { get; set; }
+
+    /// <summary>
+    /// Vertical offset (light mode)
+    /// </summary>
+    public double OffsetY { get; set; }
+
+    /// <summary>
+    /// Blur radius (light mode)
+    /// </summary>
+    public double Radius { get; set; }
+
+    /// <summary>
+    /// Shadow color (hex or rgba, light mode)
+    /// </summary>
+    public required string Color { get; set; }
+
+    /// <summary>
+    /// Shadow opacity (0-1, light mode)
+    /// </summary>
+    public double Opacity { get; set; } = 1.0;
+
+    /// <summary>
+    /// Dark mode horizontal offset (optional)
+    /// </summary>
+    public double? DarkOffsetX { get; set; }
+
+    /// <summary>
+    /// Dark mode vertical offset (optional)
+    /// </summary>
+    public double? DarkOffsetY { get; set; }
+
+    /// <summary>
+    /// Dark mode blur radius (optional)
+    /// </summary>
+    public double? DarkRadius { get; set; }
+
+    /// <summary>
+    /// Dark mode shadow color (optional)
+    /// </summary>
+    public string? DarkColor { get; set; }
+
+    /// <summary>
+    /// Dark mode shadow opacity (optional)
+    /// </summary>
+    public double? DarkOpacity { get; set; }
 
     /// <summary>
     /// Purpose/description of this token

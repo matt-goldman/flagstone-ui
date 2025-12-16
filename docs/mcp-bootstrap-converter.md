@@ -89,13 +89,16 @@ tools/FlagstoneUI.Mcp/
 
 1. **FlagstoneUI.BootstrapConverter Library** (Core conversion logic)
    - ✅ SCSS/CSS parsing with variable resolution
-   - ✅ Token mapping (colors, typography, spacing, borders)
+   - ✅ Token mapping (colors, typography, spacing, borders, **shadows**, **per-edge borders**)
    - ✅ XAML generation (Tokens.xaml, Theme.xaml, Styles.xaml)
    - ✅ C# code-behind generation
-   - ✅ Dark mode variant generation
+   - ✅ Dark mode variant generation with **AppThemeBinding support**
+   - ✅ **Light/dark mode CSS custom property extraction** (Bootstrap 5+)
    - ✅ Multi-file support
    - ✅ Font detection and handling
    - ✅ Component style generation (FsButton, FsEntry, FsEditor, FsCard)
+   - ✅ **Shadow extraction** from Bootstrap variables and CSS (box-shadow parsing)
+   - ✅ **Per-edge border extraction** from multi-value border-width properties
 
 2. **FlagstoneUI.BootstrapConverter.Cli** (Command-line interface)
    - ✅ Convert command with comprehensive options

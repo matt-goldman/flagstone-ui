@@ -211,7 +211,7 @@
 
   <!-- ========== FsCard (implicit default) ========== -->
   <Style x:Key="SlateProCard" TargetType="fs:FsCard">
-    <Setter Property="BackgroundColor" Value="{DynamicResource Sp.Color.Surface}" />
+    <Setter Property="BackgroundBrush" Value="{AppThemeBinding Light={DynamicResource Sp.Color.Surface}, Dark={DynamicResource Sp.Color.SurfaceDark}}" />
     <!-- subtle LOB outline instead of elevation -->
     <Setter Property="BorderColor" Value="{DynamicResource Sp.Color.OutlineVariant}" />
     <Setter Property="BorderWidth" Value="{DynamicResource Sp.BorderWidth.Thin}" />

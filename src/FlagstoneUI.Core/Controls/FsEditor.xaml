@@ -11,11 +11,11 @@
           Stroke="{Binding BorderBrush}"
           StrokeThickness="{Binding BorderWidth}"
           StrokeShape="{Binding BorderShape}">
-    <Grid Padding="{Binding Padding}"
-          MinimumHeightRequest="88">
+    <Grid MinimumHeightRequest="88">
       <fs:BorderlessEditor Text="{Binding Text}"
                            Placeholder="{Binding Placeholder}"
                            PlaceholderColor="{Binding PlaceholderColor}"
+                           Background="Transparent"
                            TextColor="{Binding TextColor}"
                            TextChanged="OnTextChanged"
                            Completed="OnCompleted"
@@ -26,7 +26,7 @@
                            AutoSize="{Binding AutoSize}"
                            MaxLength="{Binding MaxLength}"
                            IsReadOnly="{Binding IsReadOnly}"
-                           Margin="0"
+                           Margin="{Binding Padding}"
                            VerticalOptions="Fill"
                            Focused="BorderlessEditor_Focused"
                            Unfocused="BorderlessEditor_Unfocused"
