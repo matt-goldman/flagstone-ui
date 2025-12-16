@@ -1,0 +1,985 @@
+
+<?xaml-comp compile="true"?>
+<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        x:Class="FlagstoneUI.SampleApp.Resources.Styles.Brite"
+        xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
+        xmlns="http://schemas.microsoft.com/dotnet/maui/global">
+    <!-- Bootstrap Styles - Generated from Bootstrap -->
+    <!-- Control styles that use theme tokens -->
+    <!-- ===== Color Tokens ===== -->
+    <!-- Color.Background: Extracted from theme -->
+    <Color x:Key="Color.Background">#212529</Color>
+    <!-- Color.Dark: Extracted from theme -->
+    <Color x:Key="Color.Dark">#000000</Color>
+    <!-- Color.Error: Extracted from theme -->
+    <Color x:Key="Color.Error">#F56565</Color>
+    <!-- Color.Info: Extracted from theme -->
+    <Color x:Key="Color.Info">#22D2ED</Color>
+    <!-- Color.Light: Extracted from theme -->
+    <Color x:Key="Color.Light">#E9ECEF</Color>
+    <!-- Color.OnBackground: Extracted from theme -->
+    <Color x:Key="Color.OnBackground">#DEE2E6</Color>
+    <!-- Color.OnError: Extracted from theme -->
+    <Color x:Key="Color.OnError">#000000</Color>
+    <!-- Color.OnInfo: Extracted from theme -->
+    <Color x:Key="Color.OnInfo">#000000</Color>
+    <!-- Color.OnLight: Extracted from theme -->
+    <Color x:Key="Color.OnLight">#000000</Color>
+    <!-- Color.OnPrimary: Extracted from theme -->
+    <Color x:Key="Color.OnPrimary">#000000</Color>
+    <!-- Color.OnSuccess: Extracted from theme -->
+    <Color x:Key="Color.OnSuccess">#000000</Color>
+    <!-- Color.OnSurface: Extracted from theme -->
+    <Color x:Key="Color.OnSurface">#000000</Color>
+    <!-- Color.OnWarning: Extracted from theme -->
+    <Color x:Key="Color.OnWarning">#000000</Color>
+    <!-- Color.Outline: Extracted from theme -->
+    <Color x:Key="Color.Outline">#000000</Color>
+    <!-- Color.Primary: Extracted from theme -->
+    <Color x:Key="Color.Primary">#A2E436</Color>
+    <!-- Color.Secondary: Extracted from theme -->
+    <Color x:Key="Color.Secondary">#FFFFFF</Color>
+    <!-- Color.Success: Extracted from theme -->
+    <Color x:Key="Color.Success">#68D391</Color>
+    <!-- Color.Surface: Extracted from theme -->
+    <Color x:Key="Color.Surface">#E9ECEF</Color>
+    <!-- Color.SurfaceVariant.Dark: Extracted from theme -->
+    <Color x:Key="Color.SurfaceVariant.Dark">#000000</Color>
+    <!-- Color.Warning: Extracted from theme -->
+    <Color x:Key="Color.Warning">#FFC700</Color>
+    <!-- ===== Typography Tokens ===== -->
+    <!-- FontSize.Body: Extracted from theme -->
+    <x:Double x:Key="FontSize.Body">14</x:Double>
+    <!-- FontSize.Button: Extracted from theme -->
+    <x:Double x:Key="FontSize.Button">12.25</x:Double>
+    <!-- ===== Spacing Tokens ===== -->
+    <!-- Spacing.ExtraLarge: Extracted from theme -->
+    <x:Double x:Key="Spacing.ExtraLarge">48</x:Double>
+    <!-- Spacing.ExtraSmall: Extracted from theme -->
+    <x:Double x:Key="Spacing.ExtraSmall">4</x:Double>
+    <!-- Spacing.Large: Extracted from theme -->
+    <x:Double x:Key="Spacing.Large">24</x:Double>
+    <!-- Spacing.Medium: Extracted from theme -->
+    <x:Double x:Key="Spacing.Medium">16</x:Double>
+    <!-- Spacing.Small: Extracted from theme -->
+    <x:Double x:Key="Spacing.Small">8</x:Double>
+    <!-- ===== Corner Radius Tokens ===== -->
+    <!-- Radius.Card: Extracted from theme -->
+    <x:Double x:Key="Radius.Card">0</x:Double>
+    <!-- Radius.Default: Extracted from theme -->
+    <x:Double x:Key="Radius.Default">6</x:Double>
+    <!-- Radius.Large: Extracted from theme -->
+    <x:Double x:Key="Radius.Large">8</x:Double>
+    <!-- Radius.Medium: Extracted from theme -->
+    <x:Double x:Key="Radius.Medium">4</x:Double>
+    <!-- Radius.Small: Extracted from theme -->
+    <x:Double x:Key="Radius.Small">4</x:Double>
+    <!-- Button-specific radius tokens (Int32 for Button.CornerRadius) -->
+    <!-- Radius.Button.Card: Extracted from theme (for buttons) -->
+    <x:Int32 x:Key="Radius.Button.Card">0</x:Int32>
+    <!-- Radius.Button.Default: Extracted from theme (for buttons) -->
+    <x:Int32 x:Key="Radius.Button.Default">6</x:Int32>
+    <!-- Radius.Button.Large: Extracted from theme (for buttons) -->
+    <x:Int32 x:Key="Radius.Button.Large">8</x:Int32>
+    <!-- Radius.Button.Medium: Extracted from theme (for buttons) -->
+    <x:Int32 x:Key="Radius.Button.Medium">4</x:Int32>
+    <!-- Radius.Button.Small: Extracted from theme (for buttons) -->
+    <x:Int32 x:Key="Radius.Button.Small">4</x:Int32>
+    <!-- ===== Border Width Tokens ===== -->
+    <!-- BorderWidth.Default: Extracted from theme -->
+    <x:Double x:Key="BorderWidth.Default">2</x:Double>
+
+    <!-- ========== FsButton Styles ========== -->
+
+    <!-- Base Button Style (Filled Button - Primary) -->
+    <Style TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource Color.Primary}"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.OnPrimary}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Card}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Body}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!-- Outlined Button Style -->
+    <Style x:Key="OutlinedButton"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="Transparent"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.Primary}"/>
+        <Setter Property="BorderColor"
+                Value="{DynamicResource Color.Outline}"/>
+        <Setter Property="BorderWidth"
+                Value="{DynamicResource BorderWidth.Default}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Card}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Body}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!-- Text Button Style (No background or border) -->
+    <Style x:Key="TextButton"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="Transparent"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.Primary}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Card}"/>
+        <Setter Property="Padding"
+                Value="12,10"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Body}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+
+    <!-- Semantic button variants -->
+    <Style x:Key="ButtonSecondary"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource Color.Secondary}"/>
+        <Setter Property="TextColor"
+                Value="#FFFFFF"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonSuccess"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource Color.Success}"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.OnSuccess}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonDanger"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource Color.Error}"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.OnError}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonWarning"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource Color.Warning}"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.OnWarning}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonInfo"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource Color.Info}"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.OnInfo}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonLight"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource Color.Light}"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.OnLight}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonDark"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource Color.Dark}"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.OnBackground}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+
+
+    <!-- Outline button variants -->
+    <Style x:Key="ButtonOutlinePrimary"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="Transparent"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.Primary}"/>
+        <Setter Property="BorderColor"
+                Value="{DynamicResource Color.Primary}"/>
+        <Setter Property="BorderWidth"
+                Value="{DynamicResource BorderWidth.Default}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonOutlineSecondary"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="Transparent"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.Secondary}"/>
+        <Setter Property="BorderColor"
+                Value="{DynamicResource Color.Secondary}"/>
+        <Setter Property="BorderWidth"
+                Value="{DynamicResource BorderWidth.Default}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonOutlineSuccess"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="Transparent"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.Success}"/>
+        <Setter Property="BorderColor"
+                Value="{DynamicResource Color.Success}"/>
+        <Setter Property="BorderWidth"
+                Value="{DynamicResource BorderWidth.Default}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonOutlineDanger"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="Transparent"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.Error}"/>
+        <Setter Property="BorderColor"
+                Value="{DynamicResource Color.Error}"/>
+        <Setter Property="BorderWidth"
+                Value="{DynamicResource BorderWidth.Default}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonOutlineWarning"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="Transparent"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.Warning}"/>
+        <Setter Property="BorderColor"
+                Value="{DynamicResource Color.Warning}"/>
+        <Setter Property="BorderWidth"
+                Value="{DynamicResource BorderWidth.Default}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonOutlineInfo"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="Transparent"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.Info}"/>
+        <Setter Property="BorderColor"
+                Value="{DynamicResource Color.Info}"/>
+        <Setter Property="BorderWidth"
+                Value="{DynamicResource BorderWidth.Default}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonOutlineLight"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="Transparent"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.Light}"/>
+        <Setter Property="BorderColor"
+                Value="{DynamicResource Color.Light}"/>
+        <Setter Property="BorderWidth"
+                Value="{DynamicResource BorderWidth.Default}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonOutlineDark"
+            TargetType="fs:FsButton">
+        <Setter Property="BackgroundColor"
+                Value="Transparent"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.Dark}"/>
+        <Setter Property="BorderColor"
+                Value="{DynamicResource Color.Dark}"/>
+        <Setter Property="BorderWidth"
+                Value="{DynamicResource BorderWidth.Default}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+        <Setter Property="MinimumHeightRequest"
+                Value="40"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.90"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+
+
+    <!-- Size variants -->
+    <Style x:Key="ButtonSmall"
+            TargetType="fs:FsButton">
+        <Setter Property="Padding"
+                Value="16,8"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+    </Style>
+
+    <Style x:Key="ButtonLarge"
+            TargetType="fs:FsButton">
+        <Setter Property="Padding"
+                Value="32,14"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Button}"/>
+    </Style>
+
+
+    <!-- ========== FsEntry Styles ========== -->
+
+    <Style TargetType="fs:FsEntry">
+        <Setter Property="Background"
+                Value="{DynamicResource Color.Background}"/>
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource Color.Outline}"/>
+        <Setter Property="BorderWidth"
+                Value="{DynamicResource BorderWidth.Default}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.OnBackground}"/>
+        <Setter Property="PlaceholderColor"
+                Value="{DynamicResource Color.OnBackground}"/>
+        <Setter Property="Padding"
+                Value="12,10"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Body}"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource Color.Primary}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="EntryValid"
+            TargetType="fs:FsEntry">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource Color.Success}"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource Color.Success}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="EntryInvalid"
+            TargetType="fs:FsEntry">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource Color.Error}"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource Color.Error}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+
+
+    <!-- ========== FsEditor Styles ========== -->
+
+    <Style TargetType="fs:FsEditor">
+        <Setter Property="Background"
+                Value="{DynamicResource Color.Background}"/>
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource Color.Outline}"/>
+        <Setter Property="BorderWidth"
+                Value="{DynamicResource BorderWidth.Default}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="TextColor"
+                Value="{DynamicResource Color.OnBackground}"/>
+        <Setter Property="PlaceholderColor"
+                Value="{DynamicResource Color.OnBackground}"/>
+        <Setter Property="Padding"
+                Value="12,10"/>
+        <Setter Property="FontSize"
+                Value="{DynamicResource FontSize.Body}"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource Color.Primary}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="EditorValid"
+            TargetType="fs:FsEditor">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource Color.Success}"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource Color.Success}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="EditorInvalid"
+            TargetType="fs:FsEditor">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource Color.Error}"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource Color.Error}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity"
+                                    Value="0.38"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+
+
+    <!-- ========== FsCard Styles ========== -->
+
+    <Style TargetType="fs:FsCard">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource Color.Background}"/>
+        <Setter Property="BorderColor"
+                Value="{DynamicResource Color.Outline}"/>
+        <Setter Property="BorderWidth"
+                Value="{DynamicResource BorderWidth.Default}"/>
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource Radius.Button.Medium}"/>
+        <Setter Property="Padding"
+                Value="{DynamicResource Spacing.Medium}"/>
+    </Style>
+</ResourceDictionary>

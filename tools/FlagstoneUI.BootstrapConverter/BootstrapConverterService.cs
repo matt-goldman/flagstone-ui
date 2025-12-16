@@ -112,6 +112,11 @@ public class BootstrapConverterService
 			SpacingTokens = tokens.Spacing.Count,
 			BorderRadiusTokens = tokens.BorderRadius.Count,
 			BorderWidthTokens = tokens.BorderWidth.Count,
+			BorderTopWidthTokens = tokens.BorderTopWidth.Count,
+			BorderRightWidthTokens = tokens.BorderRightWidth.Count,
+			BorderBottomWidthTokens = tokens.BorderBottomWidth.Count,
+			BorderLeftWidthTokens = tokens.BorderLeftWidth.Count,
+			ShadowTokens = tokens.Shadows.Count,
 			ComponentStylesExtracted = componentStyles != null
 				? typeof(BootstrapComponentStyles).GetProperties().Count(p => p.GetValue(componentStyles) != null)
 				: 0,
@@ -220,6 +225,48 @@ public class BootstrapConverterService
 				target.BorderWidth[key] = value;
 			}
 		}
+
+		// Merge per-edge border widths
+		foreach (var (key, value) in source.BorderTopWidth)
+		{
+			if (!target.BorderTopWidth.ContainsKey(key))
+			{
+				target.BorderTopWidth[key] = value;
+			}
+		}
+
+		foreach (var (key, value) in source.BorderRightWidth)
+		{
+			if (!target.BorderRightWidth.ContainsKey(key))
+			{
+				target.BorderRightWidth[key] = value;
+			}
+		}
+
+		foreach (var (key, value) in source.BorderBottomWidth)
+		{
+			if (!target.BorderBottomWidth.ContainsKey(key))
+			{
+				target.BorderBottomWidth[key] = value;
+			}
+		}
+
+		foreach (var (key, value) in source.BorderLeftWidth)
+		{
+			if (!target.BorderLeftWidth.ContainsKey(key))
+			{
+				target.BorderLeftWidth[key] = value;
+			}
+		}
+
+		// Merge shadows
+		foreach (var (key, value) in source.Shadows)
+		{
+			if (!target.Shadows.ContainsKey(key))
+			{
+				target.Shadows[key] = value;
+			}
+		}
 	}
 }
 
@@ -295,6 +342,11 @@ public record ConversionStatistics
 	public int SpacingTokens { get; init; }
 	public int BorderRadiusTokens { get; init; }
 	public int BorderWidthTokens { get; init; }
+	public int BorderTopWidthTokens { get; init; }
+	public int BorderRightWidthTokens { get; init; }
+	public int BorderBottomWidthTokens { get; init; }
+	public int BorderLeftWidthTokens { get; init; }
+	public int ShadowTokens { get; init; }
 	public int ComponentStylesExtracted { get; init; }
 	public int VariablesParsed { get; init; }
 }

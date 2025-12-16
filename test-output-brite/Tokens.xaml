@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns="http://schemas.microsoft.com/dotnet/maui/global">
+    <!-- ===== Color Tokens ===== -->
+    <!-- Color.Background: Body background color -->
+    <Color x:Key="Color.Background">#212529</Color>
+    <!-- Dark mode: #2A3035 -->
+    <!-- Color.Dark: Dark color from Bootstrap .btn-dark -->
+    <Color x:Key="Color.Dark">rgb(0, 0, 0)</Color>
+    <!-- Color.Error: Error color from Bootstrap .btn-error -->
+    <Color x:Key="Color.Error">rgb(245, 101, 101)</Color>
+    <!-- Color.Info: Info color from Bootstrap .btn-info -->
+    <Color x:Key="Color.Info">rgb(34, 210, 237)</Color>
+    <!-- Color.Light: Light color from Bootstrap .btn-light -->
+    <Color x:Key="Color.Light">rgb(233, 236, 239)</Color>
+    <!-- Color.OnBackground: Body text color -->
+    <Color x:Key="Color.OnBackground">#DEE2E6</Color>
+    <!-- Dark mode: #9B9EA1 -->
+    <!-- Color.OnError: Auto-generated on-color for Color.Error -->
+    <Color x:Key="Color.OnError">#000000</Color>
+    <!-- Color.OnInfo: Auto-generated on-color for Color.Info -->
+    <Color x:Key="Color.OnInfo">#000000</Color>
+    <!-- Color.OnLight: Auto-generated on-color for Color.Light -->
+    <Color x:Key="Color.OnLight">#000000</Color>
+    <!-- Color.OnPrimary: Auto-generated on-color for Color.Primary -->
+    <Color x:Key="Color.OnPrimary">#000000</Color>
+    <!-- Color.OnSuccess: Auto-generated on-color for Color.Success -->
+    <Color x:Key="Color.OnSuccess">#000000</Color>
+    <!-- Color.OnSurface: Auto-generated on-color for Color.Surface -->
+    <Color x:Key="Color.OnSurface">#000000</Color>
+    <!-- Color.OnWarning: Auto-generated on-color for Color.Warning -->
+    <Color x:Key="Color.OnWarning">#000000</Color>
+    <!-- Color.Outline: Border color -->
+    <Color x:Key="Color.Outline">#000</Color>
+    <!-- Color.Primary: Primary color from Bootstrap .btn-primary -->
+    <Color x:Key="Color.Primary">rgb(162, 228, 54)</Color>
+    <!-- Color.Secondary: Secondary color from Bootstrap .btn-secondary -->
+    <Color x:Key="Color.Secondary">rgb(255, 255, 255)</Color>
+    <!-- Color.Success: Success color from Bootstrap .btn-success -->
+    <Color x:Key="Color.Success">rgb(104, 211, 145)</Color>
+    <!-- Color.Surface: Light surface color -->
+    <Color x:Key="Color.Surface">#E9ECEF</Color>
+    <!-- Dark mode: #A3A5A7 -->
+    <!-- Color.SurfaceVariant.Dark: Dark surface variant -->
+    <Color x:Key="Color.SurfaceVariant.Dark">#000</Color>
+    <!-- Color.Warning: Warning color from Bootstrap .btn-warning -->
+    <Color x:Key="Color.Warning">rgb(255, 199, 0)</Color>
+<!-- ===== Typography Tokens ===== --><!-- FontSize.Body: Base body font size --><x:Double x:Key="FontSize.Body">14</x:Double><!-- FontSize.Button: Button font size from Bootstrap .btn --><x:Double x:Key="FontSize.Button">12.25</x:Double>
+<!-- ===== Spacing Tokens ===== --><!-- Spacing.ExtraLarge: Extra large spacing --><x:Double x:Key="Spacing.ExtraLarge">48</x:Double><!-- Spacing.ExtraSmall: Extra small spacing --><x:Double x:Key="Spacing.ExtraSmall">4</x:Double><!-- Spacing.Large: Large spacing --><x:Double x:Key="Spacing.Large">24</x:Double><!-- Spacing.Medium: Medium spacing (base) --><x:Double x:Key="Spacing.Medium">16</x:Double><!-- Spacing.Small: Small spacing --><x:Double x:Key="Spacing.Small">8</x:Double>
+<!-- ===== Corner Radius Tokens ===== --><!-- Radius.Card: Corner radius from card-inner-border-radius --><x:Double x:Key="Radius.Card">0</x:Double><!-- Radius.Default: Corner radius from nav-tabs-border-radius --><x:Double x:Key="Radius.Default">6</x:Double><!-- Radius.Large: Large corner radius --><x:Double x:Key="Radius.Large">8</x:Double><!-- Radius.Medium: Medium corner radius (from button) --><x:Double x:Key="Radius.Medium">4</x:Double><!-- Radius.Small: Small corner radius --><x:Double x:Key="Radius.Small">4</x:Double>
+<!-- Button-specific radius tokens (Int32 for Button.CornerRadius) --><!-- Radius.Button.Card: Corner radius from card-inner-border-radius (for buttons) --><x:Int32 x:Key="Radius.Button.Card">0</x:Int32><!-- Radius.Button.Default: Corner radius from nav-tabs-border-radius (for buttons) --><x:Int32 x:Key="Radius.Button.Default">6</x:Int32><!-- Radius.Button.Large: Large corner radius (for buttons) --><x:Int32 x:Key="Radius.Button.Large">8</x:Int32><!-- Radius.Button.Medium: Medium corner radius (from button) (for buttons) --><x:Int32 x:Key="Radius.Button.Medium">4</x:Int32><!-- Radius.Button.Small: Small corner radius (for buttons) --><x:Int32 x:Key="Radius.Button.Small">4</x:Int32>
+<!-- ===== Border Width Tokens ===== --><!-- BorderWidth.Default: Default border width --><x:Double x:Key="BorderWidth.Default">2</x:Double>
+<!-- ===== Border Top Width Tokens ===== --><!-- BorderTopWidth.Button: Top border width for Button --><x:Double x:Key="BorderTopWidth.Button">0</x:Double>
+<!-- ===== Border Right Width Tokens ===== --><!-- BorderRightWidth.Button: Right border width for Button --><x:Double x:Key="BorderRightWidth.Button">0</x:Double>
+<!-- ===== Border Bottom Width Tokens ===== --><!-- BorderBottomWidth.Button: Bottom border width for Button --><x:Double x:Key="BorderBottomWidth.Button">0</x:Double>
+<!-- ===== Border Left Width Tokens ===== --><!-- BorderLeftWidth.Button: Left border width for Button --><x:Double x:Key="BorderLeftWidth.Button">0</x:Double>
+<!-- ===== Shadow Tokens ===== --><!-- Shadow.Accordion.Btn.Focus.Default: Shadow from Bootstrap variable accordion-btn-focus-box-shadow --><Shadow x:Key="Shadow.Accordion.Btn.Focus.Default"><Shadow.Offset>0, 0</Shadow.Offset><Shadow.Radius>0</Shadow.Radius><Shadow.Brush><SolidColorBrush Color="#000" Opacity="1" /></Shadow.Brush></Shadow><!-- Shadow.Btn.Close.Focus: Shadow from Bootstrap variable btn-close-focus-shadow --><Shadow x:Key="Shadow.Btn.Close.Focus"><Shadow.Offset>0, 0</Shadow.Offset><Shadow.Radius>0</Shadow.Radius><Shadow.Brush><SolidColorBrush Color="#000" Opacity="1" /></Shadow.Brush></Shadow><!-- Shadow.Btn.Focus.Default: Shadow from Bootstrap variable btn-focus-box-shadow --><Shadow x:Key="Shadow.Btn.Focus.Default"><Shadow.Offset>0, 0</Shadow.Offset><Shadow.Radius>0</Shadow.Radius><Shadow.Brush><SolidColorBrush Color="#000" Opacity="1" /></Shadow.Brush></Shadow><!-- Shadow.Button: Shadow from Bootstrap variable btn-box-shadow --><Shadow x:Key="Shadow.Button"><Shadow.Offset>0, 0</Shadow.Offset><Shadow.Radius>0</Shadow.Radius><Shadow.Brush><SolidColorBrush Color="#000" Opacity="1" /></Shadow.Brush></Shadow><!-- Shadow.Default: Shadow from Bootstrap variable box-shadow --><Shadow x:Key="Shadow.Default"><Shadow.Offset>0, 8</Shadow.Offset><Shadow.Radius>16</Shadow.Radius><Shadow.Brush><SolidColorBrush Color="#000" Opacity="1" /></Shadow.Brush></Shadow><!-- Shadow.Large: Shadow from Bootstrap variable box-shadow-lg --><Shadow x:Key="Shadow.Large"><Shadow.Offset>0, 16</Shadow.Offset><Shadow.Radius>48</Shadow.Radius><Shadow.Brush><SolidColorBrush Color="#000" Opacity="1" /></Shadow.Brush></Shadow><!-- Shadow.Modal.Default: Shadow from Bootstrap variable modal-box-shadow --><Shadow x:Key="Shadow.Modal.Default"><Shadow.Offset>0, 8</Shadow.Offset><Shadow.Radius>16</Shadow.Radius><Shadow.Brush><SolidColorBrush Color="#000" Opacity="1" /></Shadow.Brush></Shadow><!-- Shadow.Offcanvas.Default: Shadow from Bootstrap variable offcanvas-box-shadow --><Shadow x:Key="Shadow.Offcanvas.Default"><Shadow.Offset>0, 2</Shadow.Offset><Shadow.Radius>4</Shadow.Radius><Shadow.Brush><SolidColorBrush Color="#000" Opacity="1" /></Shadow.Brush></Shadow><!-- Shadow.Pagination.Focus.Default: Shadow from Bootstrap variable pagination-focus-box-shadow --><Shadow x:Key="Shadow.Pagination.Focus.Default"><Shadow.Offset>0, 0</Shadow.Offset><Shadow.Radius>0</Shadow.Radius><Shadow.Brush><SolidColorBrush Color="#000" Opacity="1" /></Shadow.Brush></Shadow><!-- Shadow.Popover.Default: Shadow from Bootstrap variable popover-box-shadow --><Shadow x:Key="Shadow.Popover.Default"><Shadow.Offset>0, 8</Shadow.Offset><Shadow.Radius>16</Shadow.Radius><Shadow.Brush><SolidColorBrush Color="#000" Opacity="1" /></Shadow.Brush></Shadow><!-- Shadow.Small: Shadow from Bootstrap variable box-shadow-sm --><Shadow x:Key="Shadow.Small"><Shadow.Offset>0, 2</Shadow.Offset><Shadow.Radius>4</Shadow.Radius><Shadow.Brush><SolidColorBrush Color="#000" Opacity="1" /></Shadow.Brush></Shadow><!-- Shadow.Toast.Default: Shadow from Bootstrap variable toast-box-shadow --><Shadow x:Key="Shadow.Toast.Default"><Shadow.Offset>3, 3</Shadow.Offset><Shadow.Radius>0</Shadow.Radius><Shadow.Brush><SolidColorBrush Color="#000" Opacity="1" /></Shadow.Brush></Shadow>
+</ResourceDictionary>

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Storage;
 using Microsoft.Extensions.Logging;
 
 namespace FlagstoneUI.BootstrapConverter.UI;
@@ -16,6 +17,8 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			})
 			.UseMauiCommunityToolkit();
+
+		builder.Services.AddSingleton<IFileSaver>(FileSaver.Default);
 
 #if DEBUG
 		builder.Logging.AddDebug();

@@ -260,7 +260,24 @@ public class BootstrapCssAnalyzer
 			"border-top-left-radius",
 			"border-top-right-radius",
 			"border-bottom-right-radius",
-			"border-bottom-left-radius"
+			"border-bottom-left-radius",
+			// Per-edge border properties
+			"border-top",
+			"border-right",
+			"border-bottom",
+			"border-left",
+			"border-top-width",
+			"border-right-width",
+			"border-bottom-width",
+			"border-left-width",
+			"border-top-color",
+			"border-right-color",
+			"border-bottom-color",
+			"border-left-color",
+			"border-top-style",
+			"border-right-style",
+			"border-bottom-style",
+			"border-left-style"
 		];
 
 		foreach (var prop in borderProperties)
@@ -273,6 +290,33 @@ public class BootstrapCssAnalyzer
 		}
 
 		return borders;
+	}
+
+	/// <summary>
+	/// Extract shadow properties from a computed style
+	/// </summary>
+	public Dictionary<string, string> ExtractShadows(ComputedStyle style)
+	{
+		var shadows = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+		// Shadow properties
+		string[] shadowProperties = [
+			"box-shadow",
+			"--bs-btn-box-shadow",
+			"--bs-box-shadow",
+			"text-shadow"
+		];
+
+		foreach (var prop in shadowProperties)
+		{
+			var value = style.GetProperty(prop);
+			if (!string.IsNullOrWhiteSpace(value))
+			{
+				shadows[prop] = value;
+			}
+		}
+
+		return shadows;
 	}
 
 	/// <summary>

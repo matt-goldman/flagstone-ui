@@ -32,6 +32,9 @@ public class BootstrapMapper
 		// Map borders
 		MapBorders(variables.Borders, tokens);
 
+		// Map shadows from Other variables
+		MapShadowVariables(variables.Other, tokens);
+
 		return tokens;
 	}
 
@@ -250,6 +253,275 @@ public class BootstrapMapper
 		{
 			var widthValue = ConvertToPixels(width, 16.0);
 			tokens.BorderWidth["BorderWidth.Default"] = CreateNumericToken("BorderWidth.Default", widthValue, "Default border width");
+		}
+
+		// Per-edge border widths
+		MapPerEdgeBorders(bootstrapBorders, tokens);
+	}
+
+	/// <summary>
+	/// Map shadow variables from Bootstrap Other variables to Flagstone shadow tokens
+	/// </summary>
+	private void MapShadowVariables(Dictionary<string, string> otherVariables, FlagstoneTokens tokens)
+	{
+		ConverterLogger.Debug($"Mapping shadow variables from {otherVariables.Count} other variables...");
+
+		// Look for shadow-related variables
+		foreach (var (key, value) in otherVariables)
+		{
+			// Check for box-shadow or shadow-related variables
+			if (key.Contains("box-shadow", StringComparison.OrdinalIgnoreCase) ||
+				key.Contains("-shadow", StringComparison.OrdinalIgnoreCase))
+			{
+				ConverterLogger.Debug($"  Found shadow variable: {key} = {value}");
+				var shadow = ParseBoxShadow(value);
+				if (shadow != null)
+				{
+					// Generate a meaningful key from the variable name
+					var tokenKey = GenerateShadowTokenKey(key);
+					shadow.Key = tokenKey;
+					shadow.Purpose = $"Shadow from Bootstrap variable {key}";
+					tokens.Shadows[tokenKey] = shadow;
+					ConverterLogger.Debug($"  Mapped to {tokenKey}");
+				}
+				else
+				{
+					ConverterLogger.Debug($"  Failed to parse shadow value: {value}");
+				}
+			}
+		}
+
+		ConverterLogger.Debug($"Total shadow tokens mapped: {tokens.Shadows.Count}");
+	}
+
+	/// <summary>
+	/// Generate a shadow token key from a Bootstrap variable name
+	/// </summary>
+	private static string GenerateShadowTokenKey(string variableName)
+	{
+		// Convert "btn-box-shadow" -> "Shadow.Button"
+		// Convert "box-shadow" -> "Shadow.Default"
+		// Convert "box-shadow-sm" -> "Shadow.Small"
+		// Convert "box-shadow-lg" -> "Shadow.Large"
+
+		var normalized = variableName
+			.Replace("btn-box-shadow", "Button", StringComparison.OrdinalIgnoreCase)
+			.Replace("box-shadow-lg", "Large", StringComparison.OrdinalIgnoreCase)
+			.Replace("box-shadow-sm", "Small", StringComparison.OrdinalIgnoreCase)
+			.Replace("box-shadow", "Default", StringComparison.OrdinalIgnoreCase)
+			.Replace("-shadow", "", StringComparison.OrdinalIgnoreCase)
+			.Replace("_", "", StringComparison.Ordinal)
+			.Replace("-", ".", StringComparison.Ordinal);
+
+		// Clean up and ensure proper casing
+		var parts = normalized.Split('.', StringSplitOptions.RemoveEmptyEntries);
+		var capitalizedParts = parts.Select(p => char.ToUpper(p[0], CultureInfo.InvariantCulture) + p.Substring(1).ToLower(CultureInfo.InvariantCulture));
+		var result = string.Join(".", capitalizedParts);
+
+		return result.StartsWith("Shadow.", StringComparison.Ordinal) ? result : $"Shadow.{result}";
+	}
+
+	/// <summary>
+	/// Map per-edge border properties from Bootstrap to Flagstone tokens
+	/// </summary>
+	private void MapPerEdgeBorders(Dictionary<string, string> bootstrapBorders, FlagstoneTokens tokens, string? componentName = null)
+	{
+		var suffix = string.IsNullOrEmpty(componentName) ? "Default" : componentName;
+
+		// Check for multi-value border-width (e.g., "2px 0 0 0" for top-only border)
+		if (bootstrapBorders.TryGetValue("border-width", out var borderWidth) && borderWidth.Contains(' ', StringComparison.Ordinal))
+		{
+			var parts = borderWidth.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+			if (parts.Length == 4)
+			{
+				// CSS order: top right bottom left
+				var topWidthValue = ConvertToPixels(parts[0], 16.0);
+				var rightWidthValue = ConvertToPixels(parts[1], 16.0);
+				var bottomWidthValue = ConvertToPixels(parts[2], 16.0);
+				var leftWidthValue = ConvertToPixels(parts[3], 16.0);
+
+				if (topWidthValue > 0)
+					tokens.BorderTopWidth[$"BorderTopWidth.{suffix}"] = CreateNumericToken($"BorderTopWidth.{suffix}", topWidthValue, $"Top border width for {suffix}");
+				if (rightWidthValue > 0)
+					tokens.BorderRightWidth[$"BorderRightWidth.{suffix}"] = CreateNumericToken($"BorderRightWidth.{suffix}", rightWidthValue, $"Right border width for {suffix}");
+				if (bottomWidthValue > 0)
+					tokens.BorderBottomWidth[$"BorderBottomWidth.{suffix}"] = CreateNumericToken($"BorderBottomWidth.{suffix}", bottomWidthValue, $"Bottom border width for {suffix}");
+				if (leftWidthValue > 0)
+					tokens.BorderLeftWidth[$"BorderLeftWidth.{suffix}"] = CreateNumericToken($"BorderLeftWidth.{suffix}", leftWidthValue, $"Left border width for {suffix}");
+			}
+		}
+
+		// Individual edge properties
+		if (bootstrapBorders.TryGetValue("border-top-width", out var topWidth))
+		{
+			var value = ConvertToPixels(topWidth, 16.0);
+			tokens.BorderTopWidth[$"BorderTopWidth.{suffix}"] = CreateNumericToken($"BorderTopWidth.{suffix}", value, $"Top border width for {suffix}");
+		}
+
+		if (bootstrapBorders.TryGetValue("border-right-width", out var rightWidth))
+		{
+			var value = ConvertToPixels(rightWidth, 16.0);
+			tokens.BorderRightWidth[$"BorderRightWidth.{suffix}"] = CreateNumericToken($"BorderRightWidth.{suffix}", value, $"Right border width for {suffix}");
+		}
+
+		if (bootstrapBorders.TryGetValue("border-bottom-width", out var bottomWidth))
+		{
+			var value = ConvertToPixels(bottomWidth, 16.0);
+			tokens.BorderBottomWidth[$"BorderBottomWidth.{suffix}"] = CreateNumericToken($"BorderBottomWidth.{suffix}", value, $"Bottom border width for {suffix}");
+		}
+
+		if (bootstrapBorders.TryGetValue("border-left-width", out var leftWidth))
+		{
+			var value = ConvertToPixels(leftWidth, 16.0);
+			tokens.BorderLeftWidth[$"BorderLeftWidth.{suffix}"] = CreateNumericToken($"BorderLeftWidth.{suffix}", value, $"Left border width for {suffix}");
+		}
+	}
+
+	/// <summary>
+	/// Parse box-shadow value and create shadow tokens
+	/// </summary>
+	public void MapShadows(Dictionary<string, string> shadowProps, FlagstoneTokens tokens, string componentName)
+	{
+		// Try Bootstrap custom properties first, then fall back to box-shadow
+		var boxShadow = shadowProps.GetValueOrDefault("--bs-btn-box-shadow")
+			?? shadowProps.GetValueOrDefault("--bs-box-shadow")
+			?? shadowProps.GetValueOrDefault("box-shadow");
+
+		if (string.IsNullOrWhiteSpace(boxShadow))
+			return;
+
+		var shadow = ParseBoxShadow(boxShadow);
+		if (shadow != null)
+		{
+			shadow.Key = $"Shadow.{componentName}";
+			shadow.Purpose = $"{componentName} shadow from Bootstrap box-shadow";
+			tokens.Shadows[shadow.Key] = shadow;
+		}
+	}
+
+	/// <summary>
+	/// Parse a CSS box-shadow value into a ShadowToken
+	/// </summary>
+	private ShadowToken? ParseBoxShadow(string boxShadow)
+	{
+		if (string.IsNullOrWhiteSpace(boxShadow) || boxShadow == "none")
+			return null;
+
+		try
+		{
+			// Handle multiple shadows (comma-separated)
+			// For now, take the first non-inset shadow
+			var shadows = boxShadow.Split(',');
+			foreach (var shadow in shadows)
+			{
+				var trimmedShadow = shadow.Trim();
+				
+				// Skip inset shadows
+				if (trimmedShadow.StartsWith("inset", StringComparison.OrdinalIgnoreCase))
+					continue;
+
+				var result = ParseSingleBoxShadow(trimmedShadow);
+				if (result != null)
+					return result;
+			}
+
+			return null;
+		}
+		catch
+		{
+			return null;
+		}
+	}
+
+	/// <summary>
+	/// Parse a single CSS box-shadow value (not comma-separated)
+	/// </summary>
+	private ShadowToken? ParseSingleBoxShadow(string boxShadow)
+	{
+		try
+		{
+			// Simple parser for common box-shadow patterns:
+			// "3px 3px 0 0 #000"
+			// "0 0.5rem 1rem rgba(0, 0, 0, 0.15)"
+
+			var opacity = 1.0;
+			var color = "#000"; // Default fallback color
+
+			// First, extract any rgba/rgb color to avoid splitting issues
+			var rgbaMatch = System.Text.RegularExpressions.Regex.Match(boxShadow, @"rgba?\([^)]+\)");
+			if (rgbaMatch.Success)
+			{
+				var colorValue = rgbaMatch.Value;
+				
+				// Extract opacity from rgba
+				var alphaMatch = System.Text.RegularExpressions.Regex.Match(colorValue, @"rgba\([^,]+,\s*[^,]+,\s*[^,]+,\s*([0-9.]+)\)");
+				if (alphaMatch.Success && double.TryParse(alphaMatch.Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var alpha))
+				{
+					opacity = alpha;
+				}
+
+				// Extract RGB components
+				var rgbMatch = System.Text.RegularExpressions.Regex.Match(colorValue, @"rgba?\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)");
+				if (rgbMatch.Success)
+				{
+					var r = rgbMatch.Groups[1].Value;
+					var g = rgbMatch.Groups[2].Value;
+					var b = rgbMatch.Groups[3].Value;
+					color = $"rgb({r},{g},{b})";
+				}
+				else
+				{
+					// rgba with variables or invalid format - skip this shadow
+					ConverterLogger.Debug($"Skipping shadow with CSS variable or invalid rgba: {colorValue}");
+					return null;
+				}
+
+				// Remove the color from the string for further parsing
+				boxShadow = boxShadow.Replace(rgbaMatch.Value, "", StringComparison.Ordinal).Trim();
+			}
+			else if (boxShadow.Contains("#", StringComparison.Ordinal))
+			{
+				// Extract hex color
+				var hexMatch = System.Text.RegularExpressions.Regex.Match(boxShadow, @"#[0-9a-fA-F]{3,8}");
+				if (hexMatch.Success)
+				{
+					color = hexMatch.Value;
+					boxShadow = boxShadow.Replace(hexMatch.Value, "", StringComparison.Ordinal).Trim();
+				}
+			}
+			else if (boxShadow.Contains("rgb(", StringComparison.Ordinal))
+			{
+				// Handle rgb() without alpha
+				var rgbMatch = System.Text.RegularExpressions.Regex.Match(boxShadow, @"rgb\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)");
+				if (rgbMatch.Success)
+				{
+					color = rgbMatch.Value;
+					boxShadow = boxShadow.Replace(rgbMatch.Value, "", StringComparison.Ordinal).Trim();
+				}
+			}
+
+			// Now parse the numeric values
+			var parts = boxShadow.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+			if (parts.Length < 3)
+				return null;
+
+			var offsetX = ConvertToPixels(parts[0], 16.0);
+			var offsetY = ConvertToPixels(parts[1], 16.0);
+			var blur = ConvertToPixels(parts[2], 16.0);
+
+			return new ShadowToken
+			{
+				Key = "Shadow.Temp", // Will be set by caller
+				OffsetX = offsetX,
+				OffsetY = offsetY,
+				Radius = blur,
+				Color = NormalizeColorValue(color),
+				Opacity = opacity
+			};
+		}
+		catch
+		{
+			return null;
 		}
 	}
 
@@ -509,6 +781,11 @@ public class BootstrapMapper
 				Purpose = $"Border color for {colorName} variant"
 			};
 		}
+
+		// Extract shadows from button style
+		var analyzer = new BootstrapCssAnalyzer();
+		var shadowProps = analyzer.ExtractShadows(buttonStyle);
+		MapShadows(shadowProps, tokens, $"Button.{colorName}");
 	}
 
 	private void ExtractSpacingTokens(ComputedStyle style, FlagstoneTokens tokens)
@@ -559,6 +836,11 @@ public class BootstrapMapper
 				Purpose = "Button border width from Bootstrap .btn"
 			};
 		}
+
+		// Extract per-edge borders
+		var analyzer = new BootstrapCssAnalyzer();
+		var borderProps = analyzer.ExtractBorders(style);
+		MapPerEdgeBorders(borderProps, tokens, "Button");
 	}
 
 	private void ExtractTypographyTokens(ComputedStyle style, FlagstoneTokens tokens)

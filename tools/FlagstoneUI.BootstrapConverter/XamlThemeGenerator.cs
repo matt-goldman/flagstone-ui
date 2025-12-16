@@ -68,6 +68,8 @@ public class XamlThemeGenerator
     {
         options ??= new ConversionOptions();
 
+        ConverterLogger.Debug($"GenerateTokensXaml: Colors={tokens.Colors.Count}, Typography={tokens.Typography.Count}, Shadows={tokens.Shadows.Count}");
+
         var doc = CreateXamlDocument();
         var root = doc.Root!;
 
@@ -99,6 +101,33 @@ public class XamlThemeGenerator
         if (tokens.BorderWidth.Count > 0)
         {
             AddNumericTokens(root, tokens.BorderWidth, "Border Width", options);
+        }
+
+        // Add per-edge border width tokens
+        if (tokens.BorderTopWidth.Count > 0)
+        {
+            AddNumericTokens(root, tokens.BorderTopWidth, "Border Top Width", options);
+        }
+
+        if (tokens.BorderRightWidth.Count > 0)
+        {
+            AddNumericTokens(root, tokens.BorderRightWidth, "Border Right Width", options);
+        }
+
+        if (tokens.BorderBottomWidth.Count > 0)
+        {
+            AddNumericTokens(root, tokens.BorderBottomWidth, "Border Bottom Width", options);
+        }
+
+        if (tokens.BorderLeftWidth.Count > 0)
+        {
+            AddNumericTokens(root, tokens.BorderLeftWidth, "Border Left Width", options);
+        }
+
+        // Add shadow tokens
+        if (tokens.Shadows.Count > 0)
+        {
+            AddShadowTokens(root, tokens.Shadows, options);
         }
 
         return FormatXamlDocument(doc);
@@ -354,6 +383,50 @@ public class XamlThemeGenerator
         root.Add(new XText("\n"));
     }
 
+    private void AddShadowTokens(XElement root, Dictionary<string, ShadowToken> shadows, ConversionOptions options)
+    {
+        var xNs = root.GetNamespaceOfPrefix("x") ?? XNamespace.Get(XamlNamespace);
+        var mauiNs = root.Name.Namespace;
+
+        root.Add(new XComment(" ===== Shadow Tokens ===== "));
+
+        foreach (var (_, token) in shadows.OrderBy(kvp => kvp.Key))
+        {
+            if (options.IncludeComments && !string.IsNullOrWhiteSpace(token.Purpose))
+            {
+                root.Add(new XComment($" {token.Key}: {token.Purpose} "));
+            }
+
+            // Create Shadow element with properties
+            var shadowElement = new XElement(mauiNs + "Shadow",
+                new XAttribute(xNs + "Key", token.Key)
+            );
+
+            // Add Offset property (combining OffsetX and OffsetY)
+            shadowElement.Add(new XElement(mauiNs + "Shadow.Offset",
+                new XText($"{token.OffsetX.ToString(CultureInfo.InvariantCulture)}, {token.OffsetY.ToString(CultureInfo.InvariantCulture)}")
+            ));
+
+            // Add Radius property
+            shadowElement.Add(new XElement(mauiNs + "Shadow.Radius",
+                new XText(token.Radius.ToString(CultureInfo.InvariantCulture))
+            ));
+
+            // Add Brush property with color and opacity
+            var brush = new XElement(mauiNs + "Shadow.Brush",
+                new XElement(mauiNs + "SolidColorBrush",
+                    new XAttribute("Color", token.Color),
+                    new XAttribute("Opacity", token.Opacity.ToString(CultureInfo.InvariantCulture))
+                )
+            );
+            shadowElement.Add(brush);
+
+            root.Add(shadowElement);
+        }
+
+        root.Add(new XText("\n"));
+    }
+
     /// <summary>
     /// Generate .xaml.cs code-behind file for a theme
     /// </summary>
@@ -509,6 +582,16 @@ public class XamlThemeGenerator
 
         defaultStyle.Add(CreateSetter(mauiNs, "MinimumHeightRequest", "40"));
 
+        // Add shadow if available - prefer Shadow.Button, fallback to Shadow.Default
+        if (tokens.Shadows.ContainsKey("Shadow.Button"))
+        {
+            defaultStyle.Add(CreateSetter(mauiNs, "Shadow", "{DynamicResource Shadow.Button}"));
+        }
+        else if (tokens.Shadows.ContainsKey("Shadow.Default"))
+        {
+            defaultStyle.Add(CreateSetter(mauiNs, "Shadow", "{DynamicResource Shadow.Default}"));
+        }
+
         // Add disabled visual state
         AddButtonVisualStates(defaultStyle, mauiNs, xNs);
 
@@ -567,6 +650,17 @@ public class XamlThemeGenerator
         }
 
         outlinedStyle.Add(CreateSetter(mauiNs, "MinimumHeightRequest", "40"));
+
+        // Add shadow if available - prefer Shadow.Button, fallback to Shadow.Default
+        if (tokens.Shadows.ContainsKey("Shadow.Button"))
+        {
+            outlinedStyle.Add(CreateSetter(mauiNs, "Shadow", "{DynamicResource Shadow.Button}"));
+        }
+        else if (tokens.Shadows.ContainsKey("Shadow.Default"))
+        {
+            outlinedStyle.Add(CreateSetter(mauiNs, "Shadow", "{DynamicResource Shadow.Default}"));
+        }
+
         AddButtonVisualStates(outlinedStyle, mauiNs, xNs);
 
         root.Add(outlinedStyle);
@@ -605,6 +699,17 @@ public class XamlThemeGenerator
         }
 
         textButtonStyle.Add(CreateSetter(mauiNs, "MinimumHeightRequest", "40"));
+
+        // Add shadow if available - prefer Shadow.Button, fallback to Shadow.Default
+        if (tokens.Shadows.ContainsKey("Shadow.Button"))
+        {
+            textButtonStyle.Add(CreateSetter(mauiNs, "Shadow", "{DynamicResource Shadow.Button}"));
+        }
+        else if (tokens.Shadows.ContainsKey("Shadow.Default"))
+        {
+            textButtonStyle.Add(CreateSetter(mauiNs, "Shadow", "{DynamicResource Shadow.Default}"));
+        }
+
         AddButtonVisualStates(textButtonStyle, mauiNs, xNs);
 
         root.Add(textButtonStyle);
@@ -1117,6 +1222,22 @@ public class XamlThemeGenerator
         var cardPadding = TryParseCssPaddingToThickness(componentStyles?.Card?.GetProperty("padding"))
             ?? (tokens.Spacing.ContainsKey("Spacing.Medium") ? "{DynamicResource Spacing.Medium}" : "16");
         baseStyle.Add(CreateSetter(mauiNs, "Padding", cardPadding));
+
+        // Add shadow if available - prefer Shadow.Small, fallback to Shadow.Default or any available shadow
+        if (tokens.Shadows.ContainsKey("Shadow.Small"))
+        {
+            baseStyle.Add(CreateSetter(mauiNs, "Shadow", "{DynamicResource Shadow.Small}"));
+        }
+        else if (tokens.Shadows.ContainsKey("Shadow.Default"))
+        {
+            baseStyle.Add(CreateSetter(mauiNs, "Shadow", "{DynamicResource Shadow.Default}"));
+        }
+        else if (tokens.Shadows.Count > 0)
+        {
+            // Use first available shadow token
+            var firstShadowKey = tokens.Shadows.Keys.First();
+            baseStyle.Add(CreateSetter(mauiNs, "Shadow", $"{{DynamicResource {firstShadowKey}}}"));
+        }
 
         root.Add(baseStyle);
         root.Add(new XText("\n"));
