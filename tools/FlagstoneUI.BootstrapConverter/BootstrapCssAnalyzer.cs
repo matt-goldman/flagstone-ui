@@ -1,5 +1,6 @@
 using ExCSS;
 using FlagstoneUI.BootstrapConverter.Models;
+using System.Text.RegularExpressions;
 
 namespace FlagstoneUI.BootstrapConverter;
 
@@ -19,7 +20,9 @@ public class BootstrapCssAnalyzer
 	/// - ([^}]*): Capture group 1 - the declarations block content
 	/// - \}: Match closing brace
 	/// </summary>
-	private static readonly string ThemeLightPattern = @"(?:^|\n)\s*(?::root|(?:\:root,)?\[data-bs-theme\s*=\s*['""]?light['""]?\])[^{]*\{([^}]*)\}";
+	private static readonly Regex ThemeLightPattern = new(
+		@"(?:^|\n)\s*(?::root|(?:\:root,)?\[data-bs-theme\s*=\s*['""]?light['""]?\])[^{]*\{([^}]*)\}",
+		RegexOptions.Compiled | RegexOptions.Singleline);
 
 	/// <summary>
 	/// Regex pattern for matching CSS theme blocks with dark mode properties.
@@ -31,7 +34,9 @@ public class BootstrapCssAnalyzer
 	/// - ([^}]*): Capture group 1 - the declarations block content
 	/// - \}: Match closing brace
 	/// </summary>
-	private static readonly string ThemeDarkPattern = @"(?:^|\n)\s*\[data-bs-theme\s*=\s*['""]?dark['""]?\][^{]*\{([^}]*)\}";
+	private static readonly Regex ThemeDarkPattern = new(
+		@"(?:^|\n)\s*\[data-bs-theme\s*=\s*['""]?dark['""]?\][^{]*\{([^}]*)\}",
+		RegexOptions.Compiled | RegexOptions.Singleline);
 
 	/// <summary>
 	/// Regex pattern for matching CSS custom property declarations.
@@ -42,7 +47,9 @@ public class BootstrapCssAnalyzer
 	/// - ([^;]+): Capture group 2 - property value (any characters except semicolon)
 	/// - ;: Match trailing semicolon
 	/// </summary>
-	private static readonly string CustomPropertyPattern = @"(--[a-z0-9-]+)\s*:\s*([^;]+);";
+	private static readonly Regex CustomPropertyPattern = new(
+		@"(--[a-z0-9-]+)\s*:\s*([^;]+);",
+		RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
 	/// <summary>
 	/// Analyze Bootstrap CSS and extract component styles
@@ -406,16 +413,14 @@ public class BootstrapCssAnalyzer
 
 		// Manual parsing since ExCSS doesn't support CSS custom properties
 		// Extract light mode properties
-		foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(
-			cssContent, ThemeLightPattern, System.Text.RegularExpressions.RegexOptions.Singleline))
+		foreach (Match match in ThemeLightPattern.Matches(cssContent))
 		{
 			var declarations = match.Groups[1].Value;
 			ParseCustomProperties(declarations, result["light"]);
 		}
 
 		// Extract dark mode properties
-		foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(
-			cssContent, ThemeDarkPattern, System.Text.RegularExpressions.RegexOptions.Singleline))
+		foreach (Match match in ThemeDarkPattern.Matches(cssContent))
 		{
 			var declarations = match.Groups[1].Value;
 			ParseCustomProperties(declarations, result["dark"]);
@@ -430,8 +435,7 @@ public class BootstrapCssAnalyzer
 	/// </summary>
 	private static void ParseCustomProperties(string declarationsBlock, Dictionary<string, string> target)
 	{
-		foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(
-			declarationsBlock, CustomPropertyPattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+		foreach (Match match in CustomPropertyPattern.Matches(declarationsBlock))
 		{
 			var propertyName = match.Groups[1].Value.Trim();
 			var propertyValue = match.Groups[2].Value.Trim();
