@@ -13,9 +13,9 @@ public class BootstrapCssAnalyzer
 	/// <summary>
 	/// Regex pattern for matching CSS theme blocks with light mode properties.
 	/// Matches :root or [data-bs-theme=light] selectors and captures the content within curly braces.
-	/// Pattern structure: (?:^|\n)\s*(?::root|(?:\:root,)?\[data-bs-theme\s*=\s*['""]?light['""]?\])[^{]*\{([^}]*)\}
+	/// Pattern structure: (?:^|\n)\s*(?::root|(?::root,)?\[data-bs-theme\s*=\s*['""]?light['""]?\])[^{]*\{([^}]*)\}
 	/// - (?:^|\n)\s*: Match start of line or newline followed by optional whitespace
-	/// - (?::root|(?:\:root,)?\[data-bs-theme\s*=\s*['""]?light['""]?\]): Match :root or [data-bs-theme=light] selector
+	/// - (?::root|(?::root,)?\[data-bs-theme\s*=\s*['""]?light['""]?\]): Match :root or [data-bs-theme=light] selector
 	/// - [^{]*\{: Match any characters up to opening brace
 	/// - ([^}]*): Capture group 1 - the declarations block content
 	/// - \}: Match closing brace
