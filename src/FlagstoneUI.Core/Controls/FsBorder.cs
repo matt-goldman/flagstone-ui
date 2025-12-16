@@ -16,9 +16,6 @@ namespace FlagstoneUI.Core.Controls;
 /// </remarks>
 public partial class FsBorder : ContentView
 {
-	private readonly Grid _layoutRoot;
-	private readonly MauiBorder _innerBorder;
-	private readonly ContentPresenter _contentPresenter;
 	private Line? _topLine;
 	private Line? _rightLine;
 	private Line? _bottomLine;
@@ -26,25 +23,7 @@ public partial class FsBorder : ContentView
 
 	public FsBorder()
 	{
-		_layoutRoot = [];
-		_innerBorder = new MauiBorder();
-		_contentPresenter = new ContentPresenter();
-
-		_innerBorder.Content = _contentPresenter;
-		_layoutRoot.Children.Add(_innerBorder);
-
-		Content = _layoutRoot;
-
-		// Bind content presenter to this control's content
-		_contentPresenter.SetBinding(ContentPresenter.ContentProperty, new Binding(nameof(BorderContent), source: this));
-		_innerBorder.SetBinding(VisualElement.BackgroundProperty, new Binding(nameof(Background), source: this));
-		_innerBorder.SetBinding(MauiBorder.PaddingProperty, new Binding(nameof(Padding), source: this));
-		_innerBorder.SetBinding(MauiBorder.StrokeShapeProperty, new Binding(nameof(StrokeShape), source: this));
-		
-		// Bind uniform border properties to inner border
-		// These will be disabled when per-edge mode is active
-		_innerBorder.SetBinding(MauiBorder.StrokeProperty, new Binding(nameof(Stroke), source: this));
-		_innerBorder.SetBinding(MauiBorder.StrokeThicknessProperty, new Binding(nameof(StrokeThickness), source: this));
+		InitializeComponent();
 	}
 
 	protected override void OnSizeAllocated(double width, double height)
@@ -67,7 +46,7 @@ public partial class FsBorder : ContentView
 			if (_topLine == null)
 			{
 				_topLine = CreateBorderLine(strokeCap);
-				_layoutRoot.Children.Add(_topLine);
+				LayoutRoot.Children.Add(_topLine);
 			}
 			_topLine.X1 = 0;
 			_topLine.Y1 = BorderTopThickness / 2;
@@ -88,7 +67,7 @@ public partial class FsBorder : ContentView
 			if (_bottomLine == null)
 			{
 				_bottomLine = CreateBorderLine(strokeCap);
-				_layoutRoot.Children.Add(_bottomLine);
+				LayoutRoot.Children.Add(_bottomLine);
 			}
 			_bottomLine.X1 = 0;
 			_bottomLine.Y1 = height - (BorderBottomThickness / 2);
@@ -109,7 +88,7 @@ public partial class FsBorder : ContentView
 			if (_leftLine == null)
 			{
 				_leftLine = CreateBorderLine(strokeCap);
-				_layoutRoot.Children.Add(_leftLine);
+				LayoutRoot.Children.Add(_leftLine);
 			}
 			_leftLine.X1 = BorderLeftThickness / 2;
 			_leftLine.Y1 = 0;
@@ -130,7 +109,7 @@ public partial class FsBorder : ContentView
 			if (_rightLine == null)
 			{
 				_rightLine = CreateBorderLine(strokeCap);
-				_layoutRoot.Children.Add(_rightLine);
+				LayoutRoot.Children.Add(_rightLine);
 			}
 			_rightLine.X1 = width - (BorderRightThickness / 2);
 			_rightLine.Y1 = 0;
@@ -599,8 +578,8 @@ public partial class FsBorder : ContentView
 		if (isPerEdgeMode)
 		{
 			// Per-edge mode: disable uniform border stroke
-			_innerBorder.Stroke = Colors.Transparent;
-			_innerBorder.StrokeThickness = 0;
+			InnerBorder.Stroke = Colors.Transparent;
+			InnerBorder.StrokeThickness = 0;
 		}
 		else
 		{

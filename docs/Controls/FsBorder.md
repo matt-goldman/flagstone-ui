@@ -222,9 +222,11 @@ When these properties are set, they automatically update all four edge-specific 
 
 4. **Separate thickness and brush properties**: Keeping these separate provides maximum flexibility, though this could be revisited based on usage patterns.
 
-5. **Z-index layering**: Border lines use `ZIndex = -1` to render behind all Grid content (which defaults to `ZIndex = 0`). This ensures borders never cover or obscure content.
+5. **XAML-based structure**: FsBorder uses XAML + C# partial class pattern (like FsCard) for clearer visual structure and proper content binding through ContentPresenter.
 
-6. **Input transparency**: Border lines are set to `InputTransparent = true` to ensure they render visually without blocking user interaction with the content inside the border.
+6. **Z-index layering**: Border lines use `ZIndex = -1` to render behind all Grid content (which defaults to `ZIndex = 0`). This ensures borders never cover or obscure content.
+
+7. **Input transparency**: Border lines are set to `InputTransparent = true` to ensure they render visually without blocking user interaction with the content inside the border.
 
 ## Accessibility Considerations
 
