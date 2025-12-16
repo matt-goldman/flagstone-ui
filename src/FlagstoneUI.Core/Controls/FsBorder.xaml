@@ -5,14 +5,18 @@
              x:DataType="controls:FsBorder"
              x:Class="FlagstoneUI.Core.Controls.FsBorder"
              x:Name="BorderControl">
-    <Grid x:Name="LayoutRoot">
-        <Border x:Name="InnerBorder"
-                Background="{Binding Source={x:Reference BorderControl}, Path=Background}"
-                Padding="{Binding Source={x:Reference BorderControl}, Path=Padding}"
-                Stroke="{Binding Source={x:Reference BorderControl}, Path=Stroke}"
-                StrokeThickness="{Binding Source={x:Reference BorderControl}, Path=StrokeThickness}"
-                StrokeShape="{Binding Source={x:Reference BorderControl}, Path=StrokeShape}">
-            <ContentPresenter Content="{Binding Source={x:Reference BorderControl}, Path=BorderContent}" />
-        </Border>
-    </Grid>
+    <ContentView.ControlTemplate>
+        <ControlTemplate>
+            <Grid x:Name="LayoutRoot">
+                <Border x:Name="InnerBorder"
+                        Background="{Binding Source={x:Reference BorderControl}, Path=Background}"
+                        Padding="{Binding Source={x:Reference BorderControl}, Path=Padding}"
+                        Stroke="{Binding Source={x:Reference BorderControl}, Path=Stroke}"
+                        StrokeThickness="{Binding Source={x:Reference BorderControl}, Path=StrokeThickness}"
+                        StrokeShape="{Binding Source={x:Reference BorderControl}, Path=StrokeShape}">
+                    <ContentPresenter />
+                </Border>
+            </Grid>
+        </ControlTemplate>
+    </ContentView.ControlTemplate>
 </ContentView>

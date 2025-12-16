@@ -222,7 +222,7 @@ When these properties are set, they automatically update all four edge-specific 
 
 4. **Separate thickness and brush properties**: Keeping these separate provides maximum flexibility, though this could be revisited based on usage patterns.
 
-5. **XAML-based structure**: FsBorder uses XAML + C# partial class pattern (like FsCard) for clearer visual structure and proper content binding through ContentPresenter.
+5. **ControlTemplate architecture**: FsBorder uses a ControlTemplate (like FsCard) to properly handle content through ContentPresenter. The `BorderContent` property syncs to the `Content` property for compatibility with existing usage.
 
 6. **Z-index layering**: Border lines use `ZIndex = -1` to render behind all Grid content (which defaults to `ZIndex = 0`). This ensures borders never cover or obscure content.
 

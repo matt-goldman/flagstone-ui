@@ -15,6 +15,8 @@ namespace FlagstoneUI.Core.Controls;
 /// </remarks>
 public partial class FsBorder : ContentView
 {
+	private Grid? _layoutRoot;
+	private Border? _innerBorder;
 	private Line? _topLine;
 	private Line? _rightLine;
 	private Line? _bottomLine;
@@ -23,6 +25,15 @@ public partial class FsBorder : ContentView
 	public FsBorder()
 	{
 		InitializeComponent();
+	}
+
+	protected override void OnApplyTemplate()
+	{
+		base.OnApplyTemplate();
+
+		// Get template children
+		_layoutRoot = GetTemplateChild("LayoutRoot") as Grid;
+		_innerBorder = GetTemplateChild("InnerBorder") as Border;
 	}
 
 	protected override void OnSizeAllocated(double width, double height)
@@ -37,6 +48,8 @@ public partial class FsBorder : ContentView
 
 	private void UpdateBorderLines(double width, double height)
 	{
+		if (_layoutRoot == null) return;
+
 		var strokeCap = BorderStrokeCap;
 
 		// Top border
@@ -45,7 +58,7 @@ public partial class FsBorder : ContentView
 			if (_topLine == null)
 			{
 				_topLine = CreateBorderLine(strokeCap);
-				LayoutRoot.Children.Add(_topLine);
+				_layoutRoot.Children.Add(_topLine);
 			}
 			_topLine.X1 = 0;
 			_topLine.Y1 = BorderTopThickness / 2;
@@ -66,7 +79,7 @@ public partial class FsBorder : ContentView
 			if (_bottomLine == null)
 			{
 				_bottomLine = CreateBorderLine(strokeCap);
-				LayoutRoot.Children.Add(_bottomLine);
+				_layoutRoot.Children.Add(_bottomLine);
 			}
 			_bottomLine.X1 = 0;
 			_bottomLine.Y1 = height - (BorderBottomThickness / 2);
@@ -87,7 +100,7 @@ public partial class FsBorder : ContentView
 			if (_leftLine == null)
 			{
 				_leftLine = CreateBorderLine(strokeCap);
-				LayoutRoot.Children.Add(_leftLine);
+				_layoutRoot.Children.Add(_leftLine);
 			}
 			_leftLine.X1 = BorderLeftThickness / 2;
 			_leftLine.Y1 = 0;
@@ -108,7 +121,7 @@ public partial class FsBorder : ContentView
 			if (_rightLine == null)
 			{
 				_rightLine = CreateBorderLine(strokeCap);
-				LayoutRoot.Children.Add(_rightLine);
+				_layoutRoot.Children.Add(_rightLine);
 			}
 			_rightLine.X1 = width - (BorderRightThickness / 2);
 			_rightLine.Y1 = 0;
@@ -142,7 +155,8 @@ public partial class FsBorder : ContentView
 		nameof(BorderContent),
 		typeof(View),
 		typeof(FsBorder),
-		null);
+		null,
+		propertyChanged: OnBorderContentChanged);
 
 	/// <summary>
 	/// Gets or sets the content displayed within the border.
@@ -151,6 +165,15 @@ public partial class FsBorder : ContentView
 	{
 		get => (View?)GetValue(BorderContentProperty);
 		set => SetValue(BorderContentProperty, value);
+	}
+
+	private static void OnBorderContentChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is FsBorder border)
+		{
+			// Sync BorderContent to Content so ControlTemplate's ContentPresenter picks it up
+			border.Content = newValue as View;
+		}
 	}
 	#endregion
 
@@ -577,8 +600,11 @@ public partial class FsBorder : ContentView
 		if (isPerEdgeMode)
 		{
 			// Per-edge mode: disable uniform border stroke
-			InnerBorder.Stroke = Colors.Transparent;
-			InnerBorder.StrokeThickness = 0;
+			if (_innerBorder != null)
+			{
+				_innerBorder.Stroke = Colors.Transparent;
+				_innerBorder.StrokeThickness = 0;
+			}
 		}
 		else
 		{
