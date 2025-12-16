@@ -428,7 +428,7 @@ public class XamlThemeGenerator
 
             // Add Offset property (combining OffsetX and OffsetY)
             shadowElement.Add(new XElement(mauiNs + "Shadow.Offset",
-                new XText($"{token.OffsetX.ToString(CultureInfo.InvariantCulture)}, {token.OffsetY.ToString(CultureInfo.InvariantCulture)}")
+                new XText($"{token.OffsetX.ToString(CultureInfo.InvariantCulture)},{token.OffsetY.ToString(CultureInfo.InvariantCulture)}")
             ));
 
             // Add Radius property
