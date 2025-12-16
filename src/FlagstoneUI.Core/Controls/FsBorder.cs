@@ -35,9 +35,6 @@ public partial class FsBorder : ContentView
 
 		Content = _layoutRoot;
 
-		// Ensure content renders on top of border lines
-		_innerBorder.ZIndex = 1;
-
 		// Bind content presenter to this control's content
 		_contentPresenter.SetBinding(ContentPresenter.ContentProperty, new Binding(nameof(BorderContent), source: this));
 		_innerBorder.SetBinding(VisualElement.BackgroundProperty, new Binding(nameof(Background), source: this));
@@ -155,7 +152,7 @@ public partial class FsBorder : ContentView
 		{
 			StrokeLineCap = strokeCap,
 			InputTransparent = true,
-			ZIndex = 0  // Render behind content (content has ZIndex = 1)
+			ZIndex = -1  // Render behind content (use negative ZIndex)
 		};
 	}
 
