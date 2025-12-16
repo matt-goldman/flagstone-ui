@@ -298,8 +298,9 @@ public class XamlThemeGenerator
                     new XAttribute(xNs + "Key", $"{token.Key}.Dark"),
                     token.DarkValue
                 );
-                root.Add(darkColorElement);
-            }
+				root.Add(new XComment($" Dark mode: {token.DarkValue} "));
+				root.Add(darkColorElement);
+			}
         }
 
         root.Add(new XText("\n"));
