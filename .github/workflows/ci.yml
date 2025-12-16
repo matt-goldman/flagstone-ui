@@ -15,6 +15,7 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    if: github.event.pull_request.draft == false || github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4
       - name: Set up .NET 10 SDK
