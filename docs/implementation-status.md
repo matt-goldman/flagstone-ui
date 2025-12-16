@@ -40,13 +40,12 @@ This document tracks the current implementation status of Flagstone UI component
 |------------------------------------|---------------|------------------|----------|---------------------------------------------------------------------------------------|
 | **FsSwitch**                       | ❌ Not Started | No (MVP)         | Medium   | Enhanced switch with improved theming                                                 |
 | **Snackbar**                       | ❌ Not Planned | No               | Medium   | Complete service implementation with overlay                                          |
-| **FlagstoneUI MCP Server**         | 📋 Planned     | No (Post-MVP)    | **High** | Comprehensive MCP server for agent-assisted development (replacing temp MCP project)  |
-| **MCP Bootstrap Converter Tool**   | 📋 Planned     | No (Post-MVP)    | High     | Integrate Bootstrap converter into MCP server                                         |
-| **MCP Documentation Tool**         | 📋 Planned     | No (Post-MVP)    | High     | Provide FlagstoneUI docs to AI agents (tokens, controls, architecture, best practices) |
-| **MCP Example Provider Tool**      | 📋 Planned     | No (Post-MVP)    | High     | Show converted theme examples and control usage patterns                             |
-| **MCP Theme Analyzer Tool**        | 📋 Planned     | No (Post-MVP)    | Medium   | Analyze and validate FlagstoneUI themes                                               |
-| **MCP UI Generator Tool**          | 📋 Planned     | No (Future)      | Medium   | Generate complete XAML pages from natural language                                   |
-| **Tailwind Converter**             | 📋 Planned     | No (Future)      | Medium   | Convert Tailwind themes to FlagstoneUI (more complex than Bootstrap)                 |
+| **AGENTS.md Documentation**        | 📋 Planned     | No (Post-MVP)    | **High** | Comprehensive AI agent guidance (architecture, patterns, examples, tools) - see ADR009 |
+| **Bootstrap CLI Global Tool**      | 📋 Planned     | No (Post-MVP)    | High     | Publish Bootstrap converter as global .NET CLI tool                                   |
+| **.NET Project Templates**         | 📋 Planned     | No (Post-MVP)    | High     | FlagstoneUI app templates with AGENTS.md and opinionated patterns                    |
+| **Figma → FlagstoneUI Converter**  | 📋 Planned     | No (Future)      | **High** | Convert Figma design tokens to FlagstoneUI themes (designer-developer workflow)      |
+| **Crosswind Integration Docs**     | 📋 Planned     | No (Future)      | Medium   | Document integration patterns with Steven Thewissen's Tailwind-to-MAUI work          |
+| **FlagstoneUI MCP Server**         | ❌ Not Planned | No               | Low      | Deferred in favor of AGENTS.md (see ADR009); may reconsider if Figma converter proves valuable |
 
 ## Architecture Review
 
@@ -83,36 +82,38 @@ This document tracks the current implementation status of Flagstone UI component
   - Workaround for ExCSS 4.2.3 limitation (doesn't parse CSS custom properties) via regex-based parsing
   - Tested with Brite theme: 127 light mode + 67 dark mode properties extracted
 
-### Next Milestone: FlagstoneUI MCP Server 🎯
+### Next Milestone: Agent Guidance & Developer Experience 🎯
 
-- **Target**: Enable AI agent-assisted FlagstoneUI development
+- **Target**: Enable AI-assisted and human developer productivity
 - **Current Progress**: 0% (planning phase)
 - **Priority**: **High**
-- **Target Completion**: Q1 2025
+- **Target Completion**: Q1 2026
+- **Strategy**: AGENTS.md documentation file (see ADR009)
 
 **Goals**:
-1. Enable "vibe-coding" of FlagstoneUI interfaces through AI
-2. Provide comprehensive theme conversion tools
-3. Make FlagstoneUI documentation accessible to agents
-4. Teach agents FlagstoneUI patterns through examples
-5. Accelerate development with AI assistance
+1. Provide comprehensive guidance for AI tools and human developers
+2. Enable quality FlagstoneUI code generation through AI
+3. Establish best practices and common patterns
+4. Make CLI tools easily accessible
+5. Bridge designer-developer workflow (future: Figma)
 
-**Planned Components**:
-- [ ] Core MCP server implementation (JSON-RPC over stdio)
-- [ ] Bootstrap Converter tool (integrate existing library)
-- [ ] Documentation tool (tokens, controls, architecture, best practices)
-- [ ] Example Provider tool (converted themes, control patterns)
-- [ ] Theme Analyzer tool (validation, suggestions)
-- [ ] Configuration for Claude Desktop, VS Code, other MCP clients
-- [ ] Comprehensive testing (protocol, integration, agent behavior)
-- [ ] Documentation and usage guides
+**Planned Deliverables**:
+- [ ] AGENTS.md documentation file
+  - Architecture overview and philosophy
+  - Code generation patterns and examples
+  - Token usage guidelines
+  - Anti-patterns to avoid
+  - Available CLI tools
+- [ ] Publish Bootstrap converter as global .NET CLI tool
+- [ ] .NET project templates with opinionated patterns
+- [ ] Figma → FlagstoneUI converter (future)
 
 **Value Proposition**:
-- ✅ Natural language → Complete FlagstoneUI interfaces
-- ✅ Bootstrap/Tailwind → FlagstoneUI automatic conversion
-- ✅ Comprehensive system understanding for AI
-- ✅ Rapid prototyping and customization
-- ✅ Consistent code generation following best practices
+- ✅ Universal AI tool compatibility (not limited to MCP clients)
+- ✅ Version-controlled guidance in repository
+- ✅ Template-based rapid project setup
+- ✅ Designer-developer workflow support (Figma)
+- ✅ Zero infrastructure maintenance burden
 
 ### Future Milestones
 
