@@ -1,5 +1,4 @@
-﻿using MauiBorder = Microsoft.Maui.Controls.Border;
-using Microsoft.Maui.Controls.Shapes;
+﻿using Microsoft.Maui.Controls.Shapes;
 
 namespace FlagstoneUI.Core.Controls;
 
