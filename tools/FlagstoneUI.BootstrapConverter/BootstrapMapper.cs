@@ -342,6 +342,7 @@ public class BootstrapMapper
 				var bottomWidthValue = ConvertToPixels(parts[2], 16.0);
 				var leftWidthValue = ConvertToPixels(parts[3], 16.0);
 
+				// Only create tokens for non-zero widths. Setting values on per-edge borders disables the uniform border.
 				if (topWidthValue > 0)
 					tokens.BorderTopWidth[$"BorderTopWidth.{suffix}"] = CreateNumericToken($"BorderTopWidth.{suffix}", topWidthValue, $"Top border width for {suffix}");
 				if (rightWidthValue > 0)
