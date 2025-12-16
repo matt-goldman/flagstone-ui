@@ -193,6 +193,8 @@ FsBorder uses up to four Line elements to render borders:
 
 Lines are positioned and sized in `OnSizeAllocated` and are only materialized when the corresponding edge thickness > 0.
 
+**Layering**: Border Line elements have `ZIndex = 0` while the inner content border has `ZIndex = 1`, ensuring borders render behind the content rather than on top of it.
+
 **Input Transparency**: All border Line elements have `InputTransparent = true` to ensure they do not intercept hit testing or block user interaction with the underlying content.
 
 ### Corner Radius Behavior
@@ -220,7 +222,9 @@ When these properties are set, they automatically update all four edge-specific 
 
 4. **Separate thickness and brush properties**: Keeping these separate provides maximum flexibility, though this could be revisited based on usage patterns.
 
-5. **Input transparency**: Border lines are set to `InputTransparent = true` to ensure they render visually without blocking user interaction with the content inside the border.
+5. **Z-index layering**: Border lines use `ZIndex = 0` while content uses `ZIndex = 1`, ensuring borders render behind content. This prevents border lines from covering or obscuring the content inside the border.
+
+6. **Input transparency**: Border lines are set to `InputTransparent = true` to ensure they render visually without blocking user interaction with the content inside the border.
 
 ## Accessibility Considerations
 
