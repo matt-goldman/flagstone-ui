@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Text.RegularExpressions;
 using FlagstoneUI.BootstrapConverter.Models;
 
 namespace FlagstoneUI.BootstrapConverter;
@@ -8,6 +9,76 @@ namespace FlagstoneUI.BootstrapConverter;
 /// </summary>
 public class BootstrapMapper
 {
+	/// <summary>
+	/// Regex pattern for matching rgba() or rgb() color functions in CSS.
+	/// Matches rgba(R, G, B, A) or rgb(R, G, B) and captures the entire function call.
+	/// Pattern structure: rgba?\([^)]+\)
+	/// - rgba?: Match 'rgb' or 'rgba'
+	/// - \(: Match opening parenthesis
+	/// - [^)]+: Capture one or more characters that are not closing parenthesis
+	/// - \): Match closing parenthesis
+	/// </summary>
+	private static readonly Regex RgbaColorPattern = new(
+		@"rgba?\([^)]+\)",
+		RegexOptions.Compiled);
+
+	/// <summary>
+	/// Regex pattern for extracting alpha channel from rgba() function.
+	/// Captures the alpha/opacity value from rgba(R, G, B, A) format.
+	/// Pattern structure: rgba\([^,]+,\s*[^,]+,\s*[^,]+,\s*([0-9.]+)\)
+	/// - rgba\(: Match 'rgba' followed by opening parenthesis
+	/// - [^,]+,\s*: Match first value (R) and comma with optional whitespace (repeated for G and B)
+	/// - ([0-9.]+): Capture group 1 - the alpha value (digits and decimal point)
+	/// - \): Match closing parenthesis
+	/// </summary>
+	private static readonly Regex RgbaAlphaPattern = new(
+		@"rgba\([^,]+,\s*[^,]+,\s*[^,]+,\s*([0-9.]+)\)",
+		RegexOptions.Compiled);
+
+	/// <summary>
+	/// Regex pattern for extracting RGB components from rgba() or rgb() function.
+	/// Captures the R, G, and B values from rgba(R, G, B, A) or rgb(R, G, B) format.
+	/// Pattern structure: rgba?\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)
+	/// - rgba?: Match 'rgb' or 'rgba'
+	/// - \(\s*: Match opening parenthesis and optional whitespace
+	/// - ([0-9]+): Capture group 1 - red value (digits only)
+	/// - \s*,\s*: Match comma with optional surrounding whitespace
+	/// - ([0-9]+): Capture group 2 - green value (digits only)
+	/// - \s*,\s*: Match comma with optional surrounding whitespace
+	/// - ([0-9]+): Capture group 3 - blue value (digits only)
+	/// </summary>
+	private static readonly Regex RgbComponentsPattern = new(
+		@"rgba?\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)",
+		RegexOptions.Compiled);
+
+	/// <summary>
+	/// Regex pattern for matching hexadecimal color values in CSS.
+	/// Matches colors like #RGB, #RRGGBB, #RRGGBBAA.
+	/// Pattern structure: #[0-9a-fA-F]{3,8}
+	/// - #: Match hash symbol
+	/// - [0-9a-fA-F]{3,8}: Match 3 to 8 hexadecimal characters (covers #RGB to #RRGGBBAA)
+	/// </summary>
+	private static readonly Regex HexColorPattern = new(
+		@"#[0-9a-fA-F]{3,8}",
+		RegexOptions.Compiled);
+
+	/// <summary>
+	/// Regex pattern for matching rgb() color function (without alpha).
+	/// Captures the R, G, and B values from rgb(R, G, B) format.
+	/// Pattern structure: rgb\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)
+	/// - rgb\(: Match 'rgb' followed by opening parenthesis
+	/// - \s*: Match optional whitespace
+	/// - ([0-9]+): Capture group 1 - red value (digits only)
+	/// - \s*,\s*: Match comma with optional surrounding whitespace
+	/// - ([0-9]+): Capture group 2 - green value (digits only)
+	/// - \s*,\s*: Match comma with optional surrounding whitespace
+	/// - ([0-9]+): Capture group 3 - blue value (digits only)
+	/// - \s*\): Match optional whitespace and closing parenthesis
+	/// </summary>
+	private static readonly Regex RgbColorPattern = new(
+		@"rgb\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)",
+		RegexOptions.Compiled);
+
 	/// <summary>
 	/// Map Bootstrap variables to Flagstone tokens
 	/// </summary>
@@ -451,20 +522,20 @@ public class BootstrapMapper
 			var color = "#000"; // Default fallback color
 
 			// First, extract any rgba/rgb color to avoid splitting issues
-			var rgbaMatch = System.Text.RegularExpressions.Regex.Match(boxShadow, @"rgba?\([^)]+\)");
+			var rgbaMatch = RgbaColorPattern.Match(boxShadow);
 			if (rgbaMatch.Success)
 			{
 				var colorValue = rgbaMatch.Value;
 				
 				// Extract opacity from rgba
-				var alphaMatch = System.Text.RegularExpressions.Regex.Match(colorValue, @"rgba\([^,]+,\s*[^,]+,\s*[^,]+,\s*([0-9.]+)\)");
+				var alphaMatch = RgbaAlphaPattern.Match(colorValue);
 				if (alphaMatch.Success && double.TryParse(alphaMatch.Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var alpha))
 				{
 					opacity = alpha;
 				}
 
 				// Extract RGB components
-				var rgbMatch = System.Text.RegularExpressions.Regex.Match(colorValue, @"rgba?\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)");
+				var rgbMatch = RgbComponentsPattern.Match(colorValue);
 				if (rgbMatch.Success)
 				{
 					var r = rgbMatch.Groups[1].Value;
@@ -485,7 +556,7 @@ public class BootstrapMapper
 			else if (boxShadow.Contains("#", StringComparison.Ordinal))
 			{
 				// Extract hex color
-				var hexMatch = System.Text.RegularExpressions.Regex.Match(boxShadow, @"#[0-9a-fA-F]{3,8}");
+				var hexMatch = HexColorPattern.Match(boxShadow);
 				if (hexMatch.Success)
 				{
 					color = hexMatch.Value;
@@ -495,7 +566,7 @@ public class BootstrapMapper
 			else if (boxShadow.Contains("rgb(", StringComparison.Ordinal))
 			{
 				// Handle rgb() without alpha
-				var rgbMatch = System.Text.RegularExpressions.Regex.Match(boxShadow, @"rgb\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)");
+				var rgbMatch = RgbColorPattern.Match(boxShadow);
 				if (rgbMatch.Success)
 				{
 					color = rgbMatch.Value;
