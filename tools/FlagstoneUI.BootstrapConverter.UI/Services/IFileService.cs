@@ -13,7 +13,12 @@ public interface IFileService
 
 internal class FileService : IFileService
 {
-	private readonly HttpClient _httpClient = new HttpClient();
+	private readonly IHttpClientFactory _httpClientFactory;
+
+	public FileService(IHttpClientFactory httpClientFactory)
+	{
+		_httpClientFactory = httpClientFactory;
+	}
 
 	public Task<SourceFile> GetFilePath()
 	{
@@ -79,7 +84,8 @@ internal class FileService : IFileService
 	{
 		try
 		{
-			var response = await _httpClient.GetAsync(url, cancellationToken);
+			using var httpClient = _httpClientFactory.CreateClient();
+			var response = await httpClient.GetAsync(url, cancellationToken);
 			response.EnsureSuccessStatusCode();
 			return await response.Content.ReadAsByteArrayAsync(cancellationToken);
 		}
