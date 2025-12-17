@@ -1248,21 +1248,8 @@ public class XamlThemeGenerator
             ?? (tokens.Spacing.ContainsKey("Spacing.Medium") ? "{DynamicResource Spacing.Medium}" : "16");
         baseStyle.Add(CreateSetter(mauiNs, "Padding", cardPadding));
 
-        // Add shadow if available - prefer Shadow.Small, fallback to Shadow.Default or any available shadow
-        if (tokens.Shadows.ContainsKey("Shadow.Small"))
-        {
-            baseStyle.Add(CreateSetter(mauiNs, "Shadow", "{DynamicResource Shadow.Small}"));
-        }
-        else if (tokens.Shadows.ContainsKey("Shadow.Default"))
-        {
-            baseStyle.Add(CreateSetter(mauiNs, "Shadow", "{DynamicResource Shadow.Default}"));
-        }
-        else if (tokens.Shadows.Count > 0)
-        {
-            // Use first available shadow token
-            var firstShadowKey = tokens.Shadows.Keys.First();
-            baseStyle.Add(CreateSetter(mauiNs, "Shadow", $"{{DynamicResource {firstShadowKey}}}"));
-        }
+        // Note: Bootstrap cards do not have shadows by default
+        // Shadows should be added manually via Elevation property or custom styles if needed
 
         root.Add(baseStyle);
         root.Add(new XText("\n"));
