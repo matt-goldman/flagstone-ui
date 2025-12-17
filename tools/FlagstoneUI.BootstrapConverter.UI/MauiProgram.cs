@@ -19,6 +19,7 @@ public static class MauiProgram
 			.UseMauiCommunityToolkit();
 
 		builder.Services.AddSingleton<IFileSaver>(FileSaver.Default);
+		builder.Services.AddHttpClient();
 
 #if DEBUG
 		builder.Logging.AddDebug();
