@@ -13,14 +13,7 @@ public interface IFileService
 
 internal class FileService : IFileService
 {
-	private readonly IFileSaver _fileSaver;
-	private readonly HttpClient _httpClient;
-
-	public FileService(IFileSaver fileSaver)
-	{
-		_fileSaver = fileSaver;
-		_httpClient = new HttpClient();
-	}
+	private readonly HttpClient _httpClient = new HttpClient();
 
 	public Task<SourceFile> GetFilePath()
 	{
@@ -45,7 +38,6 @@ internal class FileService : IFileService
 	{
 		try
 		{
-			// First, pick a folder to save to
 			var folderResult = await FolderPicker.Default.PickAsync(CancellationToken.None);
 			
 			if (!folderResult.IsSuccessful || folderResult.Folder == null)
@@ -56,24 +48,13 @@ internal class FileService : IFileService
 			var savedFiles = new List<string>();
 			var errors = new List<string>();
 
-			// Save each file to the selected folder
 			foreach (var (fileName, content) in files)
 			{
 				try
 				{
 					var filePath = Path.Combine(folderResult.Folder.Path, fileName);
-					using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
-					
-					var saveResult = await _fileSaver.SaveAsync(filePath, stream, CancellationToken.None);
-					
-					if (saveResult.IsSuccessful)
-					{
-						savedFiles.Add(fileName);
-					}
-					else
-					{
-						errors.Add($"{fileName}: {saveResult.Exception?.Message ?? "Unknown error"}");
-					}
+					await File.WriteAllTextAsync(filePath, content, Encoding.UTF8);
+					savedFiles.Add(fileName);
 				}
 				catch (Exception ex)
 				{

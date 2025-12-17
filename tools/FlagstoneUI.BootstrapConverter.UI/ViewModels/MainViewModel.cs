@@ -363,7 +363,7 @@ public partial class MainViewModel(
 					ConversionResults += "Add the following to your MauiProgram.cs:\n\n";
 					ConversionResults += "builder.ConfigureFonts(fonts =>\n{\n";
 					
-					foreach (var family in _lastConversionResult.Fonts.Families.Where(f => f.Source != FlagstoneUI.BootstrapConverter.Models.FontSource.System))
+					foreach (var family in _lastConversionResult.Fonts.Families.Where(f => f.Source != BootstrapConverter.Models.FontSource.System))
 					{
 						var fileName = $"{family.SuggestedAlias}-Regular.ttf";
 						ConversionResults += $"    fonts.AddFont(\"{fileName}\", \"{family.SuggestedAlias}\");\n";
