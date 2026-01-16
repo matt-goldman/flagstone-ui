@@ -63,7 +63,7 @@ FlagstoneUI.Integrations.MCT (optional)
 
 ### Token System
 
-FlagstoneUI uses a comprehensive token system defined in `src/FlagstoneUI.Core/Styles/Tokens.xaml`:
+FlagstoneUI uses a comprehensive token system with design tokens organized into semantic categories:
 
 **Token Categories:**
 - **Colors**: `Color.Primary`, `Color.OnPrimary`, `Color.Surface`, `Color.Error`, etc.
@@ -108,7 +108,25 @@ Tokens follow Material Design 3 naming conventions for broad familiarity.
 - Theme is added via `<material:Theme />` in MergedDictionaries
 - Requires XAML namespace declaration: `xmlns:material="clr-namespace:FlagstoneUI.Themes.Material;assembly=FlagstoneUI.Themes.Material"`
 - Requires project reference to the theme package
-- Themes automatically merge core tokens from `FlagstoneUI.Core/Styles/Tokens.xaml`
+- Themes automatically merge core tokens
+
+**Alternative: Define Theme Directly in Your App:**
+
+You can also define a theme ResourceDictionary directly in your app alongside existing resource dictionaries:
+
+```xml
+<Application.Resources>
+    <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+            <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+            <ResourceDictionary Source="Resources/Styles/YourTheme.xaml" />
+        </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+</Application.Resources>
+```
+
+This is a common pattern for custom themes that are specific to your application.
 
 ## Code Generation Patterns
 
@@ -117,7 +135,10 @@ Tokens follow Material Design 3 naming conventions for broad familiarity.
 **Always reference tokens using DynamicResource:**
 
 ```xml
-<!-- ✅ CORRECT: Using tokens -->
+<!-- ✅ BEST: Use theme styles (no explicit styling needed) -->
+<fs:FsButton Text="Submit" />
+
+<!-- ✅ ALSO CORRECT: Using tokens when customizing beyond theme defaults -->
 <fs:FsButton 
     Text="Submit"
     BackgroundColor="{DynamicResource Color.Primary}"
@@ -494,7 +515,7 @@ FlagstoneUI provides optional integration with MCT validators via the `Flagstone
 ### ❌ DON'T: Override Token Values in Component Styles
 
 ```xml
-<!-- ❌ WRONG: Overriding tokens breaks theming -->
+<!-- ❌ WRONG: Hardcoded values in application styles break theming -->
 <Style TargetType="fs:FsButton">
     <Setter Property="BackgroundColor" Value="#FF0000" />
 </Style>
@@ -505,6 +526,8 @@ FlagstoneUI provides optional integration with MCT validators via the `Flagstone
     <Setter Property="TextColor" Value="{DynamicResource Color.OnError}" />
 </Style>
 ```
+
+**Note**: Base themes (like Material theme) set token values and define base styles. This anti-pattern applies to application-level styles that consumers create.
 
 ### ❌ DON'T: Use Magic Numbers for Sizing
 
@@ -561,7 +584,7 @@ FlagstoneUI provides optional integration with MCT validators via the `Flagstone
 </fs:FsCard>
 ```
 
-### ❌ DON'T: Create Controls Without Theme Support
+### ❌ DON'T: Use Hardcoded Values in Custom Containers
 
 ```xml
 <!-- ❌ WRONG: Hardcoded styling can't be themed -->
@@ -569,12 +592,22 @@ FlagstoneUI provides optional integration with MCT validators via the `Flagstone
     <Label Text="Content" TextColor="#000000" />
 </ContentView>
 
-<!-- ✅ CORRECT: Use FsCard with tokens -->
+<!-- ✅ CORRECT: Use tokens for any custom containers -->
+<ContentView 
+    BackgroundColor="{DynamicResource Color.Surface}"
+    Padding="{DynamicResource Space.16}">
+    <Label Text="Content" 
+           TextColor="{DynamicResource Color.OnSurface}" />
+</ContentView>
+
+<!-- ✅ ALSO CORRECT: Use FsCard for card-style containers -->
 <fs:FsCard>
     <Label Text="Content" 
            TextColor="{DynamicResource Color.OnSurface}" />
 </fs:FsCard>
 ```
+
+**Note**: You can create custom controls and containers using standard MAUI controls. The key is to use design tokens instead of hardcoded values so your custom controls respect the theme.
 
 ## Advanced Patterns
 
@@ -662,9 +695,9 @@ private void OnAiEditorUnfocused(object? sender, EventArgs e)
 
 ## Available Tools
 
-### CLI Tools (Future)
+### CLI Tools
 
-- **Bootstrap Theme Converter**: `flagstone-bootstrap convert --help` (planned)
+- **Bootstrap Theme Converter**: Available in the codebase but not yet published as a .NET CLI tool. Will be available as `flagstone-bootstrap convert --help` once published.
 - **Tailwind Palette Converter**: Tool for converting Tailwind color palettes to FlagstoneUI tokens (planned)
 
 ### Integration Tools
