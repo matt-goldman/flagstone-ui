@@ -1,96 +1,11 @@
 {
-  "schema": "../schemas/design-system-contract.schema.json",
+  "$schema": "../schemas/design-system-contract.schema.json",
   "name": "minimal",
   "version": "1.0.0",
   "description": "The minimum viable contract for a valid FlagstoneUI theme. Requires implicit styles for all Fs* controls.",
   "layer": "theme",
   "stylingSurface": {
     "controls": {
-      "FsBorder": {
-        "inheritsFrom": "Microsoft.Maui.Controls.ContentView",
-        "architecture": "wrapper",
-        "styledProperties": [
-          {
-            "name": "Background",
-            "type": "brush",
-            "tokenCategory": "colors",
-            "recommendedToken": "Color.SurfaceVariant",
-            "bindable": true
-          },
-          {
-            "name": "Padding",
-            "type": "thickness",
-            "tokenCategory": "spacing",
-            "recommendedToken": "Space.16",
-            "bindable": true
-          },
-          {
-            "name": "Border",
-            "type": "string",
-            "bindable": true
-          },
-          {
-            "name": "BorderTopThickness",
-            "type": "double",
-            "tokenCategory": "borderWidth",
-            "bindable": true
-          },
-          {
-            "name": "BorderRightThickness",
-            "type": "double",
-            "tokenCategory": "borderWidth",
-            "bindable": true
-          },
-          {
-            "name": "BorderBottomThickness",
-            "type": "double",
-            "tokenCategory": "borderWidth",
-            "bindable": true
-          },
-          {
-            "name": "BorderLeftThickness",
-            "type": "double",
-            "tokenCategory": "borderWidth",
-            "bindable": true
-          },
-          {
-            "name": "BorderTopBrush",
-            "type": "brush",
-            "tokenCategory": "colors",
-            "bindable": true
-          },
-          {
-            "name": "BorderRightBrush",
-            "type": "brush",
-            "tokenCategory": "colors",
-            "bindable": true
-          },
-          {
-            "name": "BorderBottomBrush",
-            "type": "brush",
-            "tokenCategory": "colors",
-            "bindable": true
-          },
-          {
-            "name": "BorderLeftBrush",
-            "type": "brush",
-            "tokenCategory": "colors",
-            "bindable": true
-          },
-          {
-            "name": "Stroke",
-            "type": "brush",
-            "tokenCategory": "colors",
-            "bindable": true
-          },
-          {
-            "name": "StrokeThickness",
-            "type": "double",
-            "tokenCategory": "borderWidth",
-            "bindable": true
-          }
-        ]
-      },
       "FsButton": {
         "inheritsFrom": "Microsoft.Maui.Controls.Button",
         "architecture": "subclass",
@@ -140,108 +55,96 @@
           {
             "name": "FontFamily",
             "type": "string",
+            "tokenCategory": null,
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "FontAttributes",
             "type": "string",
+            "tokenCategory": null,
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "Padding",
             "type": "thickness",
             "tokenCategory": "spacing",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "HeightRequest",
             "type": "double",
+            "tokenCategory": null,
+            "recommendedToken": null,
             "bindable": true
           }
         ]
       },
-      "FsCard": {
+      "FsEntry": {
         "inheritsFrom": "Microsoft.Maui.Controls.ContentView",
         "architecture": "wrapper",
         "styledProperties": [
           {
-            "name": "Elevation",
-            "type": "int",
-            "tokenCategory": "elevation",
-            "recommendedToken": "Elevation.Level1",
-            "bindable": true
-          },
-          {
-            "name": "CornerRadius",
-            "type": "double",
-            "tokenCategory": "borderRadius",
-            "recommendedToken": "Radius.Medium",
-            "bindable": true
-          },
-          {
-            "name": "BackgroundBrush",
-            "type": "brush",
-            "tokenCategory": "colors",
-            "bindable": true
-          },
-          {
-            "name": "BackgroundColor",
-            "type": "color",
-            "tokenCategory": "colors",
-            "recommendedToken": "Color.Surface",
-            "bindable": true
-          },
-          {
             "name": "BorderTopThickness",
             "type": "double",
             "tokenCategory": "borderWidth",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "BorderRightThickness",
             "type": "double",
             "tokenCategory": "borderWidth",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "BorderBottomThickness",
             "type": "double",
             "tokenCategory": "borderWidth",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "BorderLeftThickness",
             "type": "double",
             "tokenCategory": "borderWidth",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "BorderTopBrush",
             "type": "brush",
             "tokenCategory": "colors",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "BorderRightBrush",
             "type": "brush",
             "tokenCategory": "colors",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "BorderBottomBrush",
             "type": "brush",
             "tokenCategory": "colors",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "BorderLeftBrush",
             "type": "brush",
             "tokenCategory": "colors",
+            "recommendedToken": null,
             "bindable": true
           },
           {
-            "name": "BorderColor",
-            "type": "color",
+            "name": "BorderBrush",
+            "type": "brush",
             "tokenCategory": "colors",
             "recommendedToken": "Color.Outline",
             "bindable": true
@@ -257,17 +160,77 @@
             "name": "Stroke",
             "type": "brush",
             "tokenCategory": "colors",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "StrokeThickness",
             "type": "double",
             "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "CornerRadius",
+            "type": "double",
+            "tokenCategory": "borderRadius",
+            "recommendedToken": "Radius.Medium",
+            "bindable": true
+          },
+          {
+            "name": "PlaceholderColor",
+            "type": "color",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.OnSurfaceVariant",
+            "bindable": true
+          },
+          {
+            "name": "TextColor",
+            "type": "color",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.OnSurface",
+            "bindable": true
+          },
+          {
+            "name": "Background",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.SurfaceVariant",
+            "bindable": true
+          },
+          {
+            "name": "HorizontalTextAlignment",
+            "type": "enum",
+            "tokenCategory": null,
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "VerticalTextAlignment",
+            "type": "enum",
+            "tokenCategory": null,
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "FontSize",
+            "type": "double",
+            "tokenCategory": "typography",
+            "recommendedToken": "FontSize.BodyLarge",
+            "bindable": true
+          },
+          {
+            "name": "Padding",
+            "type": "thickness",
+            "tokenCategory": "spacing",
+            "recommendedToken": "Space.16",
             "bindable": true
           },
           {
             "name": "Border",
             "type": "string",
+            "tokenCategory": null,
+            "recommendedToken": null,
             "bindable": true
           }
         ]
@@ -321,11 +284,15 @@
           {
             "name": "HorizontalTextAlignment",
             "type": "enum",
+            "tokenCategory": null,
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "VerticalTextAlignment",
             "type": "enum",
+            "tokenCategory": null,
+            "recommendedToken": null,
             "bindable": true
           },
           {
@@ -344,61 +311,97 @@
           }
         ]
       },
-      "FsEntry": {
+      "FsCard": {
         "inheritsFrom": "Microsoft.Maui.Controls.ContentView",
         "architecture": "wrapper",
         "styledProperties": [
           {
+            "name": "Elevation",
+            "type": "int",
+            "tokenCategory": "elevation",
+            "recommendedToken": "Elevation.Level1",
+            "bindable": true
+          },
+          {
+            "name": "CornerRadius",
+            "type": "double",
+            "tokenCategory": "borderRadius",
+            "recommendedToken": "Radius.Medium",
+            "bindable": true
+          },
+          {
+            "name": "BackgroundBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BackgroundColor",
+            "type": "color",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.Surface",
+            "bindable": true
+          },
+          {
             "name": "BorderTopThickness",
             "type": "double",
             "tokenCategory": "borderWidth",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "BorderRightThickness",
             "type": "double",
             "tokenCategory": "borderWidth",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "BorderBottomThickness",
             "type": "double",
             "tokenCategory": "borderWidth",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "BorderLeftThickness",
             "type": "double",
             "tokenCategory": "borderWidth",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "BorderTopBrush",
             "type": "brush",
             "tokenCategory": "colors",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "BorderRightBrush",
             "type": "brush",
             "tokenCategory": "colors",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "BorderBottomBrush",
             "type": "brush",
             "tokenCategory": "colors",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "BorderLeftBrush",
             "type": "brush",
             "tokenCategory": "colors",
+            "recommendedToken": null,
             "bindable": true
           },
           {
-            "name": "BorderBrush",
-            "type": "brush",
+            "name": "BorderColor",
+            "type": "color",
             "tokenCategory": "colors",
             "recommendedToken": "Color.Outline",
             "bindable": true
@@ -414,57 +417,34 @@
             "name": "Stroke",
             "type": "brush",
             "tokenCategory": "colors",
+            "recommendedToken": null,
             "bindable": true
           },
           {
             "name": "StrokeThickness",
             "type": "double",
             "tokenCategory": "borderWidth",
+            "recommendedToken": null,
             "bindable": true
           },
           {
-            "name": "CornerRadius",
-            "type": "double",
-            "tokenCategory": "borderRadius",
-            "recommendedToken": "Radius.Medium",
+            "name": "Border",
+            "type": "string",
+            "tokenCategory": null,
+            "recommendedToken": null,
             "bindable": true
-          },
-          {
-            "name": "PlaceholderColor",
-            "type": "color",
-            "tokenCategory": "colors",
-            "recommendedToken": "Color.OnSurfaceVariant",
-            "bindable": true
-          },
-          {
-            "name": "TextColor",
-            "type": "color",
-            "tokenCategory": "colors",
-            "recommendedToken": "Color.OnSurface",
-            "bindable": true
-          },
+          }
+        ]
+      },
+      "FsBorder": {
+        "inheritsFrom": "Microsoft.Maui.Controls.ContentView",
+        "architecture": "wrapper",
+        "styledProperties": [
           {
             "name": "Background",
             "type": "brush",
             "tokenCategory": "colors",
             "recommendedToken": "Color.SurfaceVariant",
-            "bindable": true
-          },
-          {
-            "name": "HorizontalTextAlignment",
-            "type": "enum",
-            "bindable": true
-          },
-          {
-            "name": "VerticalTextAlignment",
-            "type": "enum",
-            "bindable": true
-          },
-          {
-            "name": "FontSize",
-            "type": "double",
-            "tokenCategory": "typography",
-            "recommendedToken": "FontSize.BodyLarge",
             "bindable": true
           },
           {
@@ -477,6 +457,78 @@
           {
             "name": "Border",
             "type": "string",
+            "tokenCategory": null,
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderTopThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderRightThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderBottomThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderLeftThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderTopBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderRightBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderBottomBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderLeftBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "Stroke",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "StrokeThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
             "bindable": true
           }
         ]
@@ -941,19 +993,19 @@
     }
   },
   "requiredStyles": {
-    "FsBorder": {
-      "implicit": true
-    },
     "FsButton": {
       "implicit": true
     },
-    "FsCard": {
+    "FsEntry": {
       "implicit": true
     },
     "FsEditor": {
       "implicit": true
     },
-    "FsEntry": {
+    "FsCard": {
+      "implicit": true
+    },
+    "FsBorder": {
       "implicit": true
     }
   },

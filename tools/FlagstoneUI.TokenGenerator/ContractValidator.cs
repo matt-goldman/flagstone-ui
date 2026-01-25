@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Xml.Linq;
 
 namespace FlagstoneUI.TokenGenerator;
@@ -152,12 +152,9 @@ public class ContractValidator
 		writer.WriteStartObject();
 
 		// Copy parent properties
-		foreach (var prop in parent.EnumerateObject())
+		foreach (var prop in parent.EnumerateObject().Where(p => p.Name != "extends"))
 		{
-			if (prop.Name != "extends") // Don't propagate extends
-			{
-				prop.WriteTo(writer);
-			}
+			prop.WriteTo(writer);
 		}
 
 		// Override/add child properties
@@ -192,7 +189,7 @@ public class ContractValidator
 		foreach (var control in child.EnumerateObject())
 		{
 			processedControls.Add(control.Name);
-			
+
 			if (parent.TryGetProperty(control.Name, out var parentControl))
 			{
 				// Merge: combine named styles
@@ -211,7 +208,7 @@ public class ContractValidator
 
 				// Merge named styles
 				var namedStyles = new Dictionary<string, JsonElement>(StringComparer.Ordinal);
-				
+
 				if (parentControl.TryGetProperty("named", out var parentNamed))
 				{
 					foreach (var style in parentNamed.EnumerateArray())
@@ -220,7 +217,7 @@ public class ContractValidator
 						namedStyles[styleName] = style;
 					}
 				}
-				
+
 				if (control.Value.TryGetProperty("named", out var childNamed))
 				{
 					foreach (var style in childNamed.EnumerateArray())
@@ -250,12 +247,9 @@ public class ContractValidator
 		}
 
 		// Add parent-only controls
-		foreach (var control in parent.EnumerateObject())
+		foreach (var control in parent.EnumerateObject().Where(c => !processedControls.Contains(c.Name)))
 		{
-			if (!processedControls.Contains(control.Name))
-			{
-				control.WriteTo(writer);
-			}
+			control.WriteTo(writer);
 		}
 
 		writer.WriteEndObject();
@@ -302,7 +296,7 @@ public class ContractValidator
 				foreach (var styleReq in namedReq.EnumerateArray())
 				{
 					var styleName = styleReq.GetProperty("name").GetString() ?? "";
-					
+
 					var hasNamed = styles.Any(s =>
 					{
 						var targetType = s.Attribute("TargetType")?.Value ?? "";
@@ -355,16 +349,14 @@ public class ContractValidator
 	private void ValidateTokenSchema(XElement root, JsonElement tokenSchema, ContractValidationResult result)
 	{
 		var xNs = root.GetNamespaceOfPrefix("x");
-		var mauiNs = root.Name.Namespace;
 
 		// Check for required token categories
 		if (tokenSchema.TryGetProperty("requiredCategories", out var categories))
 		{
-			foreach (var category in categories.EnumerateArray())
+			foreach (var category in categories.EnumerateArray().Select(c => c.GetString() ?? "").Where(c => !string.IsNullOrEmpty(c)))
 			{
-				var categoryName = category.GetString() ?? "";
-				var prefix = GetCategoryPrefix(categoryName);
-				
+				var prefix = GetCategoryPrefix(category);
+
 				// Look for any tokens with this prefix
 				var hasTokens = root.Descendants()
 					.Any(el => el.Attribute(xNs + "Key")?.Value?.StartsWith(prefix, StringComparison.Ordinal) == true);
@@ -372,7 +364,7 @@ public class ContractValidator
 				if (!hasTokens)
 				{
 					result.AddWarning($"missing_category",
-						$"Contract recommends tokens in category '{categoryName}' (prefix: {prefix}) but none found");
+						$"Contract recommends tokens in category '{category}' (prefix: {prefix}) but none found");
 				}
 			}
 		}
@@ -523,7 +515,7 @@ public class ContractValidationResult
 	public string ToSummaryString()
 	{
 		var sb = new System.Text.StringBuilder();
-		
+
 		sb.AppendLine($"Contract: {ContractName} ({ContractLayer} layer)");
 		sb.AppendLine($"Status: {(IsValid ? "✅ Valid" : "❌ Invalid")}");
 		sb.AppendLine();

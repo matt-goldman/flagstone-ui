@@ -132,7 +132,7 @@
         },
         "type": {
           "type": "string",
-          "enum": ["color", "double", "int", "thickness", "brush", "string", "bool", "cornerRadius"],
+          "enum": ["color", "double", "int", "thickness", "brush", "string", "bool", "cornerRadius", "enum"],
           "description": "CLR type category"
         },
         "tokenCategory": {
