@@ -24,7 +24,7 @@
       },
       "FsCard": {
         "inheritsFrom": "Microsoft.Maui.Controls.ContentView",
-        "architecture": "subclass",
+        "architecture": "wrapper",
         "styledProperties": [
           { "name": "BackgroundColor", "type": "color", "tokenCategory": "colors", "recommendedToken": "Color.Surface" },
           { "name": "BorderColor", "type": "color", "tokenCategory": "colors", "recommendedToken": "Color.Outline" },
