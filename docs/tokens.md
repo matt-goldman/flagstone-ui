@@ -6,6 +6,58 @@ This document provides a comprehensive reference of all design tokens available 
 
 Design tokens are named entities that store visual design attributes. They provide a single source of truth for design decisions and make it easy to maintain consistency across an application. In Flagstone UI, tokens are defined as XAML resources that can be referenced throughout your application and overridden by themes.
 
+## Theme Architecture: The Three Layers
+
+FlagstoneUI uses a layered architecture for themes and design systems. Understanding these layers helps clarify what constitutes a "valid theme" versus a "complete design system."
+
+### Layer 1: Styling Surface (The "What")
+
+The **styling surface** defines all properties that can be styled on FlagstoneUI controls. This is the raw capability - what you *can* customize. It's automatically extracted from control source code.
+
+- Extracted from `BindableProperty` declarations in Fs* controls
+- Represents the full styling API of each control
+- Forms the foundation for both themes and design systems
+- Example: `FsButton.BackgroundColor`, `FsCard.CornerRadius`, `FsEntry.BorderBrush`
+
+### Layer 2: Theme (The "Minimum")
+
+A **theme** provides the minimum viable styling for FlagstoneUI controls to render correctly with a consistent visual identity. A valid theme must provide:
+
+- ✅ Implicit styles for all Fs* controls (no x:Key attribute)
+- ✅ Core design tokens (colors, spacing, typography, etc.)
+- ⚠️ Named style variants are optional at this layer
+
+This is what most developers need - a theme that "just works" when applied.
+
+### Layer 3: Design System (The "Complete")
+
+A **design system** extends a theme with comprehensive style variants that cover common UI patterns. In addition to theme requirements:
+
+- ✅ Named style variants (e.g., `OutlinedButton`, `ElevatedCard`, `TextButton`)
+- ✅ Consistent visual language across all variants
+- ✅ Documentation and usage guidelines
+
+### Design System Contracts
+
+Contracts are JSON files that formally specify requirements at each layer. They enable:
+
+- **Validation**: Verify themes meet minimum requirements
+- **Compliance checking**: Ensure design systems provide required variants
+- **Tooling integration**: CI/CD pipelines, code generation, AI assistance
+
+See [ADR010: Theme Contract System](Decisions/adr010-theme-contract-system.md) for the full architectural decision.
+
+**Contract Files:**
+- `docs/contracts/minimal.json` - Base theme requirements
+- `docs/contracts/material.json` - Material Design 3 design system
+- `docs/schemas/design-system-contract.schema.json` - Contract schema
+
+**Validation:**
+```bash
+# Validate a theme against a contract
+flagstone-tokens validate-contract --theme Theme.xaml --contract material.json
+```
+
 ## Machine-Readable Token Catalog
 
 For AI agents, automated tooling, and programmatic access, a comprehensive machine-readable token catalog is available at [`tokens-catalog.json`](tokens-catalog.json). This JSON file includes:

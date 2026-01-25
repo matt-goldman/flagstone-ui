@@ -1,0 +1,72 @@
+{
+  "schema": "../schemas/design-system-contract.schema.json",
+  "name": "material",
+  "version": "1.0.0",
+  "description": "material design system contract. Extends minimal with named style variants.",
+  "layer": "design-system",
+  "extends": "minimal",
+  "requiredStyles": {
+    "FsButton": {
+      "implicit": true,
+      "named": [
+        {
+          "name": "OutlinedButton",
+          "description": "Outlined Button Style"
+        },
+        {
+          "name": "TextButton",
+          "description": "Text Button Style (No background or border)"
+        },
+        {
+          "name": "TonalButton",
+          "description": "Tonal Button Style (Secondary container color)"
+        },
+        {
+          "name": "SecondaryButton",
+          "description": "Secondary Button Style (Uses secondary color)"
+        },
+        {
+          "name": "TertiaryButton",
+          "description": "Tertiary Button Style (Uses tertiary color)"
+        }
+      ]
+    },
+    "FsCard": {
+      "implicit": true,
+      "named": [
+        {
+          "name": "OutlinedCard",
+          "description": "Outlined Card Style"
+        },
+        {
+          "name": "ElevatedCard",
+          "description": "Elevated Card Style (Higher elevation)"
+        }
+      ]
+    },
+    "FsEntry": {
+      "implicit": true,
+      "named": [
+        {
+          "name": "OutlinedEntry",
+          "description": "Outlined Entry Style"
+        }
+      ]
+    },
+    "FsEditor": {
+      "implicit": true,
+      "named": [
+        {
+          "name": "OutlinedEditor",
+          "description": "Outlined Editor Style"
+        }
+      ]
+    }
+  },
+  "metadata": {
+    "author": "FlagstoneUI",
+    "license": "MIT",
+    "generatedFrom": "Theme.xaml",
+    "generatedAt": "2026-01-25"
+  }
+}
