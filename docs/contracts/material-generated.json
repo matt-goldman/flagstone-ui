@@ -1,8 +1,8 @@
 {
-  "schema": "../schemas/design-system-contract.schema.json",
+  "$schema": "../schemas/design-system-contract.schema.json",
   "name": "material",
   "version": "1.0.0",
-  "description": "material design system contract. Extends minimal with named style variants.",
+  "description": "Material design system contract. Extends minimal with named style variants.",
   "layer": "design-system",
   "extends": "minimal",
   "requiredStyles": {
