@@ -266,10 +266,10 @@ public class ControlSurfaceExtractor
 			.Where(f => !f.Contains("BorderlessEntry", StringComparison.OrdinalIgnoreCase) &&
 					   !f.Contains("BorderlessEditor", StringComparison.OrdinalIgnoreCase));
 
-		foreach (var surface in controlFiles.Select(ExtractFromFile).Where(s => s != null))
+		foreach (var surface in controlFiles.Select(ExtractFromFile).OfType<ControlSurface>())
 		{
 			// Use the control name without .xaml suffix
-			var key = surface!.ControlName;
+			var key = surface.ControlName;
 
 			// If we already have this control (from .cs file), merge properties from .xaml.cs
 			if (results.TryGetValue(key, out var existing))
