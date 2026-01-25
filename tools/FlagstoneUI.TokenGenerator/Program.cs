@@ -3,11 +3,11 @@ using FlagstoneUI.TokenGenerator;
 
 var rootCommand = new RootCommand("Flagstone UI Theme Tools")
 {
-    Description = "Tools for managing Flagstone UI themes and tokens"
+    Description = "Tools for managing Flagstone UI themes, tokens, and design system contracts"
 };
 
-// ===== Generate Command =====
-var generateCommand = new Command("generate", "Generate token catalog from XAML files");
+// ===== Generate Catalog Command =====
+var generateCommand = new Command("generate", "Generate token catalog from XAML files (legacy)");
 
 var genSourceOption = new Option<DirectoryInfo>(
     aliases: ["--source", "-s"],
@@ -292,9 +292,305 @@ generateXamlCommand.SetHandler((inputFile, outputFile) =>
     }
 }, xamlInputOption, xamlOutputOption);
 
+// ===== Generate Contract Command =====
+var generateContractCommand = new Command("generate-contract", "Generate design system contract from source files");
+
+var contractSourceOption = new Option<DirectoryInfo>(
+    aliases: ["--source", "-s"],
+    description: "Source directory containing FlagstoneUI.Core",
+    getDefaultValue: () => new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), "src")));
+
+var contractOutputOption = new Option<FileInfo>(
+    aliases: ["--output", "-o"],
+    description: "Output path for the contract JSON",
+    getDefaultValue: () => new FileInfo(Path.Combine(Directory.GetCurrentDirectory(), "docs", "contracts", "minimal.json")));
+
+var contractNameOption = new Option<string>(
+    aliases: ["--name", "-n"],
+    description: "Contract name",
+    getDefaultValue: () => "minimal");
+
+var contractThemeOption = new Option<FileInfo?>(
+    aliases: ["--theme", "-t"],
+    description: "Optional theme XAML file to extract named styles from (for design system contracts)");
+
+var contractExtendsOption = new Option<string?>(
+    aliases: ["--extends", "-e"],
+    description: "Base contract to extend (for design system contracts)",
+    getDefaultValue: () => "minimal");
+
+generateContractCommand.AddOption(contractSourceOption);
+generateContractCommand.AddOption(contractOutputOption);
+generateContractCommand.AddOption(contractNameOption);
+generateContractCommand.AddOption(contractThemeOption);
+generateContractCommand.AddOption(contractExtendsOption);
+
+generateContractCommand.SetHandler(async (sourceDir, outputFile, name, themeFile, extends) =>
+{
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("📜 Flagstone UI Contract Generator");
+    Console.ResetColor();
+    Console.WriteLine($"   Source:   {sourceDir.FullName}");
+    Console.WriteLine($"   Output:   {outputFile.FullName}");
+    Console.WriteLine($"   Contract: {name}");
+    if (themeFile != null)
+        Console.WriteLine($"   Theme:    {themeFile.FullName}");
+    Console.WriteLine();
+
+    try
+    {
+        if (!sourceDir.Exists)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"❌ Source directory not found: {sourceDir.FullName}");
+            Console.ResetColor();
+            Environment.Exit(1);
+            return;
+        }
+
+        var generator = new ContractGenerator();
+        string contract;
+
+        if (themeFile != null && themeFile.Exists)
+        {
+            // Generate design system contract from theme
+            contract = await generator.GenerateDesignSystemContractAsync(
+                themeFile.FullName, 
+                name, 
+                extends);
+        }
+        else
+        {
+            // Generate minimal contract from source
+            contract = await generator.GenerateMinimalContractAsync(sourceDir.FullName);
+        }
+
+        outputFile.Directory?.Create();
+        await File.WriteAllTextAsync(outputFile.FullName, contract);
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("✅ Contract generated successfully!");
+        Console.ResetColor();
+        Console.WriteLine($"   File: {outputFile.FullName}");
+        Console.WriteLine($"   Size: {new FileInfo(outputFile.FullName).Length:N0} bytes");
+    }
+    catch (FileNotFoundException ex)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"❌ File not found: {ex.Message}");
+        Console.ResetColor();
+        Environment.Exit(1);
+    }
+    catch (Exception ex)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"❌ Error: {ex.Message}");
+        Console.ResetColor();
+        Environment.Exit(1);
+    }
+}, contractSourceOption, contractOutputOption, contractNameOption, contractThemeOption, contractExtendsOption);
+
+// ===== Extract Surface Command =====
+var extractSurfaceCommand = new Command("extract-surface", "Extract control styling surface (for debugging)");
+
+var surfaceControlsPathOption = new Option<DirectoryInfo>(
+    aliases: ["--controls", "-c"],
+    description: "Path to Controls directory",
+    getDefaultValue: () => new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), "src", "FlagstoneUI.Core", "Controls")));
+
+extractSurfaceCommand.AddOption(surfaceControlsPathOption);
+
+extractSurfaceCommand.SetHandler((controlsDir) =>
+{
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("🔍 Flagstone UI Control Surface Extractor");
+    Console.ResetColor();
+    Console.WriteLine($"   Controls: {controlsDir.FullName}");
+    Console.WriteLine();
+
+    try
+    {
+        if (!controlsDir.Exists)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"❌ Controls directory not found: {controlsDir.FullName}");
+            Console.ResetColor();
+            Environment.Exit(1);
+            return;
+        }
+
+        var extractor = new ControlSurfaceExtractor();
+        var surfaces = extractor.ExtractFromDirectory(controlsDir.FullName);
+
+        Console.WriteLine();
+        foreach (var (name, surface) in surfaces)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"📦 {name}");
+            Console.ResetColor();
+            Console.WriteLine($"   Inherits: {surface.InheritsFrom}");
+            Console.WriteLine($"   Architecture: {surface.Architecture}");
+            Console.WriteLine($"   Styled Properties ({surface.StyledProperties.Count}):");
+            
+            foreach (var prop in surface.StyledProperties.OrderBy(p => p.Name))
+            {
+                var tokenInfo = prop.RecommendedToken != null 
+                    ? $" → {prop.RecommendedToken}" 
+                    : "";
+                Console.WriteLine($"      • {prop.Name} ({prop.Type}){tokenInfo}");
+            }
+            Console.WriteLine();
+        }
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"✅ Extracted {surfaces.Count} control surfaces");
+        Console.ResetColor();
+    }
+    catch (Exception ex)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"❌ Error: {ex.Message}");
+        Console.ResetColor();
+        Environment.Exit(1);
+    }
+}, surfaceControlsPathOption);
+
+// ===== Validate Contract Command =====
+var validateContractCommand = new Command("validate-contract", "Validate a theme against a design system contract");
+
+var vcThemeOption = new Option<FileInfo>(
+    aliases: ["--theme", "-t"],
+    description: "Path to theme XAML file to validate")
+{ IsRequired = true };
+
+var vcContractOption = new Option<FileInfo>(
+    aliases: ["--contract", "-c"],
+    description: "Path to contract JSON file")
+{ IsRequired = true };
+
+var vcContractsDir = new Option<DirectoryInfo>(
+    aliases: ["--contracts-dir", "-d"],
+    description: "Directory containing contract files (for resolving 'extends')",
+    getDefaultValue: () => new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), "docs", "contracts")));
+
+var vcJsonOutputOption = new Option<bool>(
+    aliases: ["--json", "-j"],
+    description: "Output results as JSON",
+    getDefaultValue: () => false);
+
+validateContractCommand.AddOption(vcThemeOption);
+validateContractCommand.AddOption(vcContractOption);
+validateContractCommand.AddOption(vcContractsDir);
+validateContractCommand.AddOption(vcJsonOutputOption);
+
+validateContractCommand.SetHandler(async (themeFile, contractFile, contractsDir, jsonOutput) =>
+{
+    if (!jsonOutput)
+    {
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine("🔍 Flagstone UI Contract Validator");
+        Console.ResetColor();
+        Console.WriteLine($"   Theme:    {themeFile.FullName}");
+        Console.WriteLine($"   Contract: {contractFile.FullName}");
+        Console.WriteLine();
+    }
+
+    try
+    {
+        if (!themeFile.Exists)
+        {
+            throw new FileNotFoundException($"Theme file not found: {themeFile.FullName}");
+        }
+
+        if (!contractFile.Exists)
+        {
+            throw new FileNotFoundException($"Contract file not found: {contractFile.FullName}");
+        }
+
+        var validator = new ContractValidator(contractsDir.FullName);
+        var result = await validator.ValidateThemeAsync(themeFile.FullName, contractFile.FullName);
+
+        if (jsonOutput)
+        {
+            Console.WriteLine(result.ToJsonString());
+        }
+        else
+        {
+            Console.WriteLine(result.ToSummaryString());
+
+            if (result.Errors.Count > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"❌ {result.Errors.Count} error(s):");
+                Console.ResetColor();
+                foreach (var error in result.Errors)
+                {
+                    Console.WriteLine($"   • [{error.Token}] {error.Message}");
+                }
+                Console.WriteLine();
+            }
+
+            if (result.Warnings.Count > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"⚠️  {result.Warnings.Count} warning(s):");
+                Console.ResetColor();
+                foreach (var warning in result.Warnings)
+                {
+                    Console.WriteLine($"   • [{warning.Token}] {warning.Message}");
+                }
+                Console.WriteLine();
+            }
+
+            if (result.IsValid)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("✅ Theme complies with contract!");
+                Console.ResetColor();
+            }
+        }
+
+        if (!result.IsValid)
+        {
+            Environment.Exit(1);
+        }
+    }
+    catch (FileNotFoundException ex)
+    {
+        if (jsonOutput)
+        {
+            Console.WriteLine($"{{\"valid\": false, \"error\": \"File not found: {ex.Message}\"}}");
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"❌ File not found: {ex.Message}");
+            Console.ResetColor();
+        }
+        Environment.Exit(1);
+    }
+    catch (Exception ex)
+    {
+        if (jsonOutput)
+        {
+            Console.WriteLine($"{{\"valid\": false, \"error\": \"{ex.Message.Replace("\"", "\\\"", StringComparison.Ordinal)}\"}}");
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"❌ Error: {ex.Message}");
+            Console.ResetColor();
+        }
+        Environment.Exit(1);
+    }
+}, vcThemeOption, vcContractOption, vcContractsDir, vcJsonOutputOption);
+
 // Add commands to root
 rootCommand.AddCommand(generateCommand);
 rootCommand.AddCommand(validateCommand);
 rootCommand.AddCommand(generateXamlCommand);
+rootCommand.AddCommand(generateContractCommand);
+rootCommand.AddCommand(extractSurfaceCommand);
+rootCommand.AddCommand(validateContractCommand);
 
 return await rootCommand.InvokeAsync(args);

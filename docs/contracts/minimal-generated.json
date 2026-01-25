@@ -1,0 +1,1018 @@
+{
+  "$schema": "../schemas/design-system-contract.schema.json",
+  "name": "minimal",
+  "version": "1.0.0",
+  "description": "The minimum viable contract for a valid FlagstoneUI theme. Requires implicit styles for all Fs* controls.",
+  "layer": "theme",
+  "stylingSurface": {
+    "controls": {
+      "FsButton": {
+        "inheritsFrom": "Microsoft.Maui.Controls.Button",
+        "architecture": "subclass",
+        "styledProperties": [
+          {
+            "name": "BackgroundColor",
+            "type": "color",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.Primary",
+            "bindable": true
+          },
+          {
+            "name": "TextColor",
+            "type": "color",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.OnPrimary",
+            "bindable": true
+          },
+          {
+            "name": "BorderColor",
+            "type": "color",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.Outline",
+            "bindable": true
+          },
+          {
+            "name": "BorderWidth",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": "BorderWidth.None",
+            "bindable": true
+          },
+          {
+            "name": "CornerRadius",
+            "type": "int",
+            "tokenCategory": "borderRadius",
+            "recommendedToken": "Radius.Button.Medium",
+            "bindable": true
+          },
+          {
+            "name": "FontSize",
+            "type": "double",
+            "tokenCategory": "typography",
+            "recommendedToken": "FontSize.LabelLarge",
+            "bindable": true
+          },
+          {
+            "name": "FontFamily",
+            "type": "string",
+            "tokenCategory": null,
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "FontAttributes",
+            "type": "string",
+            "tokenCategory": null,
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "Padding",
+            "type": "thickness",
+            "tokenCategory": "spacing",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "HeightRequest",
+            "type": "double",
+            "tokenCategory": null,
+            "recommendedToken": null,
+            "bindable": true
+          }
+        ]
+      },
+      "FsEntry": {
+        "inheritsFrom": "Microsoft.Maui.Controls.ContentView",
+        "architecture": "wrapper",
+        "styledProperties": [
+          {
+            "name": "BorderTopThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderRightThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderBottomThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderLeftThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderTopBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderRightBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderBottomBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderLeftBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.Outline",
+            "bindable": true
+          },
+          {
+            "name": "BorderWidth",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": "BorderWidth.None",
+            "bindable": true
+          },
+          {
+            "name": "Stroke",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "StrokeThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "CornerRadius",
+            "type": "double",
+            "tokenCategory": "borderRadius",
+            "recommendedToken": "Radius.Medium",
+            "bindable": true
+          },
+          {
+            "name": "PlaceholderColor",
+            "type": "color",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.OnSurfaceVariant",
+            "bindable": true
+          },
+          {
+            "name": "TextColor",
+            "type": "color",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.OnSurface",
+            "bindable": true
+          },
+          {
+            "name": "Background",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.SurfaceVariant",
+            "bindable": true
+          },
+          {
+            "name": "HorizontalTextAlignment",
+            "type": "enum",
+            "tokenCategory": null,
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "VerticalTextAlignment",
+            "type": "enum",
+            "tokenCategory": null,
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "FontSize",
+            "type": "double",
+            "tokenCategory": "typography",
+            "recommendedToken": "FontSize.BodyLarge",
+            "bindable": true
+          },
+          {
+            "name": "Padding",
+            "type": "thickness",
+            "tokenCategory": "spacing",
+            "recommendedToken": "Space.16",
+            "bindable": true
+          },
+          {
+            "name": "Border",
+            "type": "string",
+            "tokenCategory": null,
+            "recommendedToken": null,
+            "bindable": true
+          }
+        ]
+      },
+      "FsEditor": {
+        "inheritsFrom": "Microsoft.Maui.Controls.ContentView",
+        "architecture": "wrapper",
+        "styledProperties": [
+          {
+            "name": "BorderBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.Outline",
+            "bindable": true
+          },
+          {
+            "name": "BorderWidth",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": "BorderWidth.None",
+            "bindable": true
+          },
+          {
+            "name": "CornerRadius",
+            "type": "double",
+            "tokenCategory": "borderRadius",
+            "recommendedToken": "Radius.Medium",
+            "bindable": true
+          },
+          {
+            "name": "PlaceholderColor",
+            "type": "color",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.OnSurfaceVariant",
+            "bindable": true
+          },
+          {
+            "name": "TextColor",
+            "type": "color",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.OnSurface",
+            "bindable": true
+          },
+          {
+            "name": "Background",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.SurfaceVariant",
+            "bindable": true
+          },
+          {
+            "name": "HorizontalTextAlignment",
+            "type": "enum",
+            "tokenCategory": null,
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "VerticalTextAlignment",
+            "type": "enum",
+            "tokenCategory": null,
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "FontSize",
+            "type": "double",
+            "tokenCategory": "typography",
+            "recommendedToken": "FontSize.BodyLarge",
+            "bindable": true
+          },
+          {
+            "name": "Padding",
+            "type": "thickness",
+            "tokenCategory": "spacing",
+            "recommendedToken": "Space.16",
+            "bindable": true
+          }
+        ]
+      },
+      "FsCard": {
+        "inheritsFrom": "Microsoft.Maui.Controls.ContentView",
+        "architecture": "wrapper",
+        "styledProperties": [
+          {
+            "name": "Elevation",
+            "type": "int",
+            "tokenCategory": "elevation",
+            "recommendedToken": "Elevation.Level1",
+            "bindable": true
+          },
+          {
+            "name": "CornerRadius",
+            "type": "double",
+            "tokenCategory": "borderRadius",
+            "recommendedToken": "Radius.Medium",
+            "bindable": true
+          },
+          {
+            "name": "BackgroundBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BackgroundColor",
+            "type": "color",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.Surface",
+            "bindable": true
+          },
+          {
+            "name": "BorderTopThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderRightThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderBottomThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderLeftThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderTopBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderRightBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderBottomBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderLeftBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderColor",
+            "type": "color",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.Outline",
+            "bindable": true
+          },
+          {
+            "name": "BorderWidth",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": "BorderWidth.None",
+            "bindable": true
+          },
+          {
+            "name": "Stroke",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "StrokeThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "Border",
+            "type": "string",
+            "tokenCategory": null,
+            "recommendedToken": null,
+            "bindable": true
+          }
+        ]
+      },
+      "FsBorder": {
+        "inheritsFrom": "Microsoft.Maui.Controls.ContentView",
+        "architecture": "wrapper",
+        "styledProperties": [
+          {
+            "name": "Background",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": "Color.SurfaceVariant",
+            "bindable": true
+          },
+          {
+            "name": "Padding",
+            "type": "thickness",
+            "tokenCategory": "spacing",
+            "recommendedToken": "Space.16",
+            "bindable": true
+          },
+          {
+            "name": "Border",
+            "type": "string",
+            "tokenCategory": null,
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderTopThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderRightThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderBottomThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderLeftThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderTopBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderRightBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderBottomBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "BorderLeftBrush",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "Stroke",
+            "type": "brush",
+            "tokenCategory": "colors",
+            "recommendedToken": null,
+            "bindable": true
+          },
+          {
+            "name": "StrokeThickness",
+            "type": "double",
+            "tokenCategory": "borderWidth",
+            "recommendedToken": null,
+            "bindable": true
+          }
+        ]
+      }
+    },
+    "baseTokenSchema": {
+      "Color.Primary": {
+        "type": "color",
+        "category": "primary",
+        "purpose": "Main brand color for primary actions"
+      },
+      "Color.OnPrimary": {
+        "type": "color",
+        "category": "primary",
+        "purpose": "Content color on primary surfaces"
+      },
+      "Color.PrimaryContainer": {
+        "type": "color",
+        "category": "primary",
+        "purpose": "Container color for primary elements"
+      },
+      "Color.OnPrimaryContainer": {
+        "type": "color",
+        "category": "primary",
+        "purpose": "Content color on primary containers"
+      },
+      "Color.Secondary": {
+        "type": "color",
+        "category": "secondary",
+        "purpose": "Secondary brand color"
+      },
+      "Color.OnSecondary": {
+        "type": "color",
+        "category": "secondary",
+        "purpose": "Content color on secondary surfaces"
+      },
+      "Color.SecondaryContainer": {
+        "type": "color",
+        "category": "secondary",
+        "purpose": "Container color for secondary elements"
+      },
+      "Color.OnSecondaryContainer": {
+        "type": "color",
+        "category": "secondary",
+        "purpose": "Content color on secondary containers"
+      },
+      "Color.Tertiary": {
+        "type": "color",
+        "category": "tertiary",
+        "purpose": "Tertiary accent color"
+      },
+      "Color.OnTertiary": {
+        "type": "color",
+        "category": "tertiary",
+        "purpose": "Content color on tertiary surfaces"
+      },
+      "Color.TertiaryContainer": {
+        "type": "color",
+        "category": "tertiary",
+        "purpose": "Container color for tertiary elements"
+      },
+      "Color.OnTertiaryContainer": {
+        "type": "color",
+        "category": "tertiary",
+        "purpose": "Content color on tertiary containers"
+      },
+      "Color.Error": {
+        "type": "color",
+        "category": "error",
+        "purpose": "Error state color"
+      },
+      "Color.OnError": {
+        "type": "color",
+        "category": "error",
+        "purpose": "Content color on error surfaces"
+      },
+      "Color.ErrorContainer": {
+        "type": "color",
+        "category": "error",
+        "purpose": "Container color for error elements"
+      },
+      "Color.OnErrorContainer": {
+        "type": "color",
+        "category": "error",
+        "purpose": "Content color on error containers"
+      },
+      "Color.Surface": {
+        "type": "color",
+        "category": "surface",
+        "purpose": "Default surface/card background"
+      },
+      "Color.OnSurface": {
+        "type": "color",
+        "category": "surface",
+        "purpose": "Content color on surfaces"
+      },
+      "Color.SurfaceVariant": {
+        "type": "color",
+        "category": "surface",
+        "purpose": "Alternative surface color"
+      },
+      "Color.OnSurfaceVariant": {
+        "type": "color",
+        "category": "surface",
+        "purpose": "Content color on surface variants"
+      },
+      "Color.Background": {
+        "type": "color",
+        "category": "background",
+        "purpose": "Page/screen background"
+      },
+      "Color.OnBackground": {
+        "type": "color",
+        "category": "background",
+        "purpose": "Content color on background"
+      },
+      "Color.Outline": {
+        "type": "color",
+        "category": "outline",
+        "purpose": "Border and divider color"
+      },
+      "Color.OutlineVariant": {
+        "type": "color",
+        "category": "outline",
+        "purpose": "Subtle border color"
+      },
+      "Color.InverseSurface": {
+        "type": "color",
+        "category": "surface",
+        "purpose": "Inverse surface (e.g., dark tooltip in light mode)"
+      },
+      "Color.InverseOnSurface": {
+        "type": "color",
+        "category": "surface",
+        "purpose": "Content on inverse surface"
+      },
+      "Color.InversePrimary": {
+        "type": "color",
+        "category": "primary",
+        "purpose": "Primary color for inverse surfaces"
+      },
+      "Radius.None": {
+        "type": "double",
+        "category": "borderRadius",
+        "purpose": "Corner radius (None)"
+      },
+      "Radius.ExtraSmall": {
+        "type": "double",
+        "category": "borderRadius",
+        "purpose": "Corner radius (ExtraSmall)"
+      },
+      "Radius.Small": {
+        "type": "double",
+        "category": "borderRadius",
+        "purpose": "Corner radius (Small)"
+      },
+      "Radius.Medium": {
+        "type": "double",
+        "category": "borderRadius",
+        "purpose": "Corner radius (Medium)"
+      },
+      "Radius.Large": {
+        "type": "double",
+        "category": "borderRadius",
+        "purpose": "Corner radius (Large)"
+      },
+      "Radius.ExtraLarge": {
+        "type": "double",
+        "category": "borderRadius",
+        "purpose": "Corner radius (ExtraLarge)"
+      },
+      "Radius.Full": {
+        "type": "double",
+        "category": "borderRadius",
+        "purpose": "Corner radius (Full)"
+      },
+      "Space.0": {
+        "type": "double",
+        "category": "spacing",
+        "purpose": "Spacing token (0dp)"
+      },
+      "Space.2": {
+        "type": "double",
+        "category": "spacing",
+        "purpose": "Spacing token (2dp)"
+      },
+      "Space.4": {
+        "type": "double",
+        "category": "spacing",
+        "purpose": "Spacing token (4dp)"
+      },
+      "Space.8": {
+        "type": "double",
+        "category": "spacing",
+        "purpose": "Spacing token (8dp)"
+      },
+      "Space.12": {
+        "type": "double",
+        "category": "spacing",
+        "purpose": "Spacing token (12dp)"
+      },
+      "Space.16": {
+        "type": "double",
+        "category": "spacing",
+        "purpose": "Spacing token (16dp)"
+      },
+      "Space.20": {
+        "type": "double",
+        "category": "spacing",
+        "purpose": "Spacing token (20dp)"
+      },
+      "Space.24": {
+        "type": "double",
+        "category": "spacing",
+        "purpose": "Spacing token (24dp)"
+      },
+      "Space.32": {
+        "type": "double",
+        "category": "spacing",
+        "purpose": "Spacing token (32dp)"
+      },
+      "Space.40": {
+        "type": "double",
+        "category": "spacing",
+        "purpose": "Spacing token (40dp)"
+      },
+      "Space.48": {
+        "type": "double",
+        "category": "spacing",
+        "purpose": "Spacing token (48dp)"
+      },
+      "FontSize.DisplayLarge": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for DisplayLarge text"
+      },
+      "FontSize.DisplayMedium": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for DisplayMedium text"
+      },
+      "FontSize.DisplaySmall": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for DisplaySmall text"
+      },
+      "FontSize.HeadlineLarge": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for HeadlineLarge text"
+      },
+      "FontSize.HeadlineMedium": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for HeadlineMedium text"
+      },
+      "FontSize.HeadlineSmall": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for HeadlineSmall text"
+      },
+      "FontSize.TitleLarge": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for TitleLarge text"
+      },
+      "FontSize.TitleMedium": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for TitleMedium text"
+      },
+      "FontSize.TitleSmall": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for TitleSmall text"
+      },
+      "FontSize.BodyLarge": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for BodyLarge text"
+      },
+      "FontSize.BodyMedium": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for BodyMedium text"
+      },
+      "FontSize.BodySmall": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for BodySmall text"
+      },
+      "FontSize.LabelLarge": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for LabelLarge text"
+      },
+      "FontSize.LabelMedium": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for LabelMedium text"
+      },
+      "FontSize.LabelSmall": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for LabelSmall text"
+      },
+      "FontSize.Body": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for Body text"
+      },
+      "FontSize.Title": {
+        "type": "double",
+        "category": "typography",
+        "purpose": "Font size for Title text"
+      },
+      "BorderWidth.None": {
+        "type": "double",
+        "category": "borderWidth",
+        "purpose": "Border width (None)"
+      },
+      "BorderWidth.Thin": {
+        "type": "double",
+        "category": "borderWidth",
+        "purpose": "Border width (Thin)"
+      },
+      "BorderWidth.Thick": {
+        "type": "double",
+        "category": "borderWidth",
+        "purpose": "Border width (Thick)"
+      },
+      "BorderWidth.Heavy": {
+        "type": "double",
+        "category": "borderWidth",
+        "purpose": "Border width (Heavy)"
+      },
+      "Elevation.Level0": {
+        "type": "double",
+        "category": "elevation",
+        "purpose": "Elevation level Level0"
+      },
+      "Elevation.Level1": {
+        "type": "double",
+        "category": "elevation",
+        "purpose": "Elevation level Level1"
+      },
+      "Elevation.Level2": {
+        "type": "double",
+        "category": "elevation",
+        "purpose": "Elevation level Level2"
+      },
+      "Elevation.Level3": {
+        "type": "double",
+        "category": "elevation",
+        "purpose": "Elevation level Level3"
+      },
+      "Elevation.Level4": {
+        "type": "double",
+        "category": "elevation",
+        "purpose": "Elevation level Level4"
+      },
+      "Padding.None": {
+        "type": "double",
+        "category": "padding",
+        "purpose": "Padding (None)"
+      },
+      "Padding.Small": {
+        "type": "double",
+        "category": "padding",
+        "purpose": "Padding (Small)"
+      },
+      "Padding.Medium": {
+        "type": "double",
+        "category": "padding",
+        "purpose": "Padding (Medium)"
+      },
+      "Padding.Large": {
+        "type": "double",
+        "category": "padding",
+        "purpose": "Padding (Large)"
+      },
+      "Padding.ExtraLarge": {
+        "type": "double",
+        "category": "padding",
+        "purpose": "Padding (ExtraLarge)"
+      },
+      "StateLayer.Hover": {
+        "type": "double",
+        "category": "opacity",
+        "purpose": "State layer opacity for Hover state"
+      },
+      "StateLayer.Focus": {
+        "type": "double",
+        "category": "opacity",
+        "purpose": "State layer opacity for Focus state"
+      },
+      "StateLayer.Pressed": {
+        "type": "double",
+        "category": "opacity",
+        "purpose": "State layer opacity for Pressed state"
+      },
+      "StateLayer.Dragged": {
+        "type": "double",
+        "category": "opacity",
+        "purpose": "State layer opacity for Dragged state"
+      },
+      "Opacity.Disabled": {
+        "type": "double",
+        "category": "opacity",
+        "purpose": "Opacity for Disabled state"
+      },
+      "Opacity.Medium": {
+        "type": "double",
+        "category": "opacity",
+        "purpose": "Opacity for Medium state"
+      },
+      "Opacity.High": {
+        "type": "double",
+        "category": "opacity",
+        "purpose": "Opacity for High state"
+      },
+      "Opacity.Full": {
+        "type": "double",
+        "category": "opacity",
+        "purpose": "Opacity for Full state"
+      },
+      "Radius.Button.None": {
+        "type": "int",
+        "category": "borderRadius",
+        "purpose": "Button corner radius (None)"
+      },
+      "Radius.Button.ExtraSmall": {
+        "type": "int",
+        "category": "borderRadius",
+        "purpose": "Button corner radius (ExtraSmall)"
+      },
+      "Radius.Button.Small": {
+        "type": "int",
+        "category": "borderRadius",
+        "purpose": "Button corner radius (Small)"
+      },
+      "Radius.Button.Medium": {
+        "type": "int",
+        "category": "borderRadius",
+        "purpose": "Button corner radius (Medium)"
+      },
+      "Radius.Button.Large": {
+        "type": "int",
+        "category": "borderRadius",
+        "purpose": "Button corner radius (Large)"
+      },
+      "Radius.Button.ExtraLarge": {
+        "type": "int",
+        "category": "borderRadius",
+        "purpose": "Button corner radius (ExtraLarge)"
+      },
+      "Radius.Button.Full": {
+        "type": "int",
+        "category": "borderRadius",
+        "purpose": "Button corner radius (Full)"
+      }
+    }
+  },
+  "requiredStyles": {
+    "FsButton": {
+      "implicit": true
+    },
+    "FsEntry": {
+      "implicit": true
+    },
+    "FsEditor": {
+      "implicit": true
+    },
+    "FsCard": {
+      "implicit": true
+    },
+    "FsBorder": {
+      "implicit": true
+    }
+  },
+  "metadata": {
+    "author": "FlagstoneUI",
+    "license": "MIT",
+    "repository": "https://github.com/AnnexCreative/flagstone-ui",
+    "documentation": "https://flagstoneui.dev/docs/contracts/minimal"
+  }
+}

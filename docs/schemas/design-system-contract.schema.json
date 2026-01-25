@@ -1,0 +1,246 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://flagstoneui.dev/schemas/design-system-contract.json",
+  "title": "FlagstoneUI Design System Contract",
+  "description": "Schema for defining theme and design system validation contracts",
+  "type": "object",
+  "required": ["$schema", "name", "version"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Reference to this schema"
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9._-]*$",
+      "description": "Unique identifier for this contract (e.g., 'minimal', 'material', 'Acme.DesignSystem')"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.]+)?$",
+      "description": "Semantic version of the contract"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the design system"
+    },
+    "extends": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ],
+      "description": "Base contract(s) this extends. Can be a built-in name, NuGet package, URL, or file path"
+    },
+    "layer": {
+      "type": "string",
+      "enum": ["styling-surface", "theme", "design-system"],
+      "default": "design-system",
+      "description": "The architectural layer this contract represents"
+    },
+    "stylingSurface": {
+      "$ref": "#/definitions/stylingSurface",
+      "description": "Control styling surface definition (typically only in 'minimal' contract)"
+    },
+    "requiredTokens": {
+      "type": "object",
+      "description": "Tokens that must be defined by implementations",
+      "additionalProperties": {
+        "$ref": "#/definitions/tokenRequirement"
+      }
+    },
+    "requiredStyles": {
+      "type": "object",
+      "description": "Named styles that must be defined by implementations",
+      "patternProperties": {
+        "^Fs[A-Z][a-zA-Z]+$": {
+          "$ref": "#/definitions/styleRequirements"
+        }
+      },
+      "additionalProperties": false
+    },
+    "recommendedStyles": {
+      "type": "object",
+      "description": "Named styles that are recommended but not required",
+      "patternProperties": {
+        "^Fs[A-Z][a-zA-Z]+$": {
+          "$ref": "#/definitions/styleRequirements"
+        }
+      },
+      "additionalProperties": false
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional metadata about the contract",
+      "properties": {
+        "author": { "type": "string" },
+        "license": { "type": "string" },
+        "repository": { "type": "string", "format": "uri" },
+        "documentation": { "type": "string", "format": "uri" }
+      }
+    }
+  },
+  "definitions": {
+    "stylingSurface": {
+      "type": "object",
+      "description": "Defines the stylable properties of FlagstoneUI controls",
+      "properties": {
+        "controls": {
+          "type": "object",
+          "patternProperties": {
+            "^Fs[A-Z][a-zA-Z]+$": {
+              "$ref": "#/definitions/controlSurface"
+            }
+          }
+        },
+        "baseTokenSchema": {
+          "type": "object",
+          "description": "Base token keys and their types (no values)",
+          "additionalProperties": {
+            "$ref": "#/definitions/tokenSchema"
+          }
+        }
+      }
+    },
+    "controlSurface": {
+      "type": "object",
+      "required": ["inheritsFrom", "styledProperties"],
+      "properties": {
+        "inheritsFrom": {
+          "type": "string",
+          "description": "The base .NET MAUI type this control extends"
+        },
+        "architecture": {
+          "type": "string",
+          "enum": ["subclass", "wrapper"],
+          "description": "Whether the control is a simple subclass or a wrapper"
+        },
+        "styledProperties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/styledProperty"
+          }
+        }
+      }
+    },
+    "styledProperty": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Property name (e.g., 'BackgroundColor')"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["color", "double", "int", "thickness", "brush", "string", "bool", "cornerRadius", "enum"],
+          "description": "CLR type category"
+        },
+        "tokenCategory": {
+          "type": "string",
+          "enum": ["colors", "spacing", "typography", "borderRadius", "borderWidth", "elevation", "padding", "opacity"],
+          "description": "Which token category this property typically uses"
+        },
+        "recommendedToken": {
+          "type": "string",
+          "description": "Recommended default token key"
+        },
+        "bindable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether this is a BindableProperty"
+        }
+      }
+    },
+    "tokenSchema": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["color", "double", "int", "thickness"],
+          "description": "CLR type"
+        },
+        "category": {
+          "type": "string",
+          "description": "Semantic category (e.g., 'primary', 'spacing', 'typography')"
+        },
+        "purpose": {
+          "type": "string",
+          "description": "Semantic description"
+        }
+      }
+    },
+    "tokenRequirement": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["color", "double", "int", "thickness"],
+          "description": "Required CLR type"
+        },
+        "purpose": {
+          "type": "string",
+          "description": "Why this token is required"
+        },
+        "defaultValue": {
+          "description": "Suggested default value (for documentation)"
+        }
+      }
+    },
+    "styleRequirements": {
+      "type": "object",
+      "properties": {
+        "implicit": {
+          "oneOf": [
+            { "type": "boolean" },
+            { "$ref": "#/definitions/styleSpec" }
+          ],
+          "description": "Whether an implicit (TargetType-only) style is required"
+        },
+        "named": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "type": "string" },
+              { "$ref": "#/definitions/namedStyleSpec" }
+            ]
+          },
+          "description": "Named styles (x:Key) that must be defined"
+        }
+      }
+    },
+    "styleSpec": {
+      "type": "object",
+      "properties": {
+        "requiredSetters": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Properties that must have setters in the style"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "namedStyleSpec": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The x:Key value for the style"
+        },
+        "description": {
+          "type": "string",
+          "description": "Purpose of this style variant"
+        },
+        "requiredSetters": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Properties that must have setters"
+        }
+      }
+    }
+  }
+}
