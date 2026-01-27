@@ -39,30 +39,26 @@ The pipeline infrastructure is in place and runs end-to-end. Each stage executes
 
 ---
 
-## Known Issues
+## Resolved Issues
 
-### Issue 2: Structure Extraction Receives HTML Instead of JSX
+### ✅ Issue 2: Structure Extraction Receives HTML Instead of JSX
 
-**Symptom**: Stage 2 finds 0 components and 0 pages  
-**Root Cause**: Stage 1 outputs HTML (via `EmitHtml: true`), but Stage 2's `StructuralExtractorService` only parses JSX/TSX.
+**Resolved**: 2025-01-21
 
-**Impact**: Application structure contract is empty, losing valuable metadata about pages, components, and navigation.
+**Original Symptom**: Stage 2 found 0 components and 0 pages  
+**Root Cause**: Stage 1 outputs HTML (via `EmitHtml: true`), but Stage 2's `StructuralExtractorService` only parsed JSX/TSX.
 
-**Solution**: Enhance Stage 2 to support HTML input using data attributes from Stage 1.
+**Solution Implemented**:
+1. Created `HtmlStructureParser.cs` using AngleSharp to parse HTML
+2. Modified `StructuralExtractorService.cs` to detect input type (HTML vs JSX)
+3. For HTML input: Parse `data-component` attributes to build structure
+4. Extracts className props, href attributes, component refs, etc.
 
-Stage 1 already emits:
-- `data-component="ComponentName"` on elements that were React components
-- `data-source="filename"` on root elements
-- `<meta name="component">` in document head
-
-Stage 2 should:
-1. Detect input type (HTML vs JSX/TSX)
-2. For HTML: Parse and extract structure from `data-component` attributes
-3. For JSX: Use current behavior (backward compatibility)
-
-This preserves the benefit of normalization (cleaner, flattened structure) while retaining component boundary information.
+**Result**: Pipeline now extracts 86 components and 5 pages from the AI Learning Platform test sample.
 
 ---
+
+## Known Issues
 
 ### Issue 3: CSS Computation Requires Compiled CSS
 
