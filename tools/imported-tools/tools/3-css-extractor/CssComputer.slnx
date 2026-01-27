@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CssComputer.Cli/CssComputer.Cli.csproj" />
+    <Project Path="src/CssComputer.Core/CssComputer.Core.csproj" />
+  </Folder>
+</Solution>

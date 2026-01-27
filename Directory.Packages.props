@@ -25,8 +25,13 @@
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <!-- Tooling -->
     <PackageVersion Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
-    <PackageVersion Include="ExCSS" Version="4.2.3" />
+    <PackageVersion Include="ExCSS" Version="4.3.1" />
     <PackageVersion Include="ModelContextProtocol" Version="0.4.0-preview.3" />
+    <!-- Pipeline Tools -->
+    <PackageVersion Include="Acornima" Version="1.2.0" />
+    <PackageVersion Include="Acornima.Extras" Version="1.2.0" />
+    <PackageVersion Include="AngleSharp" Version="1.4.0" />
+    <PackageVersion Include="YamlDotNet" Version="16.3.0" />
     <!-- Web -->
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
     <PackageVersion Include="ModelContextProtocol.AspNetCore" Version="0.4.0-preview.3" />

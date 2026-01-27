@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Solution>
+  <Folder Name="/Tools/">
+    <Folder Name="/Tools/1-Normalizer/">
+      <Project Path="tools\1-normalization-tool\src\ReactComponentFlattener.Core\ReactComponentFlattener.Core.csproj" />
+      <Project Path="tools\1-normalization-tool\src\ReactComponentFlattener.Cli\ReactComponentFlattener.Cli.csproj" />
+    </Folder>
+    <Folder Name="/Tools/2-StructureExtractor/">
+      <Project Path="tools\2-structure-extractor\src\StructuralExtractor.Core\StructuralExtractor.Core.csproj" />
+      <Project Path="tools\2-structure-extractor\src\StructuralExtractor.Cli\StructuralExtractor.Cli.csproj" />
+    </Folder>
+    <Folder Name="/Tools/3-CssComputer/">
+      <Project Path="tools\3-css-extractor\src\CssComputer.Core\CssComputer.Core.csproj" />
+      <Project Path="tools\3-css-extractor\src\CssComputer.Cli\CssComputer.Cli.csproj" />
+    </Folder>
+    <Folder Name="/Tools/TokenGenerator/">
+      <Project Path="..\FlagstoneUI.TokenGenerator\FlagstoneUI.TokenGenerator.csproj" />
+    </Folder>
+  </Folder>
+  <Folder Name="/Pipeline/">
+    <Project Path="tools\FlagstoneUI.PipelineRunner\FlagstoneUI.PipelineRunner.csproj" />
+  </Folder>
+</Solution>

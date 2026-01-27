@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/StructuralExtractor.Cli/StructuralExtractor.Cli.csproj" />
+    <Project Path="src/StructuralExtractor.Core/StructuralExtractor.Core.csproj" />
+  </Folder>
+</Solution>

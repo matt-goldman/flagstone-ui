@@ -1,0 +1,10 @@
+# EditorConfig for imported tools
+# These tools were developed externally and have globalization-related analyzer warnings
+# We suppress these to allow the pipeline to build without modifying the original code
+
+root = false
+
+[*.cs]
+# Suppress globalization rules for imported code
+dotnet_diagnostic.CA1307.severity = none
+dotnet_diagnostic.CA1311.severity = none

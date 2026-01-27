@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\ReactComponentFlattener.Core\ReactComponentFlattener.Core.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <!-- .NET Tool configuration -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>proto-normalize</ToolCommandName>
+    <PackageId>FlagstoneUI.ReactNormalizer</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Matt Goldman</Authors>
+    <Description>Flatten overly-componentized React components for easier normalization and processing</Description>
+    <PackageProjectUrl>https://github.com/verdaniq/flagstone-pipeline</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/verdaniq/flagstone-pipeline</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>maui;xaml;react;vbe-coding;theme;converter</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

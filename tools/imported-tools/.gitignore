@@ -1,0 +1,6 @@
+# Generated pipeline output artifacts
+dls.json
+computation-report.json
+
+# Ignore pipeline-test-output directory at any level
+**/pipeline-test-output/
