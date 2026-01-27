@@ -63,7 +63,10 @@ public class PipelineOrchestrator
             }
 
             // Stage 3: Compute CSS/DLS
-            var stage3Result = await RunStage3CssComputeAsync(stage1Result.OutputPath!, config.CssSourcePath, tempDir);
+            // Use explicit CssSourcePath if provided, otherwise fall back to original input path
+            // (the normalized output doesn't contain .next/dist build artifacts with compiled CSS)
+            var effectiveCssSourcePath = config.CssSourcePath ?? config.InputPath;
+            var stage3Result = await RunStage3CssComputeAsync(stage1Result.OutputPath!, effectiveCssSourcePath, tempDir);
             manifest.Stages.Add(stage3Result);
 
             if (stage3Result.Status == StageStatus.Failed)

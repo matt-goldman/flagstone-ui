@@ -41,6 +41,28 @@ The pipeline infrastructure is in place and runs end-to-end. Each stage executes
 
 ## Resolved Issues
 
+### ✅ Issue 3: CSS Computation Requires Compiled CSS
+
+**Resolved**: 2025-01-27
+
+**Original Symptom**: Minimal style extraction (1 style, 0 variants) from Tailwind projects  
+**Root Cause**: Two issues:
+1. Tool 3 wasn't looking in `.next/dev/static/chunks/` for dev build output
+2. Pipeline was using the normalized output path for CSS source (which doesn't contain `.next/`)
+
+**Solution Implemented**:
+1. Added `.next/dev/static/chunks/` and `.next/dev/static/css/` to compiled CSS search paths
+2. Modified pipeline to use original input path as CSS source (not the normalized output)
+
+**Result**: Pipeline now extracts **29 styles and 6 variants** from the AI Learning Platform test sample, with actual computed CSS values like:
+- `min-height: 100vh`
+- `width: 100%`, `max-width: 96rem`
+- `display: flex`, `align-items: center`, `justify-content: space-between`
+
+**Note**: Tailwind projects still require a build step (`npm run dev` or `npm run build`) to generate compiled CSS.
+
+---
+
 ### ✅ Issue 2: Structure Extraction Receives HTML Instead of JSX
 
 **Resolved**: 2025-01-21
@@ -59,22 +81,6 @@ The pipeline infrastructure is in place and runs end-to-end. Each stage executes
 ---
 
 ## Known Issues
-
-### Issue 3: CSS Computation Requires Compiled CSS
-
-**Symptom**: Minimal style extraction from Tailwind projects  
-**Root Cause**: Tool 3 computes styles from actual CSS. Tailwind utility classes don't exist in source CSS - they're generated during build.
-
-**Impact**: For Tailwind/utility-class projects, DLS output is limited to non-utility styles only.
-
-**Workaround**: Run `npm run build` on the prototype first to generate compiled CSS. The tool checks standard build output locations:
-- `.next/static/css/` (Next.js)
-- `dist/assets/` (Vite)
-- `build/static/css/` (CRA)
-
-**Long-term**: Document this requirement clearly; optionally add a pre-build step to the pipeline.
-
----
 
 ### Issue 4: Token Generation Not Implemented
 

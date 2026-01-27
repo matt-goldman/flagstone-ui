@@ -332,10 +332,13 @@ public class StyleResolutionService
         // This is the authoritative source for Tailwind and other utility-class frameworks
         var compiledCssPaths = new[]
         {
-            // Next.js build output (various versions)
+            // Next.js production build output (various versions)
             ".next/static/css",
             ".next/static/chunks",      // Next.js with Turbopack
             ".next/static/media",       // Some Next.js versions
+            // Next.js development build output (Turbopack dev server)
+            ".next/dev/static/chunks",  // Dev mode compiled CSS
+            ".next/dev/static/css",     // Dev mode CSS directory
             // Vite build output
             "dist/assets",
             // Generic build outputs
