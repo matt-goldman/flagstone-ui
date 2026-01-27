@@ -2,7 +2,7 @@
 
 **Status**: Deferred (part of Flagstrap)  
 **Date**: 2026-01-26  
-**Deciders**: @mattleibow, AI Assistant  
+**Deciders**: @matt-goldman, AI Assistant
 **Superseded by**: ADR011 (Token System Repositioning) - contract system deferred as part of Flagstrap  
 **Relates to**: ADR009 (Agent Guidance Strategy)
 
