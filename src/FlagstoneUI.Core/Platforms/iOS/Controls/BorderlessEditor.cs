@@ -2,13 +2,8 @@
 
 public partial class BorderlessEditor
 {
-	private static bool _handlerRegistered;
-
 	partial void RegisterHandler()
 	{
-		if (_handlerRegistered) return;
-		_handlerRegistered = true;
-
 		Microsoft.Maui.Handlers.EditorHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
 		{
 			if (view is not BorderlessEditor)
