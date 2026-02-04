@@ -2,8 +2,13 @@
 
 public partial class BorderlessEditor
 {
-	internal static partial void RegisterHandler()
+	private static bool _handlerRegistered;
+
+	partial void RegisterHandler()
 	{
+		if (_handlerRegistered) return;
+		_handlerRegistered = true;
+
 		Microsoft.Maui.Handlers.EditorHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
 		{
 			if (view is not BorderlessEditor)
@@ -13,9 +18,9 @@ public partial class BorderlessEditor
 
 			handler.PlatformView.Background = null;
 			handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
-			handler.PlatformView.BackgroundTintList = 
+			handler.PlatformView.BackgroundTintList =
 				Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
-			
+
 			// Remove native padding that can cause text clipping
 			handler.PlatformView.SetPadding(0, 0, 0, 0);
 		});

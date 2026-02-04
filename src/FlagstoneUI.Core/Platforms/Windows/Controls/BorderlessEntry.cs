@@ -2,8 +2,13 @@
 
 public partial class BorderlessEntry
 {
-	internal static partial void RegisterHandler()
+	private static bool _handlerRegistered;
+
+	partial void RegisterHandler()
 	{
+		if (_handlerRegistered) return;
+		_handlerRegistered = true;
+
 		Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
 		{
 			if (view is BorderlessEntry)
