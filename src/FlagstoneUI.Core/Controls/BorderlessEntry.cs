@@ -6,21 +6,21 @@ public partial class BorderlessEntry : Entry
 	{
 		var transparentBackgroundSetter = new Setter
 		{
-			Property = BackgroundColorProperty,
-			Value = Colors.Transparent
+			Property	= BackgroundColorProperty,
+			Value		= Colors.Transparent
 		};
 
 		var focusedTrigger = new Trigger(typeof(BorderlessEntry))
 		{
-			Property = IsFocusedProperty,
-			Value = true
+			Property	= IsFocusedProperty,
+			Value		= true
 		};
 		focusedTrigger.Setters.Add(transparentBackgroundSetter);
 
 		var hoverTrigger = new Trigger(typeof(BorderlessEntry))
 		{
-			Property = IsFocusedProperty,
-			Value = true
+			Property	= IsFocusedProperty,
+			Value		= true
 		};
 		hoverTrigger.Setters.Add(transparentBackgroundSetter);
 
@@ -30,7 +30,7 @@ public partial class BorderlessEntry : Entry
 
 	internal static partial void RegisterHandler();
 
-#if !(ANDROID || WINDOWS || IOS)
+#if !(ANDROID || WINDOWS || IOS || MACCATALYST)
 	internal static partial void RegisterHandler() { }
 #endif
 }
