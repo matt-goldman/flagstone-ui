@@ -4,8 +4,6 @@ public partial class BorderlessEntry : Entry
 {
 	public BorderlessEntry()
 	{
-		RegisterHandler();
-
 		var transparentBackgroundSetter = new Setter
 		{
 			Property	= BackgroundColorProperty,
@@ -30,5 +28,9 @@ public partial class BorderlessEntry : Entry
 		Triggers.Add(hoverTrigger);
 	}
 
-	partial void RegisterHandler();
+	internal static partial void RegisterHandler();
+
+#if !(ANDROID || WINDOWS || IOS || MACCATALYST)
+	internal static partial void RegisterHandler() { }
+#endif
 }
