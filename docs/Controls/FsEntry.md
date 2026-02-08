@@ -119,7 +119,7 @@ This gives Flagstone UI complete control over the Entry's appearance, allowing t
 <!-- With custom styling -->
 <fs:FsEntry 
     Placeholder="Email Address"
-    BorderColor="#CCCCCC"
+    BorderBrush="#CCCCCC"
     BorderWidth="1"
     CornerRadius="8"
     Padding="12"
@@ -138,7 +138,7 @@ This gives Flagstone UI complete control over the Entry's appearance, allowing t
 <!-- Use with StaticResource -->
 <fs:FsEntry 
     Placeholder="Username"
-    BorderColor="{StaticResource InputBorder}"
+    BorderBrush="{StaticResource InputBorder}"
     BorderWidth="1"
     Background="{StaticResource InputBackground}"
     CornerRadius="8"
@@ -150,7 +150,7 @@ This gives Flagstone UI complete control over the Entry's appearance, allowing t
 ```xaml
 <!-- Define implicit style in theme -->
 <Style TargetType="fs:FsEntry">
-    <Setter Property="BorderColor" Value="#CCCCCC" />
+    <Setter Property="BorderBrush" Value="#CCCCCC" />
     <Setter Property="BorderWidth" Value="1" />
     <Setter Property="CornerRadius" Value="8" />
     <Setter Property="Padding" Value="12" />
@@ -196,7 +196,7 @@ If your theme uses design tokens (like Material), you can reference them:
 <fs:FsEntry 
     Placeholder="Password"
     IsPassword="True"
-    BorderColor="#CCCCCC"
+    BorderBrush="#CCCCCC"
     BorderWidth="1"
     CornerRadius="4"
     Padding="12" />
@@ -208,7 +208,7 @@ If your theme uses design tokens (like Material), you can reference them:
 <fs:FsEntry 
     Text="{Binding Username}"
     Placeholder="Username"
-    BorderColor="#6750A4"
+    BorderBrush="#6750A4"
     BorderWidth="2"
     CornerRadius="8"
     Padding="12" />
@@ -221,7 +221,7 @@ If your theme uses design tokens (like Material), you can reference them:
     Placeholder="Enter amount"
     Keyboard="Numeric"
     HorizontalTextAlignment="End"
-    BorderColor="#CCCCCC"
+    BorderBrush="#CCCCCC"
     BorderWidth="1"
     Padding="12" />
 ```
@@ -232,7 +232,7 @@ If your theme uses design tokens (like Material), you can reference them:
 <fs:FsEntry 
     Placeholder="email@example.com"
     Keyboard="Email"
-    BorderColor="#CCCCCC"
+    BorderBrush="#CCCCCC"
     BorderWidth="1"
     CornerRadius="4"
     Padding="12" />
@@ -244,11 +244,11 @@ Entries can be styled globally through themes:
 
 ```xaml
 <Style TargetType="fs:FsEntry">
-    <Setter Property="BorderColor" Value="#CCCCCC" />
+    <Setter Property="BorderBrush" Value="#CCCCCC" />
     <Setter Property="BorderWidth" Value="1" />
     <Setter Property="CornerRadius" Value="8" />
     <Setter Property="Padding" Value="12" />
-    <Setter Property="BackgroundColor" Value="#F5F5F5" />
+    <Setter Property="Background" Value="#F5F5F5" />
     <Setter Property="TextColor" Value="#333333" />
     <Setter Property="FontSize" Value="16" />
 </Style>
@@ -258,11 +258,11 @@ Themes using design tokens can reference them in styles:
 
 ```xaml
 <Style TargetType="fs:FsEntry">
-    <Setter Property="BorderColor" Value="{DynamicResource Color.Outline}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Color.Outline}" />
     <Setter Property="BorderWidth" Value="1" />
     <Setter Property="CornerRadius" Value="8" />
     <Setter Property="Padding" Value="12" />
-    <Setter Property="BackgroundColor" Value="{DynamicResource Color.SurfaceVariant}" />
+    <Setter Property="Background" Value="{DynamicResource Color.SurfaceVariant}" />
     <Setter Property="TextColor" Value="{DynamicResource Color.OnSurface}" />
     <Setter Property="FontSize" Value="16" />
 </Style>
@@ -273,8 +273,8 @@ Themes using design tokens can reference them in styles:
 ```xaml
 <!-- Filled Entry -->
 <Style TargetType="fs:FsEntry" x:Key="FilledEntry">
-    <Setter Property="BackgroundColor" Value="#F5F5F5" />
-    <Setter Property="BorderColor" Value="Transparent" />
+    <Setter Property="Background" Value="#F5F5F5" />
+    <Setter Property="BorderBrush" Value="Transparent" />
     <Setter Property="BorderWidth" Value="0" />
     <Setter Property="CornerRadius" Value="4" />
     <Setter Property="Padding" Value="16,12" />
@@ -282,8 +282,8 @@ Themes using design tokens can reference them in styles:
 
 <!-- Outlined Entry -->
 <Style TargetType="fs:FsEntry" x:Key="OutlinedEntry">
-    <Setter Property="BackgroundColor" Value="Transparent" />
-    <Setter Property="BorderColor" Value="#CCCCCC" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="#CCCCCC" />
     <Setter Property="BorderWidth" Value="1" />
     <Setter Property="CornerRadius" Value="4" />
     <Setter Property="Padding" Value="16,12" />
