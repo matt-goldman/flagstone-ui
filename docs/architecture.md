@@ -73,7 +73,7 @@ FlagstoneUI supports multiple valid styling approaches. Developers choose what f
     BackgroundColor="{StaticResource PrimaryColor}" />
 ```
 
-**Approach 3: Implicit Styles (Recommended)**
+**Approach 3: Implicit Styles (Default Look)**
 ```xml
 <!-- Define in Theme -->
 <Style TargetType="fs:FsButton">
@@ -85,7 +85,20 @@ FlagstoneUI supports multiple valid styling approaches. Developers choose what f
 <fs:FsButton Text="Submit" />
 ```
 
-**Approach 4: Design Tokens (Optional)**
+**Approach 4: Explicit/Named Styles (Variants)**
+```xml
+<!-- Named styles for control variants -->
+<Style x:Key="OutlinedButton" TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="Transparent" />
+    <Setter Property="BorderColor" Value="#6750A4" />
+    <Setter Property="BorderWidth" Value="1" />
+</Style>
+
+<!-- Usage -->
+<fs:FsButton Text="Cancel" Style="{StaticResource OutlinedButton}" />
+```
+
+**Approach 5: Design Tokens (Optional)**
 ```xml
 <!-- Some themes use tokens as an implementation detail -->
 <fs:FsButton 
@@ -93,7 +106,7 @@ FlagstoneUI supports multiple valid styling approaches. Developers choose what f
     CornerRadius="{DynamicResource Radius.Button.Medium}" />
 ```
 
-All approaches are valid. Choose based on your project's needs.
+All approaches are valid. Themes commonly combine implicit styles (for defaults) with explicit styles (for variants).
 
 ### Theme System
 
@@ -104,21 +117,30 @@ Themes are ResourceDictionaries containing implicit and/or explicit styles:
 
 ```xml
 <ResourceDictionary xmlns="...">
-  <!-- Implicit style - applies to all FsButton by default -->
+  <!-- Implicit style - default appearance for all FsButton -->
   <Style TargetType="fs:FsButton">
     <Setter Property="BackgroundColor" Value="#6750A4" />
     <Setter Property="TextColor" Value="White" />
     <Setter Property="CornerRadius" Value="12" />
   </Style>
   
-  <!-- Explicit style variant -->
+  <!-- Explicit style variants - provide multiple options -->
   <Style x:Key="OutlinedButton" TargetType="fs:FsButton">
     <Setter Property="BackgroundColor" Value="Transparent" />
     <Setter Property="BorderColor" Value="#6750A4" />
     <Setter Property="BorderWidth" Value="1" />
   </Style>
+  
+  <Style x:Key="DeleteButton" TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="#DC3545" />
+    <Setter Property="TextColor" Value="White" />
+  </Style>
 </ResourceDictionary>
 ```
+
+**Themes typically provide**:
+- **Implicit styles** - Default appearance applied automatically to all controls
+- **Explicit styles** - Named variants for different visual styles or semantic purposes (e.g., `OutlinedButton`, `DeleteButton`, `RoundedEntry`)
 
 **Themes can use**:
 - Direct values (like `#6750A4`)
@@ -126,7 +148,7 @@ Themes are ResourceDictionaries containing implicit and/or explicit styles:
 - Design tokens (like `{DynamicResource Color.Primary}`) - optional implementation detail
 
 **Current Themes**:
-- ✅ Material theme (example using tokens internally)
+- ✅ Material theme (example using tokens internally with multiple variants)
 - 🚧 Additional example themes coming
 
 ### Control Implementation

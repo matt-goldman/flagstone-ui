@@ -188,7 +188,40 @@ FlagstoneUI supports multiple valid styling approaches. Choose the one that fits
 
 **When to use:** Most applications, consistent branding, reusable styles.
 
-#### Approach 3: App Resources (Reusable Values)
+#### Approach 3: Explicit/Named Styles (Control Variants)
+
+```xml
+<!-- ✅ COMMON IN THEMES: Named variants for different appearances -->
+<Style TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="#6750A4" />
+    <Setter Property="TextColor" Value="White" />
+</Style>
+
+<Style x:Key="OutlinedButton" TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="Transparent" />
+    <Setter Property="BorderColor" Value="#6750A4" />
+    <Setter Property="BorderWidth" Value="1" />
+</Style>
+
+<Style x:Key="DeleteButton" TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="#DC3545" />
+    <Setter Property="TextColor" Value="White" />
+</Style>
+
+<!-- Usage -->
+<fs:FsButton Text="Submit" />  <!-- Uses implicit style -->
+<fs:FsButton Text="Cancel" Style="{StaticResource OutlinedButton}" />
+<fs:FsButton Text="Delete" Style="{StaticResource DeleteButton}" />
+```
+
+**When to use:** Most themes. Provides multiple visual or semantic variants while maintaining consistency.
+
+**Common patterns for explicit styles:**
+- Visual variants: `OutlinedButton`, `RoundedEntry`, `ElevatedCard`
+- Semantic variants: `PurchaseButton`, `DeleteButton`, `WarningCard`
+- Size variants: `SmallButton`, `LargeCard`
+
+#### Approach 4: App Resources (Reusable Values)
 
 ```xml
 <!-- Define reusable colors/values in App.xaml -->
@@ -207,7 +240,7 @@ FlagstoneUI supports multiple valid styling approaches. Choose the one that fits
 
 **When to use:** Reusable values across the app, simple theming.
 
-#### Approach 4: Design Tokens (Design System Consistency)
+#### Approach 5: Design Tokens (Design System Consistency)
 
 ```xml
 <!-- ✅ ALSO VALID: Using design tokens when available -->
@@ -233,12 +266,12 @@ FlagstoneUI supports multiple valid styling approaches. Choose the one that fits
 **Decision Guide:**
 ```
 ├─ Simple app or prototype? → Direct values (Approach 1)
-├─ Theme-based app? → Implicit styles (Approach 2)
-├─ Reusable values? → App resources (Approach 3)
-└─ Design system or existing token-based theme? → Design tokens (Approach 4)
+├─ Theme-based app? → Implicit styles + explicit variants (Approaches 2 & 3)
+├─ Reusable values? → App resources (Approach 4)
+└─ Design system or existing token-based theme? → Design tokens (Approach 5)
 ```
 
-All approaches are valid. The "best" approach depends on your project's needs.
+All approaches are valid. **Most themes combine implicit styles (for defaults) with explicit styles (for variants)**.
 
 ### When Using Design Tokens: Semantic Color Usage
 

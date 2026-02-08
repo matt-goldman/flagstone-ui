@@ -16,13 +16,23 @@ This guide is for designers who want to create custom themes for FlagstoneUI app
 
 ### What is a Theme?
 
-A theme in FlagstoneUI is a collection of styles that defines the visual appearance of controls in your application. Themes control:
+A theme in FlagstoneUI is a collection of styles that defines the visual appearance of controls in your application. **Themes are for everyone creating an app**—not just designers distributing libraries. Any project beyond a simple prototype should use a theme for consistency.
+
+Themes control:
 
 - **Colors**: Backgrounds, text, borders, and state colors
 - **Typography**: Font sizes, weights, and line heights
 - **Spacing**: Padding and spacing values
 - **Shape**: Corner radii and border widths
 - **Effects**: Shadows and elevation
+
+### Who Creates Themes?
+
+- **App developers**: Create themes for their own applications to maintain consistent branding and visual identity
+- **Design teams**: Create themes as part of their design system implementation
+- **Library authors**: Create themes for distribution (like Bootswatch themes for Bootstrap), but this is optional
+
+**Most themes are created for individual applications**, not for public distribution.
 
 ### Theme Architecture
 
@@ -86,7 +96,47 @@ Use app-level resources for values used across multiple controls:
 
 **When to use:** Reusable values, simple theme switching, consistent branding.
 
-### Approach 3: Design Tokens (Design System)
+### Approach 3: Explicit/Named Styles (Control Variants)
+
+Provide named style variants for different control appearances. This is a core part of most themes:
+
+```xml
+<!-- Default/implicit style -->
+<Style TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="#6750A4" />
+    <Setter Property="TextColor" Value="White" />
+    <Setter Property="CornerRadius" Value="8" />
+</Style>
+
+<!-- Named variants -->
+<Style x:Key="OutlinedButton" TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="Transparent" />
+    <Setter Property="BorderColor" Value="#6750A4" />
+    <Setter Property="BorderWidth" Value="1" />
+    <Setter Property="TextColor" Value="#6750A4" />
+    <Setter Property="CornerRadius" Value="8" />
+</Style>
+
+<Style x:Key="DeleteButton" TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="#DC3545" />
+    <Setter Property="TextColor" Value="White" />
+    <Setter Property="CornerRadius" Value="8" />
+</Style>
+
+<!-- Usage -->
+<fs:FsButton Text="Submit" />  <!-- Uses implicit style -->
+<fs:FsButton Text="Cancel" Style="{StaticResource OutlinedButton}" />
+<fs:FsButton Text="Delete" Style="{StaticResource DeleteButton}" />
+```
+
+**When to use:** Most applications. Themes with explicit styles provide multiple variants (visual or semantic) while maintaining consistency.
+
+**Common explicit style patterns:**
+- **Visual variants**: `OutlinedButton`, `RoundedEntry`, `UnderlineEntry`, `ElevatedCard`
+- **Semantic variants**: `PurchaseButton`, `DeleteButton`, `WarningCard`, `SuccessEntry`
+- **Size variants**: `SmallButton`, `LargeCard`
+
+### Approach 4: Design Tokens (Design System)
 
 For comprehensive design systems with well-defined token vocabularies:
 
