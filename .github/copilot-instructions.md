@@ -101,11 +101,13 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 
 ## Project-Specific Conventions
 
-- **Token-first styling**: Add/modify tokens in `src/FlagstoneUI.Core/Styles/Tokens.xaml`. Themes consume tokens via `DynamicResource` in their `Theme.xaml`.
+- **Control styling**: Style controls using standard .NET MAUI patterns (inline values, explicit styles, implicit styles, StaticResource, DynamicResource)
+- **Styling surface**: All visual properties exposed via BindableProperties—this is what makes FlagstoneUI valuable
 - **Naming**: Projects/files start with `FlagstoneUI.*` for discoverability.
 - **Controls**: Live under `src/FlagstoneUI.Core/Controls`. Keep public API minimal and theme-agnostic.
-- **Themes**: Implement platform-agnostic styles in `Theme.xaml` and merge core tokens.
+- **Themes**: Implement platform-agnostic styles in `Theme.xaml`. Themes can use direct values, app resources, or design tokens.
 - **Blocks**: High-level screens go in `src/FlagstoneUI.Blocks/Blocks` and depend on Core controls.
+- **Optional: Design Tokens**: Some themes (like Material) use tokens in `src/FlagstoneUI.Core/Styles/Tokens.xaml` as an implementation detail. Tokens are consumed via `DynamicResource`.
 
 ## Integration Points
 

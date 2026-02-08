@@ -4,14 +4,15 @@
 
 ## Overview
 
-**FlagstoneUI** is a cross-platform UI kit and framework for .NET MAUI that provides themeable, platform-neutral controls through a token-based design system. It solves the problem of inconsistent visual styling across platforms by offering controls with full visual control from shared code—no platform handlers needed for basic styling.
+**FlagstoneUI** is a cross-platform UI kit and framework for .NET MAUI that provides a unified styling plane for .NET MAUI—controls with full visual control from shared code, no platform handlers needed. It solves the problem of inconsistent visual styling across platforms by offering enhanced controls with comprehensive styling properties exposed through standard .NET MAUI patterns.
 
 ### Philosophy
 
-- **Token-First Design**: All visual properties reference semantic design tokens (e.g., `Color.Primary`, `Space.16`) rather than hardcoded values
+- **Full Visual Control**: Controls expose all styling properties via BindableProperties—border, corner radius, padding, colors, etc.
+- **Standard .NET MAUI Styling**: Use inline values, `StaticResource`, `DynamicResource`, explicit styles, or implicit styles—all approaches are valid
+- **No Platform Code**: Style from shared code without handlers or renderers
 - **Platform Neutrality**: Controls are designed to look and behave consistently across iOS, Android, Windows, and macOS
-- **Theme Flexibility**: Swap entire visual systems by changing one resource dictionary
-- **Developer Experience**: Simple XAML API that feels natural to .NET MAUI developers
+- **Flexibility**: Use direct values for simple cases, app resources for reusability, or design tokens for consistency—choose what fits your project
 
 ### When to Use FlagstoneUI
 
@@ -19,7 +20,8 @@
 - Building cross-platform apps that need consistent, custom visual styling
 - Implementing a design system or brand identity across .NET MAUI
 - You need controls with full visual customization without platform-specific code
-- You want token-based theming similar to CSS custom properties
+- You want full control over borders, corner radius, padding, colors from shared code
+- You need theming support with standard .NET MAUI patterns
 
 ❌ **DON'T use FlagstoneUI when:**
 - You specifically want platform-native look and feel
@@ -50,32 +52,46 @@
 ```
 FlagstoneUI.Core
 ├── Controls/          # FsButton, FsCard, FsEntry, FsEditor
-├── Styles/            # Tokens.xaml (design tokens)
+├── Styles/            # Tokens.xaml (optional design tokens)
 └── Builders/          # FlagstoneUIBuilder (minimal, may be removed)
 
 FlagstoneUI.Themes.Material
-└── Theme.xaml         # Material Design 3 theme implementation
+└── Theme.xaml         # Material theme example
 
 FlagstoneUI.Integrations.MCT (optional)
 ├── Behaviors/         # ValidationBehaviorAdapter for FsEntry
 └── Animations/        # FsEditorBorderAnimation for animated borders
 ```
 
-### Token System
+### Core Architecture
 
-FlagstoneUI uses a comprehensive token system with design tokens organized into semantic categories:
+FlagstoneUI's architecture is simple and focused:
 
-**Token Categories:**
+```
+Controls → Styles → Themes
+```
+
+That's it. This is the styling plane for .NET MAUI.
+
+**What FlagstoneUI Provides:**
+- Enhanced controls (`FsButton`, `FsCard`, `FsEntry`, `FsEditor`) with full visual control
+- All styling properties exposed as BindableProperties
+- Standard .NET MAUI styling patterns (inline, explicit styles, implicit styles)
+- Themes as collections of styles
+
+### Optional: Design Tokens
+
+Some themes (like Material) use design tokens as an implementation detail to organize style values:
+
+**Token Categories (Material theme example):**
 - **Colors**: `Color.Primary`, `Color.OnPrimary`, `Color.Surface`, `Color.Error`, etc.
 - **Spacing**: `Space.0`, `Space.8`, `Space.16`, `Space.24`, etc.
 - **Border Radius**: `Radius.Small`, `Radius.Medium`, `Radius.Large` (Double), `Radius.Button.Small`, `Radius.Button.Medium` (Int32 for Button.CornerRadius)
 - **Typography**: `FontSize.BodyLarge`, `FontSize.TitleMedium`, `FontSize.HeadlineLarge`, etc.
 - **Border Width**: `BorderWidth.Thin`, `BorderWidth.Thick`, etc.
 - **Elevation**: `Elevation.Level0`, `Elevation.Level1`, `Elevation.Level2`, etc.
-- **Padding**: `Padding.Small`, `Padding.Medium`, `Padding.Large`, etc.
-- **Opacity**: `Opacity.Disabled`, `Opacity.Medium`, `Opacity.High`, etc.
 
-Tokens follow Material Design 3 naming conventions for broad familiarity.
+**Tokens are optional** — themes can use direct values, app resources, or any standard .NET MAUI pattern.
 
 ### Theme Configuration
 
@@ -130,15 +146,71 @@ This is a common pattern for custom themes that are specific to your application
 
 ## Code Generation Patterns
 
-### ✅ DO: Use Tokens for All Visual Properties
+### Styling Approaches
 
-**Always reference tokens using DynamicResource:**
+FlagstoneUI supports multiple valid styling approaches. Choose the one that fits your project:
+
+#### Approach 1: Direct Styling (Simple Projects)
 
 ```xml
-<!-- ✅ BEST: Use theme styles (no explicit styling needed) -->
-<fs:FsButton Text="Submit" />
+<!-- ✅ VALID: Direct values for simple cases -->
+<fs:FsButton 
+    Text="Submit"
+    BackgroundColor="#6750A4"
+    TextColor="White"
+    CornerRadius="12"
+    Padding="16,8" />
 
-<!-- ✅ ALSO CORRECT: Using tokens when customizing beyond theme defaults -->
+<fs:FsCard 
+    BackgroundColor="#FAFAFA"
+    CornerRadius="12"
+    Padding="16">
+    <Label Text="Card Content" />
+</fs:FsCard>
+```
+
+**When to use:** Prototypes, simple apps, one-off styling needs.
+
+#### Approach 2: Theme-Based with Implicit Styles (Recommended for Most Apps)
+
+```xml
+<!-- ✅ RECOMMENDED: Define implicit styles in your theme -->
+<!-- In Theme.xaml or App.xaml -->
+<Style TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="#6750A4" />
+    <Setter Property="TextColor" Value="White" />
+    <Setter Property="CornerRadius" Value="12" />
+</Style>
+
+<!-- Usage - styles applied automatically -->
+<fs:FsButton Text="Submit" />
+```
+
+**When to use:** Most applications, consistent branding, reusable styles.
+
+#### Approach 3: App Resources (Reusable Values)
+
+```xml
+<!-- Define reusable colors/values in App.xaml -->
+<Application.Resources>
+    <Color x:Key="PrimaryColor">#6750A4</Color>
+    <Color x:Key="SurfaceColor">#FAFAFA</Color>
+    <x:Double x:Key="StandardCornerRadius">12</x:Double>
+</Application.Resources>
+
+<!-- Use with StaticResource -->
+<fs:FsButton 
+    Text="Submit"
+    BackgroundColor="{StaticResource PrimaryColor}"
+    CornerRadius="{StaticResource StandardCornerRadius}" />
+```
+
+**When to use:** Reusable values across the app, simple theming.
+
+#### Approach 4: Design Tokens (Design System Consistency)
+
+```xml
+<!-- ✅ ALSO VALID: Using design tokens when available -->
 <fs:FsButton 
     Text="Submit"
     BackgroundColor="{DynamicResource Color.Primary}"
@@ -154,26 +226,26 @@ This is a common pattern for custom themes that are specific to your application
 </fs:FsCard>
 ```
 
-### ❌ DON'T: Hardcode Visual Values
+**When to use:** Design system driven apps, token-based themes (like Material), dynamic theme switching.
 
-```xml
-<!-- ❌ WRONG: Hardcoded values -->
-<fs:FsButton 
-    Text="Submit"
-    BackgroundColor="#6750A4"
-    TextColor="#FFFFFF"
-    CornerRadius="12"
-    Padding="16" />
+### ✅ DO: Choose the Appropriate Approach
+
+**Decision Guide:**
+```
+├─ Simple app or prototype? → Direct values (Approach 1)
+├─ Theme-based app? → Implicit styles (Approach 2)
+├─ Reusable values? → App resources (Approach 3)
+└─ Design system or existing token-based theme? → Design tokens (Approach 4)
 ```
 
-**Why?** Hardcoded values break theming, prevent dark mode support, and create inconsistency.
+All approaches are valid. The "best" approach depends on your project's needs.
 
-### ✅ DO: Use Semantic Color Tokens
+### When Using Design Tokens: Semantic Color Usage
 
-Choose tokens based on semantic meaning, not appearance:
+If you're using a token-based theme (like Material), choose tokens based on semantic meaning:
 
 ```xml
-<!-- ✅ CORRECT: Semantic color usage -->
+<!-- ✅ CORRECT: Semantic token usage (if using tokens) -->
 <fs:FsButton Text="Delete" 
              BackgroundColor="{DynamicResource Color.Error}"
              TextColor="{DynamicResource Color.OnError}" />
@@ -187,7 +259,7 @@ Choose tokens based on semantic meaning, not appearance:
 </fs:FsCard>
 ```
 
-**Color Role Guidelines:**
+**Color Role Guidelines (Material theme):**
 - **Primary**: Main brand actions, key UI elements
 - **Secondary**: Supporting actions, less prominent elements
 - **Tertiary**: Accent color for visual hierarchy
