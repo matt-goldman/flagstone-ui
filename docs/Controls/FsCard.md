@@ -1,14 +1,15 @@
 # FsCard Control
 
-The `FsCard` control is a customizable card view that provides a surface for displaying content with visual styling options including elevation, rounded corners, and per-edge borders.
+The `FsCard` control is an enhanced card view that extends .NET MAUI layouts with full visual styling control from shared code. It provides a surface for displaying content with elevation, rounded corners, and per-edge border customization.
 
 ## Features
 
+- **Complete Styling Control**: All visual properties exposed as BindableProperties
 - **Elevation**: Automatic shadow effects based on Material Design 3 specifications
 - **Corner Radius**: Customizable rounded corners
 - **Per-Edge Borders**: Individual control over each border edge (top, right, bottom, left)
 - **Border Styling**: Configurable border color and width (uniform or per-edge)
-- **Background Color**: Themeable background color
+- **Standard .NET MAUI Patterns**: Use inline values, StaticResource, DynamicResource, or styles
 - **Content**: Can contain any .NET MAUI content
 
 ## Properties
@@ -56,45 +57,89 @@ The `FsCard` control is a customizable card view that provides a surface for dis
 
 ## Usage Examples
 
-### Basic Card
+### Direct Styling (Simple)
 
 ```xaml
 <fs:FsCard>
     <Label Text="Hello, Card!" />
 </fs:FsCard>
-```
 
-### Card with Elevation
-
-```xaml
-<fs:FsCard Elevation="2">
+<!-- With custom styling -->
+<fs:FsCard 
+    Elevation="2"
+    CornerRadius="12"
+    BorderColor="#CCCCCC"
+    BorderWidth="1"
+    BackgroundColor="White"
+    Padding="16">
     <VerticalStackLayout Spacing="8">
-        <Label Text="Elevated Card" FontSize="18" FontAttributes="Bold" />
-        <Label Text="This card has a shadow for depth." />
+        <Label Text="Styled Card" FontSize="18" FontAttributes="Bold" />
+        <Label Text="This card has elevation and a border." />
     </VerticalStackLayout>
 </fs:FsCard>
 ```
 
-### Styled Card
+### Using App Resources
+
+```xaml
+<!-- Define once in App.xaml -->
+<Color x:Key="CardBackground">White</Color>
+<Color x:Key="CardBorder">#CCCCCC</Color>
+
+<!-- Use with StaticResource -->
+<fs:FsCard 
+    Elevation="2"
+    BackgroundColor="{StaticResource CardBackground}"
+    BorderColor="{StaticResource CardBorder}"
+    BorderWidth="1"
+    CornerRadius="12"
+    Padding="16">
+    <Label Text="Card with app resources" />
+</fs:FsCard>
+```
+
+### Using Theme Styles
+
+```xaml
+<!-- Define implicit style in theme -->
+<Style TargetType="fs:FsCard">
+    <Setter Property="Elevation" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="BackgroundColor" Value="White" />
+    <Setter Property="BorderColor" Value="#CCCCCC" />
+    <Setter Property="Padding" Value="16" />
+</Style>
+
+<!-- Usage - styles applied automatically -->
+<fs:FsCard>
+    <Label Text="Themed card" />
+</fs:FsCard>
+```
+
+### Optional: Using Design Tokens
+
+If your theme uses design tokens (like Material), you can reference them:
 
 ```xaml
 <fs:FsCard 
     Elevation="3"
     CornerRadius="12"
-    BorderColor="Gray"
+    BorderColor="{DynamicResource Color.Outline}"
     BorderWidth="1"
-    BackgroundColor="White"
+    BackgroundColor="{DynamicResource Color.Surface}"
     Padding="16">
-    <Label Text="Fully styled card" />
+    <Label Text="Card with design tokens" />
 </fs:FsCard>
 ```
+
+> **Note**: Design tokens are optional. You can style FsCard using direct values, app resources, or theme styles without tokens.
 
 ### Card with Per-Edge Border (Divider Style)
 
 ```xaml
 <fs:FsCard 
     BorderBottomThickness="2"
-    BorderBottomBrush="Gray"
+    BorderBottomBrush="#CCCCCC"
     Padding="16">
     <Label Text="Card with bottom border only" />
 </fs:FsCard>
@@ -173,7 +218,7 @@ See [FsBorder documentation](FsBorder.md) for complete shorthand syntax details.
     <Grid RowDefinitions="Auto,*,Auto" RowSpacing="12">
         <Label Text="Card Title" FontSize="20" FontAttributes="Bold" />
         <Image Source="image.png" Grid.Row="1" Aspect="AspectFill" HeightRequest="200" />
-        <Button Text="Action" Grid.Row="2" />
+        <fs:FsButton Text="Action" Grid.Row="2" />
     </Grid>
 </fs:FsCard>
 ```
@@ -194,6 +239,18 @@ Shadow opacity increases with elevation (0.2 to 0.4) to maintain visual hierarch
 ## Theme Styling
 
 Cards can be styled globally through themes:
+
+```xaml
+<Style TargetType="fs:FsCard">
+    <Setter Property="Padding" Value="16" />
+    <Setter Property="BackgroundColor" Value="White" />
+    <Setter Property="BorderColor" Value="#E0E0E0" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Elevation" Value="1" />
+</Style>
+```
+
+Themes using design tokens can reference them in styles:
 
 ```xaml
 <Style TargetType="fs:FsCard">
