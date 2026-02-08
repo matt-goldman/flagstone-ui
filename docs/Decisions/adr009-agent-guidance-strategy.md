@@ -1,5 +1,11 @@
 # ADR009: Agent Guidance Strategy - AGENTS.md vs MCP Server
 
+> **⚠️ Status Update (February 2026)**: Following ADR011 (Token System Repositioning), agent guidance has been updated to reflect FlagstoneUI as a styling plane with flexible approaches. The token-first design mentioned in this ADR is now understood to be optional (part of future Flagstrap work).
+>
+> AGENTS.md has been updated to reflect multiple valid styling approaches.
+>
+> See [ADR011: Token System Repositioning](adr011-token-system-repositioning.md) for the architectural clarification.
+
 **Status**: Accepted  
 **Date**: December 16, 2025  
 **Deciders**: Matt Goldman  
