@@ -1,10 +1,26 @@
 # Flagstone UI Architecture
 
-This document describes the current architecture and implementation approach for Flagstone UI.
+This document describes the architecture and implementation approach for Flagstone UI.
 
 ## Overview
 
-Flagstone UI is a .NET MAUI UI kit that provides neutral, themeable controls through a design token system and custom control implementations.
+Flagstone UI is a .NET MAUI UI kit that provides a unified styling plane—enhanced controls with full visual control from shared code, no platform handlers needed for styling. It enables developers to style controls using standard .NET MAUI patterns: inline values, explicit styles, implicit styles, and resource references.
+
+## Core Architecture
+
+FlagstoneUI's architecture is simple and focused:
+
+```
+Controls → Styles → Themes
+```
+
+That's it. This is the styling plane for .NET MAUI.
+
+**What FlagstoneUI Provides:**
+- Enhanced controls with all visual properties exposed as BindableProperties
+- Standard .NET MAUI styling patterns (inline, StaticResource, DynamicResource, styles)
+- Themes as collections of styles
+- No requirement for platform-specific code to achieve visual consistency
 
 ## Current Architecture
 
@@ -13,96 +29,136 @@ Flagstone UI is a .NET MAUI UI kit that provides neutral, themeable controls thr
 ```
 FlagstoneUI.Core/
 ├── Builders/
-│   └── FlagstoneUIBuilder.cs          # Configuration builder pattern
+│   └── FlagstoneUIBuilder.cs          # Minimal builder (may be removed)
 ├── Controls/
-│   └── Card.cs                        # Custom controls (Card implemented)
+│   ├── FsButton.cs                    # Enhanced button with full styling control
+│   ├── FsCard.cs                      # Card control with elevation, borders
+│   ├── FsEntry.cs                     # Single-line text input with full styling
+│   └── FsEditor.cs                    # Multi-line text input with full styling
 ├── Styles/
-│   └── Tokens.xaml                    # Design tokens (colors, spacing, typography)
+│   └── Tokens.xaml                    # Optional design tokens (used by some themes)
 └── Themes/
     └── ThemeLoader.cs                 # Theme registration utilities
 
 FlagstoneUI.Themes.Material/
-└── Theme.xaml                         # Material Design theme implementation
+└── Theme.xaml                         # Material theme example (uses tokens internally)
 
 FlagstoneUI.Themes.Modern/
-└── Theme.xaml                         # Modern theme implementation (placeholder)
+└── Theme.xaml                         # Modern theme (planned)
 
 FlagstoneUI.Blocks/
 └── (Future reusable page templates)
 ```
 
-### Design Token System
+### Styling Approaches
 
-**Core Concept**: Central design tokens defined in `FlagstoneUI.Core/Styles/Tokens.xaml` are consumed by theme files through `DynamicResource` references.
+FlagstoneUI supports multiple valid styling approaches. Developers choose what fits their project:
 
-**Current Implementation**:
-- ✅ Tokens defined for colors, spacing, radii, typography
-- ❌ Cross-component resource loading blocked (see Known Issues)
-- 🚧 Temporary workaround: Local token definitions in theme files
-
-**Token Categories**:
+**Approach 1: Direct Styling**
 ```xml
-<!-- Colors -->
-<Color x:Key="Color.Primary">#6750A4</Color>
-<Color x:Key="Color.OnPrimary">#FFFFFF</Color>
-<Color x:Key="Color.Surface">#FFFBFE</Color>
-
-<!-- Spacing -->
-<x:Double x:Key="Space.8">8</x:Double>
-<x:Double x:Key="Space.16">16</x:Double>
-
-<!-- Radii -->
-<x:Double x:Key="Radius.Medium">8</x:Double>
-
-<!-- Typography -->
-<x:Double x:Key="FontSize.Body">14</x:Double>
+<fs:FsButton 
+    Text="Submit" 
+    BackgroundColor="#6750A4" 
+    CornerRadius="12" />
 ```
+
+**Approach 2: App Resources**
+```xml
+<!-- Define in App.xaml -->
+<Color x:Key="PrimaryColor">#6750A4</Color>
+
+<!-- Use with StaticResource -->
+<fs:FsButton 
+    Text="Submit" 
+    BackgroundColor="{StaticResource PrimaryColor}" />
+```
+
+**Approach 3: Implicit Styles (Recommended)**
+```xml
+<!-- Define in Theme -->
+<Style TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="#6750A4" />
+    <Setter Property="CornerRadius" Value="12" />
+</Style>
+
+<!-- Usage - styles applied automatically -->
+<fs:FsButton Text="Submit" />
+```
+
+**Approach 4: Design Tokens (Optional)**
+```xml
+<!-- Some themes use tokens as an implementation detail -->
+<fs:FsButton 
+    BackgroundColor="{DynamicResource Color.Primary}"
+    CornerRadius="{DynamicResource Radius.Button.Medium}" />
+```
+
+All approaches are valid. Choose based on your project's needs.
 
 ### Theme System
 
-**Implementation Strategy**:
-1. Themes merge core tokens via `ResourceDictionary.MergedDictionaries`
-2. Themes define implicit styles for standard controls
-3. Themes define styles for custom Flagstone controls
+**What is a Theme?**: A collection of styles for FlagstoneUI controls.
 
-**Current Status**:
-- ✅ Basic Material theme structure
-- ❌ Resource merging not functional
-- 🚧 Using local token definitions as workaround
+**Implementation**:
+Themes are ResourceDictionaries containing implicit and/or explicit styles:
 
-**Example Theme Structure**:
 ```xml
 <ResourceDictionary xmlns="...">
-  <ResourceDictionary.MergedDictionaries>
-    <!-- TODO: Fix cross-component resource references -->
-    <!-- <ResourceDictionary Source="/FlagstoneUI.Core;component/Styles/Tokens.xaml" /> -->
-  </ResourceDictionary.MergedDictionaries>
-  
-  <!-- Implicit styles for standard controls -->
-  <Style TargetType="Button">
-    <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />
+  <!-- Implicit style - applies to all FsButton by default -->
+  <Style TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="#6750A4" />
+    <Setter Property="TextColor" Value="White" />
+    <Setter Property="CornerRadius" Value="12" />
   </Style>
   
-  <!-- Styles for custom controls -->
-  <Style TargetType="fs:Card">
-    <Setter Property="Padding" Value="{DynamicResource Space.16}" />
+  <!-- Explicit style variant -->
+  <Style x:Key="OutlinedButton" TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="Transparent" />
+    <Setter Property="BorderColor" Value="#6750A4" />
+    <Setter Property="BorderWidth" Value="1" />
   </Style>
 </ResourceDictionary>
 ```
 
+**Themes can use**:
+- Direct values (like `#6750A4`)
+- App resources (like `{StaticResource PrimaryColor}`)
+- Design tokens (like `{DynamicResource Color.Primary}`) - optional implementation detail
+
+**Current Themes**:
+- ✅ Material theme (example using tokens internally)
+- 🚧 Additional example themes coming
+
 ### Control Implementation
 
-**Philosophy**: Create neutral controls that strip platform-specific styling and apply theme-based styling consistently.
+**Philosophy**: Create enhanced controls that expose all visual properties via BindableProperties, enabling full visual control from shared code without platform handlers.
+
+**The Styling Surface**: This is what makes FlagstoneUI valuable—all visual properties are exposed and styleable:
 
 **Current Implementation**:
-- ✅ **Card**: Complete custom ContentView with elevation (shadow support), corner radius, and border properties. Elevation automatically applies Material Design-compliant shadows.
-- ✅ **FsButton**: Button subclass with all properties exposed
-- ✅ **FsEntry**: Subclass of Entry wrapped in a ContentView, all inner properties surfaces as bindable properties, all visual properties exposed as bindable properties, Community Toolkit validators integration via adapters
-- ✅ **FsEditor**: Subclass of Editor wrapped in a ContentView, all inner properties surfaces as bindable properties, all visual properties exposed as bindable properties, Community Toolkit validators integration via adapters
+- ✅ **FsButton**: Button with corner radius, borders, colors, padding fully exposed
+- ✅ **FsCard**: Container with elevation (shadow support), corner radius, border properties, and per-edge borders
+- ✅ **FsEntry**: Single-line text input with full visual control, Community Toolkit validator integration
+- ✅ **FsEditor**: Multi-line text input with full visual control, optional animated border effects
 
-**Card Example**:
+**Example - FsButton Properties**:
 ```csharp
-public partial class Card : ContentView
+public partial class FsButton : Button
+{
+    public static readonly BindableProperty CornerRadiusProperty = ...;
+    public static readonly BindableProperty BorderColorProperty = ...;
+    public static readonly BindableProperty BorderWidthProperty = ...;
+    
+    public int CornerRadius { get; set; }
+    public Color BorderColor { get; set; }
+    public double BorderWidth { get; set; }
+    // ... more properties
+}
+```
+
+**Example - FsCard Properties**:
+```csharp
+public partial class FsCard : ContentView
 {
     public static readonly BindableProperty ElevationProperty = ...;
     public static readonly BindableProperty CornerRadiusProperty = ...;
@@ -111,6 +167,7 @@ public partial class Card : ContentView
     public int Elevation { get; set; }
     public double CornerRadius { get; set; }
     public Color BorderColor { get; set; }
+    // ... including per-edge border properties
 }
 ```
 
@@ -129,6 +186,32 @@ public partial class Card : ContentView
     </ResourceDictionary>
 </Application.Resources>
 ```
+
+### Optional: Design Tokens
+
+Some themes (like Material) use design tokens as an implementation detail to organize style values. This is optional—themes can use direct values, app resources, or any standard .NET MAUI pattern.
+
+**Token Categories (Material theme example)**:
+```xml
+<!-- Colors -->
+<Color x:Key="Color.Primary">#6750A4</Color>
+<Color x:Key="Color.OnPrimary">#FFFFFF</Color>
+<Color x:Key="Color.Surface">#FFFBFE</Color>
+
+<!-- Spacing -->
+<x:Double x:Key="Space.8">8</x:Double>
+<x:Double x:Key="Space.16">16</x:Double>
+
+<!-- Radii -->
+<x:Double x:Key="Radius.Medium">8</x:Double>
+```
+
+Tokens enable:
+- Consistent values across theme
+- Easy theming by overriding token values
+- Dynamic theme switching at runtime
+
+**Note**: Using tokens is an implementation choice for theme authors, not a requirement for using FlagstoneUI.
 
 ## Known Issues & Technical Debt
 
