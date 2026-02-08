@@ -1,7 +1,7 @@
 namespace FlagstoneUI.Themes.Modern;
 
 /// <summary>
-/// Modern theme resource dictionary for Flagstone UI controls.
+/// Modern theme resource dictionary for FlagstoneUI controls.
 /// </summary>
 public partial class Theme : ResourceDictionary
 {

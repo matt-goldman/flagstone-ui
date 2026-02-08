@@ -31,7 +31,7 @@ Themes control:
 Themes are created by different people for different purposes:
 
 - **App developers**: Create themes for their own applications to maintain consistent branding and visual identity
-- **Design teams**: Create themes as part of their design system implementation  
+- **Design teams**: Create themes as part of their design system implementation
 - **Library authors**: Create themes for distribution (like Bootswatch themes for Bootstrap) so others can use them
 
 All of these are valid and supported use cases. While most themes are created for individual applications, distributable theme libraries are equally valuable for the community.
@@ -513,7 +513,7 @@ Below is a template you can use to document your custom theme and hand it to a d
 
 ## Control Properties Reference
 
-This section shows what properties are themable for each Flagstone UI control.
+This section shows what properties are themable for each FlagstoneUI control.
 
 ### FsButton
 
@@ -570,7 +570,7 @@ This section shows what properties are themable for each Flagstone UI control.
 
 ## Border Property Patterns
 
-Flagstone UI controls (FsCard, FsEntry, FsEditor, FsBorder) support three mechanisms for setting borders. **All are equally valid** - choose the approach that best fits your use case. **Do not use multiple mechanisms together** on the same control.
+FlagstoneUI controls (FsCard, FsEntry, FsEditor, FsBorder) support three mechanisms for setting borders. **All are equally valid** - choose the approach that best fits your use case. **Do not use multiple mechanisms together** on the same control.
 
 ### 1. Convenience Properties
 
@@ -606,13 +606,13 @@ Use these for **asymmetric borders** like underlines, 3D effects, or custom edge
 
 **Example - Underline Only:**
 ```xml
-<fs:FsEntry BorderBottomThickness="2" 
+<fs:FsEntry BorderBottomThickness="2"
             BorderBottomBrush="{DynamicResource Color.Primary}" />
 ```
 
 **Example - 3D Inset Effect:**
 ```xml
-<fs:FsCard BorderTopThickness="1" 
+<fs:FsCard BorderTopThickness="1"
            BorderTopBrush="White"
            BorderRightThickness="2"
            BorderRightBrush="Black"
@@ -663,7 +663,7 @@ All three mechanisms set the same underlying per-edge properties. For example:
 ```xml
 <!-- These are equivalent: -->
 <fs:FsCard BorderColor="Red" BorderWidth="2" />
-<fs:FsCard BorderTopBrush="Red" BorderRightBrush="Red" 
+<fs:FsCard BorderTopBrush="Red" BorderRightBrush="Red"
            BorderBottomBrush="Red" BorderLeftBrush="Red"
            BorderTopThickness="2" BorderRightThickness="2"
            BorderBottomThickness="2" BorderLeftThickness="2" />
@@ -878,7 +878,7 @@ See the sample document above for a complete custom theme example based on a tea
 
 ## Summary
 
-Creating a Flagstone UI theme is straightforward:
+Creating a FlagstoneUI theme is straightforward:
 
 1. ✅ Define your color palette (primary, secondary, surfaces, etc.)
 2. ✅ Choose typography and spacing (or use defaults)

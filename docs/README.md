@@ -1,6 +1,6 @@
-# Flagstone UI Documentation
+# FlagstoneUI Documentation
 
-Welcome to the Flagstone UI documentation! This directory contains comprehensive guides, references, and technical documentation for building apps with Flagstone UI.
+Welcome to the FlagstoneUI documentation! This directory contains comprehensive guides, references, and technical documentation for building apps with FlagstoneUI.
 
 > 👈 **New here?** Start with the [main README](../README.md) for a project overview, code examples, and quick start instructions.
 
@@ -31,7 +31,7 @@ Welcome to the Flagstone UI documentation! This directory contains comprehensive
   - Color, spacing, typography, shape tokens
   - Usage guidelines and design principles
   - Semantic meaning of each token
-  
+
 - **[Token Catalog System](token-catalog-system.md)** - Machine-readable token architecture
   - For AI agents and automated tooling
   - JSON Schema and validation
@@ -105,4 +105,4 @@ When adding new controls or tokens:
 
 ---
 
-*Flagstone UI - A token-based, themeable UI framework for .NET MAUI*
+*FlagstoneUI - A token-based, themeable UI framework for .NET MAUI*

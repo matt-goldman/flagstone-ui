@@ -1,6 +1,6 @@
-# Flagstone UI Theme Tools
+# FlagstoneUI Theme Tools
 
-A .NET command-line tool for managing Flagstone UI themes and design tokens. Provides automated catalog generation, validation, and bidirectional conversion between XAML and JSON formats.
+A .NET command-line tool for managing FlagstoneUI themes and design tokens. Provides automated catalog generation, validation, and bidirectional conversion between XAML and JSON formats.
 
 ## Features
 
@@ -35,7 +35,7 @@ dotnet run --project tools/FlagstoneUI.TokenGenerator -- generate --source src -
 
 **Example Output:**
 ```
-🔍 Flagstone UI Token Catalog Generator
+🔍 FlagstoneUI Token Catalog Generator
    Source: E:\source\repos\flagstone-ui\src
    Output: E:\source\repos\flagstone-ui\docs\tokens-catalog.json
 
@@ -73,7 +73,7 @@ dotnet run --project tools/FlagstoneUI.TokenGenerator -- validate --input docs/t
 
 **Example Output:**
 ```
-🔍 Flagstone UI Theme Validator
+🔍 FlagstoneUI Theme Validator
    Input: E:\source\repos\flagstone-ui\docs\tokens-catalog.json
 
 ✅ Validation passed!
@@ -117,7 +117,7 @@ dotnet run --project tools/FlagstoneUI.TokenGenerator -- generate-xaml --input d
 
 **Example Output:**
 ```
-🔍 Flagstone UI XAML Generator
+🔍 FlagstoneUI XAML Generator
    Input:  E:\source\repos\flagstone-ui\docs\tokens-catalog.json
    Output: E:\source\repos\flagstone-ui\src\FlagstoneUI.Core\Styles\Tokens.xaml
 
@@ -134,7 +134,7 @@ This tool is designed for easy integration with Model Context Protocol (MCP) ser
 
 ```typescript
 // Generate catalog from source
-flagstone_generate_catalog(source_path: string) 
+flagstone_generate_catalog(source_path: string)
   → { catalog: string, size: number }
 
 // Validate theme

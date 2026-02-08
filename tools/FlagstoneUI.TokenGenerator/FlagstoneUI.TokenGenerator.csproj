@@ -6,14 +6,14 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    
+
     <!-- Tool packaging settings -->
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>flagstone-tokens</ToolCommandName>
     <PackageId>FlagstoneUI.TokenGenerator</PackageId>
     <Version>0.1.0</Version>
     <Authors>Matt Goldman</Authors>
-    <Description>CLI tool for generating Flagstone UI token catalogs from XAML resource dictionaries</Description>
+    <Description>CLI tool for generating FlagstoneUI token catalogs from XAML resource dictionaries</Description>
     <PackageTags>flagstone-ui;maui;tokens;design-system;theme-generator</PackageTags>
   </PropertyGroup>
 

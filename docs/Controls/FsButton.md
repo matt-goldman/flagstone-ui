@@ -229,7 +229,7 @@ Unlike `FsEntry`, which requires a wrapper control to remove platform-specific s
 - No intrusive platform decorations that need to be removed
 - BackgroundColor overrides native styling appropriately
 
-This makes `FsButton` lightweight and performant while maintaining the Flagstone UI type identity for theme targeting.
+This makes `FsButton` lightweight and performant while maintaining the FlagstoneUI type identity for theme targeting.
 
 ## Example: Sign-In Form
 

@@ -1,16 +1,16 @@
 # FlagstoneUI.BootstrapConverter
 
-A .NET class library for converting Bootstrap themes to Flagstone UI tokens and theme files.
+A .NET class library for converting Bootstrap themes to FlagstoneUI tokens and theme files.
 
 ## Overview
 
-This library provides the core functionality for parsing Bootstrap CSS/SCSS files, extracting computed styles from CSS classes, mapping to Flagstone UI tokens, and generating XAML theme files.
+This library provides the core functionality for parsing Bootstrap CSS/SCSS files, extracting computed styles from CSS classes, mapping to FlagstoneUI tokens, and generating XAML theme files.
 
 ## Features
 
 - **Parse Bootstrap themes** from CSS, SCSS, URLs, or files
 - **Top-down CSS analysis** - extract computed styles from Bootstrap component classes
-- **Bottom-up variable mapping** - map Bootstrap variables to Flagstone UI tokens
+- **Bottom-up variable mapping** - map Bootstrap variables to FlagstoneUI tokens
 - **Hybrid mode** - combine both approaches for maximum coverage
 - **Generate XAML** token and theme files with proper ResourceDictionary structure
 - **Auto-generate dark mode** color variants with **AppThemeBinding support** for light/dark adaptive themes
@@ -62,7 +62,7 @@ var variables = await parser.ParseFromUrlAsync(
 
 // Map to Flagstone tokens
 var mapper = new BootstrapMapper();
-var tokens = mapper.MapToFlagstoneTokens(variables, new ConversionOptions 
+var tokens = mapper.MapToFlagstoneTokens(variables, new ConversionOptions
 {
     DarkModeStrategy = DarkModeStrategy.Auto,
     IncludeComments = true
@@ -71,8 +71,8 @@ var tokens = mapper.MapToFlagstoneTokens(variables, new ConversionOptions
 // Generate XAML files
 var generator = new XamlThemeGenerator();
 await generator.GenerateFilesAsync(
-    tokens, 
-    "Bootstrap Darkly", 
+    tokens,
+    "Bootstrap Darkly",
     "./output"
 );
 ```
@@ -94,7 +94,7 @@ For best results with Bootswatch themes, use multiple source files to get comple
 ```csharp
 var parser = new BootstrapParser();
 var variables = await parser.ParseMultipleFilesAsync(
-    new[] { 
+    new[] {
         "./bootswatch/_variables.scss",  // Theme-specific variables
         "./bootswatch/_bootswatch.scss"  // Theme overrides and fonts
     },

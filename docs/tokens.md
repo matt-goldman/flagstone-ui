@@ -1,4 +1,4 @@
-# Flagstone UI Design Tokens (Flagstrap Exploration)
+# FlagstoneUI Design Tokens (Flagstrap Exploration)
 
 > **⚠️ Important Note**: This document describes the design token system used in the Material theme example. Design tokens are **NOT** part of FlagstoneUI's core architecture—they're an optional implementation detail for theme authors.
 >
@@ -12,7 +12,7 @@ This document provides a reference of design tokens available in the Material th
 
 ## What are Design Tokens?
 
-Design tokens are named entities that store visual design attributes. They provide a single source of truth for design decisions and make it easy to maintain consistency across an application. In Flagstone UI, tokens are defined as XAML resources that can be referenced throughout your application and overridden by themes.
+Design tokens are named entities that store visual design attributes. They provide a single source of truth for design decisions and make it easy to maintain consistency across an application. In FlagstoneUI, tokens are defined as XAML resources that can be referenced throughout your application and overridden by themes.
 
 ## Theme Architecture: The Three Layers
 
@@ -345,7 +345,7 @@ General opacity tokens for various UI states and elements.
 
 **Important**: The base token system in `Tokens.xaml` defines only light mode values. Dark mode support is implemented at the **theme level**, not in the base tokens.
 
-Flagstone UI themes can define dark mode color variants using the `.Dark` suffix pattern (e.g., `Color.Primary.Dark`). The Material theme demonstrates this approach.
+FlagstoneUI themes can define dark mode color variants using the `.Dark` suffix pattern (e.g., `Color.Primary.Dark`). The Material theme demonstrates this approach.
 
 ### Implementing Dark Mode in Your Theme
 
@@ -359,8 +359,8 @@ Flagstone UI themes can define dark mode color variants using the `.Dark` suffix
 2. **Use `AppThemeBinding`** in control styles to switch between light and dark values:
    ```xml
    <Style TargetType="Button">
-       <Setter Property="BackgroundColor" 
-               Value="{AppThemeBinding Light={DynamicResource Color.Primary}, 
+       <Setter Property="BackgroundColor"
+               Value="{AppThemeBinding Light={DynamicResource Color.Primary},
                                       Dark={DynamicResource Color.Primary.Dark}}" />
    </Style>
    ```
@@ -389,14 +389,14 @@ Example theme structure:
 
     <!-- Override light mode colors -->
     <Color x:Key="Color.Primary">#YourBrandColor</Color>
-    
+
     <!-- Define dark mode colors -->
     <Color x:Key="Color.Primary.Dark">#YourDarkBrandColor</Color>
-    
+
     <!-- Create styles using tokens -->
     <Style TargetType="Button">
-        <Setter Property="BackgroundColor" 
-                Value="{AppThemeBinding Light={DynamicResource Color.Primary}, 
+        <Setter Property="BackgroundColor"
+                Value="{AppThemeBinding Light={DynamicResource Color.Primary},
                                        Dark={DynamicResource Color.Primary.Dark}}" />
     </Style>
 </ResourceDictionary>
@@ -404,7 +404,7 @@ Example theme structure:
 
 ## Design Guidelines
 
-When working with Flagstone UI tokens:
+When working with FlagstoneUI tokens:
 
 1. **Semantic over literal**: Use tokens by their semantic meaning (e.g., `Color.Primary`) rather than their color value (e.g., "purple")
 2. **Consistent spacing**: Stick to the spacing scale for predictable layouts
@@ -415,7 +415,7 @@ When working with Flagstone UI tokens:
 
 ## Token Naming Conventions
 
-Flagstone UI follows these naming conventions:
+FlagstoneUI follows these naming conventions:
 
 - **Category prefix**: All tokens start with their category (e.g., `Color.`, `FontSize.`, `Space.`)
 - **Semantic naming**: Token names describe purpose, not appearance
@@ -424,7 +424,7 @@ Flagstone UI follows these naming conventions:
 
 ## Future Enhancements
 
-This token system is designed to grow with Flagstone UI. Planned additions include:
+This token system is designed to grow with FlagstoneUI. Planned additions include:
 
 - Animation/transition tokens
 - Shadow tokens (beyond elevation levels)
@@ -435,9 +435,9 @@ This token system is designed to grow with Flagstone UI. Planned additions inclu
 
 ## Questions or Feedback?
 
-For questions about tokens or to suggest new tokens, please open an issue on the [Flagstone UI GitHub repository](https://github.com/matt-goldman/flagstone-ui).
+For questions about tokens or to suggest new tokens, please open an issue on the [FlagstoneUI GitHub repository](https://github.com/matt-goldman/flagstone-ui).
 
 ---
 
-*Last Updated: 2025-11-01*  
+*Last Updated: 2025-11-01*
 *Version: 0.1.0 (MVP)*

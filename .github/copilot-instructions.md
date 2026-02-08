@@ -1,10 +1,10 @@
-# Copilot Instructions for Flagstone UI
+# Copilot Instructions for FlagstoneUI
 
-This guide helps AI coding agents work productively in the Flagstone UI codebase. It summarizes architecture, workflows, and conventions unique to this project.
+This guide helps AI coding agents work productively in the FlagstoneUI codebase. It summarizes architecture, workflows, and conventions unique to this project.
 
 ## Project Overview
 
-- **Flagstone UI** is a cross-platform, open-source UI kit and framework for .NET MAUI.
+- **FlagstoneUI** is a cross-platform, open-source UI kit and framework for .NET MAUI.
 - The repo is organized into modular projects for core controls, themes, blocks (app screens), samples, and tests.
 - **Current Status**: Proof of Concept (POC) at ~60% completion. MVP milestone will follow POC validation.
 - **Core Controls Implemented**: FsButton, FsCard, FsEntry, FsEditor
@@ -84,7 +84,7 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 
 - Uses comprehensive `.editorconfig` settings including:
   - C# files use tab indentation, UTF-8 with BOM, CRLF line endings
-  - XAML files use 2-space indentation  
+  - XAML files use 2-space indentation
   - File-scoped namespaces preferred
   - CA1822 is suppressed project-wide
 - Avoid formatting-only commits; include functional changes.
@@ -124,7 +124,7 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 ### Documentation and Comments
 
 The following nomenclature is used in code comments and documentation:
-- "FlagstoneUI" - not "Flagstone UI" or "Flagstone"
+- "FlagstoneUI" - not "FlagstoneUI" or "Flagstone"
 - ".NET MAUI" - always capitalized, with a space, not "MAUI"
 
 ### Update Instructions

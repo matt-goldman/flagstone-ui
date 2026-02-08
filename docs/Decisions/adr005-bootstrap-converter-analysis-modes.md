@@ -1,13 +1,13 @@
 # ADR005: Bootstrap Converter Analysis Modes
 
-**Status**: Accepted  
-**Date**: December 12, 2025  
-**Deciders**: Matt Goldman  
-**Context**: Bootstrap theme conversion architecture for Flagstone UI
+**Status**: Accepted
+**Date**: December 12, 2025
+**Deciders**: Matt Goldman
+**Context**: Bootstrap theme conversion architecture for FlagstoneUI
 
 ## Context and Problem Statement
 
-When converting Bootstrap themes to Flagstone UI, we need to extract design tokens (colors, spacing, typography, borders) from Bootstrap's theme system. Bootstrap's architecture has evolved significantly between versions 4 and 5, with different approaches to theming:
+When converting Bootstrap themes to FlagstoneUI, we need to extract design tokens (colors, spacing, typography, borders) from Bootstrap's theme system. Bootstrap's architecture has evolved significantly between versions 4 and 5, with different approaches to theming:
 
 - **Bootstrap 4**: Used SCSS variables (`$primary`, `$font-size-base`) and compiled to CSS with explicit property values
 - **Bootstrap 5+**: Uses CSS custom properties (`--bs-primary`, `--bs-btn-bg`) for runtime theming
@@ -118,7 +118,7 @@ Implemented three analysis modes via CLI `--analysis-mode` option:
 ```csharp
 // SCSS variable parsing
 public async Task<BootstrapVariables> ParseMultipleFilesAsync(
-    string[] paths, 
+    string[] paths,
     BootstrapFormat format)
 {
     // Resolves $success: $green → #56cc9d
@@ -139,12 +139,12 @@ public BootstrapComponentStyles AnalyzeComponents(string cssContent)
 ```csharp
 // Variables → tokens (production ready)
 public FlagstoneTokens MapToFlagstoneTokens(
-    BootstrapVariables variables, 
+    BootstrapVariables variables,
     ConversionOptions options)
 
 // CSS styles → tokens (limited)
 public FlagstoneTokens MapComponentStylesToTokens(
-    BootstrapComponentStyles styles, 
+    BootstrapComponentStyles styles,
     ConversionOptions options)
 ```
 

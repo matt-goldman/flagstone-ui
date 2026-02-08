@@ -5,7 +5,7 @@ Accepted
 
 ## Context
 
-Flagstone UI requires a robust mechanism for themes (in separate assemblies) to reference and consume design tokens from the core library (FlagstoneUI.Core). This is fundamental to the token-based theming architecture.
+FlagstoneUI requires a robust mechanism for themes (in separate assemblies) to reference and consume design tokens from the core library (FlagstoneUI.Core). This is fundamental to the token-based theming architecture.
 
 ### The Problem
 
@@ -44,7 +44,7 @@ Implement cross-assembly ResourceDictionary loading using **typed references wit
    ```csharp
    // FlagstoneUI.Core/Styles/Tokens.xaml.cs
    namespace FlagstoneUI.Core.Styles;
-   
+
    public partial class Tokens : ResourceDictionary
    {
        public Tokens()

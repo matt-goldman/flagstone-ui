@@ -1,7 +1,7 @@
 ﻿namespace FlagstoneUI.BootstrapConverter.Models;
 
 /// <summary>
-/// Represents Flagstone UI tokens mapped from Bootstrap variables
+/// Represents FlagstoneUI tokens mapped from Bootstrap variables
 /// </summary>
 public class FlagstoneTokens
 {

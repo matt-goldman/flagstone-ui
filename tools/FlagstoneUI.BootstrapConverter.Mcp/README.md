@@ -1,10 +1,10 @@
 # Bootstrap Converter MCP Server
 
-Model Context Protocol (MCP) server for the Bootstrap to Flagstone UI theme converter. This server exposes the converter functionality via the MCP protocol, allowing AI agents and MCP clients to convert Bootstrap themes.
+Model Context Protocol (MCP) server for the Bootstrap to FlagstoneUI theme converter. This server exposes the converter functionality via the MCP protocol, allowing AI agents and MCP clients to convert Bootstrap themes.
 
 ## What is MCP?
 
-The [Model Context Protocol (MCP)](https://modelcontextprotocol.io) is an open protocol that standardizes how applications provide context to LLMs. This MCP server allows AI assistants like Claude Desktop, Copilot, or other MCP clients to convert Bootstrap themes to Flagstone UI without needing to install or run the CLI directly.
+The [Model Context Protocol (MCP)](https://modelcontextprotocol.io) is an open protocol that standardizes how applications provide context to LLMs. This MCP server allows AI assistants like Claude Desktop, Copilot, or other MCP clients to convert Bootstrap themes to FlagstoneUI without needing to install or run the CLI directly.
 
 ## Installation
 
@@ -50,7 +50,7 @@ Or using the built executable:
 
 ### `convert`
 
-Convert Bootstrap CSS/SCSS theme to Flagstone UI XAML tokens.
+Convert Bootstrap CSS/SCSS theme to FlagstoneUI XAML tokens.
 
 **Input Schema:**
 
@@ -84,7 +84,7 @@ Convert Bootstrap CSS/SCSS theme to Flagstone UI XAML tokens.
 **Example Usage (via MCP client):**
 
 ```
-Convert the Bootstrap theme from https://example.com/bootstrap.css to Flagstone UI tokens
+Convert the Bootstrap theme from https://example.com/bootstrap.css to FlagstoneUI tokens
 ```
 
 The AI assistant will call the `convert` tool with appropriate parameters and return the generated XAML.
@@ -175,7 +175,7 @@ echo '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"convert","
 
 - **FlagstoneUI.BootstrapConverter** - Core conversion library
 - **FlagstoneUI.BootstrapConverter.Cli** - Command-line interface
-- **Flagstone UI** - Cross-platform UI framework for .NET MAUI
+- **FlagstoneUI** - Cross-platform UI framework for .NET MAUI
 
 ## License
 
@@ -185,4 +185,4 @@ MIT License - See LICENSE file in repository root.
 
 - [Model Context Protocol](https://modelcontextprotocol.io)
 - [MCP Specification](https://spec.modelcontextprotocol.io)
-- [Flagstone UI Documentation](../../README.md)
+- [FlagstoneUI Documentation](../../README.md)

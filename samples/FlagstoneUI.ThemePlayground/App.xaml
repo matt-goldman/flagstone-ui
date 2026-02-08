@@ -7,7 +7,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- Import Flagstone UI Material theme -->
+                <!-- Import FlagstoneUI Material theme -->
                 <material:Theme />
                 <!-- Keep existing app-specific styles -->
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />

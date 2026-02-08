@@ -1,10 +1,10 @@
-# Flagstone UI Architecture
+# FlagstoneUI Architecture
 
-This document describes the architecture and implementation approach for Flagstone UI.
+This document describes the architecture and implementation approach for FlagstoneUI.
 
 ## Overview
 
-Flagstone UI is a .NET MAUI UI kit that provides a unified styling plane—enhanced controls with full visual control from shared code, no platform handlers needed for styling. It enables developers to style controls using standard .NET MAUI patterns: inline values, explicit styles, implicit styles, and resource references.
+FlagstoneUI is a .NET MAUI UI kit that provides a unified styling plane—enhanced controls with full visual control from shared code, no platform handlers needed for styling. It enables developers to style controls using standard .NET MAUI patterns: inline values, explicit styles, implicit styles, and resource references.
 
 ## Core Architecture
 
@@ -56,9 +56,9 @@ FlagstoneUI supports multiple valid styling approaches. Developers choose what f
 
 **Approach 1: Direct Styling**
 ```xml
-<fs:FsButton 
-    Text="Submit" 
-    BackgroundColor="#6750A4" 
+<fs:FsButton
+    Text="Submit"
+    BackgroundColor="#6750A4"
     CornerRadius="12" />
 ```
 
@@ -68,8 +68,8 @@ FlagstoneUI supports multiple valid styling approaches. Developers choose what f
 <Color x:Key="PrimaryColor">#6750A4</Color>
 
 <!-- Use with StaticResource -->
-<fs:FsButton 
-    Text="Submit" 
+<fs:FsButton
+    Text="Submit"
     BackgroundColor="{StaticResource PrimaryColor}" />
 ```
 
@@ -101,7 +101,7 @@ FlagstoneUI supports multiple valid styling approaches. Developers choose what f
 **Approach 5: Design Tokens (Optional)**
 ```xml
 <!-- Some themes use tokens as an implementation detail -->
-<fs:FsButton 
+<fs:FsButton
     BackgroundColor="{DynamicResource Color.Primary}"
     CornerRadius="{DynamicResource Radius.Button.Medium}" />
 ```
@@ -123,14 +123,14 @@ Themes are ResourceDictionaries containing implicit and/or explicit styles:
     <Setter Property="TextColor" Value="White" />
     <Setter Property="CornerRadius" Value="12" />
   </Style>
-  
+
   <!-- Explicit style variants - provide multiple options -->
   <Style x:Key="OutlinedButton" TargetType="fs:FsButton">
     <Setter Property="BackgroundColor" Value="Transparent" />
     <Setter Property="BorderColor" Value="#6750A4" />
     <Setter Property="BorderWidth" Value="1" />
   </Style>
-  
+
   <Style x:Key="DeleteButton" TargetType="fs:FsButton">
     <Setter Property="BackgroundColor" Value="#DC3545" />
     <Setter Property="TextColor" Value="White" />
@@ -170,7 +170,7 @@ public partial class FsButton : Button
     public static readonly BindableProperty CornerRadiusProperty = ...;
     public static readonly BindableProperty BorderColorProperty = ...;
     public static readonly BindableProperty BorderWidthProperty = ...;
-    
+
     public int CornerRadius { get; set; }
     public Color BorderColor { get; set; }
     public double BorderWidth { get; set; }
@@ -185,7 +185,7 @@ public partial class FsCard : ContentView
     public static readonly BindableProperty ElevationProperty = ...;
     public static readonly BindableProperty CornerRadiusProperty = ...;
     public static readonly BindableProperty BorderColorProperty = ...;
-    
+
     public int Elevation { get; set; }
     public double CornerRadius { get; set; }
     public Color BorderColor { get; set; }
@@ -255,14 +255,14 @@ Cross-assembly ResourceDictionary referencing is implemented using typed referen
 ```
 
 ### 2. Missing Platform Handlers
-**Issue**: No platform handlers for neutral styling  
-**Impact**: Controls will show platform-specific styling  
-**Solution**: Implement handlers for FsButton, FsEntry to strip native styling  
+**Issue**: No platform handlers for neutral styling
+**Impact**: Controls will show platform-specific styling
+**Solution**: Implement handlers for FsButton, FsEntry to strip native styling
 
 ### 3. Builder Pattern Not Required
-**Decision**: FlagstoneUIBuilder pattern is not needed (YAGNI principle)  
-**Approach**: Theme configuration via merged dictionaries in App.xaml  
-**Note**: Minimal builder class may be removed in future cleanup  
+**Decision**: FlagstoneUIBuilder pattern is not needed (YAGNI principle)
+**Approach**: Theme configuration via merged dictionaries in App.xaml
+**Note**: Minimal builder class may be removed in future cleanup
 **See**: [Archived technical-plan.md](archive/technical-plan.md) for historical builder API plans
 
 ## Future Architecture Considerations

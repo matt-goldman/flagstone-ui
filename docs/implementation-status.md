@@ -1,6 +1,6 @@
 # Implementation Status
 
-This document tracks the current implementation status of Flagstone UI components against the planned roadmap.
+This document tracks the current implementation status of FlagstoneUI components against the planned roadmap.
 
 ## Phase 1: Proof of Concept (MVP) - Status
 

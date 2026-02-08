@@ -1,7 +1,7 @@
 ﻿namespace FlagstoneUI.BootstrapConverter.Models;
 
 /// <summary>
-/// Options for converting Bootstrap themes to Flagstone UI
+/// Options for converting Bootstrap themes to FlagstoneUI
 /// </summary>
 public class ConversionOptions
 {

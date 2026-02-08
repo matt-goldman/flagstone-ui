@@ -6,7 +6,7 @@ using FlagstoneUI.BootstrapConverter.Models;
 namespace FlagstoneUI.BootstrapConverter.Mcp;
 
 /// <summary>
-/// MCP server for Bootstrap to Flagstone UI theme conversion
+/// MCP server for Bootstrap to FlagstoneUI theme conversion
 /// Implements the Model Context Protocol via JSON-RPC over stdio
 /// </summary>
 public class BootstrapConverterServer
@@ -128,7 +128,7 @@ public class BootstrapConverterServer
                     new
                     {
                         name = "convert",
-                        description = "Convert Bootstrap CSS/SCSS theme to Flagstone UI XAML tokens",
+                        description = "Convert Bootstrap CSS/SCSS theme to FlagstoneUI XAML tokens",
                         inputSchema = ConvertToolInput.Schema
                     },
                     new
@@ -140,7 +140,7 @@ public class BootstrapConverterServer
                     new
                     {
                         name = "get_flagstone_docs",
-                        description = "Get Flagstone UI documentation and architecture guides. Provides comprehensive information about tokens, controls, theming, architecture, and best practices.",
+                        description = "Get FlagstoneUI documentation and architecture guides. Provides comprehensive information about tokens, controls, theming, architecture, and best practices.",
                         inputSchema = DocsToolInput.Schema
                     },
                     new
@@ -267,7 +267,7 @@ public class BootstrapConverterServer
             // Generate XAML
             var generator = new XamlThemeGenerator();
             var tokensXaml = generator.GenerateTokensXaml(tokens, options);
-            
+
             // Extract theme name from first input or use default
             var themeName = "Bootstrap";
             if (input.Inputs.Length > 0)
@@ -282,7 +282,7 @@ public class BootstrapConverterServer
                     }
                 }
             }
-            
+
             var themeXaml = generator.GenerateThemeXaml(tokens, themeName, options);
 			var stylesXaml = generator.GenerateStylesXaml(tokens, themeName, options);
 
@@ -656,7 +656,7 @@ public class BootstrapConverterServer
     private static string? FindDocsDirectory()
     {
         var currentDir = Path.GetDirectoryName(typeof(BootstrapConverterServer).Assembly.Location);
-        
+
         while (currentDir != null)
         {
             // Look for repository markers (e.g., .git, global.json, *.sln)
@@ -670,10 +670,10 @@ public class BootstrapConverterServer
                     return docsPath;
                 }
             }
-            
+
             currentDir = Directory.GetParent(currentDir)?.FullName;
         }
-        
+
         return null;
     }
 }

@@ -40,7 +40,7 @@ public class CSharpThemeGenerator
 		}
 
 		var result = sanitized.ToString();
-		
+
 		// Ensure it starts with a letter or underscore
 		if (result.Length > 0 && char.IsDigit(result[0]))
 			result = "_" + result;
@@ -57,7 +57,7 @@ public class CSharpThemeGenerator
 		var ns = options.Namespace ?? "FlagstoneUI.Resources";
 
 		var sb = new StringBuilder();
-		
+
 		// File header
 		sb.AppendLine("using Microsoft.Maui.Controls;");
 		sb.AppendLine();
@@ -66,7 +66,7 @@ public class CSharpThemeGenerator
 		if (options.IncludeComments)
 		{
 			sb.AppendLine("/// <summary>");
-			sb.AppendLine("/// Token definitions for Flagstone UI theme");
+			sb.AppendLine("/// Token definitions for FlagstoneUI theme");
 			sb.AppendLine("/// Generated from Bootstrap theme");
 			sb.AppendLine("/// </summary>");
 		}
@@ -156,7 +156,7 @@ public class CSharpThemeGenerator
 		{
 			sb.AppendLine($"\t\t// {key}: {token.Purpose}");
 		}
-		
+
 		sb.AppendLine($"\t\tthis[\"{key}\"] = Color.FromArgb(\"{token.Value}\");");
 
 		if (options.IncludeComments && !string.IsNullOrWhiteSpace(token.DarkValue))
@@ -197,7 +197,7 @@ public class CSharpThemeGenerator
 		{
 			sb.AppendLine($"\t\t// {key}: {token.Purpose}");
 		}
-		
+
 		sb.AppendLine($"\t\tthis[\"{key}\"] = {token.Value.ToString(CultureInfo.InvariantCulture)};");
 	}
 
@@ -211,7 +211,7 @@ public class CSharpThemeGenerator
 		var sanitizedThemeName = SanitizeThemeName(themeName);
 
 		var sb = new StringBuilder();
-		
+
 		sb.AppendLine("using Microsoft.Maui.Controls;");
 		sb.AppendLine();
 		sb.AppendLine($"namespace {ns};");
@@ -219,7 +219,7 @@ public class CSharpThemeGenerator
 		if (options.IncludeComments)
 		{
 			sb.AppendLine("/// <summary>");
-			sb.AppendLine($"/// {themeName} theme resource dictionary for Flagstone UI controls.");
+			sb.AppendLine($"/// {themeName} theme resource dictionary for FlagstoneUI controls.");
 			sb.AppendLine("/// Generated from Bootstrap theme.");
 			sb.AppendLine("/// </summary>");
 		}
@@ -250,7 +250,7 @@ public class CSharpThemeGenerator
 		var sanitizedThemeName = SanitizeThemeName(themeName);
 
 		var sb = new StringBuilder();
-		
+
 		sb.AppendLine("using Microsoft.Maui.Controls;");
 		sb.AppendLine("using FlagstoneUI.Core.Controls;");
 		sb.AppendLine();

@@ -1,6 +1,6 @@
 # GitHub Copilot Setup Instructions
 
-This document provides setup instructions for GitHub Copilot to work effectively with the Flagstone UI repository.
+This document provides setup instructions for GitHub Copilot to work effectively with the FlagstoneUI repository.
 
 ## Prerequisites
 

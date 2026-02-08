@@ -12,7 +12,7 @@ This document describes the machine-readable token catalog system for token-base
 
 ## Overview
 
-The token catalog system provides structured, machine-readable data about Flagstone UI's design tokens, controls, and theme contracts. This documentation is intended for **AI agents, automated tooling, and developers building tools** that integrate with Flagstone UI.
+The token catalog system provides structured, machine-readable data about FlagstoneUI's design tokens, controls, and theme contracts. This documentation is intended for **AI agents, automated tooling, and developers building tools** that integrate with FlagstoneUI.
 
 **For human-readable token documentation**, see [tokens.md](tokens.md) which provides complete descriptions, usage guidelines, design principles, and the layered architecture explanation.
 
@@ -156,7 +156,7 @@ flagstone-tokens validate-contract \
 
 Output:
 ```
-🔍 Flagstone UI Contract Validator
+🔍 FlagstoneUI Contract Validator
    Theme:    Theme.xaml
    Contract: material.json
 
@@ -282,8 +282,8 @@ The catalog can be:
 
 ### Current Status
 
-**Version**: 0.2.0 (POC)  
-**Last Updated**: January 2026  
+**Version**: 0.2.0 (POC)
+**Last Updated**: January 2026
 **Maintenance**: Semi-automated via CLI tooling
 
 The `FlagstoneUI.TokenGenerator` tool provides comprehensive functionality for catalog and contract management.
@@ -337,7 +337,7 @@ Example CI workflow for a theme repository:
 # After control changes
 flagstone-tokens generate-contract --name minimal --source ./src/FlagstoneUI.Core/Controls --output ./docs/contracts/minimal-generated.json
 
-# After theme style changes  
+# After theme style changes
 flagstone-tokens generate-contract --name material --theme ./src/FlagstoneUI.Themes.Material/Theme.xaml --extends minimal --output ./docs/contracts/material-generated.json
 ```
 
@@ -392,10 +392,10 @@ AI agents will be able to:
 # Example GitHub Actions workflow
 - name: Generate Token Catalog
   run: dotnet flagstone-tokens generate
-  
+
 - name: Validate Token Catalog
   run: jsonschema -i docs/tokens-catalog.json docs/tokens-schema.json
-  
+
 - name: Commit if changed
   run: |
     git diff --exit-code docs/tokens-catalog.json || \

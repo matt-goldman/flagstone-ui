@@ -57,7 +57,7 @@ handler.PlatformView.Background = null;
 handler.PlatformView.FocusVisualMargin = new Microsoft.UI.Xaml.Thickness(0);
 ```
 
-This gives Flagstone UI complete control over the Entry's appearance, allowing the outer `Border` to handle all visual styling consistently.
+This gives FlagstoneUI complete control over the Entry's appearance, allowing the outer `Border` to handle all visual styling consistently.
 
 ## Properties
 
@@ -117,7 +117,7 @@ This gives Flagstone UI complete control over the Entry's appearance, allowing t
 <fs:FsEntry Placeholder="Enter your name" />
 
 <!-- With custom styling -->
-<fs:FsEntry 
+<fs:FsEntry
     Placeholder="Email Address"
     BorderBrush="#CCCCCC"
     BorderWidth="1"
@@ -136,7 +136,7 @@ This gives Flagstone UI complete control over the Entry's appearance, allowing t
 <Color x:Key="InputBackground">#F5F5F5</Color>
 
 <!-- Use with StaticResource -->
-<fs:FsEntry 
+<fs:FsEntry
     Placeholder="Username"
     BorderBrush="{StaticResource InputBorder}"
     BorderWidth="1"
@@ -167,7 +167,7 @@ This gives Flagstone UI complete control over the Entry's appearance, allowing t
 If your theme uses design tokens (like Material), you can reference them:
 
 ```xaml
-<fs:FsEntry 
+<fs:FsEntry
     Placeholder="Email Address"
     BorderBrush="{DynamicResource Color.Outline}"
     BorderWidth="1"
@@ -183,7 +183,7 @@ If your theme uses design tokens (like Material), you can reference them:
 ### Entry with Bottom Border Only (Underline Style)
 
 ```xaml
-<fs:FsEntry 
+<fs:FsEntry
     Placeholder="Enter text"
     BorderBottomThickness="1"
     BorderBottomBrush="#6750A4"
@@ -193,7 +193,7 @@ If your theme uses design tokens (like Material), you can reference them:
 ### Password Entry
 
 ```xaml
-<fs:FsEntry 
+<fs:FsEntry
     Placeholder="Password"
     IsPassword="True"
     BorderBrush="#CCCCCC"
@@ -205,7 +205,7 @@ If your theme uses design tokens (like Material), you can reference them:
 ### Entry with Data Binding (MVVM)
 
 ```xaml
-<fs:FsEntry 
+<fs:FsEntry
     Text="{Binding Username}"
     Placeholder="Username"
     BorderBrush="#6750A4"
@@ -217,7 +217,7 @@ If your theme uses design tokens (like Material), you can reference them:
 ### Numeric Entry
 
 ```xaml
-<fs:FsEntry 
+<fs:FsEntry
     Placeholder="Enter amount"
     Keyboard="Numeric"
     HorizontalTextAlignment="End"
@@ -229,7 +229,7 @@ If your theme uses design tokens (like Material), you can reference them:
 ### Email Entry
 
 ```xaml
-<fs:FsEntry 
+<fs:FsEntry
     Placeholder="email@example.com"
     Keyboard="Email"
     BorderBrush="#CCCCCC"
@@ -300,7 +300,7 @@ Themes using design tokens can reference them in styles:
 ### Event Examples
 
 ```xaml
-<fs:FsEntry 
+<fs:FsEntry
     Text="{Binding SearchText}"
     TextChanged="OnSearchTextChanged"
     Completed="OnSearchCompleted" />
@@ -328,7 +328,7 @@ As documented in [ADR001](../Decisions/adr001-fsentry-behavior.md), `FsEntry` do
 ```xaml
 <fs:FsEntry Placeholder="Email">
     <fs:FsEntry.Behaviors>
-        <toolkit:EmailValidationBehavior 
+        <toolkit:EmailValidationBehavior
             InvalidStyle="{StaticResource InvalidEntryStyle}"
             ValidStyle="{StaticResource ValidEntryStyle}"
             Flags="ValidateOnValueChanged" />
@@ -357,16 +357,16 @@ The Entry control is used in the SignInForm block:
 <fs:FsCard Elevation="2" Padding="24">
     <VerticalStackLayout Spacing="16">
         <Label Text="Sign In" FontSize="24" FontAttributes="Bold" />
-        
-        <fs:FsEntry 
+
+        <fs:FsEntry
             Placeholder="Username"
             BorderColor="{DynamicResource Color.Outline}"
             BorderWidth="1"
             CornerRadius="8"
             Padding="12"
             Text="{Binding Username}" />
-        
-        <fs:FsEntry 
+
+        <fs:FsEntry
             Placeholder="Password"
             IsPassword="True"
             BorderColor="{DynamicResource Color.Outline}"
@@ -374,8 +374,8 @@ The Entry control is used in the SignInForm block:
             CornerRadius="8"
             Padding="12"
             Text="{Binding Password}" />
-        
-        <fs:FsButton 
+
+        <fs:FsButton
             Text="Sign In"
             Command="{Binding SignInCommand}" />
     </VerticalStackLayout>
@@ -399,13 +399,13 @@ Platform handlers ensure consistent borderless rendering across all platforms, w
 
 ```xaml
 <ContentView ...>
-    <Border 
+    <Border
         BackgroundColor="{Binding BackgroundColor}"
         Stroke="{Binding BorderColor}"
         StrokeThickness="{Binding BorderWidth}"
         StrokeShape="{Binding BorderShape}">
         <Grid Padding="{Binding Padding}">
-            <fs:BorderlessEntry 
+            <fs:BorderlessEntry
                 Text="{Binding Text}"
                 Placeholder="{Binding Placeholder}"
                 ... />

@@ -1,7 +1,7 @@
 ﻿namespace FlagstoneUI.Core.Builders;
 
 /// <summary>
-/// Provides functionality to build and configure a Flagstone UI with customizable options.
+/// Provides functionality to build and configure a FlagstoneUI with customizable options.
 /// </summary>
 /// <remarks>This class supports a fluent API for configuring the UI. Call methods in a chain to apply multiple
 /// configurations.</remarks>

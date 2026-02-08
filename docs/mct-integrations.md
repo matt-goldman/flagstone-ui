@@ -1,6 +1,6 @@
 # MAUI Community Toolkit (MCT) Integrations
 
-Flagstone UI provides optional integrations with the [MAUI Community Toolkit](https://github.com/CommunityToolkit/Maui) through the `FlagstoneUI.Integrations.MCT` package. These integrations bridge Flagstone UI controls with MCT's powerful behaviors, animations, and other features.
+FlagstoneUI provides optional integrations with the [MAUI Community Toolkit](https://github.com/CommunityToolkit/Maui) through the `FlagstoneUI.Integrations.MCT` package. These integrations bridge FlagstoneUI controls with MCT's powerful behaviors, animations, and other features.
 
 ## Overview
 
@@ -20,7 +20,7 @@ dotnet add package FlagstoneUI.Integrations.MCT --version 0.0.1-preview1
 
 ### Package Dependencies
 
-- **FlagstoneUI.Core**: Core Flagstone UI controls
+- **FlagstoneUI.Core**: Core FlagstoneUI controls
 - **CommunityToolkit.Maui**: MAUI Community Toolkit library
 
 ## Features
@@ -55,7 +55,7 @@ xmlns:int="clr-namespace:FlagstoneUI.Integrations.MCT.Behaviors;assembly=Flagsto
         <Setter Property="BorderBrush" Value="Green" />
         <Setter Property="BorderWidth" Value="2" />
     </Style>
-    
+
     <Style x:Key="InvalidStyle" TargetType="fs:FsEntry">
         <Setter Property="BorderBrush" Value="Red" />
         <Setter Property="BorderWidth" Value="2" />
@@ -65,7 +65,7 @@ xmlns:int="clr-namespace:FlagstoneUI.Integrations.MCT.Behaviors;assembly=Flagsto
 <!-- Email validation -->
 <fs:FsEntry Placeholder="Enter your email" Keyboard="Email">
     <fs:FsEntry.Behaviors>
-        <int:ValidationBehaviorAdapter 
+        <int:ValidationBehaviorAdapter
             ValidStyle="{StaticResource ValidStyle}"
             InvalidStyle="{StaticResource InvalidStyle}"
             Behavior="{mct:EmailValidationBehavior}"
@@ -99,7 +99,7 @@ The MAUI Community Toolkit provides several built-in validators:
             <int:ValidationBehaviorAdapter.Behavior>
                 <mct:MultiValidationBehavior>
                     <mct:RequiredStringValidationBehavior />
-                    <mct:CharactersValidationBehavior 
+                    <mct:CharactersValidationBehavior
                         CharacterType="Any"
                         MinimumCharacterCount="8" />
                 </mct:MultiValidationBehavior>
@@ -119,7 +119,7 @@ The MAUI Community Toolkit provides several built-in validators:
             InvalidStyle="{StaticResource InvalidStyle}"
             Flags="ValidateOnValueChanged">
             <int:ValidationBehaviorAdapter.Behavior>
-                <mct:NumericValidationBehavior 
+                <mct:NumericValidationBehavior
                     MinimumValue="1"
                     MaximumValue="100" />
             </int:ValidationBehaviorAdapter.Behavior>
@@ -165,7 +165,7 @@ xmlns:anim="clr-namespace:FlagstoneUI.Integrations.MCT.Animations;assembly=Flags
     </anim:FsEditorBorderAnimation>
 </ContentPage.Resources>
 
-<fs:FsEditor 
+<fs:FsEditor
     x:Name="AiEditor"
     Placeholder="🤖 Ask me anything..."
     Focused="OnAiEditorFocused"
@@ -182,7 +182,7 @@ private async void OnAiEditorFocused(object? sender, EventArgs e)
 {
     _animationCts = new CancellationTokenSource();
     _borderAnimation = (FsEditorBorderAnimation)Resources["AiBorderAnimation"];
-    
+
     try
     {
         await _borderAnimation.Animate(AiEditor, _animationCts.Token);
@@ -234,21 +234,21 @@ See the sample app (`ControlShowcasePage.xaml`) for a complete implementation:
 
 <!-- Usage with overlaid button -->
 <Grid>
-    <fs:FsEditor 
+    <fs:FsEditor
         Placeholder="🤖 Ask me anything..."
         x:Name="AiEditor"
         Style="{DynamicResource AiEditorStyle}"
         Focused="AiEditor_OnFocused"
         Unfocused="AiEditor_OnUnfocused" />
-    
-    <Button 
+
+    <Button
         Background="Goldenrod"
         CornerRadius="5"
         HorizontalOptions="End"
         VerticalOptions="End"
         Margin="5,10">
         <Button.ImageSource>
-            <FontImageSource 
+            <FontImageSource
                 FontFamily="FluentIcons"
                 Glyph="{DynamicResource IconSparkle}"
                 Size="48"
@@ -270,7 +270,7 @@ The adapter works by:
 4. Listening for `PropertyChanged` events on the validation behavior
 5. Updating the `FsEntry` visual state and style based on `IsValid`
 
-This design maintains the separation between Flagstone UI's custom controls and the MCT's validation system while providing seamless integration.
+This design maintains the separation between FlagstoneUI's custom controls and the MCT's validation system while providing seamless integration.
 
 ### FsEditorBorderAnimation Implementation
 
@@ -302,17 +302,17 @@ The MCT integration is provided as a separate package (`FlagstoneUI.Integrations
 
 The `ValidationBehaviorAdapter` uses the adapter pattern to bridge between:
 
-- **FsEntry**: Flagstone UI's wrapper control with custom styling
+- **FsEntry**: FlagstoneUI's wrapper control with custom styling
 - **Entry**: The inner MAUI control that MCT behaviors expect
 - **ValidationBehavior**: MCT's validation system
 
-This allows users to leverage MCT's mature validation ecosystem while using Flagstone UI's themed controls.
+This allows users to leverage MCT's mature validation ecosystem while using FlagstoneUI's themed controls.
 
 ## Future Integrations
 
 Potential future additions to the MCT integration package:
 
-- **Popup Integration**: Adapters for MCT popups with Flagstone UI styling
+- **Popup Integration**: Adapters for MCT popups with FlagstoneUI styling
 - **Additional Animations**: More animation types for other Flagstone controls
 - **Converter Helpers**: Utilities for MCT converters with token values
 - **Behavior Extensions**: Additional behavior adapters for other Flagstone controls

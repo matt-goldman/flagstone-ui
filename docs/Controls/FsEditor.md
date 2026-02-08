@@ -40,7 +40,7 @@ The `FsEditor` control is an enhanced multi-line text input field that extends t
 
 ### Solution: BorderlessEditor + Platform Handlers
 
-The `BorderlessEditor` control registers platform-specific handlers that directly manipulate native views to remove all native styling, giving Flagstone UI complete control over the Editor's appearance through the outer `Border` wrapper.
+The `BorderlessEditor` control registers platform-specific handlers that directly manipulate native views to remove all native styling, giving FlagstoneUI complete control over the Editor's appearance through the outer `Border` wrapper.
 
 ## Properties
 
@@ -71,7 +71,7 @@ The `BorderlessEditor` control registers platform-specific handlers that directl
 <fs:FsEditor Placeholder="Enter your comments here" />
 
 <!-- With custom styling -->
-<fs:FsEditor 
+<fs:FsEditor
     Placeholder="Description"
     BorderBrush="#CCCCCC"
     BorderWidth="1"
@@ -91,7 +91,7 @@ The `BorderlessEditor` control registers platform-specific handlers that directl
 <Color x:Key="InputBackground">#F5F5F5</Color>
 
 <!-- Use with StaticResource -->
-<fs:FsEditor 
+<fs:FsEditor
     Placeholder="Notes"
     BorderBrush="{StaticResource InputBorder}"
     BorderWidth="1"
@@ -124,7 +124,7 @@ The `BorderlessEditor` control registers platform-specific handlers that directl
 If your theme uses design tokens (like Material), you can reference them:
 
 ```xaml
-<fs:FsEditor 
+<fs:FsEditor
     Placeholder="Description"
     BorderBrush="{DynamicResource Color.Outline}"
     BorderWidth="1"
@@ -141,7 +141,7 @@ If your theme uses design tokens (like Material), you can reference them:
 ### Auto-Sizing Editor
 
 ```xaml
-<fs:FsEditor 
+<fs:FsEditor
     Placeholder="Type a message..."
     AutoSize="TextChanges"
     BorderBrush="#CCCCCC"
@@ -153,7 +153,7 @@ If your theme uses design tokens (like Material), you can reference them:
 ### Editor with Character Limit
 
 ```xaml
-<fs:FsEditor 
+<fs:FsEditor
     Placeholder="Enter your bio (max 500 characters)"
     MaxLength="500"
     BorderBrush="#6750A4"
@@ -165,7 +165,7 @@ If your theme uses design tokens (like Material), you can reference them:
 ### Editor with Data Binding (MVVM)
 
 ```xaml
-<fs:FsEditor 
+<fs:FsEditor
     Text="{Binding Notes}"
     Placeholder="Notes"
     BorderBrush="#CCCCCC"
@@ -178,7 +178,7 @@ If your theme uses design tokens (like Material), you can reference them:
 ### Read-Only Editor
 
 ```xaml
-<fs:FsEditor 
+<fs:FsEditor
     Text="{Binding DisplayText}"
     IsReadOnly="True"
     BorderBrush="#E0E0E0"
@@ -258,7 +258,7 @@ Themes using design tokens can reference them in styles:
 ### Event Examples
 
 ```xaml
-<fs:FsEditor 
+<fs:FsEditor
     Text="{Binding Message}"
     TextChanged="OnMessageTextChanged"
     Focused="OnEditorFocused"
@@ -307,8 +307,8 @@ private void OnEditorUnfocused(object sender, EventArgs e)
 <fs:FsCard Padding="16">
     <VerticalStackLayout Spacing="12">
         <Label Text="Leave a Comment" FontSize="18" FontAttributes="Bold" />
-        
-        <fs:FsEditor 
+
+        <fs:FsEditor
             Text="{Binding CommentText}"
             Placeholder="What are your thoughts?"
             BorderBrush="{DynamicResource Color.Outline}"
@@ -318,15 +318,15 @@ private void OnEditorUnfocused(object sender, EventArgs e)
             MinimumHeightRequest="120"
             MaxLength="1000"
             AutoSize="TextChanges" />
-        
+
         <HorizontalStackLayout HorizontalOptions="End">
-            <Label 
+            <Label
                 Text="{Binding RemainingCharacters, StringFormat='{0} characters remaining'}"
                 FontSize="12"
                 TextColor="{DynamicResource Color.OnSurfaceVariant}" />
         </HorizontalStackLayout>
-        
-        <fs:FsButton 
+
+        <fs:FsButton
             Text="Submit Comment"
             Command="{Binding SubmitCommentCommand}"
             HorizontalOptions="End" />
@@ -339,7 +339,7 @@ private void OnEditorUnfocused(object sender, EventArgs e)
 The Editor control is well-suited for chat or messaging interfaces:
 
 ```xaml
-<fs:FsEditor 
+<fs:FsEditor
     Placeholder="Type a message..."
     Text="{Binding MessageText}"
     BorderBrush="{DynamicResource Color.Outline}"
@@ -370,15 +370,15 @@ Platform handlers ensure consistent borderless rendering across all platforms, w
 
 ```xaml
 <ContentView ...>
-    <Border 
+    <Border
         Background="{Binding Background}"
         Stroke="{Binding BorderBrush}"
         StrokeThickness="{Binding BorderWidth}"
         StrokeShape="{Binding BorderShape}">
-        <Grid 
+        <Grid
             Padding="{Binding Padding}"
             MinimumHeightRequest="88">
-            <fs:BorderlessEditor 
+            <fs:BorderlessEditor
                 Text="{Binding Text}"
                 Placeholder="{Binding Placeholder}"
                 PlaceholderColor="{Binding PlaceholderColor}"

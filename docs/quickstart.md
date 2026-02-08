@@ -1,10 +1,10 @@
 # Quickstart Guide
 
-Welcome to Flagstone UI! This guide will help you quickly get started building beautiful, consistent .NET MAUI applications with FlagstoneUI's enhanced controls and flexible styling options.
+Welcome to FlagstoneUI! This guide will help you quickly get started building beautiful, consistent .NET MAUI applications with FlagstoneUI's enhanced controls and flexible styling options.
 
-## What is Flagstone UI?
+## What is FlagstoneUI?
 
-Flagstone UI is a cross-platform, open-source **UI kit** for .NET MAUI that provides a unified styling plane—controls with full visual control from shared code.
+FlagstoneUI is a cross-platform, open-source **UI kit** for .NET MAUI that provides a unified styling plane—controls with full visual control from shared code.
 
 FlagstoneUI solves the problem of .NET MAUI's limited styling surface by providing enhanced controls where **all visual properties are exposed as BindableProperties**. This allows you to:
 
@@ -17,7 +17,7 @@ FlagstoneUI solves the problem of .NET MAUI's limited styling surface by providi
 
 ## Architecture Overview
 
-Flagstone UI uses a simple, focused architecture:
+FlagstoneUI uses a simple, focused architecture:
 
 ```
 ┌─────────────────────────────────────┐
@@ -59,7 +59,7 @@ Before you begin, ensure you have:
 
 ## Installation
 
-> **Note**: Flagstone UI is currently in development. NuGet packages will be available in future releases.
+> **Note**: FlagstoneUI is currently in development. NuGet packages will be available in future releases.
 
 For now, clone the repository and reference the projects directly:
 
@@ -88,9 +88,9 @@ In any page where you want to use Flagstone controls, add the namespace:
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
              x:Class="YourApp.MainPage">
-    
+
     <!-- Your content here -->
-    
+
 </ContentPage>
 ```
 
@@ -100,37 +100,37 @@ Now you can use Flagstone controls with direct styling:
 
 ```xml
 <VerticalStackLayout Padding="16" Spacing="16">
-    
+
     <!-- Direct styling - this is valid FlagstoneUI -->
-    <fs:FsButton 
-        Text="Submit" 
+    <fs:FsButton
+        Text="Submit"
         BackgroundColor="#6750A4"
         TextColor="White"
         CornerRadius="12"
         Padding="16,8"
         Clicked="OnButtonClicked" />
-    
+
     <!-- Card with direct styling -->
-    <fs:FsCard 
+    <fs:FsCard
         BackgroundColor="#FAFAFA"
         CornerRadius="12"
         Padding="16">
         <VerticalStackLayout Spacing="8">
-            <Label Text="Welcome to FlagstoneUI" 
-                   FontSize="20" 
+            <Label Text="Welcome to FlagstoneUI"
+                   FontSize="20"
                    FontAttributes="Bold" />
             <Label Text="Build beautiful apps with full visual control" />
         </VerticalStackLayout>
     </fs:FsCard>
-    
+
     <!-- Text Entry with styling -->
-    <fs:FsEntry 
+    <fs:FsEntry
         Placeholder="Enter your name"
         BorderBrush="#CCCCCC"
         BorderWidth="1"
         CornerRadius="8"
         Padding="12,8" />
-    
+
 </VerticalStackLayout>
 ```
 
@@ -145,9 +145,9 @@ FlagstoneUI supports multiple valid styling approaches. Choose what fits your pr
 Perfect for prototypes and simple apps:
 
 ```xml
-<fs:FsButton 
-    Text="Click Me" 
-    BackgroundColor="#6750A4" 
+<fs:FsButton
+    Text="Click Me"
+    BackgroundColor="#6750A4"
     CornerRadius="12" />
 ```
 
@@ -183,7 +183,7 @@ You can also use pre-built themes like Material. In your `App.xaml`:
                 <!-- Your existing styles -->
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
-                
+
                 <!-- Add Material theme (optional) -->
                 <material:Theme />
             </ResourceDictionary.MergedDictionaries>
@@ -204,7 +204,7 @@ You can also use pre-built themes like Material. In your `App.xaml`:
 > - You must declare the **XAML namespace** (the `xmlns:material=...` line shown above)
 > - The theme will take advantage of .NET 10's global XAML namespaces and implicit usings in future updates
 
-> **Note**: The Material theme is provided to showcase Flagstone UI's capabilities. The themes demonstrate the concept and are value-add components. The core value of Flagstone UI is the token-based theming framework itself, which allows you to create or use any theme that fits your needs.
+> **Note**: The Material theme is provided to showcase FlagstoneUI's capabilities. The themes demonstrate the concept and are value-add components. The core value of FlagstoneUI is the token-based theming framework itself, which allows you to create or use any theme that fits your needs.
 
 ### Step 2: Add Namespace to Your Pages
 
@@ -216,9 +216,9 @@ In any page where you want to use Flagstone controls, add the namespace:
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
              x:Class="YourApp.MainPage">
-    
+
     <!-- Your content here -->
-    
+
 </ContentPage>
 ```
 
@@ -228,24 +228,24 @@ Now you can use Flagstone controls in your XAML:
 
 ```xml
 <VerticalStackLayout Padding="16" Spacing="16">
-    
+
     <!-- Filled Button (default style) -->
-    <fs:FsButton Text="Primary Action" 
+    <fs:FsButton Text="Primary Action"
                  Clicked="OnButtonClicked" />
-    
+
     <!-- Card with content -->
     <fs:FsCard>
         <VerticalStackLayout Spacing="8">
-            <Label Text="Welcome to Flagstone UI" 
-                   FontSize="20" 
+            <Label Text="Welcome to FlagstoneUI"
+                   FontSize="20"
                    FontAttributes="Bold" />
             <Label Text="Build beautiful apps with themeable controls" />
         </VerticalStackLayout>
     </fs:FsCard>
-    
+
     <!-- Text Entry -->
     <fs:FsEntry Placeholder="Enter your name" />
-    
+
 </VerticalStackLayout>
 ```
 
@@ -260,15 +260,15 @@ Themes typically provide several style variants for each control. For example, t
 <fs:FsButton Text="Filled Button" />
 
 <!-- Outlined Button -->
-<fs:FsButton Text="Outlined Button" 
+<fs:FsButton Text="Outlined Button"
              Style="{StaticResource OutlinedButton}" />
 
 <!-- Text Button -->
-<fs:FsButton Text="Text Button" 
+<fs:FsButton Text="Text Button"
              Style="{StaticResource TextButton}" />
 
 <!-- Tonal Button -->
-<fs:FsButton Text="Tonal Button" 
+<fs:FsButton Text="Tonal Button"
              Style="{StaticResource TonalButton}" />
 ```
 
@@ -330,7 +330,7 @@ For a complete list of available tokens, see the [Token Reference Documentation]
 
 ## Bonus: Runtime Theme Switching
 
-Here's something cool - you can even switch themes at runtime if your app needs it! While the primary use case for Flagstone UI is theming an app according to your desired look and feel, the token-based architecture enables dynamic theme switching:
+Here's something cool - you can even switch themes at runtime if your app needs it! While the primary use case for FlagstoneUI is theming an app according to your desired look and feel, the token-based architecture enables dynamic theme switching:
 
 ```csharp
 // In your App.xaml.cs
@@ -338,11 +338,11 @@ public static void SwitchTheme(string themeName)
 {
     // Clear existing themes
     Current!.Resources.MergedDictionaries.Clear();
-    
+
     // Add your base styles
     Current.Resources.MergedDictionaries.Add(new YourApp.Resources.Styles.Colors());
     Current.Resources.MergedDictionaries.Add(new YourApp.Resources.Styles.Styles());
-    
+
     // Add the new theme
     switch (themeName)
     {
@@ -374,13 +374,13 @@ You can create custom style variants in your theme that build on Flagstone token
 Use your custom style:
 
 ```xml
-<fs:FsButton Text="Custom Styled Button" 
+<fs:FsButton Text="Custom Styled Button"
              Style="{StaticResource AccentButton}" />
 ```
 
 ## Example: Complete Page
 
-Here's a complete example showing various Flagstone UI controls working together:
+Here's a complete example showing various FlagstoneUI controls working together:
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
@@ -389,50 +389,50 @@ Here's a complete example showing various Flagstone UI controls working together
              xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
              x:Class="YourApp.SignInPage"
              BackgroundColor="{DynamicResource Color.Background}">
-    
+
     <ScrollView>
         <VerticalStackLayout Padding="24" Spacing="24">
-            
+
             <!-- Header -->
             <Label Text="Welcome Back"
                    FontSize="{DynamicResource FontSize.HeadlineLarge}"
                    TextColor="{DynamicResource Color.OnBackground}"
                    HorizontalOptions="Center"
                    Margin="0,32,0,0" />
-            
+
             <Label Text="Sign in to continue"
                    FontSize="{DynamicResource FontSize.BodyMedium}"
                    TextColor="{DynamicResource Color.OnSurfaceVariant}"
                    HorizontalOptions="Center" />
-            
+
             <!-- Sign In Card -->
             <fs:FsCard Style="{StaticResource ElevatedCard}">
                 <VerticalStackLayout Spacing="16">
-                    
+
                     <fs:FsEntry Placeholder="Email"
                                 Keyboard="Email" />
-                    
+
                     <fs:FsEntry Placeholder="Password"
                                 IsPassword="True" />
-                    
+
                     <fs:FsButton Text="Sign In"
                                  Clicked="OnSignInClicked" />
-                    
+
                     <fs:FsButton Text="Create Account"
                                  Style="{StaticResource OutlinedButton}"
                                  Clicked="OnCreateAccountClicked" />
-                    
+
                     <fs:FsButton Text="Forgot Password?"
                                  Style="{StaticResource TextButton}"
                                  Clicked="OnForgotPasswordClicked"
                                  HorizontalOptions="Center" />
-                    
+
                 </VerticalStackLayout>
             </fs:FsCard>
-            
+
         </VerticalStackLayout>
     </ScrollView>
-    
+
 </ContentPage>
 ```
 
@@ -443,7 +443,7 @@ Now that you have the basics:
 1. **Explore Controls**: Check out the [sample app](../samples/FlagstoneUI.SampleApp/) to see all available controls and styles
 2. **Learn About Tokens**: Read the [Token Reference](tokens.md) to understand the complete token system
 3. **Create Custom Themes**: See the [Theming Guide](theming-guide.md) for designers and theme creators
-4. **View Control Documentation**: 
+4. **View Control Documentation**:
    - [FsButton](Controls/FsButton.md)
    - [FsCard](Controls/FsCard.md)
    - [FsEntry](Controls/FsEntry.md)
@@ -451,9 +451,9 @@ Now that you have the basics:
 
 ## Optional: MAUI Community Toolkit Integration
 
-Flagstone UI is designed to work well with the [MAUI Community Toolkit](https://github.com/CommunityToolkit/Maui), which provides additional behaviors, converters, and functionality.
+FlagstoneUI is designed to work well with the [MAUI Community Toolkit](https://github.com/CommunityToolkit/Maui), which provides additional behaviors, converters, and functionality.
 
-**Note**: CommunityToolkit.Maui is **not** a required dependency of Flagstone UI. Add it to your application project only if you need its features:
+**Note**: CommunityToolkit.Maui is **not** a required dependency of FlagstoneUI. Add it to your application project only if you need its features:
 
 ```bash
 dotnet add package CommunityToolkit.Maui
@@ -466,12 +466,12 @@ builder.UseMauiApp<App>()
     .UseMauiCommunityToolkit();
 ```
 
-**Common use cases with Flagstone UI:**
+**Common use cases with FlagstoneUI:**
 - Email/URL validation on `FsEntry` using `EmailValidationBehavior`
 - Converters for advanced binding scenarios
 - Additional UI enhancements and animations
 
-See [ADR001](Decisions/adr001-fsentry-behavior.md) for more details on the Flagstone UI + MCT integration approach.
+See [ADR001](Decisions/adr001-fsentry-behavior.md) for more details on the FlagstoneUI + MCT integration approach.
 
 ## Troubleshooting
 
@@ -528,8 +528,8 @@ dotnet build
 dotnet run
 ```
 
-Then modify `App.xaml` and your pages as shown above to start using Flagstone UI controls.
+Then modify `App.xaml` and your pages as shown above to start using FlagstoneUI controls.
 
 ---
 
-Happy coding with Flagstone UI! 🚀
+Happy coding with FlagstoneUI! 🚀

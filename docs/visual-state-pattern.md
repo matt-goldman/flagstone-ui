@@ -1,8 +1,8 @@
-# Visual State Pattern in Flagstone UI
+# Visual State Pattern in FlagstoneUI
 
 ## Overview
 
-Flagstone UI controls use a **theme-driven visual state pattern** where controls trigger state changes programmatically, but themes define the visual appearance for each state. This separation of concerns allows maximum flexibility for theme authors while keeping control logic simple and focused.
+FlagstoneUI controls use a **theme-driven visual state pattern** where controls trigger state changes programmatically, but themes define the visual appearance for each state. This separation of concerns allows maximum flexibility for theme authors while keeping control logic simple and focused.
 
 ## Architecture
 
@@ -63,8 +63,8 @@ private void BorderlessEntry_Unfocused(object sender, FocusEventArgs e)
     <!-- Base appearance -->
     <Setter Property="Background">
         <Setter.Value>
-            <SolidColorBrush Color="{AppThemeBinding 
-                Light={DynamicResource Color.SurfaceVariant}, 
+            <SolidColorBrush Color="{AppThemeBinding
+                Light={DynamicResource Color.SurfaceVariant},
                 Dark={DynamicResource Color.SurfaceVariant.Dark}}" />
         </Setter.Value>
     </Setter>
@@ -73,7 +73,7 @@ private void BorderlessEntry_Unfocused(object sender, FocusEventArgs e)
             <SolidColorBrush Color="Transparent" />
         </Setter.Value>
     </Setter>
-    
+
     <!-- Visual state definitions -->
     <Setter Property="VisualStateManager.VisualStateGroups">
         <VisualStateGroupList>
@@ -82,8 +82,8 @@ private void BorderlessEntry_Unfocused(object sender, FocusEventArgs e)
                     <VisualState.Setters>
                         <Setter Property="BorderBrush">
                             <Setter.Value>
-                                <SolidColorBrush Color="{AppThemeBinding 
-                                    Light={DynamicResource Color.Primary}, 
+                                <SolidColorBrush Color="{AppThemeBinding
+                                    Light={DynamicResource Color.Primary},
                                     Dark={DynamicResource Color.Primary.Dark}}" />
                             </Setter.Value>
                         </Setter>
@@ -109,7 +109,7 @@ private void BorderlessEntry_Unfocused(object sender, FocusEventArgs e)
 
 ## Standard Visual State Names
 
-Flagstone UI uses the official .NET MAUI `VisualStateManager.CommonStates` constants for consistency with the platform:
+FlagstoneUI uses the official .NET MAUI `VisualStateManager.CommonStates` constants for consistency with the platform:
 
 ### Common States (from .NET MAUI)
 
@@ -119,7 +119,7 @@ Flagstone UI uses the official .NET MAUI `VisualStateManager.CommonStates` const
 - **`VisualStateManager.CommonStates.PointerOver`** - Mouse/pointer is over the control (hover, desktop-only)
 - **`VisualStateManager.CommonStates.Selected`** - Item is selected (for selectable controls)
 
-**Note:** Flagstone UI controls transition to `Normal` state when unfocused, rather than defining a separate "Unfocused" state.
+**Note:** FlagstoneUI controls transition to `Normal` state when unfocused, rather than defining a separate "Unfocused" state.
 
 ### Reference
 
@@ -218,7 +218,7 @@ This pattern enables **CSS-to-XAML translation** tools to generate visual states
                     <Setter Property="BorderWidth" Value="2" />
                     <Setter Property="Shadow">
                         <Setter.Value>
-                            <Shadow Brush="{DynamicResource ColorBlue100}" 
+                            <Shadow Brush="{DynamicResource ColorBlue100}"
                                     Radius="3" Opacity="1" />
                         </Setter.Value>
                     </Setter>
@@ -251,10 +251,10 @@ public void Entry_ShouldHaveCorrectBorderWhenFocused()
 {
     // Arrange
     var entry = new FsEntry();
-    
+
     // Act
     VisualStateManager.GoToState(entry, VisualStateManager.CommonStates.Focused);
-    
+
     // Assert
     // Visual state system will apply the Focused state setters
     // Theme-specific assertions can verify expected appearance

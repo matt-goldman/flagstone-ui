@@ -11,7 +11,7 @@
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Icons.xaml" />
-                <!-- Import Flagstone UI Material theme -->
+                <!-- Import FlagstoneUI Material theme -->
                 <material:Theme />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
