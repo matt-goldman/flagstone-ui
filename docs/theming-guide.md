@@ -16,7 +16,7 @@ This guide is for designers who want to create custom themes for FlagstoneUI app
 
 ### What is a Theme?
 
-A theme in FlagstoneUI is a collection of styles that defines the visual appearance of controls in your application. **Themes are for everyone creating an app**—not just designers distributing libraries. Any project beyond a simple prototype should use a theme for consistency.
+A theme in FlagstoneUI is a collection of styles that defines the visual appearance of controls in your application. **Themes are for everyone**: app developers creating custom themes for their projects, and library authors creating distributable themes for the community. Any project beyond a simple prototype should use a theme for consistency.
 
 Themes control:
 
@@ -28,11 +28,13 @@ Themes control:
 
 ### Who Creates Themes?
 
-- **App developers**: Create themes for their own applications to maintain consistent branding and visual identity
-- **Design teams**: Create themes as part of their design system implementation
-- **Library authors**: Create themes for distribution (like Bootswatch themes for Bootstrap), but this is optional
+Themes are created by different people for different purposes:
 
-**Most themes are created for individual applications**, not for public distribution.
+- **App developers**: Create themes for their own applications to maintain consistent branding and visual identity
+- **Design teams**: Create themes as part of their design system implementation  
+- **Library authors**: Create themes for distribution (like Bootswatch themes for Bootstrap) so others can use them
+
+All of these are valid and supported use cases. While most themes are created for individual applications, distributable theme libraries are equally valuable for the community.
 
 ### Theme Architecture
 
