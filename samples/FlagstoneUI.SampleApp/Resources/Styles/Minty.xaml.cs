@@ -1,4 +1,4 @@
-namespace FlagstoneUI.SampleApp.Resources.Styles;
+﻿namespace FlagstoneUI.SampleApp.Resources.Styles;
 
 /// <summary>
 /// _bootswatch Styles theme resource dictionary for Flagstone UI controls.

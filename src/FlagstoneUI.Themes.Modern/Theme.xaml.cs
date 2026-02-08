@@ -1,4 +1,4 @@
-namespace FlagstoneUI.Themes.Modern;
+﻿namespace FlagstoneUI.Themes.Modern;
 
 /// <summary>
 /// Modern theme resource dictionary for Flagstone UI controls.

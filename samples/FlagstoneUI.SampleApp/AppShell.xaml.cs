@@ -10,13 +10,13 @@ public partial class AppShell : Shell
 		BindingContext = new AppShellViewModel();
 	}
 
-    private void OnThemeRadioButtonCheckedChanged(object sender, CheckedChangedEventArgs e)
-    {
-        var theme = (sender as RadioButton)?.ContentAsString();
+	private void OnThemeRadioButtonCheckedChanged(object sender, CheckedChangedEventArgs e)
+	{
+		var theme = (sender as RadioButton)?.ContentAsString();
 
-        if (theme is not null && e.Value)
-        {
-            App.SwitchTheme(theme);
-        }
-    }
+		if (theme is not null && e.Value)
+		{
+			App.SwitchTheme(theme);
+		}
+	}
 }

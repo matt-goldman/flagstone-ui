@@ -14,4 +14,8 @@ public partial class App : Application
 	{
 		return new Window(new AppShell());// _page);
 	}
+
+	public App(IntPtr javaReference, Android.Runtime.JniHandleOwnership transfer) : base(javaReference, transfer)
+	{
+	}
 }

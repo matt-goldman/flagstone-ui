@@ -12,7 +12,7 @@ public partial class FsCard : ContentView
 	public FsCard()
 	{
 		InitializeComponent();
-    }
+	}
 
 	#region Elevation Property
 	/// <summary>
@@ -21,18 +21,18 @@ public partial class FsCard : ContentView
 	/// <remarks>This property is used to define the elevation level of the <see cref="FsCard"/>.  The default
 	/// value is <c>0</c>.</remarks>
 	public static readonly BindableProperty ElevationProperty = BindableProperty.Create(
-        nameof(Elevation), typeof(int), typeof(FsCard), 0, propertyChanged: OnElevationChanged);
+		nameof(Elevation), typeof(int), typeof(FsCard), 0, propertyChanged: OnElevationChanged);
 
-    /// <summary>
-    /// Gets or sets the elevation value, typically representing the height or depth of an element.
-    /// </summary>
-    /// <remarks>This property is a dependency property, which means it supports data binding, styling, and
-    /// default values. Higher elevation values create larger shadows for a greater sense of depth.</remarks>
-    public int Elevation
-    {
-        get => (int)GetValue(ElevationProperty);
-        set => SetValue(ElevationProperty, value);
-    }
+	/// <summary>
+	/// Gets or sets the elevation value, typically representing the height or depth of an element.
+	/// </summary>
+	/// <remarks>This property is a dependency property, which means it supports data binding, styling, and
+	/// default values. Higher elevation values create larger shadows for a greater sense of depth.</remarks>
+	public int Elevation
+	{
+		get => (int)GetValue(ElevationProperty);
+		set => SetValue(ElevationProperty, value);
+	}
 
 	private static void OnElevationChanged(BindableObject bindable, object oldValue, object newValue)
 	{
@@ -70,16 +70,16 @@ public partial class FsCard : ContentView
 			};
 		}
 	}
-    #endregion
+	#endregion
 
-    #region CornerRadius Property
-    /// <summary>
-    /// Identifies the <see cref="CornerRadius"/> bindable property.
-    /// </summary>
-    /// <remarks>This property represents the corner radius of the <see cref="FsCard"/> control.  The default
-    /// value is <c>0.0</c>.</remarks>
-    public static readonly BindableProperty CornerRadiusProperty = BindableProperty.Create(
-        nameof(CornerRadius), typeof(double), typeof(FsCard), 0.0);
+	#region CornerRadius Property
+	/// <summary>
+	/// Identifies the <see cref="CornerRadius"/> bindable property.
+	/// </summary>
+	/// <remarks>This property represents the corner radius of the <see cref="FsCard"/> control.  The default
+	/// value is <c>0.0</c>.</remarks>
+	public static readonly BindableProperty CornerRadiusProperty = BindableProperty.Create(
+		nameof(CornerRadius), typeof(double), typeof(FsCard), 0.0);
 
 	/// <summary>
 	/// Gets or sets the corner radius of the element.
@@ -87,11 +87,11 @@ public partial class FsCard : ContentView
 	/// <remarks>A larger value results in more rounded corners. Negative values are not allowed and will
 	/// throw an exception.</remarks>
 	public double CornerRadius
-    {
-        get => (double)GetValue(CornerRadiusProperty);
-        set => SetValue(CornerRadiusProperty, value);
-    }
-    #endregion
+	{
+		get => (double)GetValue(CornerRadiusProperty);
+		set => SetValue(CornerRadiusProperty, value);
+	}
+	#endregion
 
 	#region BackgroundBrush Property
 	/// <summary>
@@ -109,20 +109,20 @@ public partial class FsCard : ContentView
 	}
 	#endregion
 
-    #region BackgroundColor Property (Backward Compatibility)
-    /// <summary>
-    /// Identifies the bindable property for the <see cref="BackgroundColor"/> property.
-    /// </summary>
-    /// <remarks>This property allows the background color of the <see cref="FsCard"/> to be set or retrieved.
-    /// The default value is <see cref="Colors.Transparent"/>. This property is maintained for backward compatibility.</remarks>
-    public new static readonly BindableProperty BackgroundColorProperty = BindableProperty.Create(
-        nameof(BackgroundColor), typeof(Color), typeof(FsCard), Colors.Transparent, propertyChanged: OnBackgroundColorChanged);
+	#region BackgroundColor Property (Backward Compatibility)
+	/// <summary>
+	/// Identifies the bindable property for the <see cref="BackgroundColor"/> property.
+	/// </summary>
+	/// <remarks>This property allows the background color of the <see cref="FsCard"/> to be set or retrieved.
+	/// The default value is <see cref="Colors.Transparent"/>. This property is maintained for backward compatibility.</remarks>
+	public new static readonly BindableProperty BackgroundColorProperty = BindableProperty.Create(
+		nameof(BackgroundColor), typeof(Color), typeof(FsCard), Colors.Transparent, propertyChanged: OnBackgroundColorChanged);
 
-    public new Color BackgroundColor
-    {
-        get => (Color)GetValue(BackgroundColorProperty);
-        set => SetValue(BackgroundColorProperty, value);
-    }
+	public new Color BackgroundColor
+	{
+		get => (Color)GetValue(BackgroundColorProperty);
+		set => SetValue(BackgroundColorProperty, value);
+	}
 
 	private static void OnBackgroundColorChanged(BindableObject bindable, object oldValue, object newValue)
 	{
@@ -131,7 +131,7 @@ public partial class FsCard : ContentView
 			card.BackgroundBrush = new SolidColorBrush(color);
 		}
 	}
-    #endregion
+	#endregion
 
 	#region Per-Edge Border Thickness Properties
 	/// <summary>
@@ -274,28 +274,28 @@ public partial class FsCard : ContentView
 	}
 	#endregion
 
-    #region BorderColor Property
-    /// <summary>
-    /// Identifies the <see cref="BorderColor"/> bindable property.
-    /// </summary>
-    /// <remarks>This property is used to define the border color of the <see cref="FsCard"/> control.  The
-    /// default value is <see langword="null"/>, which indicates no specific border color is set.
-    /// This property sets a uniform border and supports corner radius.
-    /// For per-edge borders (e.g., underlines, 3D effects), use the per-edge properties instead.</remarks>
-    public static readonly BindableProperty BorderColorProperty = BindableProperty.Create(
-        nameof(BorderColor), typeof(Color), typeof(FsCard), null, propertyChanged: OnBorderColorChanged);  
+	#region BorderColor Property
+	/// <summary>
+	/// Identifies the <see cref="BorderColor"/> bindable property.
+	/// </summary>
+	/// <remarks>This property is used to define the border color of the <see cref="FsCard"/> control.  The
+	/// default value is <see langword="null"/>, which indicates no specific border color is set.
+	/// This property sets a uniform border and supports corner radius.
+	/// For per-edge borders (e.g., underlines, 3D effects), use the per-edge properties instead.</remarks>
+	public static readonly BindableProperty BorderColorProperty = BindableProperty.Create(
+		nameof(BorderColor), typeof(Color), typeof(FsCard), null, propertyChanged: OnBorderColorChanged);
 
-    /// <summary>
-    /// Gets or sets the color of the border.
-    /// </summary>
-    /// <remarks>This property sets a uniform border color and supports corner radius.
-    /// For per-edge control (e.g., underlines, 3D effects), use BorderTopBrush, BorderRightBrush, BorderBottomBrush, and BorderLeftBrush.
-    /// Do not mix uniform and per-edge border properties.</remarks>
-    public Color BorderColor
-    {
-        get => (Color)GetValue(BorderColorProperty);
-        set => SetValue(BorderColorProperty, value);
-    }
+	/// <summary>
+	/// Gets or sets the color of the border.
+	/// </summary>
+	/// <remarks>This property sets a uniform border color and supports corner radius.
+	/// For per-edge control (e.g., underlines, 3D effects), use BorderTopBrush, BorderRightBrush, BorderBottomBrush, and BorderLeftBrush.
+	/// Do not mix uniform and per-edge border properties.</remarks>
+	public Color BorderColor
+	{
+		get => (Color)GetValue(BorderColorProperty);
+		set => SetValue(BorderColorProperty, value);
+	}
 
 	private static void OnBorderColorChanged(BindableObject bindable, object oldValue, object newValue)
 	{
@@ -305,29 +305,29 @@ public partial class FsCard : ContentView
 			card.Stroke = new SolidColorBrush(color);
 		}
 	}
-    #endregion
+	#endregion
 
-    #region BorderWidth Property
-    /// <summary>
-    /// Gets or sets the width of the border surrounding the card.
-    /// </summary>
-    /// <remarks>This property sets a uniform border width and supports corner radius.
-    /// For per-edge control (e.g., underlines, 3D effects), use BorderTopThickness, BorderRightThickness, BorderBottomThickness, and BorderLeftThickness.</remarks>
-    public static readonly BindableProperty BorderWidthProperty = BindableProperty.Create(
-        nameof(BorderWidth), typeof(double), typeof(FsCard), 0.0, propertyChanged: OnBorderWidthChanged);
+	#region BorderWidth Property
+	/// <summary>
+	/// Gets or sets the width of the border surrounding the card.
+	/// </summary>
+	/// <remarks>This property sets a uniform border width and supports corner radius.
+	/// For per-edge control (e.g., underlines, 3D effects), use BorderTopThickness, BorderRightThickness, BorderBottomThickness, and BorderLeftThickness.</remarks>
+	public static readonly BindableProperty BorderWidthProperty = BindableProperty.Create(
+		nameof(BorderWidth), typeof(double), typeof(FsCard), 0.0, propertyChanged: OnBorderWidthChanged);
 
-    /// <summary>
-    /// Gets or sets the width of the border, in device-independent units (1/96th inch per unit).
-    /// </summary>
-    /// <remarks>A value of 0.0 indicates that the border is not visible. Negative values are not allowed. 
-    /// This property sets a uniform border width and supports corner radius.
-    /// For per-edge control (e.g., underlines, 3D effects), use the per-edge thickness properties.
-    /// Do not mix uniform and per-edge border properties.</remarks>
-    public double BorderWidth
-    {
-        get => (double)GetValue(BorderWidthProperty);
-        set => SetValue(BorderWidthProperty, value);
-    }
+	/// <summary>
+	/// Gets or sets the width of the border, in device-independent units (1/96th inch per unit).
+	/// </summary>
+	/// <remarks>A value of 0.0 indicates that the border is not visible. Negative values are not allowed. 
+	/// This property sets a uniform border width and supports corner radius.
+	/// For per-edge control (e.g., underlines, 3D effects), use the per-edge thickness properties.
+	/// Do not mix uniform and per-edge border properties.</remarks>
+	public double BorderWidth
+	{
+		get => (double)GetValue(BorderWidthProperty);
+		set => SetValue(BorderWidthProperty, value);
+	}
 
 	private static void OnBorderWidthChanged(BindableObject bindable, object oldValue, object newValue)
 	{
@@ -337,7 +337,7 @@ public partial class FsCard : ContentView
 			card.StrokeThickness = width;
 		}
 	}
-    #endregion
+	#endregion
 
 	#region Uniform Border Properties (Stroke/StrokeThickness)
 	/// <summary>
@@ -424,7 +424,7 @@ public partial class FsCard : ContentView
 			try
 			{
 				var parsed = BorderShorthand.Parse(shorthand);
-				
+
 				// Set thickness properties
 				card.BorderTopThickness = parsed.Top.Thickness;
 				card.BorderRightThickness = parsed.Right.Thickness;

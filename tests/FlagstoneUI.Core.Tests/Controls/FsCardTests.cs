@@ -87,7 +87,7 @@ public class FsCardTests : MauiTestBase
 	public void Card_border_color_sets_all_edge_brushes()
 	{
 		var card = new FsCard { BorderColor = Colors.Red };
-		
+
 		// BorderColor sets the uniform Stroke property (not per-edge brushes)
 		var strokeBrush = card.Stroke as SolidColorBrush;
 		strokeBrush.ShouldNotBeNull();
@@ -98,7 +98,7 @@ public class FsCardTests : MauiTestBase
 	public void Card_border_width_sets_all_edge_thicknesses()
 	{
 		var card = new FsCard { BorderWidth = 3.0 };
-		
+
 		// BorderWidth sets the uniform StrokeThickness property (not per-edge thicknesses)
 		card.StrokeThickness.ShouldBe(3.0);
 	}
@@ -146,7 +146,7 @@ public class FsCardTests : MauiTestBase
 	public void Card_background_color_sets_background_brush()
 	{
 		var card = new FsCard { BackgroundColor = Colors.Blue };
-		
+
 		var brush = card.BackgroundBrush as SolidColorBrush;
 		brush.ShouldNotBeNull();
 		brush.Color.ShouldBe(Colors.Blue);
@@ -194,12 +194,12 @@ public class FsCardTests : MauiTestBase
 	public void Card_per_edge_properties_default_to_zero_or_transparent()
 	{
 		var card = new FsCard();
-		
+
 		card.BorderTopThickness.ShouldBe(0.0);
 		card.BorderRightThickness.ShouldBe(0.0);
 		card.BorderBottomThickness.ShouldBe(0.0);
 		card.BorderLeftThickness.ShouldBe(0.0);
-		
+
 		(card.BorderTopBrush as SolidColorBrush)?.Color.ShouldBe(Colors.Transparent);
 		(card.BorderRightBrush as SolidColorBrush)?.Color.ShouldBe(Colors.Transparent);
 		(card.BorderBottomBrush as SolidColorBrush)?.Color.ShouldBe(Colors.Transparent);

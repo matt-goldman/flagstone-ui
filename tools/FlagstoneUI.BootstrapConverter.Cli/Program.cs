@@ -1,4 +1,4 @@
-using System.CommandLine;
+﻿using System.CommandLine;
 using FlagstoneUI.BootstrapConverter.Cli.Commands;
 
 namespace FlagstoneUI.BootstrapConverter.Cli;

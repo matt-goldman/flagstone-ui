@@ -55,11 +55,11 @@ public class FontFamily
 	{
 		// Remove quotes and extra whitespace
 		var sanitized = name.Trim('\'', '"', ' ');
-		
+
 		// For multi-word fonts, use the first word or remove spaces
 		// Example: "Segoe UI" -> "SegoeUI"
 		sanitized = sanitized.Replace(" ", string.Empty, StringComparison.Ordinal);
-		
+
 		return sanitized;
 	}
 }

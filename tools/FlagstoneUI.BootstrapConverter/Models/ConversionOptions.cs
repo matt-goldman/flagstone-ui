@@ -5,30 +5,30 @@
 /// </summary>
 public class ConversionOptions
 {
-    /// <summary>
-    /// Strategy for generating dark mode variants
-    /// </summary>
-    public DarkModeStrategy DarkModeStrategy { get; set; } = DarkModeStrategy.Auto;
+	/// <summary>
+	/// Strategy for generating dark mode variants
+	/// </summary>
+	public DarkModeStrategy DarkModeStrategy { get; set; } = DarkModeStrategy.Auto;
 
-    /// <summary>
-    /// Include purpose comments in generated XAML
-    /// </summary>
-    public bool IncludeComments { get; set; } = true;
+	/// <summary>
+	/// Include purpose comments in generated XAML
+	/// </summary>
+	public bool IncludeComments { get; set; } = true;
 
-    /// <summary>
-    /// Namespace to use in generated XAML (if applicable)
-    /// </summary>
-    public string? Namespace { get; set; }
+	/// <summary>
+	/// Namespace to use in generated XAML (if applicable)
+	/// </summary>
+	public string? Namespace { get; set; }
 
-    /// <summary>
-    /// Output format for resource dictionaries (XAML or C#)
-    /// </summary>
-    public ResourceDictionaryFormat OutputFormat { get; set; } = ResourceDictionaryFormat.Xaml;
+	/// <summary>
+	/// Output format for resource dictionaries (XAML or C#)
+	/// </summary>
+	public ResourceDictionaryFormat OutputFormat { get; set; } = ResourceDictionaryFormat.Xaml;
 
-    /// <summary>
-    /// Include font information in conversion result (default: false)
-    /// </summary>
-    public bool IncludeFonts { get; set; } = false;
+	/// <summary>
+	/// Include font information in conversion result (default: false)
+	/// </summary>
+	public bool IncludeFonts { get; set; } = false;
 }
 
 /// <summary>
@@ -36,20 +36,20 @@ public class ConversionOptions
 /// </summary>
 public enum DarkModeStrategy
 {
-    /// <summary>
-    /// Automatically generate dark mode colors by darkening/lightening
-    /// </summary>
-    Auto,
+	/// <summary>
+	/// Automatically generate dark mode colors by darkening/lightening
+	/// </summary>
+	Auto,
 
-    /// <summary>
-    /// Manually specify dark mode colors (must be provided)
-    /// </summary>
-    Manual,
+	/// <summary>
+	/// Manually specify dark mode colors (must be provided)
+	/// </summary>
+	Manual,
 
-    /// <summary>
-    /// No dark mode support (single theme only)
-    /// </summary>
-    None
+	/// <summary>
+	/// No dark mode support (single theme only)
+	/// </summary>
+	None
 }
 
 /// <summary>
@@ -57,15 +57,15 @@ public enum DarkModeStrategy
 /// </summary>
 public enum ResourceDictionaryFormat
 {
-    /// <summary>
-    /// Generate XAML resource dictionaries
-    /// </summary>
-    Xaml,
+	/// <summary>
+	/// Generate XAML resource dictionaries
+	/// </summary>
+	Xaml,
 
-    /// <summary>
-    /// Generate C# resource dictionaries
-    /// </summary>
-    CSharp
+	/// <summary>
+	/// Generate C# resource dictionaries
+	/// </summary>
+	CSharp
 }
 
 /// <summary>

@@ -1,4 +1,4 @@
-using FlagstoneUI.Core.Controls;
+﻿using FlagstoneUI.Core.Controls;
 using Shouldly;
 using Xunit;
 
@@ -10,12 +10,12 @@ public class BorderShorthandTests : MauiTestBase
 	public void BorderShorthand_parses_single_value()
 	{
 		var shorthand = BorderShorthand.Parse("2 Red");
-		
+
 		shorthand.Top.Thickness.ShouldBe(2.0);
 		shorthand.Right.Thickness.ShouldBe(2.0);
 		shorthand.Bottom.Thickness.ShouldBe(2.0);
 		shorthand.Left.Thickness.ShouldBe(2.0);
-		
+
 		shorthand.Top.Color.ShouldBe(Colors.Red);
 		shorthand.Right.Color.ShouldBe(Colors.Red);
 		shorthand.Bottom.Color.ShouldBe(Colors.Red);
@@ -26,12 +26,12 @@ public class BorderShorthandTests : MauiTestBase
 	public void BorderShorthand_parses_two_values()
 	{
 		var shorthand = BorderShorthand.Parse("1 Black, 2 Grey");
-		
+
 		shorthand.Top.Thickness.ShouldBe(1.0);
 		shorthand.Bottom.Thickness.ShouldBe(1.0);
 		shorthand.Left.Thickness.ShouldBe(2.0);
 		shorthand.Right.Thickness.ShouldBe(2.0);
-		
+
 		shorthand.Top.Color.ShouldBe(Colors.Black);
 		shorthand.Bottom.Color.ShouldBe(Colors.Black);
 		shorthand.Left.Color.ShouldBe(Colors.Grey);
@@ -42,12 +42,12 @@ public class BorderShorthandTests : MauiTestBase
 	public void BorderShorthand_parses_four_values()
 	{
 		var shorthand = BorderShorthand.Parse("1 White, 2 Black, 3 Blue, 4 Green");
-		
+
 		shorthand.Top.Thickness.ShouldBe(1.0);
 		shorthand.Right.Thickness.ShouldBe(2.0);
 		shorthand.Bottom.Thickness.ShouldBe(3.0);
 		shorthand.Left.Thickness.ShouldBe(4.0);
-		
+
 		shorthand.Top.Color.ShouldBe(Colors.White);
 		shorthand.Right.Color.ShouldBe(Colors.Black);
 		shorthand.Bottom.Color.ShouldBe(Colors.Blue);
@@ -58,7 +58,7 @@ public class BorderShorthandTests : MauiTestBase
 	public void BorderShorthand_parses_hex_colors()
 	{
 		var shorthand = BorderShorthand.Parse("1 #FF0000");
-		
+
 		shorthand.Top.Color.Red.ShouldBe(1.0f, 0.01f);
 		shorthand.Top.Color.Green.ShouldBe(0.0f, 0.01f);
 		shorthand.Top.Color.Blue.ShouldBe(0.0f, 0.01f);
@@ -86,7 +86,7 @@ public class BorderShorthandTests : MauiTestBase
 	public void BorderShorthand_handles_empty_string()
 	{
 		var shorthand = BorderShorthand.Parse("");
-		
+
 		shorthand.Top.Thickness.ShouldBe(0.0);
 		shorthand.Top.Color.ShouldBe(Colors.Transparent);
 	}

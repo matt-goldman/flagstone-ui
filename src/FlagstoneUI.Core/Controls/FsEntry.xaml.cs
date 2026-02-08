@@ -17,9 +17,9 @@ public partial class FsEntry : ContentView
 		InitializeComponent();
 		ViewWrapper.BindingContext = this;
 		_borderShape = new RoundRectangle { CornerRadius = CornerRadius };
-    }
+	}
 
-    #region Events
+	#region Events
 	/// <summary>
 	/// Occurs when the operation has completed.
 	/// </summary>
@@ -49,9 +49,9 @@ public partial class FsEntry : ContentView
 	/// <remarks>Subscribe to this event to be notified when the control is no longer the active element. This event
 	/// is typically used to perform actions such as validation or cleanup when the user navigates away from the
 	/// control.</remarks>
-    public new event EventHandler? Unfocused;
+	public new event EventHandler? Unfocused;
 	void OnUnfocused(object? sender, FocusEventArgs e) => Unfocused?.Invoke(this, e);
-    #endregion
+	#endregion
 
 	#region Per-Edge Border Thickness Properties
 	/// <summary>
@@ -257,7 +257,7 @@ public partial class FsEntry : ContentView
 	{
 		get => (double)GetValue(BorderWidthProperty);
 		set => SetValue(BorderWidthProperty, value);
-    }
+	}
 
 	private static void OnBorderWidthChanged(BindableObject bindable, object oldValue, object newValue)
 	{
@@ -350,22 +350,22 @@ public partial class FsEntry : ContentView
 	public RoundRectangle BorderShape
 	{
 		get => _borderShape;
-		
+
 		set
 		{
 			_borderShape = value;
 			OnPropertyChanged();
 		}
 	}
-    #endregion
+	#endregion
 
-    #region TextProperty
-    /// <summary>
-    /// Identifies the bindable property for the <see cref="Text"/> property.
-    /// </summary>
-    /// <remarks>This property is used to enable data binding for the <see cref="Text"/> property of the <see
-    /// cref="FsEntry"/> class. The default value is an empty string (<see cref="string.Empty"/>).</remarks>
-    public static readonly BindableProperty TextProperty = BindableProperty.Create(
+	#region TextProperty
+	/// <summary>
+	/// Identifies the bindable property for the <see cref="Text"/> property.
+	/// </summary>
+	/// <remarks>This property is used to enable data binding for the <see cref="Text"/> property of the <see
+	/// cref="FsEntry"/> class. The default value is an empty string (<see cref="string.Empty"/>).</remarks>
+	public static readonly BindableProperty TextProperty = BindableProperty.Create(
 		nameof(Text),
 		typeof(string),
 		typeof(FsEntry),
@@ -403,32 +403,32 @@ public partial class FsEntry : ContentView
 		get => (string)GetValue(PlaceholderProperty);
 		set => SetValue(PlaceholderProperty, value);
 	}
-    #endregion
-    
-    #region PlaceholderColorProperty
-    /// <summary>
-    /// Identifies the bindable property for the placeholder text color of the entry.
-    /// </summary>
-    /// <remarks>This property allows binding to the color of the placeholder text. The default value is <see
+	#endregion
+
+	#region PlaceholderColorProperty
+	/// <summary>
+	/// Identifies the bindable property for the placeholder text color of the entry.
+	/// </summary>
+	/// <remarks>This property allows binding to the color of the placeholder text. The default value is <see
 	/// cref="Colors.Gray"/>.</remarks>
-    public static readonly BindableProperty PlaceholderColorProperty = BindableProperty.Create(
+	public static readonly BindableProperty PlaceholderColorProperty = BindableProperty.Create(
 		nameof(PlaceholderColor),
 		typeof(Color),
 		typeof(FsEntry),
 		Colors.Gray,
 		BindingMode.OneWay);
 
-    /// <summary>
-    /// Gets or sets the color of the placeholder text displayed by the control.
-    /// </summary>
-    public Color PlaceholderColor
-    {
-	    get => (Color)GetValue(PlaceholderColorProperty);
-	    set => SetValue(PlaceholderColorProperty, value);
-    }
-    #endregion
+	/// <summary>
+	/// Gets or sets the color of the placeholder text displayed by the control.
+	/// </summary>
+	public Color PlaceholderColor
+	{
+		get => (Color)GetValue(PlaceholderColorProperty);
+		set => SetValue(PlaceholderColorProperty, value);
+	}
+	#endregion
 
-    #region TextColorProperty
+	#region TextColorProperty
 	/// <summary>
 	/// Identifies the bindable property for the text color of the entry.
 	/// </summary>
@@ -445,11 +445,11 @@ public partial class FsEntry : ContentView
 	/// Gets or sets the color of the text displayed by the control.
 	/// </summary>
 	public Color TextColor
-		{
+	{
 		get => (Color)GetValue(TextColorProperty);
 		set => SetValue(TextColorProperty, value);
 	}
-    #endregion
+	#endregion
 
 	#region BackgroundProperty
 	/// <summary>
@@ -487,7 +487,7 @@ public partial class FsEntry : ContentView
 		typeof(FsEntry),
 		TextAlignment.Start,
 		BindingMode.OneWay);
-	
+
 	/// <summary>
 	/// Gets or sets the horizontal alignment of the text within the element.
 	/// </summary>
@@ -496,9 +496,9 @@ public partial class FsEntry : ContentView
 		get => (TextAlignment)GetValue(HorizontalTextAlignmentProperty);
 		set => SetValue(HorizontalTextAlignmentProperty, value);
 	}
-    #endregion
+	#endregion
 
-    #region VerticalTextAlignmentProperty
+	#region VerticalTextAlignmentProperty
 	/// <summary>
 	/// Identifies the <see cref="VerticalTextAlignment"/> bindable property, which determines the vertical alignment of
 	/// text within the control.
@@ -516,13 +516,13 @@ public partial class FsEntry : ContentView
 	/// Gets or sets the vertical alignment of text within the element.
 	/// </summary>
 	public TextAlignment VerticalTextAlignment
-    {
+	{
 		get => (TextAlignment)GetValue(VerticalTextAlignmentProperty);
 		set => SetValue(VerticalTextAlignmentProperty, value);
-    }
-    #endregion
+	}
+	#endregion
 
-    #region IsPasswordProperty
+	#region IsPasswordProperty
 	/// <summary>
 	/// Identifies the bindable property that determines whether the entry should mask its input as a password.
 	/// </summary>
@@ -539,13 +539,13 @@ public partial class FsEntry : ContentView
 	/// Gets or sets a value indicating whether the input field is treated as a password field.
 	/// </summary>
 	public bool IsPassword
-    {
+	{
 		get => (bool)GetValue(IsPasswordProperty);
 		set => SetValue(IsPasswordProperty, value);
-    }
-    #endregion
+	}
+	#endregion
 
-    #region KeyboardProperty
+	#region KeyboardProperty
 	/// <summary>
 	/// Identifies the bindable property for the <see cref="Keyboard"/> property.
 	/// </summary>
@@ -565,25 +565,25 @@ public partial class FsEntry : ContentView
 	/// <remarks>Use this property to customize the keyboard input behavior for the control. For example, you can
 	/// specify a numeric keyboard layout or other specialized input configurations.</remarks>
 	public Keyboard Keyboard
-    {
+	{
 		get => (Keyboard)GetValue(KeyboardProperty);
 		set => SetValue(KeyboardProperty, value);
-    }
-    #endregion
+	}
+	#endregion
 
-    #region FontSizeProperty
+	#region FontSizeProperty
 	/// <summary>
 	/// Identifies the FontSize bindable property.
 	/// </summary>
 	/// <remarks>This property specifies the font size for the text displayed in the <see cref="FsEntry"/> control. 
 	/// The default value is 14.0. The property supports one-way data binding.</remarks>
-    public static readonly BindableProperty FontSizeProperty = BindableProperty.Create(
+	public static readonly BindableProperty FontSizeProperty = BindableProperty.Create(
 		nameof(FontSize),
 		typeof(double),
 		typeof(FsEntry),
 		14.0d,
 		BindingMode.OneWay);
-	
+
 	/// <summary>
 	/// Gets or sets the font size for the text content.
 	/// </summary>
@@ -594,9 +594,9 @@ public partial class FsEntry : ContentView
 		get => (double)GetValue(FontSizeProperty);
 		set => SetValue(FontSizeProperty, value);
 	}
-    #endregion
+	#endregion
 
-    #region PaddingProperty
+	#region PaddingProperty
 	/// <summary>
 	/// Identifies the <see cref="Padding"/> bindable property.
 	/// </summary>
@@ -663,7 +663,7 @@ public partial class FsEntry : ContentView
 			try
 			{
 				var parsed = BorderShorthand.Parse(shorthand);
-				
+
 				// Set thickness properties
 				entry.BorderTopThickness = parsed.Top.Thickness;
 				entry.BorderRightThickness = parsed.Right.Thickness;
