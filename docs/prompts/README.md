@@ -1,8 +1,8 @@
-# AI Prompts for Flagstone UI
+# AI Prompts for FlagstoneUI
 
-This directory contains prompts for AI-powered design tools (v0, GitHub Spark, Claude, ChatGPT, etc.) to help generate themes, palettes, and design assets for Flagstone UI.
+This directory contains prompts for AI-powered design tools (v0, GitHub Spark, Claude, ChatGPT, etc.) to help generate themes, palettes, and design assets for FlagstoneUI.
 
-**Audience**: These prompts are tooling for **theme creators and contributors**, not end users. If you're using Flagstone UI in your application (not creating themes), see the [Quickstart Guide](../quickstart.md) instead.
+**Audience**: These prompts are tooling for **theme creators and contributors**, not end users. If you're using FlagstoneUI in your application (not creating themes), see the [Quickstart Guide](../quickstart.md) instead.
 
 ## Available Prompts
 
@@ -14,7 +14,7 @@ This directory contains prompts for AI-powered design tools (v0, GitHub Spark, C
 2. Paste into your AI tool (v0, Spark, Claude, etc.)
 3. Attach reference files mentioned in the prompt
 4. Review and iterate on the generated output
-5. Validate with Flagstone UI tools:
+5. Validate with FlagstoneUI tools:
    ```bash
    dotnet run --project tools/FlagstoneUI.TokenGenerator -- validate --input theme.json --json
    ```

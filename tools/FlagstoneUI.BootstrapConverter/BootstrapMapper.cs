@@ -5,7 +5,7 @@ using FlagstoneUI.BootstrapConverter.Models;
 namespace FlagstoneUI.BootstrapConverter;
 
 /// <summary>
-/// Maps Bootstrap variables to Flagstone UI tokens
+/// Maps Bootstrap variables to FlagstoneUI tokens
 /// </summary>
 public class BootstrapMapper
 {
@@ -489,7 +489,7 @@ public class BootstrapMapper
 			foreach (var shadow in shadows)
 			{
 				var trimmedShadow = shadow.Trim();
-				
+
 				// Skip inset shadows
 				if (trimmedShadow.StartsWith("inset", StringComparison.OrdinalIgnoreCase))
 					continue;
@@ -526,7 +526,7 @@ public class BootstrapMapper
 			if (rgbaMatch.Success)
 			{
 				var colorValue = rgbaMatch.Value;
-				
+
 				// Extract opacity from rgba
 				var alphaMatch = RgbaAlphaPattern.Match(colorValue);
 				if (alphaMatch.Success && double.TryParse(alphaMatch.Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var alpha))

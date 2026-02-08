@@ -32,7 +32,7 @@
                          Spacing="24">
 
       <!-- Page Header -->
-      <Label Text="Flagstone UI Controls"
+      <Label Text="FlagstoneUI Controls"
              FontSize="32"
              FontAttributes="Bold"
              TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}" />

@@ -1,9 +1,9 @@
 using System.CommandLine;
 using FlagstoneUI.TokenGenerator;
 
-var rootCommand = new RootCommand("Flagstone UI Theme Tools")
+var rootCommand = new RootCommand("FlagstoneUI Theme Tools")
 {
-    Description = "Tools for managing Flagstone UI themes, tokens, and design system contracts"
+    Description = "Tools for managing FlagstoneUI themes, tokens, and design system contracts"
 };
 
 // ===== Generate Catalog Command =====
@@ -25,7 +25,7 @@ generateCommand.AddOption(genOutputOption);
 generateCommand.SetHandler(async (sourceDir, outputFile) =>
 {
     Console.ForegroundColor = ConsoleColor.Cyan;
-    Console.WriteLine("🔍 Flagstone UI Token Catalog Generator");
+    Console.WriteLine("🔍 FlagstoneUI Token Catalog Generator");
     Console.ResetColor();
     Console.WriteLine($"   Source: {sourceDir.FullName}");
     Console.WriteLine($"   Output: {outputFile.FullName}");
@@ -104,7 +104,7 @@ validateCommand.SetHandler((inputFile, format, jsonOutput) =>
     if (!jsonOutput)
     {
         Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("🔍 Flagstone UI Theme Validator");
+        Console.WriteLine("🔍 FlagstoneUI Theme Validator");
         Console.ResetColor();
         Console.WriteLine($"   Input: {inputFile.FullName}");
         Console.WriteLine();
@@ -118,15 +118,15 @@ validateCommand.SetHandler((inputFile, format, jsonOutput) =>
         }
 
         var validator = new ThemeValidator();
-        
+
         // Auto-detect format if needed
         if (format == "auto")
         {
             format = inputFile.Extension.ToLowerInvariant() == ".json" ? "json" : "xaml";
         }
 
-        var result = format.ToLowerInvariant() == "json" 
-            ? validator.ValidateJson(inputFile.FullName) 
+        var result = format.ToLowerInvariant() == "json"
+            ? validator.ValidateJson(inputFile.FullName)
             : validator.ValidateXaml(inputFile.FullName);
 
         if (jsonOutput)
@@ -147,7 +147,7 @@ validateCommand.SetHandler((inputFile, format, jsonOutput) =>
                 Console.WriteLine($"❌ Validation failed with {result.Errors.Count} error(s)");
                 Console.ResetColor();
                 Console.WriteLine();
-                
+
                 foreach (var error in result.Errors)
                 {
                     Console.WriteLine($"   • {error.Token}: {error.Message}");
@@ -160,7 +160,7 @@ validateCommand.SetHandler((inputFile, format, jsonOutput) =>
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine($"⚠️  {result.Warnings.Count} warning(s):");
                 Console.ResetColor();
-                
+
                 foreach (var warning in result.Warnings)
                 {
                     Console.WriteLine($"   • {warning.Token}: {warning.Message}");
@@ -236,7 +236,7 @@ generateXamlCommand.AddOption(xamlOutputOption);
 generateXamlCommand.SetHandler((inputFile, outputFile) =>
 {
     Console.ForegroundColor = ConsoleColor.Cyan;
-    Console.WriteLine("🔍 Flagstone UI XAML Generator");
+    Console.WriteLine("🔍 FlagstoneUI XAML Generator");
     Console.ResetColor();
     Console.WriteLine($"   Input:  {inputFile.FullName}");
     Console.WriteLine($"   Output: {outputFile.FullName}");
@@ -328,7 +328,7 @@ generateContractCommand.AddOption(contractExtendsOption);
 generateContractCommand.SetHandler(async (sourceDir, outputFile, name, themeFile, extends) =>
 {
     Console.ForegroundColor = ConsoleColor.Cyan;
-    Console.WriteLine("📜 Flagstone UI Contract Generator");
+    Console.WriteLine("📜 FlagstoneUI Contract Generator");
     Console.ResetColor();
     Console.WriteLine($"   Source:   {sourceDir.FullName}");
     Console.WriteLine($"   Output:   {outputFile.FullName}");
@@ -355,8 +355,8 @@ generateContractCommand.SetHandler(async (sourceDir, outputFile, name, themeFile
         {
             // Generate design system contract from theme
             contract = await generator.GenerateDesignSystemContractAsync(
-                themeFile.FullName, 
-                name, 
+                themeFile.FullName,
+                name,
                 extends);
         }
         else
@@ -403,7 +403,7 @@ extractSurfaceCommand.AddOption(surfaceControlsPathOption);
 extractSurfaceCommand.SetHandler((controlsDir) =>
 {
     Console.ForegroundColor = ConsoleColor.Cyan;
-    Console.WriteLine("🔍 Flagstone UI Control Surface Extractor");
+    Console.WriteLine("🔍 FlagstoneUI Control Surface Extractor");
     Console.ResetColor();
     Console.WriteLine($"   Controls: {controlsDir.FullName}");
     Console.WriteLine();
@@ -431,11 +431,11 @@ extractSurfaceCommand.SetHandler((controlsDir) =>
             Console.WriteLine($"   Inherits: {surface.InheritsFrom}");
             Console.WriteLine($"   Architecture: {surface.Architecture}");
             Console.WriteLine($"   Styled Properties ({surface.StyledProperties.Count}):");
-            
+
             foreach (var prop in surface.StyledProperties.OrderBy(p => p.Name))
             {
-                var tokenInfo = prop.RecommendedToken != null 
-                    ? $" → {prop.RecommendedToken}" 
+                var tokenInfo = prop.RecommendedToken != null
+                    ? $" → {prop.RecommendedToken}"
                     : "";
                 Console.WriteLine($"      • {prop.Name} ({prop.Type}){tokenInfo}");
             }
@@ -488,7 +488,7 @@ validateContractCommand.SetHandler(async (themeFile, contractFile, contractsDir,
     if (!jsonOutput)
     {
         Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("🔍 Flagstone UI Contract Validator");
+        Console.WriteLine("🔍 FlagstoneUI Contract Validator");
         Console.ResetColor();
         Console.WriteLine($"   Theme:    {themeFile.FullName}");
         Console.WriteLine($"   Contract: {contractFile.FullName}");

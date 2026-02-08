@@ -8,13 +8,13 @@
              x:DataType="vm:MainViewModel">
 
   <Grid ColumnDefinitions="400,*">
-    
+
     <!-- Input options -->
     <ScrollView>
       <VerticalStackLayout Spacing="20">
         <VerticalStackLayout Spacing="10" Padding="10">
           <Label Text="Bootstrap Converter" FontSize="24" FontAttributes="Bold" />
-          <Label Text="Convert Bootstrap themes to Flagstone UI XAML resources." FontSize="14" />
+          <Label Text="Convert Bootstrap themes to FlagstoneUI XAML resources." FontSize="14" />
         </VerticalStackLayout>
 
         <!-- Theme source (file or URL) -->
@@ -38,14 +38,14 @@
               </HorizontalStackLayout>
             </HorizontalStackLayout>
           </VerticalStackLayout>
-          
+
           <!-- File Mode -->
           <VerticalStackLayout Spacing="10"
                               IsVisible="{Binding IsFromFileComputed}">
             <Label Text="Theme source files"
                    FontSize="18"
                    FontAttributes="Bold" />
-            
+
             <HorizontalStackLayout Spacing="10">
               <FsButton Style="{DynamicResource SlateProButton}"
                         Text="Add Files"
@@ -63,7 +63,7 @@
             <Label Text="Theme source URLs"
                    FontSize="18"
                    FontAttributes="Bold" />
-            
+
             <FsEntry Style="{DynamicResource SlateProEntry}"
                      Placeholder="Enter Bootstrap CSS/SCSS URL"
                      Text="{Binding NewUrlInput}"/>
@@ -82,16 +82,16 @@
           <CollectionView ItemsSource="{Binding SelectedFiles}">
             <CollectionView.ItemTemplate>
               <DataTemplate x:DataType="ser:SourceFile">
-                <Grid ColumnDefinitions="*,Auto" 
+                <Grid ColumnDefinitions="*,Auto"
                       Padding="5"
                       ColumnSpacing="10">
-                  
+
                   <!-- File mode: Label -->
                   <Label Grid.Column="0"
                          Text="{Binding Path}"
                          VerticalOptions="Center"
                          IsVisible="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=IsFromFileComputed}" />
-                  
+
                   <!-- URL mode: Entry (read-only effect via IsEnabled) -->
                   <FsEntry Grid.Column="0"
                            Style="{DynamicResource SlateProEntry}"
@@ -99,7 +99,7 @@
                            IsEnabled="False"
                            VerticalOptions="Center"
                            IsVisible="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=IsFromUrl}" />
-                  
+
                   <FsButton Grid.Column="1"
                             Style="{DynamicResource SlateProButton}"
                             Text="Remove"
@@ -177,8 +177,8 @@
           <ScrollView HeightRequest="200">
             <Label Text="{Binding ConversionResults}" />
           </ScrollView>
-          <FsButton Style="{DynamicResource SlateProButton}" 
-                    Text="Save Output" 
+          <FsButton Style="{DynamicResource SlateProButton}"
+                    Text="Save Output"
                     Command="{Binding SaveOutputCommand}"
                     IsEnabled="{Binding HasConversionResult}" />
         </VerticalStackLayout>
@@ -193,7 +193,7 @@
         <!-- Heading section-->
         <VerticalStackLayout Spacing="10" Padding="10">
           <Label Text="Controls Preview" FontSize="24" FontAttributes="Bold" />
-          <Label Text="This area will showcase various Flagstone UI controls styled with the converted theme." FontSize="14" />
+          <Label Text="This area will showcase various FlagstoneUI controls styled with the converted theme." FontSize="14" />
         </VerticalStackLayout>
 
         <!-- FsButton -->
@@ -239,7 +239,7 @@
             </BindableLayout.ItemTemplate>
           </FlexLayout>
         </VerticalStackLayout>
-        
+
         <!-- FsCard -->
         <VerticalStackLayout Spacing="10" Padding="10">
           <Label Text="Cards" FontSize="18" FontAttributes="Bold" />

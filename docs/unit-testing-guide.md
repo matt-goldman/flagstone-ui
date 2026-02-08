@@ -1,6 +1,6 @@
-# Unit Testing Guide for Flagstone UI
+# Unit Testing Guide for FlagstoneUI
 
-This guide explains how to write unit tests for MAUI UI components in the Flagstone UI project.
+This guide explains how to write unit tests for MAUI UI components in the FlagstoneUI project.
 
 ## Overview
 

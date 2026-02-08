@@ -1,16 +1,16 @@
-# Flagstone UI MCP Server (Planned)
+# FlagstoneUI MCP Server (Planned)
 
-> **📋 PLANNED - Post-Integration Update**  
-> This document outlines the vision for a comprehensive Flagstone UI MCP server that will provide agent-friendly functionality for theme conversion, UI generation, and FlagstoneUI system guidance.
-> 
+> **📋 PLANNED - Post-Integration Update**
+> This document outlines the vision for a comprehensive FlagstoneUI MCP server that will provide agent-friendly functionality for theme conversion, UI generation, and FlagstoneUI system guidance.
+>
 > **Current Status**: Bootstrap Converter core library and UI app complete. Temporary MCP implementation exists but will be replaced with comprehensive FlagstoneUI MCP server.
 
 ## Vision & Goals
 
-The Flagstone UI MCP server will enable AI agents to:
+The FlagstoneUI MCP server will enable AI agents to:
 
-1. **Convert themes** from Bootstrap/Tailwind to Flagstone UI
-2. **Generate complete UIs** using Flagstone UI controls and patterns
+1. **Convert themes** from Bootstrap/Tailwind to FlagstoneUI
+2. **Generate complete UIs** using FlagstoneUI controls and patterns
 3. **Understand the system** through comprehensive documentation access
 4. **Provide examples** showing what Bootstrap themes look like in FlagstoneUI
 5. **Assist with theming** by analyzing and generating token catalogs
@@ -55,7 +55,7 @@ tools/FlagstoneUI.Mcp/
 
 ```
 ┌─────────────────────────────────────────────────┐
-│         Flagstone UI MCP Server                 │
+│         FlagstoneUI MCP Server                 │
 │                                                 │
 │  ┌───────────────────────────────────────────┐ │
 │  │  Tools                                    │ │
@@ -378,7 +378,7 @@ Integration with GitHub Copilot via MCP protocol for inline code generation.
 
 ### Custom Agents
 
-Any MCP-compatible client can use the Flagstone UI MCP server.
+Any MCP-compatible client can use the FlagstoneUI MCP server.
 
 ## Testing Strategy
 
@@ -446,5 +446,5 @@ Any MCP-compatible client can use the Flagstone UI MCP server.
 
 *This is a living document and will be updated as the MCP server is developed.*
 
-**Last Updated**: December 2024  
+**Last Updated**: December 2024
 **Next Review**: After Phase 2 completion

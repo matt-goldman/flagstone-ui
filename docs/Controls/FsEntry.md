@@ -1,13 +1,13 @@
 # FsEntry Control
 
-The `FsEntry` control is a customizable text input field that wraps the .NET MAUI `Entry` control to provide consistent, theme-driven styling across all platforms. Unlike `FsButton`, `FsEntry` uses a wrapper control approach to remove platform-specific native styling that cannot be controlled through standard XAML properties.
+The `FsEntry` control is an enhanced text input field that extends the .NET MAUI `Entry` with full visual styling control from shared code. Unlike `FsButton`, `FsEntry` uses a wrapper control approach to remove platform-specific native styling that cannot be controlled through standard XAML properties.
 
 ## Features
 
 - **Borderless Native Entry**: Platform handlers remove native decorations (underlines, focus indicators)
 - **Custom Border Styling**: Full control over border color, width, and corner radius via `Border` wrapper
-- **Token Integration**: Seamless theming through DynamicResource bindings
-- **Flexible Layout**: Configurable padding, alignment, and sizing
+- **Complete Styling Control**: All visual properties exposed as BindableProperties
+- **Standard .NET MAUI Patterns**: Use inline values, StaticResource, DynamicResource, or styles
 - **Password Support**: Built-in password masking
 - **Keyboard Types**: Support for specialized keyboards (numeric, email, etc.)
 - **Event Support**: Text changed and completion events
@@ -57,7 +57,7 @@ handler.PlatformView.Background = null;
 handler.PlatformView.FocusVisualMargin = new Microsoft.UI.Xaml.Thickness(0);
 ```
 
-This gives Flagstone UI complete control over the Entry's appearance, allowing the outer `Border` to handle all visual styling consistently.
+This gives FlagstoneUI complete control over the Entry's appearance, allowing the outer `Border` to handle all visual styling consistently.
 
 ## Properties
 
@@ -111,16 +111,63 @@ This gives Flagstone UI complete control over the Entry's appearance, allowing t
 
 ## Usage Examples
 
-### Basic Entry
+### Direct Styling (Simple)
 
 ```xaml
 <fs:FsEntry Placeholder="Enter your name" />
+
+<!-- With custom styling -->
+<fs:FsEntry
+    Placeholder="Email Address"
+    BorderBrush="#CCCCCC"
+    BorderWidth="1"
+    CornerRadius="8"
+    Padding="12"
+    Background="#F5F5F5"
+    TextColor="#333333"
+    FontSize="16" />
 ```
 
-### Styled Entry
+### Using App Resources
 
 ```xaml
-<fs:FsEntry 
+<!-- Define once in App.xaml -->
+<Color x:Key="InputBorder">#CCCCCC</Color>
+<Color x:Key="InputBackground">#F5F5F5</Color>
+
+<!-- Use with StaticResource -->
+<fs:FsEntry
+    Placeholder="Username"
+    BorderBrush="{StaticResource InputBorder}"
+    BorderWidth="1"
+    Background="{StaticResource InputBackground}"
+    CornerRadius="8"
+    Padding="12" />
+```
+
+### Using Theme Styles
+
+```xaml
+<!-- Define implicit style in theme -->
+<Style TargetType="fs:FsEntry">
+    <Setter Property="BorderBrush" Value="#CCCCCC" />
+    <Setter Property="BorderWidth" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Padding" Value="12" />
+    <Setter Property="Background" Value="#F5F5F5" />
+    <Setter Property="FontSize" Value="16" />
+</Style>
+
+<!-- Usage - styles applied automatically -->
+<fs:FsEntry Placeholder="Email Address" />
+```
+
+### Optional: Using Design Tokens
+
+If your theme uses design tokens (like Material), you can reference them:
+
+```xaml
+<fs:FsEntry
     Placeholder="Email Address"
     BorderBrush="{DynamicResource Color.Outline}"
     BorderWidth="1"
@@ -131,23 +178,25 @@ This gives Flagstone UI complete control over the Entry's appearance, allowing t
     FontSize="16" />
 ```
 
+> **Note**: Design tokens are optional. You can style FsEntry using direct values, app resources, or theme styles without tokens.
+
 ### Entry with Bottom Border Only (Underline Style)
 
 ```xaml
-<fs:FsEntry 
+<fs:FsEntry
     Placeholder="Enter text"
     BorderBottomThickness="1"
-    BorderBottomBrush="{DynamicResource Color.Primary}"
+    BorderBottomBrush="#6750A4"
     Padding="8,4" />
 ```
 
 ### Password Entry
 
 ```xaml
-<fs:FsEntry 
+<fs:FsEntry
     Placeholder="Password"
     IsPassword="True"
-    BorderColor="{DynamicResource Color.Outline}"
+    BorderBrush="#CCCCCC"
     BorderWidth="1"
     CornerRadius="4"
     Padding="12" />
@@ -156,34 +205,37 @@ This gives Flagstone UI complete control over the Entry's appearance, allowing t
 ### Entry with Data Binding (MVVM)
 
 ```xaml
-<fs:FsEntry 
+<fs:FsEntry
     Text="{Binding Username}"
     Placeholder="Username"
-    BorderColor="{DynamicResource Color.Primary}"
+    BorderBrush="#6750A4"
     BorderWidth="2"
-    CornerRadius="8" />
+    CornerRadius="8"
+    Padding="12" />
 ```
 
 ### Numeric Entry
 
 ```xaml
-<fs:FsEntry 
+<fs:FsEntry
     Placeholder="Enter amount"
     Keyboard="Numeric"
     HorizontalTextAlignment="End"
-    BorderColor="{DynamicResource Color.Outline}"
-    BorderWidth="1" />
+    BorderBrush="#CCCCCC"
+    BorderWidth="1"
+    Padding="12" />
 ```
 
 ### Email Entry
 
 ```xaml
-<fs:FsEntry 
+<fs:FsEntry
     Placeholder="email@example.com"
     Keyboard="Email"
-    BorderColor="{DynamicResource Color.Outline}"
+    BorderBrush="#CCCCCC"
     BorderWidth="1"
-    CornerRadius="4" />
+    CornerRadius="4"
+    Padding="12" />
 ```
 
 ## Theme Styling
@@ -192,11 +244,25 @@ Entries can be styled globally through themes:
 
 ```xaml
 <Style TargetType="fs:FsEntry">
-    <Setter Property="BorderColor" Value="{DynamicResource Color.Outline}" />
+    <Setter Property="BorderBrush" Value="#CCCCCC" />
     <Setter Property="BorderWidth" Value="1" />
     <Setter Property="CornerRadius" Value="8" />
     <Setter Property="Padding" Value="12" />
-    <Setter Property="BackgroundColor" Value="{DynamicResource Color.SurfaceVariant}" />
+    <Setter Property="Background" Value="#F5F5F5" />
+    <Setter Property="TextColor" Value="#333333" />
+    <Setter Property="FontSize" Value="16" />
+</Style>
+```
+
+Themes using design tokens can reference them in styles:
+
+```xaml
+<Style TargetType="fs:FsEntry">
+    <Setter Property="BorderBrush" Value="{DynamicResource Color.Outline}" />
+    <Setter Property="BorderWidth" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Padding" Value="12" />
+    <Setter Property="Background" Value="{DynamicResource Color.SurfaceVariant}" />
     <Setter Property="TextColor" Value="{DynamicResource Color.OnSurface}" />
     <Setter Property="FontSize" Value="16" />
 </Style>
@@ -207,8 +273,8 @@ Entries can be styled globally through themes:
 ```xaml
 <!-- Filled Entry -->
 <Style TargetType="fs:FsEntry" x:Key="FilledEntry">
-    <Setter Property="BackgroundColor" Value="{DynamicResource Color.SurfaceVariant}" />
-    <Setter Property="BorderColor" Value="Transparent" />
+    <Setter Property="Background" Value="#F5F5F5" />
+    <Setter Property="BorderBrush" Value="Transparent" />
     <Setter Property="BorderWidth" Value="0" />
     <Setter Property="CornerRadius" Value="4" />
     <Setter Property="Padding" Value="16,12" />
@@ -216,8 +282,8 @@ Entries can be styled globally through themes:
 
 <!-- Outlined Entry -->
 <Style TargetType="fs:FsEntry" x:Key="OutlinedEntry">
-    <Setter Property="BackgroundColor" Value="Transparent" />
-    <Setter Property="BorderColor" Value="{DynamicResource Color.Outline}" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="#CCCCCC" />
     <Setter Property="BorderWidth" Value="1" />
     <Setter Property="CornerRadius" Value="4" />
     <Setter Property="Padding" Value="16,12" />
@@ -234,7 +300,7 @@ Entries can be styled globally through themes:
 ### Event Examples
 
 ```xaml
-<fs:FsEntry 
+<fs:FsEntry
     Text="{Binding SearchText}"
     TextChanged="OnSearchTextChanged"
     Completed="OnSearchCompleted" />
@@ -262,7 +328,7 @@ As documented in [ADR001](../Decisions/adr001-fsentry-behavior.md), `FsEntry` do
 ```xaml
 <fs:FsEntry Placeholder="Email">
     <fs:FsEntry.Behaviors>
-        <toolkit:EmailValidationBehavior 
+        <toolkit:EmailValidationBehavior
             InvalidStyle="{StaticResource InvalidEntryStyle}"
             ValidStyle="{StaticResource ValidEntryStyle}"
             Flags="ValidateOnValueChanged" />
@@ -291,16 +357,16 @@ The Entry control is used in the SignInForm block:
 <fs:FsCard Elevation="2" Padding="24">
     <VerticalStackLayout Spacing="16">
         <Label Text="Sign In" FontSize="24" FontAttributes="Bold" />
-        
-        <fs:FsEntry 
+
+        <fs:FsEntry
             Placeholder="Username"
             BorderColor="{DynamicResource Color.Outline}"
             BorderWidth="1"
             CornerRadius="8"
             Padding="12"
             Text="{Binding Username}" />
-        
-        <fs:FsEntry 
+
+        <fs:FsEntry
             Placeholder="Password"
             IsPassword="True"
             BorderColor="{DynamicResource Color.Outline}"
@@ -308,8 +374,8 @@ The Entry control is used in the SignInForm block:
             CornerRadius="8"
             Padding="12"
             Text="{Binding Password}" />
-        
-        <fs:FsButton 
+
+        <fs:FsButton
             Text="Sign In"
             Command="{Binding SignInCommand}" />
     </VerticalStackLayout>
@@ -333,13 +399,13 @@ Platform handlers ensure consistent borderless rendering across all platforms, w
 
 ```xaml
 <ContentView ...>
-    <Border 
+    <Border
         BackgroundColor="{Binding BackgroundColor}"
         Stroke="{Binding BorderColor}"
         StrokeThickness="{Binding BorderWidth}"
         StrokeShape="{Binding BorderShape}">
         <Grid Padding="{Binding Padding}">
-            <fs:BorderlessEntry 
+            <fs:BorderlessEntry
                 Text="{Binding Text}"
                 Placeholder="{Binding Placeholder}"
                 ... />

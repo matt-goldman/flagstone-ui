@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://flagstoneui.dev/schemas/tokens-catalog.json",
-  "title": "Flagstone UI Token Catalog Schema",
-  "description": "Schema for Flagstone UI design token catalog, used for theme generation and AI-assisted development",
+  "title": "FlagstoneUI Token Catalog Schema",
+  "description": "Schema for FlagstoneUI design token catalog, used for theme generation and AI-assisted development",
   "type": "object",
   "required": ["version", "lastUpdated", "baseTokens", "controls"],
   "properties": {

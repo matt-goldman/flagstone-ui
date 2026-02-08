@@ -37,7 +37,7 @@
 
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     	<PackageId>FlagstoneUI.Themes.Material</PackageId>
-    	<Description>Flagstone UI Material theme library providing Material Design styling for .NET MAUI controls.</Description>
+    	<Description>FlagstoneUI Material theme library providing Material Design styling for .NET MAUI controls.</Description>
 	</PropertyGroup>
 
 	<ItemGroup>

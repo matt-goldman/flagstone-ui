@@ -1,8 +1,8 @@
-# Generate Modern Theme for Flagstone UI
+# Generate Modern Theme for FlagstoneUI
 
 ## Objective
 
-Generate a complete "Modern" theme palette for Flagstone UI that follows Material Design 3 semantic token structure. The Modern theme should be clean, minimal, and iOS-inspired with a professional feel suitable for business and productivity applications.
+Generate a complete "Modern" theme palette for FlagstoneUI that follows Material Design 3 semantic token structure. The Modern theme should be clean, minimal, and iOS-inspired with a professional feel suitable for business and productivity applications.
 
 ## Design Direction
 
@@ -30,7 +30,7 @@ Generate a complete "Modern" theme palette for Flagstone UI that follows Materia
 
 ## Required Output Format
 
-Generate a JSON file following this exact structure (based on Flagstone UI's token catalog schema):
+Generate a JSON file following this exact structure (based on FlagstoneUI's token catalog schema):
 
 ```json
 {
@@ -140,7 +140,7 @@ Your generated theme must:
 
 ## Reference Files
 
-Attach these files from the Flagstone UI repository for context:
+Attach these files from the FlagstoneUI repository for context:
 
 1. **`docs/tokens-catalog.json`** - Example Material theme structure
 2. **`docs/tokens-schema.json`** - JSON Schema for validation

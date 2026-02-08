@@ -1,10 +1,10 @@
 # Control Implementation Guide
 
-This guide provides standards and patterns for implementing Flagstone UI controls.
+This guide provides standards and patterns for implementing FlagstoneUI controls.
 
 ## Control Implementation Philosophy
 
-Flagstone UI controls follow these principles:
+FlagstoneUI controls follow these principles:
 
 1. **Neutral by Default**: Strip platform-specific styling
 2. **Token-Driven**: Use design tokens for all visual properties
@@ -25,16 +25,16 @@ namespace FlagstoneUI.Core.Controls;
 public partial class ControlName : BaseControlType
 {
     // Bindable Properties
-    public static readonly BindableProperty PropertyNameProperty = 
+    public static readonly BindableProperty PropertyNameProperty =
         BindableProperty.Create(nameof(PropertyName), typeof(PropertyType), typeof(ControlName), defaultValue);
-    
+
     // Public Properties
     public PropertyType PropertyName
     {
         get => (PropertyType)GetValue(PropertyNameProperty);
         set => SetValue(PropertyNameProperty, value);
     }
-    
+
     // Constructor (if needed)
     public ControlName()
     {
@@ -55,7 +55,7 @@ public class FsButtonHandler : ButtonHandler
     protected override void ConnectHandler(Button platformView)
     {
         base.ConnectHandler(platformView);
-        
+
 #if ANDROID
         // Remove Android-specific styling
         platformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
@@ -115,7 +115,7 @@ public class FsButton : Button
 {
     // Additional properties for theming
     public static readonly BindableProperty ElevationProperty = ...;
-    
+
     public int Elevation
     {
         get => (int)GetValue(ElevationProperty);
@@ -199,7 +199,7 @@ public void Control_Property_Sets_Correctly()
 {
     var control = new ControlName();
     control.PropertyName = expectedValue;
-    
+
     Assert.That(control.PropertyName, Is.EqualTo(expectedValue));
 }
 ```
@@ -212,7 +212,7 @@ public void Control_Applies_Theme_Correctly()
     // Load theme
     var resources = new ResourceDictionary();
     ThemeLoader.Register(resources);
-    
+
     // Create control and verify themed properties
     var control = new ControlName();
     // Verify theme application
@@ -271,7 +271,7 @@ public static class ServiceRegistration
 protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
 {
     base.OnPropertyChanged(propertyName);
-    
+
     if (propertyName == nameof(SomeProperty))
     {
         UpdateVisualState();

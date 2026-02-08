@@ -1,10 +1,10 @@
-# Copilot Instructions for Flagstone UI
+# Copilot Instructions for FlagstoneUI
 
-This guide helps AI coding agents work productively in the Flagstone UI codebase. It summarizes architecture, workflows, and conventions unique to this project.
+This guide helps AI coding agents work productively in the FlagstoneUI codebase. It summarizes architecture, workflows, and conventions unique to this project.
 
 ## Project Overview
 
-- **Flagstone UI** is a cross-platform, open-source UI kit and framework for .NET MAUI.
+- **FlagstoneUI** is a cross-platform, open-source UI kit and framework for .NET MAUI.
 - The repo is organized into modular projects for core controls, themes, blocks (app screens), samples, and tests.
 - **Current Status**: Proof of Concept (POC) at ~60% completion. MVP milestone will follow POC validation.
 - **Core Controls Implemented**: FsButton, FsCard, FsEntry, FsEditor
@@ -84,7 +84,7 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 
 - Uses comprehensive `.editorconfig` settings including:
   - C# files use tab indentation, UTF-8 with BOM, CRLF line endings
-  - XAML files use 2-space indentation  
+  - XAML files use 2-space indentation
   - File-scoped namespaces preferred
   - CA1822 is suppressed project-wide
 - Avoid formatting-only commits; include functional changes.
@@ -101,11 +101,13 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 
 ## Project-Specific Conventions
 
-- **Token-first styling**: Add/modify tokens in `src/FlagstoneUI.Core/Styles/Tokens.xaml`. Themes consume tokens via `DynamicResource` in their `Theme.xaml`.
+- **Control styling**: Style controls using standard .NET MAUI patterns (inline values, explicit styles, implicit styles, StaticResource, DynamicResource)
+- **Styling surface**: All visual properties exposed via BindableProperties—this is what makes FlagstoneUI valuable
 - **Naming**: Projects/files start with `FlagstoneUI.*` for discoverability.
 - **Controls**: Live under `src/FlagstoneUI.Core/Controls`. Keep public API minimal and theme-agnostic.
-- **Themes**: Implement platform-agnostic styles in `Theme.xaml` and merge core tokens.
+- **Themes**: Implement platform-agnostic styles in `Theme.xaml`. Themes can use direct values, app resources, or design tokens.
 - **Blocks**: High-level screens go in `src/FlagstoneUI.Blocks/Blocks` and depend on Core controls.
+- **Optional: Design Tokens**: Some themes (like Material) use tokens in `src/FlagstoneUI.Core/Styles/Tokens.xaml` as an implementation detail. Tokens are consumed via `DynamicResource`.
 
 ## Integration Points
 
@@ -122,7 +124,7 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 ### Documentation and Comments
 
 The following nomenclature is used in code comments and documentation:
-- "FlagstoneUI" - not "Flagstone UI" or "Flagstone"
+- "FlagstoneUI" - not "FlagstoneUI" or "Flagstone"
 - ".NET MAUI" - always capitalized, with a space, not "MAUI"
 
 ### Update Instructions

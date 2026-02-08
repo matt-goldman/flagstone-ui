@@ -4,7 +4,7 @@ using System.Xml.Linq;
 namespace FlagstoneUI.TokenGenerator;
 
 /// <summary>
-/// Generates a token catalog from Flagstone UI source files
+/// Generates a token catalog from FlagstoneUI source files
 /// </summary>
 public class TokenCatalogGenerator
 {
@@ -175,7 +175,7 @@ public class TokenCatalogGenerator
         // For now, return placeholder structure
         // TODO: Implement proper control analysis from .cs files
         var controlFiles = Directory.GetFiles(controlsPath, "Fs*.cs", SearchOption.TopDirectoryOnly);
-        
+
         controls = controlFiles
             .Select(file => Path.GetFileNameWithoutExtension(file))
             .Where(controlName => controlName.StartsWith("Fs", StringComparison.Ordinal) && !controlName.Contains("BorderlessEntry", StringComparison.Ordinal))

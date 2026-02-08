@@ -48,7 +48,7 @@ public class XamlThemeGenerator
         }
 
         var result = sanitized.ToString();
-        
+
         // Ensure it starts with a letter or underscore
         if (result.Length > 0 && char.IsDigit(result[0]))
 		{
@@ -258,13 +258,13 @@ public class XamlThemeGenerator
     private string CreateColorResourceReference(string tokenKey, FlagstoneTokens tokens)
     {
         // Check if this token has a dark mode value
-        if (tokens.Colors.TryGetValue(tokenKey, out var colorToken) && 
+        if (tokens.Colors.TryGetValue(tokenKey, out var colorToken) &&
             !string.IsNullOrWhiteSpace(colorToken.DarkValue))
         {
             // Use AppThemeBinding
             return $"{{AppThemeBinding Light={{DynamicResource {tokenKey}}}, Dark={{DynamicResource {tokenKey}.Dark}}}}";
         }
-        
+
         // Use simple DynamicResource
         return $"{{DynamicResource {tokenKey}}}";
     }
@@ -372,7 +372,7 @@ public class XamlThemeGenerator
             {
                 // Generate button-specific key (e.g., Radius.Small -> Radius.Button.Small)
                 var buttonKey = key.Replace("Radius.", "Radius.Button.", StringComparison.Ordinal);
-                
+
                 if (options.IncludeComments && !string.IsNullOrWhiteSpace(token.Purpose))
                 {
                     root.Add(new XComment($" {buttonKey}: {token.Purpose} (for buttons) "));
@@ -468,7 +468,7 @@ public class XamlThemeGenerator
         sb.AppendLine($"namespace {namespaceName};");
         sb.AppendLine();
         sb.AppendLine("/// <summary>");
-        sb.AppendLine($"/// {themeName} theme resource dictionary for Flagstone UI controls.");
+        sb.AppendLine($"/// {themeName} theme resource dictionary for FlagstoneUI controls.");
         sb.AppendLine("/// Generated from Bootstrap theme.");
         sb.AppendLine("/// </summary>");
         sb.AppendLine($"public partial class {simpleClassName} : ResourceDictionary");
@@ -574,9 +574,9 @@ public class XamlThemeGenerator
 
         // Background and text colors
         defaultStyle.Add(CreateSetter(mauiNs, "BackgroundColor", CreateColorResourceReference("Color.Primary", tokens)));
-        
+
         // Try to find OnPrimary color, fallback to white
-        var textColor = tokens.Colors.ContainsKey("Color.OnPrimary") 
+        var textColor = tokens.Colors.ContainsKey("Color.OnPrimary")
             ? CreateColorResourceReference("Color.OnPrimary", tokens)
             : "#FFFFFF";
         defaultStyle.Add(CreateSetter(mauiNs, "TextColor", textColor));
@@ -590,8 +590,8 @@ public class XamlThemeGenerator
         }
 
         // Padding - use spacing if available
-        var padding = tokens.Spacing.ContainsKey("Spacing.Medium") 
-            ? "{DynamicResource Spacing.Medium}" 
+        var padding = tokens.Spacing.ContainsKey("Spacing.Medium")
+            ? "{DynamicResource Spacing.Medium}"
             : "24,10";
         defaultStyle.Add(CreateSetter(mauiNs, "Padding", padding));
 
@@ -636,13 +636,13 @@ public class XamlThemeGenerator
 
         outlinedStyle.Add(CreateSetter(mauiNs, "BackgroundColor", "Transparent"));
         outlinedStyle.Add(CreateSetter(mauiNs, "TextColor", CreateColorResourceReference("Color.Primary", tokens)));
-        
+
         // Border
-        var borderColor = tokens.Colors.ContainsKey("Color.Outline") 
+        var borderColor = tokens.Colors.ContainsKey("Color.Outline")
             ? CreateColorResourceReference("Color.Outline", tokens)
             : CreateColorResourceReference("Color.Primary", tokens);
         outlinedStyle.Add(CreateSetter(mauiNs, "BorderColor", borderColor));
-        
+
         if (tokens.BorderWidth.ContainsKey("BorderWidth.Thin"))
         {
             outlinedStyle.Add(CreateSetter(mauiNs, "BorderWidth", "{DynamicResource BorderWidth.Thin}"));
@@ -664,7 +664,7 @@ public class XamlThemeGenerator
         }
 
         outlinedStyle.Add(CreateSetter(mauiNs, "Padding", padding));
-        
+
         if (tokens.Typography.ContainsKey("FontSize.LabelLarge"))
         {
             outlinedStyle.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.LabelLarge}"));
@@ -704,7 +704,7 @@ public class XamlThemeGenerator
 
         textButtonStyle.Add(CreateSetter(mauiNs, "BackgroundColor", "Transparent"));
         textButtonStyle.Add(CreateSetter(mauiNs, "TextColor", "{DynamicResource Color.Primary}"));
-        
+
         // Use the same corner radius logic as other styles
         if (tokens.BorderRadius.Count > 0)
         {
@@ -713,7 +713,7 @@ public class XamlThemeGenerator
         }
 
         textButtonStyle.Add(CreateSetter(mauiNs, "Padding", "12,10"));
-        
+
         if (tokens.Typography.ContainsKey("FontSize.LabelLarge"))
         {
             textButtonStyle.Add(CreateSetter(mauiNs, "FontSize", "{DynamicResource FontSize.LabelLarge}"));
@@ -815,7 +815,7 @@ public class XamlThemeGenerator
 
         // Shared geometry/spacing/typography settings (match base style defaults)
         var radiusKey = GetPreferredRadiusKey(tokens);
-        if (!string.IsNullOrWhiteSpace(radiusKey))			
+        if (!string.IsNullOrWhiteSpace(radiusKey))
         {
             style.Add(CreateSetter(mauiNs, "CornerRadius", $"{{DynamicResource {radiusKey}}}"));
         }

@@ -4,7 +4,7 @@ using FlagstoneUI.BootstrapConverter.Models;
 namespace FlagstoneUI.BootstrapConverter.Cli.Commands;
 
 /// <summary>
-/// Convert command - converts Bootstrap CSS/SCSS to Flagstone UI XAML
+/// Convert command - converts Bootstrap CSS/SCSS to FlagstoneUI XAML
 /// </summary>
 internal static class ConvertCommand
 {
@@ -66,7 +66,7 @@ internal static class ConvertCommand
 			description: "Analysis mode: css (top-down CSS class analysis), variables (bottom-up variable mapping), or hybrid (both, default)",
 			getDefaultValue: () => "hybrid");
 
-		var command = new Command("convert", "Convert Bootstrap theme to Flagstone UI XAML")
+		var command = new Command("convert", "Convert Bootstrap theme to FlagstoneUI XAML")
 		{
 			inputOption,
 			outputOption,
@@ -112,12 +112,12 @@ internal static class ConvertCommand
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.Error.WriteLine($"Error: File operation failed - {ex.Message}");
 				Console.ResetColor();
-				
+
 				if (verbose)
 				{
 					Console.Error.WriteLine(ex.StackTrace);
 				}
-				
+
 				context.ExitCode = 1;
 			}
 			catch (Exception ex)
@@ -125,12 +125,12 @@ internal static class ConvertCommand
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.Error.WriteLine($"Error: {ex.Message}");
 				Console.ResetColor();
-				
+
 				if (verbose)
 				{
 					Console.Error.WriteLine(ex.StackTrace);
 				}
-				
+
 				context.ExitCode = 1;
 			}
 		});
@@ -214,7 +214,7 @@ internal static class ConvertCommand
 
 		// Execute conversion using the service
 		var service = new BootstrapConverterService();
-		
+
 		Console.Write("Converting Bootstrap theme... ");
 		var result = await service.ConvertAsync(request);
 		Console.ForegroundColor = ConsoleColor.Green;
@@ -241,7 +241,7 @@ internal static class ConvertCommand
 		// Generate files
 		var fileType = outputFormat == ResourceDictionaryFormat.CSharp ? "C# files" : "XAML files";
 		Console.Write($"Generating {fileType}... ");
-		
+
 		Directory.CreateDirectory(output);
 
 		if (outputFormat == ResourceDictionaryFormat.CSharp)
@@ -250,7 +250,7 @@ internal static class ConvertCommand
 			var tokensCs = generator.GenerateTokensCs(result.Tokens, request.Options);
 			var themeCs = generator.GenerateThemeCs(result.Tokens, result.ThemeName, request.Options);
 			var stylesCs = generator.GenerateStylesCs(result.Tokens, result.ThemeName, request.Options);
-			
+
 			await File.WriteAllTextAsync(Path.Combine(output, "Tokens.cs"), tokensCs);
 			await File.WriteAllTextAsync(Path.Combine(output, "Theme.cs"), themeCs);
 			await File.WriteAllTextAsync(Path.Combine(output, "Styles.cs"), stylesCs);
@@ -263,14 +263,14 @@ internal static class ConvertCommand
 			var stylesXaml = generator.GenerateStylesXaml(result.Tokens, result.ThemeName, result.ComponentStyles, request.Options);
 			var themeCodeBehind = generator.GenerateCodeBehind($"{request.Options!.Namespace}.{SanitizeThemeName(result.ThemeName)}", result.ThemeName);
 			var stylesCodeBehind = generator.GenerateCodeBehind($"{request.Options.Namespace}.{SanitizeThemeName(result.ThemeName)}Styles", $"{result.ThemeName} Styles");
-			
+
 			await File.WriteAllTextAsync(Path.Combine(output, "Tokens.xaml"), tokensXaml);
 			await File.WriteAllTextAsync(Path.Combine(output, "Theme.xaml"), themeXaml);
 			await File.WriteAllTextAsync(Path.Combine(output, "Theme.xaml.cs"), themeCodeBehind);
 			await File.WriteAllTextAsync(Path.Combine(output, "Styles.xaml"), stylesXaml);
 			await File.WriteAllTextAsync(Path.Combine(output, "Styles.xaml.cs"), stylesCodeBehind);
 		}
-		
+
 		Console.ForegroundColor = ConsoleColor.Green;
 		Console.WriteLine("✓");
 		Console.ResetColor();
@@ -337,13 +337,13 @@ internal static class ConvertCommand
 			Console.WriteLine();
 			Console.WriteLine("   builder.ConfigureFonts(fonts =>");
 			Console.WriteLine("   {");
-			
+
 			foreach (var family in result.Fonts.Families.Where(f => f.Source != FontSource.System))
 			{
 				var fileName = $"{family.SuggestedAlias}-Regular.ttf";
 				Console.WriteLine($"       fonts.AddFont(\"{fileName}\", \"{family.SuggestedAlias}\");");
 			}
-			
+
 			Console.WriteLine("   });");
 			Console.WriteLine();
 			Console.ForegroundColor = ConsoleColor.Yellow;
@@ -380,7 +380,7 @@ internal static class ConvertCommand
 		}
 
 		var result = sanitized.ToString();
-		
+
 		// Ensure it starts with a letter or underscore
 		if (result.Length > 0 && char.IsDigit(result[0]))
 			result = "_" + result;

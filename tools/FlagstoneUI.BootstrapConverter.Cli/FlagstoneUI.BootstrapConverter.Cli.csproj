@@ -7,14 +7,14 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>FlagstoneUI.BootstrapConverter.Cli</RootNamespace>
 		<AssemblyName>bootstrap-converter</AssemblyName>
-		
+
 		<!-- .NET Tool configuration -->
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>bootstrap-converter</ToolCommandName>
 		<PackageId>FlagstoneUI.BootstrapConverter.Cli</PackageId>
 		<Version>0.1.0</Version>
 		<Authors>Matt Goldman</Authors>
-		<Description>Convert Bootstrap themes to Flagstone UI XAML resources</Description>
+		<Description>Convert Bootstrap themes to FlagstoneUI XAML resources</Description>
 		<PackageProjectUrl>https://github.com/matt-goldman/flagstone-ui</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/matt-goldman/flagstone-ui</RepositoryUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>

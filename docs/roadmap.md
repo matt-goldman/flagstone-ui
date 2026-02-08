@@ -1,4 +1,6 @@
-# Flagstone UI Roadmap (Updated)
+# FlagstoneUI Roadmap (Updated)
+
+> **⚠️ Architecture Update (February 2026)**: The token system is being repositioned in line with proposed ADR011 (not yet fully implemented). FlagstoneUI is now clearly established as the **unified styling plane for .NET MAUI** (Controls → Styles → Themes). The token system is an optional implementation detail, not a core requirement. References to "token-first design" in this roadmap reflect the pre-ADR011 understanding. See [ADR011: Token System Repositioning](Decisions/adr011-token-system-repositioning.md) for details.
 
 This document provides an updated roadmap based on current implementation progress and lessons learned.
 
@@ -118,12 +120,12 @@ The project has successfully completed the Bootstrap Converter UI app as a quali
   - Available CLI tools (Bootstrap converter, Tailwind palette converter)
   - DO/DON'T anti-patterns
   - Integration guidance (Crosswind, design tools)
-  
+
 - [ ] **Bootstrap Converter as .NET CLI Tool**
   - Already complete as library and CLI
   - Publish as global tool: `dotnet tool install -g flagstone-bootstrap`
   - Update documentation for global tool usage
-  
+
 - [ ] **.NET Project Templates**
   - FlagstoneUI app template with sample content
   - Include AGENTS.md
@@ -138,7 +140,7 @@ The project has successfully completed the Bootstrap Converter UI app as a quali
   - Figma is industry-standard design tool
   - More valuable than Bootstrap converter for real-world design systems
   - Implementation: Figma Plugin + .NET CLI tool, or Figma API client
-  
+
 - [ ] **Crosswind Integration**
   - Document integration patterns in AGENTS.md
   - Leverage Steven Thewissen's Tailwind-to-MAUI work

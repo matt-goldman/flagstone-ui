@@ -1,5 +1,5 @@
-# Git LFS Configuration for Flagstone UI
-# 
+# Git LFS Configuration for FlagstoneUI
+#
 # Note: LFS is configured for future binary assets only.
 # Existing sample files in samples/ directories are excluded to avoid conflicts.
 

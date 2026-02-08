@@ -8,9 +8,9 @@
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-            
+
             <Label
-                Text="Flagstone UI Theme Playground"
+                Text="FlagstoneUI Theme Playground"
                 Style="{StaticResource Headline}"
                 SemanticProperties.HeadingLevel="Level1" />
 
@@ -19,10 +19,10 @@
                 Style="{StaticResource SubHeadline}"
                 SemanticProperties.HeadingLevel="Level2" />
 
-            <!-- Demonstrate Flagstone UI Card control with Material theme -->
+            <!-- Demonstrate FlagstoneUI Card control with Material theme -->
             <fs:FsCard>
                 <VerticalStackLayout Spacing="10">
-                    <Label Text="Flagstone UI Card" FontAttributes="Bold" />
+                    <Label Text="FlagstoneUI Card" FontAttributes="Bold" />
                     <Label Text="This card is styled using the Material Design theme and consumes design tokens from the Core library." />
                     <Button Text="Themed Button" HorizontalOptions="Start" />
                 </VerticalStackLayout>
@@ -31,7 +31,7 @@
             <!-- Standard MAUI controls with theme styles -->
             <Button
                 x:Name="CounterBtn"
-                Text="Click me" 
+                Text="Click me"
                 SemanticProperties.Hint="Counts the number of times you click"
                 Clicked="OnCounterClicked"
                 HorizontalOptions="Fill" />

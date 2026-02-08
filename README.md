@@ -109,16 +109,21 @@ dotnet add package FlagstoneUI.Themes.Material --version 0.0.1-preview1
 ## What Does It Look Like?
 
 ```xml
-<!-- Consistent themed button -->
-<FsButton
-    Text="Click Me"
-    BackgroundColor="{DynamicResource Color.Primary}"
-    CornerRadius="{DynamicResource Shape.CornerRadius.Medium}" />
+<!-- Direct styling - this is FlagstoneUI core -->
+<FsButton 
+    Text="Click Me" 
+    BackgroundColor="#6750A4" 
+    CornerRadius="12" />
 
-<!-- Themed entry with Community Toolkit validation -->
-<FsEntry Placeholder="Enter email"
-         BackgroundColor="{DynamicResource Color.Surface}"
-         BorderColor="{DynamicResource Color.Border}">
+<!-- Theme-based styling with implicit styles -->
+<FsButton Text="Submit" />  <!-- Uses implicit style from theme -->
+
+<!-- Entry with validation -->
+<FsEntry 
+    Placeholder="Email"
+    CornerRadius="8"
+    BorderBrush="#2196F3"
+    BorderWidth="2">
     <FsEntry.Behaviors>
         <ValidationBehaviorAdapter
             ValidStyle="{StaticResource ValidStyle}"
@@ -128,11 +133,11 @@ dotnet add package FlagstoneUI.Themes.Material --version 0.0.1-preview1
     </FsEntry.Behaviors>
 </FsEntry>
 
-<!-- Card container using tokens -->
+<!-- Card container -->
 <FsCard
-    BackgroundColor="{DynamicResource Color.Surface}"
-    CornerRadius="{DynamicResource Shape.CornerRadius.Large}"
-    Padding="{DynamicResource Spacing.Medium}">
+    BackgroundColor="#FAFAFA"
+    CornerRadius="12"
+    Padding="16">
     <Label Text="Card Content" />
 </FsCard>
 ```
@@ -143,24 +148,24 @@ If not using implicit/global namespaces, prefix controls as:
 ## How It Works
 
 1. **Enhanced Controls**
-   Purpose‑built replacements that expose full visual control.
+   Purpose‑built controls that expose full visual control from shared code.
 
-2. **Design Tokens**
-   Central definition of colour, spacing, typography, shapes.
+2. **Standard .NET MAUI Styling**
+   Use inline values, explicit styles, implicit styles, or `StaticResource`/`DynamicResource` — all valid approaches.
 
 3. **Themes**
-   Resource dictionaries that apply consistent design across the app.
+   Resource dictionaries that apply consistent design across your app.
 
-4. **Swap or Create Themes**
-   Change the entire feel of your app by replacing one file.
+4. **Flexibility**
+   Use direct values for simple cases, app resources for reusability, or design tokens for consistency — choose what fits your project.
 
 ## Development Status
 
 ### Available
 
 * `FsButton`, `FsEntry`, `FsCard`, `FsEditor`
-* Token engine
-* Material theme
+* Unified styling plane for .NET MAUI
+* Material theme (example implementation)
 * Sample app with multiple theme examples
 * Community Toolkit integration
 * Full documentation
@@ -168,8 +173,8 @@ If not using implicit/global namespaces, prefix controls as:
 ### Coming Soon
 
 * Additional controls (labels, lists, navigation)
+* More theme examples
 * Theme conversion tools
-* AI‑assisted theme creation
 
 See the [roadmap](docs/roadmap.md).
 
@@ -178,17 +183,17 @@ See the [roadmap](docs/roadmap.md).
 ```text
 flagstone-ui/
 ├── src/
-│   ├── FlagstoneUI.Core/              # Core controls + tokens
-│   ├── FlagstoneUI.Themes.Material/   # Material theme
+│   ├── FlagstoneUI.Core/              # Core controls + styling surface
+│   ├── FlagstoneUI.Themes.Material/   # Material theme example
 │   └── FlagstoneUI.Blocks/            # Planned: reusable UI building blocks
 ├── samples/
 │   ├── FlagstoneUI.SampleApp/         # Showcase
 │   └── FlagstoneUI.ThemePlayground/   # Theme experimentation
 ├── docs/                              # Documentation
-└── tools/                             # Converters, AI tools
+└── tools/                             # Theme converters and utilities
 ```
 
-The **Blocks** project (planned) will offer prebuilt forms, layouts, and workflows — optional extensions built on the same token system.
+The **Blocks** project (planned) will offer prebuilt forms, layouts, and workflows — optional extensions built on FlagstoneUI controls.
 
 ## Contributing
 

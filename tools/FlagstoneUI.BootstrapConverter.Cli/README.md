@@ -1,6 +1,6 @@
-# Bootstrap to Flagstone UI Converter
+# Bootstrap to FlagstoneUI Converter
 
-A .NET command-line tool that converts Bootstrap CSS/SCSS themes to Flagstone UI XAML resource dictionaries.
+A .NET command-line tool that converts Bootstrap CSS/SCSS themes to FlagstoneUI XAML resource dictionaries.
 
 ## Installation
 
@@ -21,7 +21,7 @@ dotnet build -c Release
 
 ### Convert Command
 
-Convert a Bootstrap theme to Flagstone UI XAML:
+Convert a Bootstrap theme to FlagstoneUI XAML:
 
 ```bash
 bootstrap-converter convert -i path/to/bootstrap.css -o ./output
@@ -159,24 +159,24 @@ Contains all design tokens as resource dictionary entries:
     <Color x:Key="Color.Secondary">#444444</Color>
     <Color x:Key="Color.Success">#00BC8C</Color>
     <Color x:Key="Color.Error">#E74C3C</Color>
-    
+
     <!-- Typography Tokens -->
     <x:String x:Key="FontFamily.Default">System</x:String>
     <x:Double x:Key="FontSize.Body">15</x:Double>
     <x:Double x:Key="LineHeight.Default">1.5</x:Double>
-    
+
     <!-- Spacing Tokens -->
     <x:Double x:Key="Spacing.ExtraSmall">4</x:Double>
     <x:Double x:Key="Spacing.Small">8</x:Double>
     <x:Double x:Key="Spacing.Medium">16</x:Double>
     <x:Double x:Key="Spacing.Large">24</x:Double>
     <x:Double x:Key="Spacing.ExtraLarge">48</x:Double>
-    
+
     <!-- Border Radius Tokens -->
     <x:Double x:Key="Radius.Small">3.2</x:Double>
     <x:Double x:Key="Radius.Medium">4</x:Double>
     <x:Double x:Key="Radius.Large">4.8</x:Double>
-    
+
     <!-- Border Width Tokens -->
     <x:Double x:Key="BorderWidth.Default">1</x:Double>
 </ResourceDictionary>
@@ -191,7 +191,7 @@ Contains control styles that reference tokens using `DynamicResource`:
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
                     x:Class="FlagstoneUI.Resources.Styles">
-    
+
     <!-- Default Button Style (Filled Primary) -->
     <Style TargetType="fs:FsButton">
         <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />
@@ -211,7 +211,7 @@ Contains control styles that reference tokens using `DynamicResource`:
             </VisualStateGroupList>
         </Setter>
     </Style>
-    
+
     <!-- Outlined Button Style -->
     <Style x:Key="OutlinedButton" TargetType="fs:FsButton">
         <Setter Property="BackgroundColor" Value="Transparent" />
@@ -220,7 +220,7 @@ Contains control styles that reference tokens using `DynamicResource`:
         <Setter Property="BorderWidth" Value="{DynamicResource BorderWidth.Default}" />
         <!-- ... -->
     </Style>
-    
+
     <!-- Text Button Style -->
     <Style x:Key="TextButton" TargetType="fs:FsButton">
         <Setter Property="BackgroundColor" Value="Transparent" />
@@ -245,9 +245,9 @@ Merges all resource dictionaries together:
 </ResourceDictionary>
 ```
 
-## Integration with Flagstone UI
+## Integration with FlagstoneUI
 
-Add the generated files to your Flagstone UI project. The recommended location is `src/FlagstoneUI.Themes.YourTheme/`:
+Add the generated files to your FlagstoneUI project. The recommended location is `src/FlagstoneUI.Themes.YourTheme/`:
 
 **Project structure:**
 ```
@@ -303,9 +303,9 @@ src/FlagstoneUI.Themes.YourTheme/
 
 ## Token Mapping
 
-Bootstrap variables are automatically mapped to Flagstone UI semantic token names:
+Bootstrap variables are automatically mapped to FlagstoneUI semantic token names:
 
-| Bootstrap | Flagstone UI |
+| Bootstrap | FlagstoneUI |
 |-----------|--------------|
 | `--bs-primary` | `Color.Primary` |
 | `--bs-secondary` | `Color.Secondary` |
@@ -373,7 +373,7 @@ dotnet pack -c Release
 
 ## Contributing
 
-Contributions are welcome! Please see the main [Flagstone UI repository](https://github.com/matt-goldman/flagstone-ui) for contribution guidelines.
+Contributions are welcome! Please see the main [FlagstoneUI repository](https://github.com/matt-goldman/flagstone-ui) for contribution guidelines.
 
 ## License
 
@@ -381,7 +381,7 @@ MIT License - see the [LICENSE](../../LICENSE) file for details.
 
 ## Related Projects
 
-- [Flagstone UI](https://github.com/matt-goldman/flagstone-ui) - Open-source UI kit for .NET MAUI
+- [FlagstoneUI](https://github.com/matt-goldman/flagstone-ui) - Open-source UI kit for .NET MAUI
 - [Bootstrap](https://getbootstrap.com/) - The world's most popular front-end framework
 
 ## Roadmap
