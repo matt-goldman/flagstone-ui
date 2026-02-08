@@ -1,5 +1,5 @@
-﻿using System.Text;
-using CommunityToolkit.Maui.Storage;
+﻿using CommunityToolkit.Maui.Storage;
+using System.Text;
 
 namespace FlagstoneUI.BootstrapConverter.UI.Services;
 
@@ -44,7 +44,7 @@ internal class FileService : IFileService
 		try
 		{
 			var folderResult = await FolderPicker.Default.PickAsync(CancellationToken.None);
-
+			
 			if (!folderResult.IsSuccessful || folderResult.Folder == null)
 			{
 				return new SaveResult(false, "Folder selection cancelled");

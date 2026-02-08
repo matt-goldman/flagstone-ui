@@ -153,7 +153,7 @@ public class BootstrapConverterService
 			ComponentStyles = componentStyles,
 			ThemeName = themeName,
 			Statistics = statistics,
-			Fonts = fontInfo
+				Fonts = fontInfo
 		};
 	}
 
@@ -163,7 +163,7 @@ public class BootstrapConverterService
 	private static async Task<List<string>> ReadInputsAsync(string[] inputs)
 	{
 		var contents = new List<string>();
-
+		
 		foreach (var input in inputs)
 		{
 			string content;
@@ -299,7 +299,7 @@ public class BootstrapConverterService
 	private static void ApplyThemeCustomProperties(FlagstoneTokens tokens, List<string> cssContents)
 	{
 		ConverterLogger.Info("Extracting theme-specific CSS custom properties for light/dark mode...");
-
+		
 		var analyzer = new BootstrapCssAnalyzer();
 		var allThemeProps = new Dictionary<string, Dictionary<string, string>>
 		{
@@ -311,13 +311,13 @@ public class BootstrapConverterService
 		foreach (var css in cssContents)
 		{
 			var themeProps = analyzer.ExtractThemeCustomProperties(css);
-
+			
 			// Merge light mode properties
 			foreach (var (key, value) in themeProps["light"])
 			{
 				allThemeProps["light"][key] = value;
 			}
-
+			
 			// Merge dark mode properties
 			foreach (var (key, value) in themeProps["dark"])
 			{
@@ -327,7 +327,7 @@ public class BootstrapConverterService
 
 		// Map CSS custom properties to color tokens
 		MapCustomPropertiesToColorTokens(tokens, allThemeProps);
-
+		
 		ConverterLogger.Info($"Applied {allThemeProps["light"].Count} light mode, {allThemeProps["dark"].Count} dark mode custom properties");
 	}
 

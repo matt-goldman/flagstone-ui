@@ -1,4 +1,4 @@
-﻿using System.CommandLine;
+using System.CommandLine;
 using FlagstoneUI.BootstrapConverter;
 using FlagstoneUI.BootstrapConverter.Models;
 
@@ -80,7 +80,7 @@ internal static class InfoCommand
 
 		// Parse the theme
 		var parser = new BootstrapParser();
-
+		
 		BootstrapVariables variables;
 		if (Uri.TryCreate(input, UriKind.Absolute, out var uri))
 		{

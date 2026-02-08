@@ -1,4 +1,4 @@
-﻿using Microsoft.Maui.Hosting;
+using Microsoft.Maui.Hosting;
 using Microsoft.Maui.Platform;
 
 namespace FlagstoneUI.Themes.Material.Tests;

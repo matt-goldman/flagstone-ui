@@ -12,8 +12,8 @@ public class XamlGenerator
 		var catalog = JsonSerializer.Deserialize<JsonElement>(json);
 
 		// Support both "tokens" and "baseTokens" as root properties
-		if (!catalog.TryGetProperty("tokens", out var tokens) &&
-			!catalog.TryGetProperty("baseTokens", out tokens))
+		if (!catalog.TryGetProperty("tokens", out var tokens) && 
+		    !catalog.TryGetProperty("baseTokens", out tokens))
 		{
 			throw new InvalidOperationException("Invalid catalog: missing 'tokens' or 'baseTokens' property");
 		}

@@ -14,8 +14,8 @@ public class ThemeValidator
 			var catalog = JsonSerializer.Deserialize<JsonElement>(json);
 
 			// Support both "tokens" and "baseTokens" as root properties
-			if (!catalog.TryGetProperty("tokens", out var tokens) &&
-				!catalog.TryGetProperty("baseTokens", out tokens))
+			if (!catalog.TryGetProperty("tokens", out var tokens) && 
+			    !catalog.TryGetProperty("baseTokens", out tokens))
 			{
 				result.AddError("missing_tokens", "Root 'tokens' or 'baseTokens' property is required");
 				return result;

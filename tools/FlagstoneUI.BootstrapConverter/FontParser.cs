@@ -1,5 +1,5 @@
-﻿using System.Text.RegularExpressions;
-using FlagstoneUI.BootstrapConverter.Models;
+﻿using FlagstoneUI.BootstrapConverter.Models;
+using System.Text.RegularExpressions;
 
 namespace FlagstoneUI.BootstrapConverter;
 
@@ -88,8 +88,7 @@ public partial class FontParser
 		{
 			// Extract font-family name
 			var familyMatch = FontFamilyInFontFaceRegex().Match(fontFaceContent);
-			if (!familyMatch.Success)
-				continue;
+			if (!familyMatch.Success) continue;
 
 			var familyName = familyMatch.Groups[1].Value.Trim('\'', '"');
 
@@ -100,7 +99,7 @@ public partial class FontParser
 			if (srcMatch.Success)
 			{
 				var srcUrl = srcMatch.Groups[1].Value;
-
+				
 				// Check if it's a Google Fonts or external URL
 				if (srcUrl.Contains("fonts.googleapis.com", StringComparison.OrdinalIgnoreCase))
 				{
@@ -124,7 +123,7 @@ public partial class FontParser
 			var hasItalic = fontFaceContent.Contains("italic", StringComparison.OrdinalIgnoreCase);
 
 			// Add or update font family
-			var existingFamily = fontInfo.Families.FirstOrDefault(f =>
+			var existingFamily = fontInfo.Families.FirstOrDefault(f => 
 				f.Name.Equals(familyName, StringComparison.OrdinalIgnoreCase));
 
 			if (existingFamily != null)
@@ -162,7 +161,7 @@ public partial class FontParser
 			// Split by comma and get the first explicitly named font
 			var fonts = fontStack.Split(',')
 				.Select(f => f.Trim().Trim('\'', '"'));
-
+			
 			foreach (var trimmedFont in fonts)
 			{
 				// Skip generic font families
@@ -177,7 +176,7 @@ public partial class FontParser
 				}
 
 				// This is a named font - add it
-				var existingFamily = fontInfo.Families.FirstOrDefault(f =>
+				var existingFamily = fontInfo.Families.FirstOrDefault(f => 
 					f.Name.Equals(trimmedFont, StringComparison.OrdinalIgnoreCase));
 
 				if (existingFamily == null)

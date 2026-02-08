@@ -1,4 +1,4 @@
-﻿namespace FlagstoneUI.Core.Styles;
+namespace FlagstoneUI.Core.Styles;
 
 /// <summary>
 /// Design tokens resource dictionary containing colors, spacing, typography, and other design system values.

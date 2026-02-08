@@ -1,6 +1,6 @@
-﻿using System.Text.RegularExpressions;
 using ExCSS;
 using FlagstoneUI.BootstrapConverter.Models;
+using System.Text.RegularExpressions;
 
 namespace FlagstoneUI.BootstrapConverter;
 
@@ -154,9 +154,9 @@ public class BootstrapCssAnalyzer
 				ConverterLogger.Debug($"    Rule has null Style property");
 				continue;
 			}
-
+			
 			ConverterLogger.Debug($"    Rule has {rule.Style.Length} declarations");
-
+			
 			foreach (var declaration in rule.Style)
 			{
 				var propertyName = declaration.Name;
@@ -439,7 +439,7 @@ public class BootstrapCssAnalyzer
 		{
 			var propertyName = match.Groups[1].Value.Trim();
 			var propertyValue = match.Groups[2].Value.Trim();
-
+			
 			target[propertyName] = propertyValue;
 			ConverterLogger.Debug($"    {propertyName}: {propertyValue}");
 		}

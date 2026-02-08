@@ -10,7 +10,7 @@ public partial class MainViewModel(
 	IBootstrapService bootstrapService,
 	IThemeService themeService) : ObservableObject
 {
-	public ObservableCollection<ResourceDictionaryFormat> ResourceDictionaryFormats { get; set; } =
+	public ObservableCollection<ResourceDictionaryFormat> ResourceDictionaryFormats { get; set; } = 
 	[
 		ResourceDictionaryFormat.CSharp,
 		ResourceDictionaryFormat.Xaml,
@@ -31,7 +31,7 @@ public partial class MainViewModel(
 	[ObservableProperty]
 	public partial DarkModeStrategy DarkModeStrategy { get; set; }
 
-
+	
 	public ObservableCollection<AnalysisStrategy> AnalysisStrategies { get; set; } =
 	[
 		AnalysisStrategy.CssOnly,
@@ -78,7 +78,7 @@ public partial class MainViewModel(
 	public partial string TargetNamespace { get; set; } = "FlagstoneUI.Themes";
 
 	public ObservableCollection<SourceFile> SelectedFiles { get; set; } = [];
-
+	
 	private bool _isFromUrl;
 	public bool IsFromUrl
 	{
@@ -94,7 +94,7 @@ public partial class MainViewModel(
 	}
 
 	public bool IsFromFileComputed => !IsFromUrl;
-
+	
 	public bool IsFromFile
 	{
 		get => !IsFromUrl;
@@ -121,10 +121,10 @@ public partial class MainViewModel(
 	public async Task AddFiles()
 	{
 		var files = await file.GetFilePaths();
-
+		
 		// Filter files that are not already in SelectedFiles
 		var newFiles = files.Where(f => !SelectedFiles.Any(existing => existing.Path == f.Path));
-
+		
 		foreach (var f in newFiles)
 		{
 			SelectedFiles.Add(f);
@@ -144,7 +144,7 @@ public partial class MainViewModel(
 			}
 			NewUrlInput = string.Empty;
 		}
-
+		
 		IsConvertButtonEnabled = SelectedFiles.Count > 0;
 	}
 
@@ -185,17 +185,17 @@ public partial class MainViewModel(
 	{
 		var request = new ConversionRequest
 		{
-			Inputs = [.. SelectedFiles.Select(static f => f.Path)],
-			Format = BootstrapFormat,
-			EnableDebugLogging = false,
-			Strategy = AnalysisStrategy,
-			Options = new ConversionOptions
+			Inputs				= [ ..SelectedFiles.Select(static f => f.Path)],
+			Format				= BootstrapFormat,
+			EnableDebugLogging	= false,
+			Strategy			= AnalysisStrategy,
+			Options				= new ConversionOptions
 			{
-				DarkModeStrategy = DarkModeStrategy,
-				IncludeComments = IncludeComments,
-				IncludeFonts = IncludeFonts,
-				Namespace = TargetNamespace,
-				OutputFormat = OutputType
+				DarkModeStrategy	= DarkModeStrategy,
+				IncludeComments		= IncludeComments,
+				IncludeFonts		= IncludeFonts,
+				Namespace			= TargetNamespace,
+				OutputFormat		= OutputType
 			}
 		};
 
@@ -252,7 +252,7 @@ public partial class MainViewModel(
 			if (resource.Value is Style style)
 			{
 				string key = "default";
-
+				
 				try
 				{
 					key = resource.Key.ToString();
@@ -313,7 +313,7 @@ public partial class MainViewModel(
 			var tokensXaml = generator.GenerateTokensXaml(tokens, options);
 			var themeXaml = generator.GenerateThemeXaml(tokens, _lastConversionResult.ThemeName, options);
 			var stylesXaml = generator.GenerateStylesXaml(tokens, _lastConversionResult.ThemeName, componentStyles: null, options);
-
+			
 			// Generate code-behind files
 			var sanitizedThemeName = SanitizeThemeName(_lastConversionResult.ThemeName);
 			var themeCodeBehind = generator.GenerateCodeBehind($"{TargetNamespace}.{sanitizedThemeName}", _lastConversionResult.ThemeName);
@@ -333,7 +333,7 @@ public partial class MainViewModel(
 			if (DownloadFonts && _lastConversionResult.Fonts != null && _lastConversionResult.Fonts.HasFonts)
 			{
 				ConversionResults += "⬇️ Downloading fonts...\n";
-
+				
 				var fontFiles = await DownloadFontsAsync(_lastConversionResult.Fonts);
 				foreach (var (fontFileName, fontData) in fontFiles)
 				{
@@ -362,13 +362,13 @@ public partial class MainViewModel(
 					ConversionResults += "\n📝 Next Steps - Font Registration:\n\n";
 					ConversionResults += "Add the following to your MauiProgram.cs:\n\n";
 					ConversionResults += "builder.ConfigureFonts(fonts =>\n{\n";
-
+					
 					foreach (var family in _lastConversionResult.Fonts.Families.Where(f => f.Source != BootstrapConverter.Models.FontSource.System))
 					{
 						var fileName = $"{family.SuggestedAlias}-Regular.ttf";
 						ConversionResults += $"    fonts.AddFont(\"{fileName}\", \"{family.SuggestedAlias}\");\n";
 					}
-
+					
 					ConversionResults += "});\n";
 				}
 			}
@@ -401,7 +401,7 @@ public partial class MainViewModel(
 					{
 						fileName = $"font_{fontFiles.Count}.ttf";
 					}
-
+					
 					fontFiles[fileName] = fontData;
 				}
 			}
@@ -504,7 +504,7 @@ public partial class MainViewModel(
 		}
 
 		var result = sanitized.ToString();
-
+		
 		if (result.Length > 0 && char.IsDigit(result[0]))
 			result = "_" + result;
 
@@ -515,9 +515,9 @@ public partial class MainViewModel(
 	public async Task SelectInputFiles()
 	{
 		var files = await file.GetFilePaths();
-
+		
 		SelectedFiles.Clear();
-
+		
 		foreach (var f in files)
 		{
 			SelectedFiles.Add(f);

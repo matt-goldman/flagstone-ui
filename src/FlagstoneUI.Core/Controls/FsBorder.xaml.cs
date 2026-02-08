@@ -48,8 +48,7 @@ public partial class FsBorder : ContentView
 
 	private void UpdateBorderLines(double width, double height)
 	{
-		if (_layoutRoot == null)
-			return;
+		if (_layoutRoot == null) return;
 
 		var strokeCap = BorderStrokeCap;
 
@@ -283,7 +282,7 @@ public partial class FsBorder : ContentView
 			try
 			{
 				var parsed = BorderShorthand.Parse(shorthand);
-
+				
 				// Set thickness properties
 				border.BorderTopThickness = parsed.Top.Thickness;
 				border.BorderRightThickness = parsed.Right.Thickness;
@@ -576,7 +575,7 @@ public partial class FsBorder : ContentView
 		{
 			// Per-edge brush changes activate per-edge mode
 			border.UpdateBorderMode();
-
+			
 			if (border.Width > 0 && border.Height > 0)
 			{
 				// Visual-only changes don't affect layout, just update border rendering
@@ -612,23 +611,11 @@ public partial class FsBorder : ContentView
 			// Uniform mode: use Stroke and StrokeThickness properties
 			// The bindings will handle this automatically, so just ensure per-edge lines are hidden
 			if (Width > 0 && Height > 0)
-<<<<<<< TODO: Unmerged change from project 'FlagstoneUI.Core(net10.0-android)', Before:
+			{
 				if (_topLine != null) _topLine.IsVisible = false;
 				if (_rightLine != null) _rightLine.IsVisible = false;
 				if (_bottomLine != null) _bottomLine.IsVisible = false;
 				if (_leftLine != null) _leftLine.IsVisible = false;
-=======
-				_topLine?.IsVisible = false;
-				_rightLine?.IsVisible = false;
-				_bottomLine?.IsVisible = false;
-				_leftLine?.IsVisible = false;
->>>>>>> After
-
-			{
-				_topLine?.IsVisible = false;
-				_rightLine?.IsVisible = false;
-				_bottomLine?.IsVisible = false;
-				_leftLine?.IsVisible = false;
 			}
 		}
 

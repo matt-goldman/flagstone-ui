@@ -1,14 +1,9 @@
 # ADR010: Theme Contract System
 
-> **⚠️ Status Update (February 2026)**: This ADR describes a contract system for design language consistency. Following ADR011 (Token System Repositioning), this work is now understood to be part of **Flagstrap** (a future design language system built on FlagstoneUI), not FlagstoneUI core.
->
-> **Flagstrap is deferred** while FlagstoneUI core is established. This ADR remains for historical context and future Flagstrap development.
->
-> See [ADR011: Token System Repositioning](adr011-token-system-repositioning.md) for the architectural clarification.
-
-**Status**: Accepted  
+**Status**: Deferred (part of Flagstrap)  
 **Date**: 2026-01-26  
 **Deciders**: @mattleibow, AI Assistant  
+**Superseded by**: ADR011 (Token System Repositioning) - contract system deferred as part of Flagstrap  
 **Relates to**: ADR009 (Agent Guidance Strategy)
 
 ## Context

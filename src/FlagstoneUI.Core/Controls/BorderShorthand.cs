@@ -78,7 +78,7 @@ public class BorderShorthand(BorderEdgeValue top, BorderEdgeValue right, BorderE
 
 		// Join remaining tokens back together for color parsing (handles colors with spaces)
 		var colorString = string.Join(" ", tokens.Skip(1));
-
+		
 		Color color;
 		try
 		{
@@ -111,7 +111,7 @@ public class BorderShorthand(BorderEdgeValue top, BorderEdgeValue right, BorderE
 		{
 			return (Color)colorField.GetValue(null)!;
 		}
-
+		
 		throw new ArgumentException($"Unknown color name: {colorName}");
 	}
 }

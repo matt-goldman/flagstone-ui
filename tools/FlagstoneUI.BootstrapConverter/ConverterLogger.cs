@@ -1,4 +1,4 @@
-﻿namespace FlagstoneUI.BootstrapConverter;
+namespace FlagstoneUI.BootstrapConverter;
 
 /// <summary>
 /// Simple logging utility for the Bootstrap converter
@@ -22,8 +22,7 @@ public static class ConverterLogger
 	/// </summary>
 	public static void Debug(string message)
 	{
-		if (!IsEnabled)
-			return;
+		if (!IsEnabled) return;
 
 		lock (_lock)
 		{
@@ -38,8 +37,7 @@ public static class ConverterLogger
 	/// </summary>
 	public static void Info(string message)
 	{
-		if (!IsEnabled)
-			return;
+		if (!IsEnabled) return;
 
 		lock (_lock)
 		{
@@ -54,8 +52,7 @@ public static class ConverterLogger
 	/// </summary>
 	public static void Warning(string message)
 	{
-		if (!IsEnabled)
-			return;
+		if (!IsEnabled) return;
 
 		lock (_lock)
 		{
@@ -70,8 +67,7 @@ public static class ConverterLogger
 	/// </summary>
 	public static void Success(string message)
 	{
-		if (!IsEnabled)
-			return;
+		if (!IsEnabled) return;
 
 		lock (_lock)
 		{
@@ -86,8 +82,7 @@ public static class ConverterLogger
 	/// </summary>
 	public static void LogVariableDiscovered(string category, string name, string value)
 	{
-		if (!IsEnabled)
-			return;
+		if (!IsEnabled) return;
 
 		var displayValue = value.Length > 60 ? value[..57] + "..." : value;
 		Debug($"  [{category}] {name} = {displayValue}");

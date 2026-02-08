@@ -1,4 +1,4 @@
-﻿namespace FlagstoneUI.SampleApp.Resources.Styles;
+namespace FlagstoneUI.SampleApp.Resources.Styles;
 
 public partial class Brite : ResourceDictionary
 {

@@ -48,7 +48,7 @@ public partial class ControlsShowcasePage : ContentPage
 	};
 
 	private CancellationTokenSource? _cts;
-
+	
 	async void AiEditor_OnFocused(object? sender, EventArgs e)
 	{
 		_cts?.Cancel();
@@ -62,7 +62,7 @@ public partial class ControlsShowcasePage : ContentPage
 			// Animation was cancelled, no action needed
 		}
 	}
-
+	
 	async void AiEditor_OnUnfocused(object? sender, EventArgs e)
 	{
 		await _cts?.CancelAsync()!;

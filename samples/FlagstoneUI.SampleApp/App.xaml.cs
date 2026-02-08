@@ -28,48 +28,44 @@ public partial class App : Application
 
 		// re-add default styles and colors
 		Current!.Resources.MergedDictionaries.Add(new Resources.Styles.Colors());
-		Current.Resources.MergedDictionaries.Add(new Styles());
-		Current.Resources.MergedDictionaries.Add(new Icons());
+        Current.Resources.MergedDictionaries.Add(new Styles());
+        Current.Resources.MergedDictionaries.Add(new Icons());
 
-		Current.Resources.MergedDictionaries.Add(newTheme.Tokens);
-	}
+        Current.Resources.MergedDictionaries.Add(newTheme.Tokens);
+    }
 
 
 	static List<Theme> Themes { get; } =
 	[
 		new Theme
 		{
-			Name    = "Material",
-			Tokens  = new Themes.Material.Theme()
+			Name	= "Material",
+			Tokens	= new Themes.Material.Theme()
 		},
 		new Theme
 		{
-			Name    = "Litera",
-			Tokens  = new Litera()
+			Name	= "Litera",
+			Tokens	= new Litera()
 		},
 		new Theme
 		{
-			Name    = "Brite",
-			Tokens  = new Brite()
-		},
+			Name	= "Brite",
+			Tokens	= new Brite()
+        },
 		new Theme
 		{
-			Name    = "Minty",
-			Tokens  = new Minty()
-		},
+			Name	= "Minty",
+			Tokens	= new Minty()
+        },
 		new Theme
 		{
-			Name    = "NovaPop",
-			Tokens  = new NovaPop()
+			Name	= "NovaPop",
+			Tokens	= new NovaPop()
 		},
 		new Theme
 		{
 			Name = "SlatePro",
 			Tokens = new SlatePro()
 		}
-	];
-
-	public App(IntPtr javaReference, Android.Runtime.JniHandleOwnership transfer) : base(javaReference, transfer)
-	{
-	}
+    ];
 }

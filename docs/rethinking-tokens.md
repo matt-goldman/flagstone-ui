@@ -552,7 +552,7 @@ The following items were identified during implementation but are deferred as th
 
 ### Sample App Enhancements
 
-1. **Add Non-Token Theme Example**
+1. **Add Non-Token Theme Example** (Priority 1)
    - Create `samples/FlagstoneUI.SampleApp/Themes/SimpleTheme.xaml`
    - Demonstrate pure FlagstoneUI theme without tokens
    - Use direct values in styles to show this is a valid approach
@@ -581,10 +581,5 @@ The following items were identified during implementation but are deferred as th
    - Create comprehensive guide showing theme creation with all approaches
    - Include side-by-side comparison of direct values vs. tokens
    - Provide decision framework for choosing approach
-
-6. **Migration Guide**
-   - For projects using token-first approach from early versions
-   - Clarify that existing token-based themes continue to work
-   - Show how to simplify themes if tokens aren't needed
 
 **Note**: These items are logged for future consideration but are not required for the core repositioning to be complete.

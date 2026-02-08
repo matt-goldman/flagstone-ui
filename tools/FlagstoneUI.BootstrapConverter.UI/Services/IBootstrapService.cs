@@ -7,13 +7,13 @@ public interface IBootstrapService
 
 internal class BootstrapService : IBootstrapService
 {
-	private readonly BootstrapConverterService _service = new();
+	private readonly BootstrapConverterService _service = new ();
 	private readonly XamlThemeGenerator _xamlThemeGenerator = new();
 
 	public async Task<UIConversionResult> ConvertAsync(ConversionRequest request)
 	{
 		var result = await _service.ConvertAsync(request);
-
+		
 		// Generate both tokens and styles XAML (without merged dictionaries for in-memory loading)
 		var tokensXaml = _xamlThemeGenerator.GenerateTokensXaml(result.Tokens, request.Options);
 		var stylesXaml = _xamlThemeGenerator.GenerateStylesXaml(result.Tokens, result.ThemeName, result.ComponentStyles, request.Options, includeMergedDictionaries: false);

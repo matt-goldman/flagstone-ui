@@ -1,4 +1,4 @@
-﻿using FlagstoneUI.Core.Controls;
+using FlagstoneUI.Core.Controls;
 using Microsoft.Maui.Controls.Shapes;
 using Shouldly;
 using Xunit;

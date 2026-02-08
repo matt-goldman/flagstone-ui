@@ -8,21 +8,21 @@ public partial class BorderlessEditor : Editor
 
 		var transparentBackgroundSetter = new Setter
 		{
-			Property = BackgroundColorProperty,
-			Value = Colors.Transparent
+			Property	= BackgroundColorProperty,
+			Value		= Colors.Transparent
 		};
 
 		var focusedTrigger = new Trigger(typeof(BorderlessEditor))
 		{
-			Property = IsFocusedProperty,
-			Value = true
+			Property	= IsFocusedProperty,
+			Value		= true
 		};
 		focusedTrigger.Setters.Add(transparentBackgroundSetter);
 
 		var hoverTrigger = new Trigger(typeof(BorderlessEditor))
 		{
-			Property = IsFocusedProperty,
-			Value = true
+			Property	= IsFocusedProperty,
+			Value		= true
 		};
 		hoverTrigger.Setters.Add(transparentBackgroundSetter);
 
