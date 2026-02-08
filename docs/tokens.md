@@ -1,6 +1,14 @@
-# Flagstone UI Design Tokens
+# Flagstone UI Design Tokens (Flagstrap Exploration)
 
-This document provides a comprehensive reference of all design tokens available in Flagstone UI. These tokens form the foundation of the theming system and can be customized by themes to create consistent, cohesive user experiences.
+> **⚠️ Important Note**: This document describes the design token system used in the Material theme example. Design tokens are **NOT** part of FlagstoneUI's core architecture—they're an optional implementation detail for theme authors.
+>
+> **FlagstoneUI Core**: Controls → Styles → Themes (no tokens required)
+>
+> **Flagstrap (Future/Deferred)**: A design language system concept built on FlagstoneUI that would use tokens as a standard vocabulary. This is exploratory work and not currently part of FlagstoneUI core.
+>
+> For core FlagstoneUI theming without tokens, see [theming-guide.md](theming-guide.md) and [architecture.md](architecture.md).
+
+This document provides a reference of design tokens available in the Material theme example. These tokens demonstrate one approach to organizing theme values.
 
 ## What are Design Tokens?
 

@@ -1,28 +1,40 @@
 # Theming Guide for Designers
 
-This guide is for designers who want to create custom themes for Flagstone UI applications. Whether you're implementing a brand identity, design language system (DLS), or custom visual style, this guide will help you understand what's themable and how to communicate your design to developers.
+This guide is for designers who want to create custom themes for FlagstoneUI applications. Whether you're implementing a brand identity, design language system (DLS), or custom visual style, this guide will help you understand what's themable and how to communicate your design to developers.
 
 ## Table of Contents
 
-- [Understanding Flagstone UI Themes](#understanding-flagstone-ui-themes)
-- [The Token System](#the-token-system)
+- [Understanding FlagstoneUI Themes](#understanding-flagstoneui-themes)
+- [Styling Approaches](#styling-approaches)
 - [Creating a Custom Theme](#creating-a-custom-theme)
-- [Sample Theme Document](#sample-theme-document)
+- [Optional: Design Tokens](#optional-design-tokens)
 - [Control Properties Reference](#control-properties-reference)
 - [Designer-to-Developer Workflow](#designer-to-developer-workflow)
 - [Best Practices](#best-practices)
 
-## Understanding Flagstone UI Themes
+## Understanding FlagstoneUI Themes
 
 ### What is a Theme?
 
-A theme in Flagstone UI is a coordinated set of design tokens that defines the visual appearance of an application. Themes control:
+A theme in FlagstoneUI is a collection of styles that defines the visual appearance of controls in your application. **Themes are for everyone**: app developers creating custom themes for their projects, and library authors creating distributable themes for the community. Any project beyond a simple prototype should use a theme for consistency.
 
-- **Colors**: Primary, secondary, surface, background, error states, and more
+Themes control:
+
+- **Colors**: Backgrounds, text, borders, and state colors
 - **Typography**: Font sizes, weights, and line heights
-- **Spacing**: Padding, margins, and gaps between elements
+- **Spacing**: Padding and spacing values
 - **Shape**: Corner radii and border widths
-- **Elevation**: Shadow depths for layered UI elements
+- **Effects**: Shadows and elevation
+
+### Who Creates Themes?
+
+Themes are created by different people for different purposes:
+
+- **App developers**: Create themes for their own applications to maintain consistent branding and visual identity
+- **Design teams**: Create themes as part of their design system implementation  
+- **Library authors**: Create themes for distribution (like Bootswatch themes for Bootstrap) so others can use them
+
+All of these are valid and supported use cases. While most themes are created for individual applications, distributable theme libraries are equally valuable for the community.
 
 ### Theme Architecture
 
@@ -33,46 +45,137 @@ A theme in Flagstone UI is a coordinated set of design tokens that defines the v
 └────────────────────────────────────────┘
                  ↓
 ┌────────────────────────────────────────┐
-│       Theme (Your Custom Theme)        │
-│     Overrides token values to          │
-│     match your brand/DLS               │
-└────────────────────────────────────────┘
-                 ↓
-┌────────────────────────────────────────┐
-│      Base Design Token System          │
-│   (Default values + token names)       │
+│          Theme (Styles)                │
+│    Defines how controls look           │
 └────────────────────────────────────────┘
 ```
 
-**Key Principle**: Instead of styling individual controls directly, you define token values. Controls automatically use these tokens, ensuring consistency across your application.
+**Key Principle**: Themes are collections of styles for FlagstoneUI controls. You can use direct values, reusable resources, or design tokens—whatever fits your project.
 
 ### What Makes a Good Theme?
 
-A well-designed Flagstone UI theme:
+A well-designed FlagstoneUI theme:
 
 1. ✅ Maintains **sufficient color contrast** for accessibility (WCAG 2.1 AA minimum)
-2. ✅ Provides **consistent spacing** using the spacing scale
-3. ✅ Uses **semantic color roles** correctly (e.g., error states use error colors)
+2. ✅ Provides **consistent spacing** across controls
+3. ✅ Uses **semantic meaning** for colors (e.g., error states use red/error colors)
 4. ✅ Supports **both light and dark modes** (if required)
 5. ✅ Reflects your **brand identity** while maintaining usability
 
-## The Token System
+## Styling Approaches
+
+FlagstoneUI supports multiple valid approaches for creating themes. Choose what works best for your project:
+
+### Approach 1: Direct Values in Styles (Simple)
+
+Perfect for straightforward themes with fixed values:
+
+```xml
+<Style TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="#6750A4" />
+    <Setter Property="TextColor" Value="White" />
+    <Setter Property="CornerRadius" Value="12" />
+</Style>
+```
+
+**When to use:** Simple projects, fixed design specifications, rapid prototyping.
+
+### Approach 2: App Resources (Reusable Values)
+
+Use app-level resources for values used across multiple controls:
+
+```xml
+<!-- Define once -->
+<Color x:Key="PrimaryColor">#6750A4</Color>
+<x:Double x:Key="StandardCornerRadius">12</x:Double>
+
+<!-- Use in multiple places -->
+<Style TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
+    <Setter Property="CornerRadius" Value="{StaticResource StandardCornerRadius}" />
+</Style>
+```
+
+**When to use:** Reusable values, simple theme switching, consistent branding.
+
+### Approach 3: Explicit/Named Styles (Control Variants)
+
+Provide named style variants for different control appearances. This is a core part of most themes:
+
+```xml
+<!-- Default/implicit style -->
+<Style TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="#6750A4" />
+    <Setter Property="TextColor" Value="White" />
+    <Setter Property="CornerRadius" Value="8" />
+</Style>
+
+<!-- Named variants -->
+<Style x:Key="OutlinedButton" TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="Transparent" />
+    <Setter Property="BorderColor" Value="#6750A4" />
+    <Setter Property="BorderWidth" Value="1" />
+    <Setter Property="TextColor" Value="#6750A4" />
+    <Setter Property="CornerRadius" Value="8" />
+</Style>
+
+<Style x:Key="DeleteButton" TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="#DC3545" />
+    <Setter Property="TextColor" Value="White" />
+    <Setter Property="CornerRadius" Value="8" />
+</Style>
+
+<!-- Usage -->
+<fs:FsButton Text="Submit" />  <!-- Uses implicit style -->
+<fs:FsButton Text="Cancel" Style="{StaticResource OutlinedButton}" />
+<fs:FsButton Text="Delete" Style="{StaticResource DeleteButton}" />
+```
+
+**When to use:** Most applications. Themes with explicit styles provide multiple variants (visual or semantic) while maintaining consistency.
+
+**Common explicit style patterns:**
+- **Visual variants**: `OutlinedButton`, `RoundedEntry`, `UnderlineEntry`, `ElevatedCard`
+- **Semantic variants**: `PurchaseButton`, `DeleteButton`, `WarningCard`, `SuccessEntry`
+- **Size variants**: `SmallButton`, `LargeCard`
+
+### Approach 4: Design Tokens (Design System)
+
+For comprehensive design systems with well-defined token vocabularies:
+
+```xml
+<!-- Define semantic tokens -->
+<Color x:Key="Color.Primary">#6750A4</Color>
+<Color x:Key="Color.OnPrimary">White</Color>
+<x:Double x:Key="Radius.Button.Medium">12</x:Double>
+
+<!-- Use with DynamicResource -->
+<Style TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />
+    <Setter Property="TextColor" Value="{DynamicResource Color.OnPrimary}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Button.Medium}" />
+</Style>
+```
+
+**When to use:** Design system implementations, runtime theme switching, large projects with comprehensive token vocabularies.
+
+## Optional: Design Tokens
+
+> **Note**: Design tokens are an optional implementation detail for theme authors. They're one way to organize style values in a theme, but FlagstoneUI doesn't require them. The Material theme uses tokens as an example.
 
 ### What are Design Tokens?
 
-Design tokens are named values that store visual design decisions. They act as a "single source of truth" for your design system.
+Design tokens are named values that store visual design decisions. They act as a "single source of truth" for design systems.
 
 **Example:**
-- Instead of hardcoding `#6750A4` everywhere, you use `Color.Primary`
+- Instead of hardcoding `#6750A4` in multiple places, you define `Color.Primary` once
 - If you want to change your primary color brand-wide, you update one token value
+- Controls reference tokens using `DynamicResource`
 
-### Token Categories
+### Token Categories (Material Theme Example)
 
-Flagstone UI organizes tokens into these categories:
+The Material theme uses these token categories. You can use a similar approach or define your own:
 
 #### 1. Color Tokens
-
-Based on Material Design 3's semantic color system:
 
 **Primary Colors** (Main brand color)
 - `Color.Primary` - Main brand color, used for key UI elements
@@ -110,10 +213,7 @@ Based on Material Design 3's semantic color system:
 - `Color.Outline` - Borders, dividers, and focus indicators
 - `Color.OutlineVariant` - Subtle borders and dividers
 
-**Inverse Colors** (For inverted UI areas)
-- `Color.InverseSurface` - Background for inverted areas
-- `Color.InverseOnSurface` - Text/icons in inverted areas
-- `Color.InversePrimary` - Primary color in inverted areas
+**Note**: These token names follow Material Design 3 conventions. You can define your own token vocabulary that fits your design system.
 
 #### 2. Spacing Tokens
 

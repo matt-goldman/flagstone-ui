@@ -543,3 +543,43 @@ These questions are deferred until Flagstrap development resumes:
 ### docs/architecture.md
 - Remove token system from core architecture diagram
 - Add note that Flagstrap is separate/exploratory
+
+---
+
+## Phase 2: Additional Improvements (Future Work)
+
+The following items were identified during implementation but are deferred as they involve code changes or are lower priority:
+
+### Sample App Enhancements
+
+1. **Add Non-Token Theme Example** (Priority 1)
+   - Create `samples/FlagstoneUI.SampleApp/Themes/SimpleTheme.xaml`
+   - Demonstrate pure FlagstoneUI theme without tokens
+   - Use direct values in styles to show this is a valid approach
+   - Add documentation explaining different theme approaches
+
+2. **Update Sample XAML Examples**
+   - Many sample app pages currently use token references (183 instances found)
+   - Consider adding examples showing direct styling alongside token-based styling
+   - Demonstrate multiple valid approaches in the showcase pages
+
+### Tooling Documentation
+
+3. **Bootstrap Converter Positioning**
+   - The converter outputs FlagstoneUI-compatible themes (currently uses tokens internally)
+   - Update examples/documentation to clarify tokens are an implementation detail
+   - Show how converter output can be adapted for non-token themes
+
+4. **TokenGenerator Tool Context**
+   - Currently positioned for token-based theme development
+   - Add documentation clarifying this is for Flagstrap-style themes
+   - Consider renaming or repositioning as Flagstrap tooling when developed
+
+### Additional Documentation
+
+5. **Theme Creation Guide**
+   - Create comprehensive guide showing theme creation with all approaches
+   - Include side-by-side comparison of direct values vs. tokens
+   - Provide decision framework for choosing approach
+
+**Note**: These items are logged for future consideration but are not required for the core repositioning to be complete.

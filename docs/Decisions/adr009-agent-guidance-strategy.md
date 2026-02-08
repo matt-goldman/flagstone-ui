@@ -1,8 +1,9 @@
 # ADR009: Agent Guidance Strategy - AGENTS.md vs MCP Server
 
-**Status**: Accepted  
+**Status**: Accepted (Updated by ADR011)  
 **Date**: December 16, 2025  
 **Deciders**: Matt Goldman  
+**Superseded by**: ADR011 (Token System Repositioning) - token-first references now understood as optional  
 **Context**: AI agent integration strategy for FlagstoneUI
 
 ## Context and Problem Statement

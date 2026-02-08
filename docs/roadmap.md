@@ -1,5 +1,7 @@
 # Flagstone UI Roadmap (Updated)
 
+> **⚠️ Architecture Update (February 2026)**: The token system has been repositioned following ADR011. FlagstoneUI is now clearly established as the **unified styling plane for .NET MAUI** (Controls → Styles → Themes). The token system is an optional implementation detail, not a core requirement. References to "token-first design" in this roadmap reflect the pre-ADR011 understanding. See [ADR011: Token System Repositioning](Decisions/adr011-token-system-repositioning.md) for details.
+
 This document provides an updated roadmap based on current implementation progress and lessons learned.
 
 ## Current Status (December 2025)

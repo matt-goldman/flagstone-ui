@@ -1,6 +1,14 @@
-# Token Catalog System
+# Token Catalog System (Flagstrap Exploration)
 
-This document describes the machine-readable token catalog system for Flagstone UI, designed to support AI agents, automated tooling, and theme generation.
+> **⚠️ Important Note**: This document describes token catalog tooling that was developed as part of token system exploration. Following ADR011 (Token System Repositioning), this work is now understood to be related to **Flagstrap** (a future design language system), not FlagstoneUI core.
+>
+> **Flagstrap is deferred** while FlagstoneUI core is established. This document remains for historical context and as reference for future Flagstrap development.
+>
+> **FlagstoneUI Core** does not require tokens or catalog systems—themes are simply collections of styles.
+>
+> See [ADR011: Token System Repositioning](Decisions/adr011-token-system-repositioning.md) and [ADR010: Theme Contract System](Decisions/adr010-theme-contract-system.md) for architectural context.
+
+This document describes the machine-readable token catalog system for token-based themes, designed to support AI agents, automated tooling, and theme generation.
 
 ## Overview
 

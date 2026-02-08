@@ -1,13 +1,13 @@
 # FsButton Control
 
-The `FsButton` control is a themeable button that extends the .NET MAUI `Button` with Flagstone UI styling and token integration. Unlike `FsEntry`, `FsButton` is a simple subclass rather than a wrapper control, as the MAUI Button already provides comprehensive styling capabilities.
+The `FsButton` control is an enhanced button that extends the .NET MAUI `Button` with full visual styling control from shared code. It exposes all styling properties as BindableProperties, enabling complete customization without platform handlers.
 
 ## Features
 
-- **Complete Native Support**: Leverages all .NET MAUI Button properties without abstraction
+- **Complete Styling Control**: All visual properties exposed as BindableProperties
 - **Border Styling**: Configurable border color, width, and corner radius
 - **Typography Control**: Full font customization (size, family, attributes)
-- **Token Integration**: Seamless theming through DynamicResource bindings
+- **Standard .NET MAUI Patterns**: Use inline values, StaticResource, DynamicResource, or styles
 - **Command Pattern**: Built-in ICommand support for MVVM scenarios
 - **Image Support**: Can display text, images, or both
 
@@ -33,28 +33,61 @@ All standard .NET MAUI Button properties are available. Key styling properties i
 
 ## Usage Examples
 
-### Basic Button
+### Direct Styling (Simple)
 
 ```xaml
 <fs:FsButton Text="Click Me" />
+
+<!-- With custom styling -->
+<fs:FsButton
+    Text="Sign In"
+    BackgroundColor="#6750A4"
+    TextColor="White"
+    CornerRadius="8"
+    Padding="16,12" />
 ```
 
-### Styled Button
+### Using App Resources
+
+```xaml
+<!-- Define once in App.xaml -->
+<Color x:Key="PrimaryColor">#6750A4</Color>
+
+<!-- Use with StaticResource -->
+<fs:FsButton
+    Text="Submit"
+    BackgroundColor="{StaticResource PrimaryColor}"
+    TextColor="White" />
+```
+
+### Using Theme Styles
+
+```xaml
+<!-- Define implicit style in theme -->
+<Style TargetType="fs:FsButton">
+    <Setter Property="BackgroundColor" Value="#6750A4" />
+    <Setter Property="TextColor" Value="White" />
+    <Setter Property="CornerRadius" Value="8" />
+</Style>
+
+<!-- Usage - styles applied automatically -->
+<fs:FsButton Text="Submit" />
+```
+
+### Optional: Using Design Tokens
+
+If your theme uses design tokens (like Material), you can reference them:
 
 ```xaml
 <fs:FsButton
     Text="Sign In"
     BackgroundColor="{DynamicResource Color.Primary}"
     TextColor="{DynamicResource Color.OnPrimary}"
-    BorderColor="{DynamicResource Color.Primary}"
-    BorderWidth="2"
     CornerRadius="{DynamicResource Radius.Button.Small}"
-    Padding="16,12"
-    FontSize="16"
-    FontAttributes="Bold" />
+    Padding="16,12" />
 ```
 
-> **Note**: Always use `Radius.Button.*` tokens for CornerRadius. The Button.CornerRadius property requires Int32 type.
+> **Note**: When using Material theme tokens, use `Radius.Button.*` tokens for CornerRadius (Int32 type required).
 
 ### Button with Command (MVVM)
 
@@ -63,8 +96,8 @@ All standard .NET MAUI Button properties are available. Key styling properties i
     Text="Submit"
     Command="{Binding SubmitCommand}"
     CommandParameter="{Binding CurrentItem}"
-    BackgroundColor="{DynamicResource Color.Secondary}"
-    TextColor="{DynamicResource Color.OnSecondary}" />
+    BackgroundColor="#6750A4"
+    TextColor="White" />
 ```
 
 ### Outlined Button
@@ -73,10 +106,10 @@ All standard .NET MAUI Button properties are available. Key styling properties i
 <fs:FsButton
     Text="Cancel"
     BackgroundColor="Transparent"
-    BorderColor="{DynamicResource Color.Outline}"
+    BorderColor="#CCCCCC"
     BorderWidth="1"
-    TextColor="{DynamicResource Color.OnSurface}"
-    CornerRadius="{DynamicResource Radius.Button.ExtraSmall}"
+    TextColor="#333333"
+    CornerRadius="4"
     Padding="20,10" />
 ```
 
@@ -86,8 +119,8 @@ All standard .NET MAUI Button properties are available. Key styling properties i
 <fs:FsButton
     Text="Save"
     ImageSource="save_icon.png"
-    BackgroundColor="{DynamicResource Color.Primary}"
-    TextColor="{DynamicResource Color.OnPrimary}" />
+    BackgroundColor="#6750A4"
+    TextColor="White" />
 ```
 
 ### Text Button (No Background)
@@ -96,7 +129,7 @@ All standard .NET MAUI Button properties are available. Key styling properties i
 <fs:FsButton
     Text="Learn More"
     BackgroundColor="Transparent"
-    TextColor="{DynamicResource Color.Primary}"
+    TextColor="#6750A4"
     BorderWidth="0" />
 ```
 

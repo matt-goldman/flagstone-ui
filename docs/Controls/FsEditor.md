@@ -1,13 +1,13 @@
 # FsEditor Control
 
-The `FsEditor` control is a customizable multi-line text input field that wraps the .NET MAUI `Editor` control to provide consistent, theme-driven styling across all platforms. Like `FsEntry`, `FsEditor` uses a wrapper control approach to remove platform-specific native styling that cannot be controlled through standard XAML properties.
+The `FsEditor` control is an enhanced multi-line text input field that extends the .NET MAUI `Editor` with full visual styling control from shared code. Like `FsEntry`, `FsEditor` uses a wrapper control approach to remove platform-specific native styling that cannot be controlled through standard XAML properties.
 
 ## Features
 
 - **Borderless Native Editor**: Platform handlers remove native decorations (underlines, focus indicators)
 - **Custom Border Styling**: Full control over border color, width, and corner radius via `Border` wrapper
-- **Token Integration**: Seamless theming through DynamicResource bindings
-- **Flexible Layout**: Configurable padding, alignment, and sizing
+- **Complete Styling Control**: All visual properties exposed as BindableProperties
+- **Standard .NET MAUI Patterns**: Use inline values, StaticResource, DynamicResource, or styles
 - **Auto-sizing**: Optional automatic height adjustment based on content
 - **Event Support**: Text changed, completion, focus, and unfocus events
 - **Keyboard Types**: Support for specialized keyboards (text, chat, etc.)
@@ -65,13 +65,63 @@ The `BorderlessEditor` control registers platform-specific handlers that directl
 
 ## Usage Examples
 
-### Basic Editor
+### Direct Styling (Simple)
 
 ```xaml
 <fs:FsEditor Placeholder="Enter your comments here" />
+
+<!-- With custom styling -->
+<fs:FsEditor 
+    Placeholder="Description"
+    BorderBrush="#CCCCCC"
+    BorderWidth="1"
+    CornerRadius="8"
+    Padding="12"
+    Background="#F5F5F5"
+    TextColor="#333333"
+    FontSize="16"
+    MinimumHeightRequest="120" />
 ```
 
-### Styled Editor
+### Using App Resources
+
+```xaml
+<!-- Define once in App.xaml -->
+<Color x:Key="InputBorder">#CCCCCC</Color>
+<Color x:Key="InputBackground">#F5F5F5</Color>
+
+<!-- Use with StaticResource -->
+<fs:FsEditor 
+    Placeholder="Notes"
+    BorderBrush="{StaticResource InputBorder}"
+    BorderWidth="1"
+    Background="{StaticResource InputBackground}"
+    CornerRadius="8"
+    Padding="12"
+    MinimumHeightRequest="120" />
+```
+
+### Using Theme Styles
+
+```xaml
+<!-- Define implicit style in theme -->
+<Style TargetType="fs:FsEditor">
+    <Setter Property="BorderBrush" Value="#CCCCCC" />
+    <Setter Property="BorderWidth" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Padding" Value="12" />
+    <Setter Property="Background" Value="#F5F5F5" />
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="MinimumHeightRequest" Value="88" />
+</Style>
+
+<!-- Usage - styles applied automatically -->
+<fs:FsEditor Placeholder="Description" />
+```
+
+### Optional: Using Design Tokens
+
+If your theme uses design tokens (like Material), you can reference them:
 
 ```xaml
 <fs:FsEditor 
@@ -86,13 +136,15 @@ The `BorderlessEditor` control registers platform-specific handlers that directl
     MinimumHeightRequest="120" />
 ```
 
+> **Note**: Design tokens are optional. You can style FsEditor using direct values, app resources, or theme styles without tokens.
+
 ### Auto-Sizing Editor
 
 ```xaml
 <fs:FsEditor 
     Placeholder="Type a message..."
     AutoSize="TextChanges"
-    BorderBrush="{DynamicResource Color.Outline}"
+    BorderBrush="#CCCCCC"
     BorderWidth="1"
     CornerRadius="8"
     Padding="12" />
@@ -104,7 +156,7 @@ The `BorderlessEditor` control registers platform-specific handlers that directl
 <fs:FsEditor 
     Placeholder="Enter your bio (max 500 characters)"
     MaxLength="500"
-    BorderBrush="{DynamicResource Color.Primary}"
+    BorderBrush="#6750A4"
     BorderWidth="2"
     CornerRadius="8"
     Padding="12" />
@@ -116,7 +168,7 @@ The `BorderlessEditor` control registers platform-specific handlers that directl
 <fs:FsEditor 
     Text="{Binding Notes}"
     Placeholder="Notes"
-    BorderBrush="{DynamicResource Color.Outline}"
+    BorderBrush="#CCCCCC"
     BorderWidth="1"
     CornerRadius="8"
     Padding="12"
@@ -129,16 +181,32 @@ The `BorderlessEditor` control registers platform-specific handlers that directl
 <fs:FsEditor 
     Text="{Binding DisplayText}"
     IsReadOnly="True"
-    BorderBrush="{DynamicResource Color.OutlineVariant}"
+    BorderBrush="#E0E0E0"
     BorderWidth="1"
     CornerRadius="4"
-    Background="{DynamicResource Color.Surface}"
+    Background="#FAFAFA"
     Padding="12" />
 ```
 
 ## Theme Styling
 
 Editors can be styled globally through themes:
+
+```xaml
+<Style TargetType="fs:FsEditor">
+    <Setter Property="BorderBrush" Value="#CCCCCC" />
+    <Setter Property="BorderWidth" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Padding" Value="12" />
+    <Setter Property="Background" Value="#F5F5F5" />
+    <Setter Property="TextColor" Value="#333333" />
+    <Setter Property="PlaceholderColor" Value="#999999" />
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="MinimumHeightRequest" Value="88" />
+</Style>
+```
+
+Themes using design tokens can reference them in styles:
 
 ```xaml
 <Style TargetType="fs:FsEditor">
@@ -160,7 +228,7 @@ Editors can be styled globally through themes:
 <!-- Outlined Editor -->
 <Style TargetType="fs:FsEditor" x:Key="OutlinedEditor">
     <Setter Property="Background" Value="Transparent" />
-    <Setter Property="BorderBrush" Value="{DynamicResource Color.Outline}" />
+    <Setter Property="BorderBrush" Value="#CCCCCC" />
     <Setter Property="BorderWidth" Value="1" />
     <Setter Property="CornerRadius" Value="4" />
     <Setter Property="Padding" Value="16,12" />
@@ -169,7 +237,7 @@ Editors can be styled globally through themes:
 
 <!-- Filled Editor -->
 <Style TargetType="fs:FsEditor" x:Key="FilledEditor">
-    <Setter Property="Background" Value="{DynamicResource Color.SurfaceVariant}" />
+    <Setter Property="Background" Value="#F5F5F5" />
     <Setter Property="BorderBrush" Value="Transparent" />
     <Setter Property="BorderWidth" Value="0" />
     <Setter Property="CornerRadius" Value="4" />
