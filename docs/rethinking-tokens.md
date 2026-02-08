@@ -462,7 +462,7 @@ Mark as Flagstrap component, defer full implementation.
 | Existing users confused by messaging change | Add notes explaining the clarification |
 | Token tooling perceived as deprecated | Clearly position as Flagstrap exploration, not deprecated |
 | AI agents still generate token-first code | Test and iterate on agent guidance |
-| Bootstrap converter perceived as less useful | Explain it outputs Flagstrap-style themes |
+| Bootstrap converter perceived as less useful | Explain it outputs standard FlagstoneUI themes (using Flagstrap tokens internally) |
 | Loss of design system guidance | Flagstrap will be developed later with proper framing |
 
 ---
