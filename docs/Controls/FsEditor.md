@@ -73,7 +73,7 @@ The `BorderlessEditor` control registers platform-specific handlers that directl
 <!-- With custom styling -->
 <fs:FsEditor 
     Placeholder="Description"
-    BorderColor="#CCCCCC"
+    BorderBrush="#CCCCCC"
     BorderWidth="1"
     CornerRadius="8"
     Padding="12"
@@ -93,7 +93,7 @@ The `BorderlessEditor` control registers platform-specific handlers that directl
 <!-- Use with StaticResource -->
 <fs:FsEditor 
     Placeholder="Notes"
-    BorderColor="{StaticResource InputBorder}"
+    BorderBrush="{StaticResource InputBorder}"
     BorderWidth="1"
     Background="{StaticResource InputBackground}"
     CornerRadius="8"
@@ -106,7 +106,7 @@ The `BorderlessEditor` control registers platform-specific handlers that directl
 ```xaml
 <!-- Define implicit style in theme -->
 <Style TargetType="fs:FsEditor">
-    <Setter Property="BorderColor" Value="#CCCCCC" />
+    <Setter Property="BorderBrush" Value="#CCCCCC" />
     <Setter Property="BorderWidth" Value="1" />
     <Setter Property="CornerRadius" Value="8" />
     <Setter Property="Padding" Value="12" />
@@ -144,7 +144,7 @@ If your theme uses design tokens (like Material), you can reference them:
 <fs:FsEditor 
     Placeholder="Type a message..."
     AutoSize="TextChanges"
-    BorderColor="#CCCCCC"
+    BorderBrush="#CCCCCC"
     BorderWidth="1"
     CornerRadius="8"
     Padding="12" />
@@ -156,7 +156,7 @@ If your theme uses design tokens (like Material), you can reference them:
 <fs:FsEditor 
     Placeholder="Enter your bio (max 500 characters)"
     MaxLength="500"
-    BorderColor="#6750A4"
+    BorderBrush="#6750A4"
     BorderWidth="2"
     CornerRadius="8"
     Padding="12" />
@@ -168,7 +168,7 @@ If your theme uses design tokens (like Material), you can reference them:
 <fs:FsEditor 
     Text="{Binding Notes}"
     Placeholder="Notes"
-    BorderColor="#CCCCCC"
+    BorderBrush="#CCCCCC"
     BorderWidth="1"
     CornerRadius="8"
     Padding="12"
@@ -181,7 +181,7 @@ If your theme uses design tokens (like Material), you can reference them:
 <fs:FsEditor 
     Text="{Binding DisplayText}"
     IsReadOnly="True"
-    BorderColor="#E0E0E0"
+    BorderBrush="#E0E0E0"
     BorderWidth="1"
     CornerRadius="4"
     Background="#FAFAFA"
