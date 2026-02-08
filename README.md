@@ -122,7 +122,7 @@ dotnet add package FlagstoneUI.Themes.Material --version 0.0.1-preview1
 <FsEntry 
     Placeholder="Email"
     CornerRadius="8"
-    BorderColor="#2196F3"
+    BorderBrush="#2196F3"
     BorderWidth="2">
     <FsEntry.Behaviors>
         <ValidationBehaviorAdapter

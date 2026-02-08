@@ -193,11 +193,6 @@ You can also use pre-built themes like Material. In your `App.xaml`:
 ```
 
 > **Note**: The Material theme is an example that uses design tokens internally. Themes are optional—you can style FlagstoneUI controls directly or create your own theme.
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Application.Resources>
-</Application>
-```
 
 > **Important Requirements**:
 > - You must add a **project reference** to `FlagstoneUI.Themes.Material` in your `.csproj`
@@ -205,49 +200,6 @@ You can also use pre-built themes like Material. In your `App.xaml`:
 > - The theme will take advantage of .NET 10's global XAML namespaces and implicit usings in future updates
 
 > **Note**: The Material theme is provided to showcase FlagstoneUI's capabilities. The themes demonstrate the concept and are value-add components. The core value of FlagstoneUI is the token-based theming framework itself, which allows you to create or use any theme that fits your needs.
-
-### Step 2: Add Namespace to Your Pages
-
-In any page where you want to use Flagstone controls, add the namespace:
-
-```xml
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
-             x:Class="YourApp.MainPage">
-
-    <!-- Your content here -->
-
-</ContentPage>
-```
-
-### Step 3: Use Flagstone Controls
-
-Now you can use Flagstone controls in your XAML:
-
-```xml
-<VerticalStackLayout Padding="16" Spacing="16">
-
-    <!-- Filled Button (default style) -->
-    <fs:FsButton Text="Primary Action"
-                 Clicked="OnButtonClicked" />
-
-    <!-- Card with content -->
-    <fs:FsCard>
-        <VerticalStackLayout Spacing="8">
-            <Label Text="Welcome to FlagstoneUI"
-                   FontSize="20"
-                   FontAttributes="Bold" />
-            <Label Text="Build beautiful apps with themeable controls" />
-        </VerticalStackLayout>
-    </fs:FsCard>
-
-    <!-- Text Entry -->
-    <fs:FsEntry Placeholder="Enter your name" />
-
-</VerticalStackLayout>
-```
 
 ## Using Control Variants
 
