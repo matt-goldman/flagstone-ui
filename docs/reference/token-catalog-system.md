@@ -6,7 +6,7 @@
 >
 > **FlagstoneUI Core** does not require tokens or catalog systems—themes are simply collections of styles.
 >
-> See [ADR011: Token System Repositioning](Decisions/adr011-token-system-repositioning.md) and [ADR010: Theme Contract System](Decisions/adr010-theme-contract-system.md) for architectural context.
+> See [ADR011: Token System Repositioning](../decisions/adr011-token-system-repositioning.md) and [ADR010: Theme Contract System](../decisions/adr010-theme-contract-system.md) for architectural context.
 
 This document describes the machine-readable token catalog system for token-based themes, designed to support AI agents, automated tooling, and theme generation.
 
@@ -33,7 +33,7 @@ The token catalog system implements a layered architecture for theme validation:
 | **Theme** | Minimum viable styling | `minimal.json` | Implicit styles for all controls |
 | **Design System** | Complete style variants | e.g., `material.json` | Named variants (OutlinedButton, etc.) |
 
-See [ADR010: Theme Contract System](Decisions/adr010-theme-contract-system.md) for full details.
+See [ADR010: Theme Contract System](../decisions/adr010-theme-contract-system.md) for full details.
 
 ## Files
 
@@ -360,7 +360,7 @@ flagstone-bootstrap convert \
 # - Output is contract-compliant
 ```
 
-See [bootstrap-converter-enhancement-plan.md](bootstrap-converter-enhancement-plan.md) for integration plans.
+See [bootstrap-converter-enhancement-plan.md](../integrations/bootstrap-converter-enhancement-plan.md) for integration plans.
 
 ### MCP Server (Future)
 

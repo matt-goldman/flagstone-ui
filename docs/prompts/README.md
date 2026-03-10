@@ -2,7 +2,7 @@
 
 This directory contains prompts for AI-powered design tools (v0, GitHub Spark, Claude, ChatGPT, etc.) to help generate themes, palettes, and design assets for FlagstoneUI.
 
-**Audience**: These prompts are tooling for **theme creators and contributors**, not end users. If you're using FlagstoneUI in your application (not creating themes), see the [Quickstart Guide](../quickstart.md) instead.
+**Audience**: These prompts are tooling for **theme creators and contributors**, not end users. If you're using FlagstoneUI in your application (not creating themes), see the [Quickstart Guide](../getting-started/quickstart.md) instead.
 
 ## Available Prompts
 

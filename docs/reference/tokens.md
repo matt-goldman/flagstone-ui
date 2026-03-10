@@ -6,7 +6,7 @@
 >
 > **Flagstrap (Future/Deferred)**: A design language system concept built on FlagstoneUI that would use tokens as a standard vocabulary. This is exploratory work and not currently part of FlagstoneUI core.
 >
-> For core FlagstoneUI theming without tokens, see [theming-guide.md](theming-guide.md) and [architecture.md](architecture.md).
+> For core FlagstoneUI theming without tokens, see [theming-guide.md](../guides/theming-guide.md) and [architecture.md](../getting-started/architecture.md).
 
 This document provides a reference of design tokens available in the Material theme example. These tokens demonstrate one approach to organizing theme values.
 
@@ -53,7 +53,7 @@ Contracts are JSON files that formally specify requirements at each layer. They 
 - **Compliance checking**: Ensure design systems provide required variants
 - **Tooling integration**: CI/CD pipelines, code generation, AI assistance
 
-See [ADR010: Theme Contract System](Decisions/adr010-theme-contract-system.md) for the full architectural decision.
+See [ADR010: Theme Contract System](../decisions/adr010-theme-contract-system.md) for the full architectural decision.
 
 **Contract Files:**
 - `docs/contracts/minimal.json` - Base theme requirements

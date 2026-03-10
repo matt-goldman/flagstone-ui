@@ -173,6 +173,6 @@ Built with:
 
 ## See Also
 
-- [Token Catalog Documentation](../../docs/README.md)
+- [Token Catalog Documentation](../../docs/index.md)
 - [Token Schema](../../docs/tokens-schema.json)
-- [Design Tokens Guide](../../docs/tokens.md)
+- [Design Tokens Guide](../../docs/reference/tokens.md)

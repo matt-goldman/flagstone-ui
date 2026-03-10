@@ -79,7 +79,7 @@ This is the layer that makes .NET MAUI feel complete: define your visual system 
 
 ## Quick Start
 
-**📚 [Documentation](docs/README.md)** | **🚀 [Quickstart](docs/quickstart.md)**
+**📚 [Documentation](docs/index.md)** | **🚀 [Quickstart](docs/getting-started/quickstart.md)**
 
 ### Build from Source
 
@@ -176,7 +176,7 @@ If not using implicit/global namespaces, prefix controls as:
 * More theme examples
 * Theme conversion tools
 
-See the [roadmap](docs/roadmap.md).
+See the [roadmap](docs/project/roadmap.md).
 
 ## Project Structure
 

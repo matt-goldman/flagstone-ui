@@ -205,7 +205,7 @@ Given that:
 
 ## Implementation Overview
 
-See [rethinking-tokens.md](../rethinking-tokens.md) for detailed implementation plan.
+See [rethinking-tokens.md](../archive/rethinking-tokens.md) for detailed implementation plan.
 
 ### High-Level Phases
 
@@ -249,7 +249,7 @@ Fully develop both FlagstoneUI core and Flagstrap simultaneously.
 
 ## References
 
-- [rethinking-tokens.md](../rethinking-tokens.md) - Detailed implementation plan
+- [rethinking-tokens.md](../archive/rethinking-tokens.md) - Detailed implementation plan
 - [ADR009: Agent Guidance Strategy](adr009-agent-guidance-strategy.md) - Related guidance decisions
 - [ADR010: Theme Contract System](adr010-theme-contract-system.md) - Contract system (becomes Flagstrap component)
 - Original GitHub issue describing the problem

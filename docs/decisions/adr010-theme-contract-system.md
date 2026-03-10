@@ -176,6 +176,6 @@ docs/
 
 ## References
 
-- [tokens.md](../tokens.md) - Human-readable token documentation
-- [token-catalog-system.md](../token-catalog-system.md) - Machine-readable catalog docs
+- [tokens.md](../reference/tokens.md) - Human-readable token documentation
+- [token-catalog-system.md](../reference/token-catalog-system.md) - Machine-readable catalog docs
 - [TokenGenerator](../../tools/FlagstoneUI.TokenGenerator/) - Tooling for catalog/contract generation

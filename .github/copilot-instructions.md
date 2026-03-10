@@ -114,7 +114,7 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 - **.NET MAUI**: This UI library targets .NET 10 frameworks (`net10.0-android`, `net10.0-ios`, `net10.0-windows10.0.19041.0`) and integrates with .NET MAUI applications.
 - **Theme Configuration**: Themes are configured via merged ResourceDictionaries in App.xaml (no builder pattern - YAGNI). Example: `<material:Theme />`
 - **CommunityToolkit.Maui**: Optional integration via `FlagstoneUI.Integrations.MCT` package (not a core dependency). MCT is commented out in Directory.Build.props for core library but included in the integrations package.
-- **MCT Integrations**: `ValidationBehaviorAdapter` for FsEntry validation, `FsEditorBorderAnimation` for animated borders. See `docs/mct-integrations.md`.
+- **MCT Integrations**: `ValidationBehaviorAdapter` for FsEntry validation, `FsEditorBorderAnimation` for animated borders. See `docs/integrations/mct-integrations.md`.
 - **Resource dictionaries**: Themes reference core tokens using typed syntax with x:Class and code-behind (see ADR004).
 - **DynamicResource**: Use token keys (e.g., `Color.Primary`) in theme styles: `<Setter Property="BackgroundColor" Value="{DynamicResource Color.Primary}" />`.
 - **Package management**: Central package version management via Directory.Build.props with consistent versioning across all library projects.

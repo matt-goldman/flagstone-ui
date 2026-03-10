@@ -280,6 +280,6 @@ public void Entry_ShouldHaveCorrectBorderWhenFocused()
 ## Related Documentation
 
 - [Control Implementation Guide](control-implementation-guide.md) - General control authoring patterns
-- [Token System](tokens.md) - Design token architecture
-- [Material Theme](../src/FlagstoneUI.Themes.Material/Theme.xaml) - Reference implementation
+- [Token System](../reference/tokens.md) - Design token architecture
+- [Material Theme](../../src/FlagstoneUI.Themes.Material/Theme.xaml) - Reference implementation
 - [TailwindXamlThemeConverter](https://github.com/matt-goldman/TailwindXamlThemeConverter) - CSS conversion tooling

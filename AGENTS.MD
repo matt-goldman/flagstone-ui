@@ -1002,10 +1002,10 @@ The sample app (`samples/FlagstoneUI.SampleApp/`) demonstrates FlagstoneUI capab
 - **Documentation**: `/docs/` directory in repository
 - **Sample App**: `samples/FlagstoneUI.SampleApp/`
 - **Theme Playground**: `samples/FlagstoneUI.ThemePlayground/`
-- **Control Documentation**: `/docs/Controls/` directory
-- **Quickstart Guide**: `/docs/quickstart.md`
-- **Theming Guide**: `/docs/theming-guide.md`
-- **Architecture**: `/docs/architecture.md`
+- **Control Documentation**: `/docs/controls/` directory
+- **Quickstart Guide**: `/docs/getting-started/quickstart.md`
+- **Theming Guide**: `/docs/guides/theming-guide.md`
+- **Architecture**: `/docs/getting-started/architecture.md`
 
 ## Contributing
 

@@ -286,7 +286,7 @@ private void OnEditorUnfocused(object sender, EventArgs e)
 
 ## Integration with MAUI Community Toolkit
 
-`FsEditor` works seamlessly with MCT animations and behaviors through the optional `FlagstoneUI.Integrations.MCT` package. See the [MCT Integrations documentation](../mct-integrations.md) for details on using `FsEditorBorderAnimation` to create animated gradient borders and other integration features.
+`FsEditor` works seamlessly with MCT animations and behaviors through the optional `FlagstoneUI.Integrations.MCT` package. See the [MCT Integrations documentation](../integrations/mct-integrations.md) for details on using `FsEditorBorderAnimation` to create animated gradient borders and other integration features.
 
 ## Best Practices
 
@@ -351,7 +351,7 @@ The Editor control is well-suited for chat or messaging interfaces:
     AutoSize="TextChanges" />
 ```
 
-For advanced chat UI examples with animated borders, see the [MCT Integrations documentation](../mct-integrations.md).
+For advanced chat UI examples with animated borders, see the [MCT Integrations documentation](../integrations/mct-integrations.md).
 
 ## Platform Support
 
@@ -423,6 +423,6 @@ Platform handlers ensure consistent borderless rendering across all platforms, w
 - [FsEntry Control](FsEntry.md) - Single-line text input control
 - [FsButton Control](FsButton.md) - Button control
 - [FsCard Control](FsCard.md) - Container control for grouping UI elements
-- [MCT Integrations](../mct-integrations.md) - MAUI Community Toolkit integration features
-- [Theme Tokens](../tokens.md) - Available design tokens for styling
-- [Control Implementation Guide](../control-implementation-guide.md) - For contributors: how to implement new controls
+- [MCT Integrations](../integrations/mct-integrations.md) - MAUI Community Toolkit integration features
+- [Theme Tokens](../reference/tokens.md) - Available design tokens for styling
+- [Control Implementation Guide](../guides/control-implementation-guide.md) - For contributors: how to implement new controls

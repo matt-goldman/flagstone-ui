@@ -1,8 +1,9 @@
-# Rethinking Tokens: Complete Remediation Plan
+# Rethinking Tokens: Complete Remediation Plan (Archived)
 
-This document outlines the complete plan for repositioning FlagstoneUI as the unified styling plane for .NET MAUI, and clarifying the separation from Flagstrap (the token-based design language system).
-
-**Related ADR**: [ADR011: Token System Repositioning](Decisions/adr011-token-system-repositioning.md)
+> **⚠️ ARCHIVED DOCUMENT**
+> This document was the implementation plan for repositioning FlagstoneUI's token system. The decision was formalised in [ADR011: Token System Repositioning](../decisions/adr011-token-system-repositioning.md), which supersedes this planning document. The documentation updates described here have been completed.
+>
+> This document is retained for historical context.
 
 ## Executive Summary
 
@@ -74,10 +75,10 @@ Both are valid approaches. Using Flagstrap is not required to use FlagstoneUI.
 
 | File | Current State | Required Change | Priority |
 |------|---------------|-----------------|----------|
-| `docs/Controls/FsButton.md` | Token integration emphasis | Styling surface primary | P1 |
-| `docs/Controls/FsEntry.md` | Token integration emphasis | Styling surface primary | P1 |
-| `docs/Controls/FsEditor.md` | Token integration emphasis | Styling surface primary | P1 |
-| `docs/Controls/FsCard.md` | Token integration emphasis | Styling surface primary | P1 |
+| `docs/controls/FsButton.md` | Token integration emphasis | Styling surface primary | P1 |
+| `docs/controls/FsEntry.md` | Token integration emphasis | Styling surface primary | P1 |
+| `docs/controls/FsEditor.md` | Token integration emphasis | Styling surface primary | P1 |
+| `docs/controls/FsCard.md` | Token integration emphasis | Styling surface primary | P1 |
 
 #### ADRs to Update
 
