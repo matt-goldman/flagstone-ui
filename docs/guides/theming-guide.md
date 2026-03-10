@@ -140,6 +140,8 @@ Provide named style variants for different control appearances. This is a core p
 
 ### Approach 4: Design Tokens (Design System)
 
+> TODO: Clarify how the Blocks package demonstrates a good use case for tokens
+
 For comprehensive design systems with well-defined token vocabularies:
 
 ```xml
