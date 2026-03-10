@@ -129,7 +129,7 @@ FlagstoneUI is established as the **unified styling plane for .NET MAUI** — co
   - Document integration patterns with Steven Thewissen's Tailwind-to-MAUI work
   - Complementary to FlagstoneUI (utility classes + styling surface)
 
-- [ ] **FlagstoneUI.Blocks** — pre-built screens (auth, CRUD, settings)
+- [ ] **FlagstoneUI.Blocks** — pre-built screens (auth, CRUD, settings, AI chat, and more); see the [Blocks Roadmap](blocks-roadmap.md) for the prioritised list
 
 ---
 
