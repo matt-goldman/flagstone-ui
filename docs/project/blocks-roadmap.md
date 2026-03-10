@@ -36,6 +36,8 @@ This is one of the highest-value blocks to deliver given how common AI-powered f
 - `IsTyping` indicator for streamed/in-progress responses
 - Empty state when no messages yet
 
+> **MCT integration demo opportunity:** The `FsEditorBorderAnimation` from `FlagstoneUI.Integrations.MCT` pairs naturally with this block — an animated gradient border on the input editor while a response is being generated makes a great demo and a compelling showcase of the MCT integration.
+
 ### Profile
 
 | Block | Description | Status |
@@ -122,9 +124,11 @@ These blocks cover useful but less universally-required patterns. They extend Fl
 
 | Block | Description | Notes |
 |---|---|---|
-| **Confirmation Dialog** | Modal/overlay with title, message, confirm, and cancel buttons | Universal utility |
+| **Confirmation Dialog** | Modal/overlay with title, message, confirm, and cancel buttons | Universal utility; MCT's `Popup` control makes this a strong MCT integration candidate |
 | **Rating / Review Form** | Star rating selector with optional text field | Common in consumer apps |
 | **Dashboard / Stats Cards** | Summary metric cards in a grid, suitable for analytics or dashboards | Requires some data-binding convention |
+
+> **MCT integration opportunity:** The Confirmation Dialog block is a natural fit for MCT's `Popup` control. Rather than building a modal overlay from scratch, an `FlagstoneUI.Integrations.MCT` integration block could wrap `Popup` with FlagstoneUI-themed content and bindable properties (title, message, confirm/cancel commands).
 
 ---
 
@@ -132,13 +136,15 @@ These blocks cover useful but less universally-required patterns. They extend Fl
 
 These are things that would genuinely deliver value in line with FlagstoneUI's principles — composable, themeable, cross-platform UI — but are not realistic candidates for inclusion given what this library actually is.
 
-| Idea | Why It Would Be Valuable | Why It's Aspirational |
-|---|---|---|
-| **Rich Text Editor Block** | In-app content editing is a common requirement for productivity apps | Requires a rich text control that doesn't exist in .NET MAUI; would need to be built from scratch or wrapped from native, well outside the scope of a styling library |
-| **Video Player Block** | Media playback is a common pattern in content and social apps | Requires deep native integration; no cross-platform abstraction that fits the FlagstoneUI model |
-| **Camera / Photo Capture Block** | Profile photos, receipts, document scans — all common mobile use cases | Platform-specific APIs with significant complexity; more in the domain of a platform toolkit than a UI styling library |
-| **Maps Block** | Location-based features are common, and a styled map container would be useful | Maps require platform-specific map SDKs (Google, Apple, Bing); no portable styling surface exists |
-| **Biometric Auth Block** | Biometric prompt UI is increasingly expected | Platform-specific flow; the UI is largely owned by the OS/device |
+> **MCT Integration note:** Several items in this section could be addressed through the MAUI Community Toolkit rather than being treated as permanently out of scope. Integration/interop with MCT is one of FlagstoneUI's original stated goals — we don't need to reinvent the wheel. Items marked **MCT candidate** could be delivered as an explicit integration block (similar to `FlagstoneUI.Integrations.MCT`) or as a sample/demo showing how to combine MCT's platform-capable controls with FlagstoneUI's theming surface. The Rich Text Editor is the exception: there is no MCT equivalent, but it could be a valuable sample demonstrating how to integrate a third-party rich text component with FlagstoneUI styling.
+
+| Idea | Why It Would Be Valuable | Why It's Aspirational | MCT Path |
+|---|---|---|---|
+| **Rich Text Editor Block** | In-app content editing is a common requirement for productivity apps | Requires a rich text control that doesn't exist in .NET MAUI; would need to be built from scratch or wrapped from native, well outside the scope of a styling library | No MCT equivalent — consider as a **sample/demo** showing third-party control integration |
+| **Video Player Block** | Media playback is a common pattern in content and social apps | Requires deep native integration; no cross-platform abstraction that fits the FlagstoneUI model | **MCT candidate** — MCT's `MediaElement` provides cross-platform video/audio playback; a themed wrapper block is feasible |
+| **Camera / Photo Capture Block** | Profile photos, receipts, document scans — all common mobile use cases | Platform-specific APIs with significant complexity; more in the domain of a platform toolkit than a UI styling library | **MCT candidate** — MCT's `CameraView` provides cross-platform camera access; a styled capture UI is feasible |
+| **Maps Block** | Location-based features are common, and a styled map container would be useful | Maps require platform-specific map SDKs (Google, Apple, Bing); no portable styling surface exists | Unlikely MCT path — map rendering is owned by the SDK, not a UI layer |
+| **Biometric Auth Block** | Biometric prompt UI is increasingly expected | Platform-specific flow; the UI is largely owned by the OS/device | Unlikely MCT path — the OS controls the biometric prompt UI |
 
 ---
 
