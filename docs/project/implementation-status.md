@@ -29,14 +29,9 @@ This document tracks the current implementation status of FlagstoneUI components
 | **Quickstart Docs** | ✅ Complete | Documentation reviewed and published |
 | **Theming Guide** | ✅ Complete | Validated with external developers and designers |
 | **AGENTS.md Documentation** | ✅ Complete | Comprehensive AI agent guidance (architecture, patterns, examples, tools) |
+| **Documentation Reorganisation** | ✅ Complete | Structured subdirectories, archived stale content, updated all internal links |
 | **ThemeLoader** | ❌ Removed | Completed but not needed; removed (YAGNI) |
 | **FlagstoneUIBuilder** | ❌ Removed | No longer necessary; removed (YAGNI) |
-
-### In Progress 🚧
-
-| Component | Status | Next Steps |
-|---|---|---|
-| **Documentation reorganisation** | 🚧 In Progress | Restructuring docs into subdirectories, updating internal links |
 
 ### Planned 📋
 
