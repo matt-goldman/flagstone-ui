@@ -39,6 +39,7 @@ Welcome to the FlagstoneUI documentation. This directory contains guides, refere
 ## Project Status
 
 - **[Roadmap](project/roadmap.md)** — Current milestone and planned features
+- **[Blocks Roadmap](project/blocks-roadmap.md)** — Prioritised list of planned FlagstoneUI.Blocks components
 - **[Implementation Status](project/implementation-status.md)** — Component completion tracking
 
 ## Architecture Decisions
