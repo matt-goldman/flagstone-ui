@@ -1,8 +1,9 @@
-# MAUI UI Testing Implementation Plan
+# MAUI UI Testing Implementation Plan (Archived)
 
-## Executive Summary
-
-This document outlines the plan to implement comprehensive UI testing for FlagstoneUI components using proper MAUI testing infrastructure. This addresses the current limitation where UI component tests are filtered out of CI due to headless environment issues.
+> **⚠️ ARCHIVED DOCUMENT**
+> This document outlines a plan for implementing comprehensive UI testing for FlagstoneUI. The testing strategy decision was captured in [ADR007: CI/UI Test Strategy](../decisions/adr007-ci-ui-test-strategy.md). UI device tests and Appium integration are deferred to post-MVP.
+>
+> This document is retained as a reference for when UI testing is implemented.
 
 ## Current State
 

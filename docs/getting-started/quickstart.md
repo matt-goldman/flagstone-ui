@@ -278,7 +278,7 @@ You can reference design tokens directly in your custom styles using `DynamicRes
 - **Radii**: `Radius.Small`, `Radius.Medium`, `Radius.Large`, etc.
 - **Elevation**: `Elevation.Level1`, `Elevation.Level2`, etc.
 
-For a complete list of available tokens, see the [Token Reference Documentation](tokens.md).
+For a complete list of available tokens, see the [Token Reference Documentation](../reference/tokens.md).
 
 ## Bonus: Runtime Theme Switching
 
@@ -392,13 +392,13 @@ Here's a complete example showing various FlagstoneUI controls working together:
 
 Now that you have the basics:
 
-1. **Explore Controls**: Check out the [sample app](../samples/FlagstoneUI.SampleApp/) to see all available controls and styles
-2. **Learn About Tokens**: Read the [Token Reference](tokens.md) to understand the complete token system
-3. **Create Custom Themes**: See the [Theming Guide](theming-guide.md) for designers and theme creators
+1. **Explore Controls**: Check out the [sample app](../../samples/FlagstoneUI.SampleApp/) to see all available controls and styles
+2. **Learn About Tokens**: Read the [Token Reference](../reference/tokens.md) to understand the complete token system
+3. **Create Custom Themes**: See the [Theming Guide](../guides/theming-guide.md) for designers and theme creators
 4. **View Control Documentation**:
-   - [FsButton](Controls/FsButton.md)
-   - [FsCard](Controls/FsCard.md)
-   - [FsEntry](Controls/FsEntry.md)
+   - [FsButton](../controls/FsButton.md)
+   - [FsCard](../controls/FsCard.md)
+   - [FsEntry](../controls/FsEntry.md)
 5. **Architecture Details**: Read the [Architecture Documentation](architecture.md) for deeper technical insights
 
 ## Optional: MAUI Community Toolkit Integration
@@ -423,7 +423,7 @@ builder.UseMauiApp<App>()
 - Converters for advanced binding scenarios
 - Additional UI enhancements and animations
 
-See [ADR001](Decisions/adr001-fsentry-behavior.md) for more details on the FlagstoneUI + MCT integration approach.
+See [ADR001](../decisions/adr001-fsentry-behavior.md) for more details on the FlagstoneUI + MCT integration approach.
 
 ## Troubleshooting
 
@@ -460,7 +460,7 @@ If you encounter build errors:
 
 - **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/matt-goldman/flagstone-ui/issues)
 - **Discussions**: Join conversations on [GitHub Discussions](https://github.com/matt-goldman/flagstone-ui/discussions)
-- **Documentation**: Browse the [full documentation](README.md)
+- **Documentation**: Browse the [full documentation](../index.md)
 
 ## Minimal Example from Scratch
 

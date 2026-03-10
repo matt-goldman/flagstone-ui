@@ -1,9 +1,9 @@
-# FlagstoneUI MCP Server (Planned)
+# FlagstoneUI MCP Server (Archived)
 
-> **📋 PLANNED - Post-Integration Update**
-> This document outlines the vision for a comprehensive FlagstoneUI MCP server that will provide agent-friendly functionality for theme conversion, UI generation, and FlagstoneUI system guidance.
+> **⚠️ ARCHIVED DOCUMENT**
+> This document described a planned MCP server for FlagstoneUI. This approach was superseded by [ADR009: Agent Guidance Strategy](../decisions/adr009-agent-guidance-strategy.md), which decided in favour of an `AGENTS.md` documentation file instead of an MCP server. The AGENTS.md file now exists in the repository root.
 >
-> **Current Status**: Bootstrap Converter core library and UI app complete. Temporary MCP implementation exists but will be replaced with comprehensive FlagstoneUI MCP server.
+> This document is retained for historical context. For current agent guidance, see `/AGENTS.MD` in the repository root.
 
 ## Vision & Goals
 

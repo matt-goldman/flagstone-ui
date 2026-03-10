@@ -241,7 +241,7 @@ Tokens enable:
 
 **Status**: ✅ Fully resolved and working
 
-Cross-assembly ResourceDictionary referencing is implemented using typed references in MergedDictionaries. See [ADR004: Cross-Assembly ResourceDictionary Loading](Decisions/adr004-cross-assembly-resource-loading.md) for detailed technical decisions and implementation.
+Cross-assembly ResourceDictionary referencing is implemented using typed references in MergedDictionaries. See [ADR004: Cross-Assembly ResourceDictionary Loading](../decisions/adr004-cross-assembly-resource-loading.md) for detailed technical decisions and implementation.
 
 **Quick Reference for Consumers**:
 ```xml
@@ -263,7 +263,7 @@ Cross-assembly ResourceDictionary referencing is implemented using typed referen
 **Decision**: FlagstoneUIBuilder pattern is not needed (YAGNI principle)
 **Approach**: Theme configuration via merged dictionaries in App.xaml
 **Note**: Minimal builder class may be removed in future cleanup
-**See**: [Archived technical-plan.md](archive/technical-plan.md) for historical builder API plans
+**See**: [Archived technical-plan.md](../archive/technical-plan.md) for historical builder API plans
 
 ## Future Architecture Considerations
 
@@ -303,6 +303,6 @@ Cross-assembly ResourceDictionary referencing is implemented using typed referen
 - **Icon Libraries**: Material Design Icons or similar
 - **Animation Libraries**: For motion system implementation
 
-**Note**: For current implementation status and completion tracking, see [implementation-status.md](implementation-status.md).
+**Note**: For current implementation status and completion tracking, see [implementation-status.md](../project/implementation-status.md).
 
 *Last Updated: November 2025*

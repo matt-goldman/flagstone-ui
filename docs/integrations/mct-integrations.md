@@ -348,8 +348,8 @@ If experiencing performance problems:
 
 ## See Also
 
-- [FsEntry Control](Controls/FsEntry.md) - Single-line text input control
-- [FsEditor Control](Controls/FsEditor.md) - Multi-line text input control
+- [FsEntry Control](../controls/FsEntry.md) - Single-line text input control
+- [FsEditor Control](../controls/FsEditor.md) - Multi-line text input control
 - [MAUI Community Toolkit Documentation](https://learn.microsoft.com/dotnet/communitytoolkit/maui/)
 - [MCT Behaviors](https://learn.microsoft.com/dotnet/communitytoolkit/maui/behaviors/)
 - [MCT Animations](https://learn.microsoft.com/dotnet/communitytoolkit/maui/animations/)

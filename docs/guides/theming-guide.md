@@ -287,7 +287,7 @@ Corner radius values for different component sizes:
 - `Radius.Button.ExtraLarge` = 28
 - `Radius.Button.Full` = 9999 ← Pill-shaped buttons
 
-> **⚠️ Important**: Use `Radius.Button.*` tokens when styling `FsButton` or standard `Button` controls. The Button.CornerRadius property requires Int32 type, while other controls use Double. Using the wrong token type will result in silent binding failure and square corners. See [ADR003](Decisions/adr003-button-corner-radius-type.md) for technical details.
+> **⚠️ Important**: Use `Radius.Button.*` tokens when styling `FsButton` or standard `Button` controls. The Button.CornerRadius property requires Int32 type, while other controls use Double. Using the wrong token type will result in silent binding failure and square corners. See [ADR003](../decisions/adr003-button-corner-radius-type.md) for technical details.
 
 #### 5. Other Tokens
 
@@ -874,7 +874,7 @@ See the sample document above for a complete custom theme example based on a tea
 
 - **Questions?** Open a discussion on [GitHub Discussions](https://github.com/matt-goldman/flagstone-ui/discussions)
 - **Found an Issue?** Report it on [GitHub Issues](https://github.com/matt-goldman/flagstone-ui/issues)
-- **Want to Contribute?** Check the [Contributing Guide](../CONTRIBUTING.md)
+- **Want to Contribute?** Check the [Contributing Guide](../../CONTRIBUTING.md)
 
 ## Summary
 
@@ -892,10 +892,10 @@ By following this guide, you can create beautiful, consistent, accessible themes
 
 **Next Steps:**
 
-- [View the Token Reference](tokens.md) for complete token documentation
-- [Token Catalog System](token-catalog-system.md) - For AI-assisted theme generation
-- [See Control Documentation](Controls/) for detailed control properties
-- [Check the Quickstart Guide](quickstart.md) to understand the developer perspective
-- [Explore Sample Apps](../samples/) to see themes in action
+- [View the Token Reference](../reference/tokens.md) for complete token documentation
+- [Token Catalog System](../reference/token-catalog-system.md) - For AI-assisted theme generation
+- [See Control Documentation](../controls/) for detailed control properties
+- [Check the Quickstart Guide](../getting-started/quickstart.md) to understand the developer perspective
+- [Explore Sample Apps](../../samples/) to see themes in action
 
 Happy theming! 🎨
