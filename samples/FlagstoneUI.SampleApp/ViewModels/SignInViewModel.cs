@@ -37,8 +37,14 @@ public partial class SignInViewModel : INotifyPropertyChanged
 		}
 	}
 
-	public ICommand SignInCommand => new Command(async () => await SignIn());
+	private readonly ICommand _signInCommand;
 
+	public SignInViewModel()
+	{
+		_signInCommand = new Command(async () => await SignIn());
+	}
+
+	public ICommand SignInCommand => _signInCommand;
 	public async Task SignIn()
 	{
 		// Implement sign-in logic here
