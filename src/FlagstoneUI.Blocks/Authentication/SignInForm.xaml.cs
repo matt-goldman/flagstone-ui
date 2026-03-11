@@ -70,7 +70,7 @@ public partial class SigninForm : ContentView
 	/// <remarks>This property defines the text displayed in the password input field of the sign-in
 	/// form. The default value is an empty string.</remarks>
 	public static readonly BindableProperty PasswordProperty = BindableProperty.Create(
-		nameof(Password), typeof(string), typeof(SigninForm), string.Empty);
+		nameof(Password), typeof(string), typeof(SigninForm), string.Empty, BindingMode.TwoWay);
 	/// <summary>
 	/// Gets or sets the text displayed in the password input field.
 	/// </summary>
