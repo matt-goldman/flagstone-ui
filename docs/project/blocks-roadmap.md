@@ -109,7 +109,7 @@ These blocks cover useful but less universally-required patterns. They extend Fl
 | Block | Description | Notes |
 |---|---|---|
 | **Activity Feed / Timeline** | Chronological list with avatar, action text, timestamp, and optional image | Useful for social or productivity apps |
-| **Comments / Reviews List** | User comment items with avatar, rating (optional), and body text | Common in e-commerce and content apps |
+| **Comments / Reviews List** | User comment items with avatar, rating (from Community Toolkit), and body text | Common in e-commerce and content apps |
 | **Image Grid / Gallery** | Uniform grid of images with optional caption overlay | Requires platform image handling |
 
 ### Commerce

@@ -15,7 +15,7 @@ public partial class FsEditor : ContentView
 	public FsEditor()
 	{
 		InitializeComponent();
-		ViewWrapper.BindingContext = this;
+		WrapperBorder.BindingContext = this;
 		_borderShape = new RoundRectangle { CornerRadius = CornerRadius };
     }
 

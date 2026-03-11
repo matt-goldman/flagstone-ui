@@ -108,6 +108,7 @@ dotnet format Flagstone.UI.sln --no-restore --exclude-diagnostics CA1822
 - **Themes**: Implement platform-agnostic styles in `Theme.xaml`. Themes can use direct values, app resources, or design tokens.
 - **Blocks**: High-level screens go in `src/FlagstoneUI.Blocks/Blocks` and depend on Core controls.
 - **Optional: Design Tokens**: Some themes (like Material) use tokens in `src/FlagstoneUI.Core/Styles/Tokens.xaml` as an implementation detail. Tokens are consumed via `DynamicResource`.
+- **XAML Data Binding**: In .NET MAUI library projects that multi-target net10.0 alongside platform-specific TFMs (net10.0-android, net10.0-ios, etc.), the XAML source generator does NOT produce strongly-typed x:Name fields for the plain net10.0 TFM. Code-behind must not directly reference XAML-generated fields (e.g., this.SignInButton.Text). Instead, use XAML data bindings with x:Reference to the parent control and BindingContext to propagate property values to child controls. This keeps net10.0 compilable (needed for unit testing without a device/emulator) while still working on all platform TFMs.
 
 ## Integration Points
 

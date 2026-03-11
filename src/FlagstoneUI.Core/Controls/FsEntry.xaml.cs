@@ -15,7 +15,7 @@ public partial class FsEntry : ContentView
 	public FsEntry()
 	{
 		InitializeComponent();
-		ViewWrapper.BindingContext = this;
+		WrapperBorder.BindingContext = this;
 		_borderShape = new RoundRectangle { CornerRadius = CornerRadius };
     }
 

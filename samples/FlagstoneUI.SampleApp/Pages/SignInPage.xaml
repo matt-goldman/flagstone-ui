@@ -3,12 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlagstoneUI.SampleApp.Pages.SignInPage"
              xmlns:fs="clr-namespace:FlagstoneUI.Blocks.Authentication;assembly=FlagstoneUI.Blocks"
+             xmlns:vm="clr-namespace:FlagstoneUI.SampleApp.ViewModels"
+             x:DataType="vm:SignInViewModel"
              Title="SignInPage">
     <FlexLayout Direction="Column"
                 AlignItems="Center"
                 JustifyContent="Center"
                 Padding="20">
         <fs:SigninForm x:Name="SignInForm"
-                       UsernamePlaceholder="Please enter a username"/>
+                       UsernamePlaceholder="Please enter a username"
+                       Username="{Binding Email}"
+                       Password="{Binding Password}"
+                       SigninCommand="{Binding SignInCommand}"/>
     </FlexLayout>
 </ContentPage>

@@ -88,13 +88,13 @@
         <!-- Filled Entry (Default) -->
         <fs:FsEntry Placeholder="Filled Entry (Default)"
                     x:Name="FilledEntry"
-                    TextChanged="OnEntryTextChanged" />
+                    Text="{Binding EntryText, Mode=TwoWay}" />
 
         <!-- Outlined Entry -->
         <fs:FsEntry Placeholder="Outlined Entry"
                     Style="{StaticResource OutlinedEntry}"
                     x:Name="OutlinedEntry"
-                    TextChanged="OnEntryTextChanged" />
+                    Text="{Binding EntryText}" />
 
         <!-- Entry with Text -->
         <fs:FsEntry Placeholder="Entry with preset text"
@@ -118,7 +118,7 @@
 
         <!-- Entry State Feedback -->
         <Label x:Name="EntryFeedbackLabel"
-               Text="Type in any entry to see feedback..."
+               Text="{Binding EntryText}"
                FontSize="12"
                TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
                Margin="0,8,0,0" />
@@ -135,7 +135,7 @@
         <!-- Default Entry -->
         <fs:FsEntry Placeholder="Default Entry"
                     x:Name="DefaultEntry"
-                    TextChanged="OnEntryTextChanged" />
+                    Text="{Binding EntryText}" />
 
         <!-- Entry with Text -->
         <fs:FsEntry Placeholder="Entry with preset text"
@@ -156,7 +156,7 @@
 
         <!-- Entry State Feedback -->
         <Label x:Name="EntryFeedbackLabelAlt"
-               Text="Type in any entry to see feedback..."
+               Text="{Binding EntryText}"
                FontSize="12"
                TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
                Margin="0,8,0,0" />
@@ -175,6 +175,7 @@
 
       <fs:FsEditor Placeholder="Enter multi-line text here"
                    x:Name="MultiLineEditor"
+                    Text="{Binding EditorText, Mode=TwoWay}"
                    Style="{DynamicResource OutlinedEditor}" />
 
       <Grid>
@@ -183,6 +184,7 @@
                      x:Name="AiEditor"
                      Focused="AiEditor_OnFocused"
                      Unfocused="AiEditor_OnUnfocused"
+                     Text="{Binding EditorText, Mode=TwoWay}"
                      Style="{DynamicResource AiEditorStyle}" />
 
         <Button Background="Goldenrod"
@@ -200,6 +202,13 @@
         </Button>
 
       </Grid>
+
+      <!-- Entry State Feedback -->
+      <Label x:Name="EditorStateFeedbackLabel"
+       Text="{Binding EditorText}"
+       FontSize="12"
+       TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
+       Margin="0,8,0,0" />
 
       <!-- Divider -->
       <BoxView HeightRequest="1"

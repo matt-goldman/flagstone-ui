@@ -7,8 +7,7 @@
     xmlns:page="clr-namespace:FlagstoneUI.SampleApp.Pages"
     xmlns:converters="clr-namespace:FlagstoneUI.SampleApp.Converters"
     xmlns:vm="clr-namespace:FlagstoneUI.SampleApp.ViewModels"
-    Title="FlagstoneUI.SampleApp"
-    FlyoutBehavior="Disabled">
+    Title="FlagstoneUI.SampleApp">
 
 
 
@@ -19,7 +18,7 @@
         Route="ControlsShowcase" />
 
     <!-- Hidden routes for future use -->
-    <!--
+    
     <FlyoutItem Title="Home" Icon="icon_home.png">
         <ShellContent
             Title="Main"
@@ -36,6 +35,6 @@
                 Icon="signin_icon.png"/>
         </Tab>
     </FlyoutItem>
-    -->
+    
 
 </Shell>
