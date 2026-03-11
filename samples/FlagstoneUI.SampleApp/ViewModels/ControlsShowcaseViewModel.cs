@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace FlagstoneUI.SampleApp.ViewModels;
 
-public class ControlsShowcaseViewModel : INotifyPropertyChanged
+public partial class ControlsShowcaseViewModel : INotifyPropertyChanged
 {
 	private string _selectedTheme = "Material";
 
@@ -39,6 +39,36 @@ public class ControlsShowcaseViewModel : INotifyPropertyChanged
 		"Minty",
 		"Brite"
 	];
+
+	private string _entryText = string.Empty;
+	public string EntryText
+	{
+		get => _entryText;
+		set
+		{
+			if (_entryText == value)
+			{
+				return;
+			}
+			_entryText = value;
+			OnPropertyChanged();
+		}
+	}
+
+	private string _editorText = string.Empty;
+	public string EditorText
+	{
+		get => _editorText;
+		set
+		{
+			if (_editorText == value)
+			{
+				return;
+			}
+			_editorText = value;
+			OnPropertyChanged();
+		}
+	}
 
 	protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
 	{

@@ -27,17 +27,17 @@ public partial class ControlsShowcasePage : ContentPage
 		}
 	}
 
-	private void OnEntryTextChanged(object sender, TextChangedEventArgs e)
-	{
-		if (sender is Microsoft.Maui.Controls.Entry entry)
-		{
-			var message = $"Text changed: '{e.NewTextValue}' (Length: {e.NewTextValue?.Length ?? 0})";
+	////private void OnEntryTextChanged(object sender, TextChangedEventArgs e)
+	////{
+	////	if (sender is Microsoft.Maui.Controls.Entry entry)
+	////	{
+	////		var message = $"Text changed: '{e.NewTextValue}' (Length: {e.NewTextValue?.Length ?? 0})";
 
-			// Update both feedback labels (only one will be visible at a time)
-			EntryFeedbackLabel?.Text = message;
-			EntryFeedbackLabelAlt?.Text = message;
-		}
-	}
+	////		// Update both feedback labels (only one will be visible at a time)
+	////		EntryFeedbackLabel?.Text = message;
+	////		EntryFeedbackLabelAlt?.Text = message;
+	////	}
+	////}
 
 	readonly FsEditorBorderAnimation _animation = new()
 	{
