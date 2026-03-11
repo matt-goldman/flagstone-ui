@@ -175,6 +175,7 @@
 
       <fs:FsEditor Placeholder="Enter multi-line text here"
                    x:Name="MultiLineEditor"
+                    Text="{Binding EditorText, Mode=TwoWay}"
                    Style="{DynamicResource OutlinedEditor}" />
 
       <Grid>
@@ -183,6 +184,7 @@
                      x:Name="AiEditor"
                      Focused="AiEditor_OnFocused"
                      Unfocused="AiEditor_OnUnfocused"
+                     Text="{Binding EditorText, Mode=TwoWay}"
                      Style="{DynamicResource AiEditorStyle}" />
 
         <Button Background="Goldenrod"
