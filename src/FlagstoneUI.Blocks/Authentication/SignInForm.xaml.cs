@@ -52,7 +52,7 @@ public partial class SigninForm : ContentView
 	/// <remarks>This property defines the text displayed in the username input field of the sign-in
 	/// form. The default value is an empty string.</remarks>
 	public static readonly BindableProperty UsernameProperty = BindableProperty.Create(
-		nameof(Username), typeof(string), typeof(SigninForm), string.Empty);
+		nameof(Username), typeof(string), typeof(SigninForm), string.Empty, BindingMode.TwoWay);
 	/// <summary>
 	/// Gets or sets the text displayed in the username input field.
 	/// </summary>
