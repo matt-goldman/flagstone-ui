@@ -91,9 +91,9 @@ public partial class SigninForm : ContentView
 	/// <summary>
 	/// Gets or sets the command executed when the sign-in button is clicked.
 	/// </summary>
-	public ICommand SigninCommand
+	public ICommand? SigninCommand
 	{
-		get => (ICommand)GetValue(SigninCommandProperty);
+		get => (ICommand?)GetValue(SigninCommandProperty);
 		set => SetValue(SigninCommandProperty, value);
 	}
 	#endregion
