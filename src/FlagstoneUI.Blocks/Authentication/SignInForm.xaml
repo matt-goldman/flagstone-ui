@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-			 xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
-			 xmlns:local="clr-namespace:FlagstoneUI.Blocks.Authentication"
-             x:Class="FlagstoneUI.Blocks.Authentication.SigninForm">
-	<fs:FsCard>
+						 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+						 xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
+						 xmlns:local="clr-namespace:FlagstoneUI.Blocks.Authentication"
+						 x:Class="FlagstoneUI.Blocks.Authentication.SigninForm"
+						 x:Name="Self">
+	<fs:FsCard x:DataType="local:SigninForm"
+						 BindingContext="{x:Reference Self}">
 		<FlexLayout Direction="Column"
 					AlignItems="Center"
 					JustifyContent="SpaceAround">
-			<fs:FsEntry x:Name="UsernameEntry"
-						Placeholder="Username"
+			<fs:FsEntry Placeholder="{Binding UsernamePlaceholder}"
+						Text="{Binding Username, Mode=TwoWay}"
 						WidthRequest="250" />
 
-			<fs:FsEntry x:Name="PasswordEntry"
-						Placeholder="Password"
+			<fs:FsEntry Placeholder="{Binding PasswordPlaceholder}"
+						Text="{Binding Password, Mode=TwoWay}"
 						IsPassword="True"/>
 
-			<fs:FsButton x:Name="SignInButton"
-						Text="Sign In"
+			<fs:FsButton Text="{Binding SignInButtonText}"
 						WidthRequest="250"
 						Clicked="OnSigninClicked" />
 		</FlexLayout>
