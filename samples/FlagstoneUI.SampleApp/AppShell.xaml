@@ -35,6 +35,13 @@
                 Icon="signin_icon.png"/>
         </Tab>
     </FlyoutItem>
+
+    <FlyoutItem Title="FsEditor" Icon="icon_home.png">
+        <ShellContent
+            Title="FsEditor"
+            ContentTemplate="{DataTemplate page:FsEditorPage}"
+            Route="FsEditorPage" />
+    </FlyoutItem>
     
 
 </Shell>
