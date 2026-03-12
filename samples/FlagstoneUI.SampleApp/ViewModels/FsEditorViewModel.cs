@@ -5,47 +5,48 @@ namespace FlagstoneUI.SampleApp.ViewModels;
 
 public class FsEditorViewModel : INotifyPropertyChanged
 {
-public event PropertyChangedEventHandler? PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-{
-PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-}
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 
-// Text
-private string _editorText = string.Empty;
-public string EditorText
-{
-get => _editorText;
-set
-{
-if (_editorText == value)
-return;
-_editorText = value;
-OnPropertyChanged();
-OnPropertyChanged(nameof(CharacterCount));
-}
-}
+    // Text
+    private string _editorText = string.Empty;
+    public string EditorText
+    {
+        get => _editorText;
+        set
+        {
+            if (_editorText == value)
+                return;
 
-public string CharacterCount => $"Characters: {EditorText.Length}";
+            _editorText = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(CharacterCount));
+        }
+    }
 
-// AutoSize
-private string _selectedAutoSize = "Disabled";
-public string SelectedAutoSize
-{
-get => _selectedAutoSize;
-set
-{
-if (_selectedAutoSize == value)
-return;
-_selectedAutoSize = value;
-AutoSize = value == "TextChanges" ? EditorAutoSizeOption.TextChanges : EditorAutoSizeOption.Disabled;
-OnPropertyChanged();
-}
-}
+    public string CharacterCount => $"Characters: {EditorText.Length}";
 
-public List<string> AutoSizeOptions { get; } = ["Disabled", "TextChanges"];
+    // AutoSize
+    private string _selectedAutoSize = "Disabled";
+    public string SelectedAutoSize
+    {
+        get => _selectedAutoSize;
+        set
+        {
+            if (_selectedAutoSize == value)
+                return;
 
+            _selectedAutoSize = value;
+            AutoSize = value == "TextChanges" ? EditorAutoSizeOption.TextChanges : EditorAutoSizeOption.Disabled;
+            OnPropertyChanged();
+        }
+    }
+
+    public List<string> AutoSizeOptions { get; } = ["Disabled", "TextChanges"];
 private EditorAutoSizeOption _autoSize = EditorAutoSizeOption.Disabled;
 public EditorAutoSizeOption AutoSize
 {
