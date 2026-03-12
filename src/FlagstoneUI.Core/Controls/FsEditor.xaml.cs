@@ -456,6 +456,167 @@ public partial class FsEditor : ContentView
 	}
 	#endregion
 
+	#region FontAttributesProperty
+	/// <summary>
+	/// Identifies the FontAttributes bindable property.
+	/// </summary>
+	/// <remarks>This property specifies the font attributes (bold, italic, etc.) for the text displayed in the
+	/// <see cref="FsEditor"/> control. The default value is <see cref="FontAttributes.None"/>.</remarks>
+	public static readonly BindableProperty FontAttributesProperty = BindableProperty.Create(
+		nameof(FontAttributes),
+		typeof(FontAttributes),
+		typeof(FsEditor),
+		FontAttributes.None,
+		BindingMode.OneWay);
+
+	/// <summary>
+	/// Gets or sets the font attributes for the text content.
+	/// </summary>
+	public FontAttributes FontAttributes
+	{
+		get => (FontAttributes)GetValue(FontAttributesProperty);
+		set => SetValue(FontAttributesProperty, value);
+	}
+	#endregion
+
+	#region FontAutoScalingEnabledProperty
+	/// <summary>
+	/// Identifies the FontAutoScalingEnabled bindable property.
+	/// </summary>
+	/// <remarks>This property determines whether the font size automatically scales with the system accessibility
+	/// font size setting. The default value is true.</remarks>
+	public static readonly BindableProperty FontAutoScalingEnabledProperty = BindableProperty.Create(
+		nameof(FontAutoScalingEnabled),
+		typeof(bool),
+		typeof(FsEditor),
+		true,
+		BindingMode.OneWay);
+
+	/// <summary>
+	/// Gets or sets whether the font size automatically scales with the system accessibility font size setting.
+	/// </summary>
+	public bool FontAutoScalingEnabled
+	{
+		get => (bool)GetValue(FontAutoScalingEnabledProperty);
+		set => SetValue(FontAutoScalingEnabledProperty, value);
+	}
+	#endregion
+
+	#region FontFamilyProperty
+	/// <summary>
+	/// Identifies the FontFamily bindable property.
+	/// </summary>
+	/// <remarks>This property specifies the font family for the text displayed in the <see cref="FsEditor"/>
+	/// control. The default value is null (uses the system default font).</remarks>
+	public static readonly BindableProperty FontFamilyProperty = BindableProperty.Create(
+		nameof(FontFamily),
+		typeof(string),
+		typeof(FsEditor),
+		null,
+		BindingMode.OneWay);
+
+	/// <summary>
+	/// Gets or sets the font family for the text content.
+	/// </summary>
+	public string? FontFamily
+	{
+		get => (string?)GetValue(FontFamilyProperty);
+		set => SetValue(FontFamilyProperty, value);
+	}
+	#endregion
+
+	#region IsSpellCheckEnabledProperty
+	/// <summary>
+	/// Identifies the IsSpellCheckEnabled bindable property.
+	/// </summary>
+	/// <remarks>This property determines whether spell checking is enabled for the editor.
+	/// The default value is true.</remarks>
+	public static readonly BindableProperty IsSpellCheckEnabledProperty = BindableProperty.Create(
+		nameof(IsSpellCheckEnabled),
+		typeof(bool),
+		typeof(FsEditor),
+		true,
+		BindingMode.OneWay);
+
+	/// <summary>
+	/// Gets or sets whether spell checking is enabled.
+	/// </summary>
+	public bool IsSpellCheckEnabled
+	{
+		get => (bool)GetValue(IsSpellCheckEnabledProperty);
+		set => SetValue(IsSpellCheckEnabledProperty, value);
+	}
+	#endregion
+
+	#region IsTextPredictionEnabledProperty
+	/// <summary>
+	/// Identifies the IsTextPredictionEnabled bindable property.
+	/// </summary>
+	/// <remarks>This property determines whether text prediction (autocomplete) is enabled for the editor.
+	/// The default value is true.</remarks>
+	public static readonly BindableProperty IsTextPredictionEnabledProperty = BindableProperty.Create(
+		nameof(IsTextPredictionEnabled),
+		typeof(bool),
+		typeof(FsEditor),
+		true,
+		BindingMode.OneWay);
+
+	/// <summary>
+	/// Gets or sets whether text prediction is enabled.
+	/// </summary>
+	public bool IsTextPredictionEnabled
+	{
+		get => (bool)GetValue(IsTextPredictionEnabledProperty);
+		set => SetValue(IsTextPredictionEnabledProperty, value);
+	}
+	#endregion
+
+	#region SelectionLengthProperty
+	/// <summary>
+	/// Identifies the SelectionLength bindable property.
+	/// </summary>
+	/// <remarks>This property specifies the length of the current text selection in the editor.
+	/// The default value is 0.</remarks>
+	public static readonly BindableProperty SelectionLengthProperty = BindableProperty.Create(
+		nameof(SelectionLength),
+		typeof(int),
+		typeof(FsEditor),
+		0,
+		BindingMode.TwoWay);
+
+	/// <summary>
+	/// Gets or sets the length of the current text selection.
+	/// </summary>
+	public int SelectionLength
+	{
+		get => (int)GetValue(SelectionLengthProperty);
+		set => SetValue(SelectionLengthProperty, value);
+	}
+	#endregion
+
+	#region TextTransformProperty
+	/// <summary>
+	/// Identifies the TextTransform bindable property.
+	/// </summary>
+	/// <remarks>This property specifies the text transformation applied to the text in the editor.
+	/// The default value is <see cref="TextTransform.Default"/>.</remarks>
+	public static readonly BindableProperty TextTransformProperty = BindableProperty.Create(
+		nameof(TextTransform),
+		typeof(TextTransform),
+		typeof(FsEditor),
+		TextTransform.Default,
+		BindingMode.OneWay);
+
+	/// <summary>
+	/// Gets or sets the text transformation applied to the editor text.
+	/// </summary>
+	public TextTransform TextTransform
+	{
+		get => (TextTransform)GetValue(TextTransformProperty);
+		set => SetValue(TextTransformProperty, value);
+	}
+	#endregion
+
 	private void BorderlessEditor_Focused(object sender, FocusEventArgs e)
 	{
 		VisualStateManager.GoToState(this, VisualStateManager.CommonStates.Focused);

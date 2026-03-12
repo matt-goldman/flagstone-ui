@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
+             xmlns:vm="clr-namespace:FlagstoneUI.SampleApp.ViewModels"
+             x:Class="FlagstoneUI.SampleApp.Pages.FsEditorPage"
+             x:DataType="vm:FsEditorViewModel"
+             Title="FsEditor Showcase"
+             BackgroundColor="{AppThemeBinding Light={DynamicResource Color.Background}, Dark={DynamicResource Color.Background.Dark}}">
+  <ScrollView>
+    <VerticalStackLayout Padding="16" Spacing="16">
+
+      <!-- Page Header -->
+      <Label Text="FsEditor"
+             FontSize="32"
+             FontAttributes="Bold"
+             TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}" />
+      <Label Text="Interactive property showcase"
+             FontSize="14"
+             TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}"
+             Margin="0,0,0,8" />
+
+      <!-- Editor under test -->
+      <fs:FsEditor x:Name="ShowcaseEditor"
+                   Placeholder="Type here to test properties..."
+                   Text="{Binding EditorText, Mode=TwoWay}"
+                   AutoSize="{Binding AutoSize}"
+                   IsReadOnly="{Binding IsReadOnly}"
+                   IsSpellCheckEnabled="{Binding IsSpellCheckEnabled}"
+                   IsTextPredictionEnabled="{Binding IsTextPredictionEnabled}"
+                   FontAttributes="{Binding FontAttributes}"
+                   FontAutoScalingEnabled="{Binding FontAutoScalingEnabled}"
+                   FontSize="{Binding FontSize}"
+                   TextTransform="{Binding TextTransform}"
+                   MaxLength="{Binding MaxLength}"
+                   Keyboard="{Binding Keyboard}"
+                   Style="{DynamicResource OutlinedEditor}" />
+
+      <!-- Character count -->
+      <Label Text="{Binding CharacterCount}"
+             FontSize="12"
+             TextColor="{AppThemeBinding Light={DynamicResource Color.OnSurfaceVariant}, Dark={DynamicResource Color.OnSurfaceVariant.Dark}}" />
+
+      <!-- Divider -->
+      <BoxView HeightRequest="1"
+               BackgroundColor="{AppThemeBinding Light={DynamicResource Color.OutlineVariant}, Dark={DynamicResource Color.OutlineVariant.Dark}}"
+               Margin="0,8" />
+
+      <!-- ===== Property Controls ===== -->
+      <Label Text="Property Controls"
+             FontSize="20"
+             FontAttributes="Bold"
+             TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}" />
+
+      <!-- AutoSize -->
+      <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="8" RowSpacing="4">
+        <Label Grid.Row="0" Grid.Column="0"
+               Text="AutoSize"
+               FontAttributes="Bold"
+               FontSize="14"
+               TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}"
+               VerticalOptions="Center" />
+        <Picker Grid.Row="1" Grid.Column="0"
+                ItemsSource="{Binding AutoSizeOptions}"
+                SelectedItem="{Binding SelectedAutoSize, Mode=TwoWay}" />
+
+        <!-- Keyboard -->
+        <Label Grid.Row="0" Grid.Column="1"
+               Text="Keyboard"
+               FontAttributes="Bold"
+               FontSize="14"
+               TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}"
+               VerticalOptions="Center" />
+        <Picker Grid.Row="1" Grid.Column="1"
+                ItemsSource="{Binding KeyboardOptions}"
+                SelectedItem="{Binding SelectedKeyboard, Mode=TwoWay}" />
+      </Grid>
+
+      <!-- FontAttributes / TextTransform -->
+      <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="8" RowSpacing="4">
+        <Label Grid.Row="0" Grid.Column="0"
+               Text="FontAttributes"
+               FontAttributes="Bold"
+               FontSize="14"
+               TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}"
+               VerticalOptions="Center" />
+        <Picker Grid.Row="1" Grid.Column="0"
+                ItemsSource="{Binding FontAttributesOptions}"
+                SelectedItem="{Binding SelectedFontAttributes, Mode=TwoWay}" />
+
+        <!-- TextTransform -->
+        <Label Grid.Row="0" Grid.Column="1"
+               Text="TextTransform"
+               FontAttributes="Bold"
+               FontSize="14"
+               TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}"
+               VerticalOptions="Center" />
+        <Picker Grid.Row="1" Grid.Column="1"
+                ItemsSource="{Binding TextTransformOptions}"
+                SelectedItem="{Binding SelectedTextTransform, Mode=TwoWay}" />
+      </Grid>
+
+      <!-- FontSize Slider -->
+      <Label Text="{Binding FontSizeLabel}"
+             FontAttributes="Bold"
+             FontSize="14"
+             TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}" />
+      <Slider Minimum="8"
+              Maximum="48"
+              Value="{Binding FontSize, Mode=TwoWay}" />
+
+      <!-- Boolean switches -->
+      <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnSpacing="16" RowSpacing="12">
+
+        <!-- IsReadOnly -->
+        <Label Grid.Row="0" Grid.Column="0"
+               Text="IsReadOnly"
+               FontSize="14"
+               TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}"
+               VerticalOptions="Center" />
+        <Switch Grid.Row="0" Grid.Column="1"
+                IsToggled="{Binding IsReadOnly, Mode=TwoWay}"
+                HorizontalOptions="End" />
+
+        <!-- IsSpellCheckEnabled -->
+        <Label Grid.Row="1" Grid.Column="0"
+               Text="IsSpellCheckEnabled"
+               FontSize="14"
+               TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}"
+               VerticalOptions="Center" />
+        <Switch Grid.Row="1" Grid.Column="1"
+                IsToggled="{Binding IsSpellCheckEnabled, Mode=TwoWay}"
+                HorizontalOptions="End" />
+
+        <!-- IsTextPredictionEnabled -->
+        <Label Grid.Row="2" Grid.Column="0"
+               Text="IsTextPredictionEnabled"
+               FontSize="14"
+               TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}"
+               VerticalOptions="Center" />
+        <Switch Grid.Row="2" Grid.Column="1"
+                IsToggled="{Binding IsTextPredictionEnabled, Mode=TwoWay}"
+                HorizontalOptions="End" />
+
+        <!-- FontAutoScalingEnabled -->
+        <Label Grid.Row="3" Grid.Column="0"
+               Text="FontAutoScalingEnabled"
+               FontSize="14"
+               TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}"
+               VerticalOptions="Center" />
+        <Switch Grid.Row="3" Grid.Column="1"
+                IsToggled="{Binding FontAutoScalingEnabled, Mode=TwoWay}"
+                HorizontalOptions="End" />
+
+        <!-- MaxLength (100 chars when enabled) -->
+        <Label Grid.Row="4" Grid.Column="0"
+               Text="MaxLength (limit to 100)"
+               FontSize="14"
+               TextColor="{AppThemeBinding Light={DynamicResource Color.OnBackground}, Dark={DynamicResource Color.OnBackground.Dark}}"
+               VerticalOptions="Center" />
+        <Switch Grid.Row="4" Grid.Column="1"
+                IsToggled="{Binding MaxLengthEnabled, Mode=TwoWay}"
+                HorizontalOptions="End" />
+
+      </Grid>
+
+    </VerticalStackLayout>
+  </ScrollView>
+</ContentPage>
