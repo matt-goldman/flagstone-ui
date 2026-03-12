@@ -7,35 +7,35 @@ namespace FlagstoneUI.Core.Tests.Controls;
 public class FsEditorTests : MauiTestBase
 {
 	[Fact]
-	public void Editor_FontAttributes_defaults_to_None()
+	public void FsEditor_FontAttributes_defaults_to_None()
 	{
 		var editor = new FsEditor();
 		editor.FontAttributes.ShouldBe(FontAttributes.None);
 	}
 
 	[Fact]
-	public void Editor_FontAttributes_can_be_set_to_Bold()
+	public void FsEditor_FontAttributes_can_be_set_to_Bold()
 	{
 		var editor = new FsEditor { FontAttributes = FontAttributes.Bold };
 		editor.FontAttributes.ShouldBe(FontAttributes.Bold);
 	}
 
 	[Fact]
-	public void Editor_FontAttributes_can_be_set_to_Italic()
+	public void FsEditor_FontAttributes_can_be_set_to_Italic()
 	{
 		var editor = new FsEditor { FontAttributes = FontAttributes.Italic };
 		editor.FontAttributes.ShouldBe(FontAttributes.Italic);
 	}
 
 	[Fact]
-	public void Editor_FontAutoScalingEnabled_defaults_to_true()
+	public void FsEditor_FontAutoScalingEnabled_defaults_to_true()
 	{
 		var editor = new FsEditor();
 		editor.FontAutoScalingEnabled.ShouldBeTrue();
 	}
 
 	[Fact]
-	public void Editor_FontAutoScalingEnabled_can_be_disabled()
+	public void FsEditor_FontAutoScalingEnabled_can_be_disabled()
 	{
 		var editor = new FsEditor { FontAutoScalingEnabled = false };
 		editor.FontAutoScalingEnabled.ShouldBeFalse();
