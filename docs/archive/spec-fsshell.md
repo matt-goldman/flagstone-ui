@@ -167,6 +167,103 @@ No other code changes are required. Existing `ShellContent` declarations, route 
 
 ## Open questions
 
-- **Top tabs (multiple `ShellContent` inside a `Tab`).** Currently out of scope for V1 visual replacement, but the underlying routing must continue to work. Verify behaviour when an `FsShell` contains a `Tab` with multiple `ShellContent` — probably falls through to stock Shell rendering for the top strip while the bottom bar uses FsTabBar. Acceptable for V1; flag in docs.
+- **Top tabs (multiple `ShellContent` inside a `Tab`).** Currently out of scope for V1 visual replacement, but the underlying routing must continue to work. Verify behaviour when an `FsShell` contains a `Tab` with multiple `ShellContent` — probably falls through to stock Shell rendering for the top strip while the bottom bar uses FsTabBar.
+  - **Resolution:** Acceptable for V1; flag in docs.
 - **Selection model on the bar.** `SelectedRoute` (string) vs. `SelectedItem` (`FsTabContext`) vs. both. Leaning toward `SelectedRoute` as the primary, with `SelectedItem` as a derived convenience. Resolve before API freeze.
+  - **Resolution:** Goal is both; either is acceptable on the concrete `FsTabBar`. Internal storage is expected to be a dictionary keyed by route with `FsTabContext` as value (or similar), so exposing both is essentially free and the implementation can decide which is "primary" as it shakes out.
+  - **However**, the public bar-replacement contract (`IFsTabBar`) is genuinely a freeze question — changing it post-V1 breaks every consumer-authored bar in the wild. The interface therefore commits to `SelectedRoute` (string) only, as the minimum a custom bar must implement. `SelectedItem` (and any equivalent context-typed accessor) lives on the concrete `FsTabBar` only and can be promoted to the interface non-breakingly later if it proves useful. Implementation strategy stays free; the contract is locked.
 - **`IsSelected` propagation for templates.** `FsTabContext.IsSelected` is the canonical source. Whether to also expose visual states (`Selected`, `Unselected`, `Disabled`) via the standard MAUI `VisualStateManager` should be decided alongside the default item template — consumers familiar with VSM-driven styling will expect it.
+  - **Resolution:** Required and critical. Visual states and VSM are expected as standard .NET MAUI behaviour and we will support them. Two specifics:
+    1. **`CommonStates` group** — driven by `FsTabContext.IsEnabled`. Standard `Normal` / `Disabled` (and `Focused` where the platform surfaces it). Matches what consumers expect on every other MAUI control.
+    2. **`SelectionStates` group** — driven by `FsTabContext.IsSelected`. `Selected` / `Unselected`. Kept as a separate group from `CommonStates` so that selected-and-disabled is expressible (the two concerns compose). Pending a quick check of what stock Shell uses on its tab items; if Microsoft has settled on a different group name, match that for least-surprise.
+    Both groups are pumped by `FsTabBar` on the template-instance root; subclassers and custom bars are expected to do the same. The default item template will demonstrate both groups in use.
+
+## Delivery plan
+
+The bootstrap (commit landing alongside this spec) covers the cross-platform API skeleton: `FsShell`, `FsTabBar`, `FsTabContext`, `IFsTabBar`, `ITabTransitionAnimator`, `FsTabTransitionContext`, the `UseFlagstoneUI()` registration, and stub `FsShellRenderer` partials on every supported platform. Everything below is what's required to take that skeleton to a shippable V1.
+
+Tasks are ordered roughly by dependency, but several streams (per-platform renderers, animator, sample app) can run in parallel once the cross-platform API is frozen.
+
+### A. Cross-platform API — finish & freeze
+
+- [x] **Resolve open question: bar selection model.** Decide between `SelectedRoute` (string) only, `SelectedItem` (`FsTabContext`) only, or both with one as canonical and the other derived. Update `IFsTabBar` and `FsTabBar` accordingly. Document the choice in the ADR.
+- [x] **Resolve open question: VSM on the default template.** Decide whether `FsTabContext.IsSelected` is the only selected-state hook or whether `FsTabBar` also pumps `VisualStateManager` `Selected` / `Unselected` / `Disabled` states on each template instance. If yes, wire the state transitions in the bar's tap/selection handler.
+- [x] **Resolve open question: top tabs.** Verify what happens when a `Tab` contains multiple `ShellContent`. Either (a) confirm stock Shell top-strip rendering still occurs and document it, or (b) decide on a fallback. No code change expected; this is a verification + docs task.
+- [ ] **Tighten the `FsTabContext` projection.** Bootstrap reads `Shell.Title` / `Shell.Icon` from the underlying `ShellContent` once at projection time. Replace with live observation: subscribe to `PropertyChanged` on each `ShellContent` so title/icon edits at runtime flow through to the bar.
+- [ ] **Refine the items rebuild.** `FsShell.RebuildTabs` currently re-clears on every child mutation. Diff instead so that existing `FsTabContext` instances are preserved across rebuilds (template instances stay bound to the same context, no flicker).
+- [ ] **`FlyoutItem` handling.** Decide whether `FlyoutItem`s contribute to the tab bar in V1 (probably no, since flyout chrome is out of scope) and document/enforce the decision in `RebuildTabs`.
+- [ ] **`Shell.SetTabBarIsVisible` bridging at the cross-platform layer.** Surface the per-page bar visibility decision back to `FsTabBar.IsVisible`, in addition to the per-platform plumbing.
+- [ ] **`HideTabBarOnKeyboard` attached property.** Defined in the spec but not yet on `FsShell`. Add the attached property + default-true wiring; the per-platform code reads it.
+- [ ] **Strongly typed `FsTabTransitionContext`.** Bootstrap passes `null` for `OutgoingView` / `IncomingView`. The renderer needs to populate these from the platform page swap; coordinate the contract once the first renderer is in place.
+- [ ] **Public API review.** Once the above settle, take a final pass: nullability, `sealed` vs not on `FsTabBar`, virtual hooks for subclassers, internal vs public on event args.
+
+### B. Platform renderers — replace bar chrome
+
+Each platform follows roughly the same shape: subclass `ShellRenderer`, suppress the native bar, host `FsTabBar` (or the consumer-supplied bar) as a sibling at the bottom of the platform shell view, and honour the bar-visibility / safe-area / keyboard / modal contracts.
+
+- [ ] **iOS — `FsShellRenderer`.**
+  - Override `CreateShellSectionRenderer` (or `CreateShellItemRenderer`) to suppress the native `UITabBar`.
+  - Host the FlagstoneUI bar as a `UIView` pinned to the bottom of the shell's container view.
+  - Project `FsTabContext` items into the bar (already done at the cross-platform layer; renderer just hosts the view).
+  - Bridge `Shell.SetTabBarIsVisible(page, false)` to the bar's `IsVisible`.
+  - Respect the bottom safe-area inset (home indicator). The bar's bottom padding adapts to `additionalSafeAreaInsets`.
+  - Slide the bar off-screen on `UIKeyboardWillShow`; restore on `UIKeyboardWillHide`. Gated by `HideTabBarOnKeyboard`.
+  - Hide the bar when a modal page is presented over the shell; restore on dismissal.
+  - Populate `FsTabTransitionContext.OutgoingView` / `IncomingView` on tab change and await `ITabTransitionAnimator.AnimateAsync` before swapping.
+
+- [ ] **MacCatalyst — `FsShellRenderer`.** Mostly identical to iOS, with whatever differences emerge during implementation (safe-area is generally a no-op; modal handling and keyboard avoidance still apply).
+
+- [ ] **Android — `FsShellRenderer`.**
+  - Suppress / hide `BottomNavigationView` in the shell fragment hierarchy.
+  - Host the FlagstoneUI bar as an Android `View` (likely via `ContentViewGroup` or hosting `FsTabBar`'s handler) in the shell's coordinator layout.
+  - Bridge `Shell.SetTabBarIsVisible`.
+  - Respect Android system bars / gesture navigation insets (`WindowInsetsCompat`).
+  - Hide the bar on soft keyboard show; restore on hide. Gated by `HideTabBarOnKeyboard`.
+  - Hide on modal page presentation; restore on dismissal.
+  - Populate `FsTabTransitionContext` and await the animator on tab change.
+
+- [ ] **Windows — `FsShellRenderer`.**
+  - Suppress / replace the WinUI `NavigationView` chrome that stock Shell produces.
+  - Host the FlagstoneUI bar at the bottom of the shell's root layout.
+  - Bridge `Shell.SetTabBarIsVisible`.
+  - Keyboard avoidance is generally a no-op on desktop Windows; verify and document.
+  - Modal handling: hide on `ContentDialog` / modal page show; restore on dismissal. Confirm exact stock Shell behaviour and match it.
+  - Populate `FsTabTransitionContext` and await the animator on tab change.
+
+### C. Tab transition animator
+
+- [ ] **First-party reference animator.** Even though the spec ships no default, having one usable example (e.g. cross-fade) in the sample app drives out the `FsTabTransitionContext` shape end-to-end.
+- [ ] **Cancellation contract test.** Verify that rapidly tapping between tabs cancels the in-flight animation cleanly on every platform.
+- [ ] **Failure / fallback behaviour.** Confirm the spec's "if the animator throws or the cancellation token is signalled, falls back to instant swap and logs the failure at warning level" actually happens at the renderer-driven swap point, not just inside `FsShell.RunTransitionAsync`.
+
+### D. Test surface
+
+- [ ] **LSP test suite.** Add `FlagstoneUI.Core.Tests` coverage that exercises every public method, property, and event on `Shell` against an `FsShell` instance, asserting equivalent behaviour. Mirrors the existing per-control LSP testing pattern.
+- [ ] **Cross-platform unit tests** for `FsTabContext` projection, items diff, `SelectedRoute` ↔ `Navigated` round-trip, custom-bar attach/detach, animator invocation/cancellation.
+- [ ] **Bar contract tests.** Verify both implementation paths for the bar replacement contract: implementing `IFsTabBar` directly, and the convention-based fallback (bindable property `ItemsSource` + `SelectedRoute` or `ItemSelected` event).
+- [ ] **Per-platform smoke tests.** Manual or automated UI test that exercises tab selection, bar visibility toggling, keyboard show/hide, modal presentation, and safe-area on each platform. Defer automation if necessary; manual checklist is acceptable for V1 if recorded.
+
+### E. Sample app — definition of done
+
+V1 is not shippable until the sample app demonstrates `FsShell` end-to-end. The sample app is the proof that consumers can do what the spec promises without writing platform code.
+
+- [ ] **Migrate `samples/FlagstoneUI.SampleApp` from `Shell` to `FsShell`.** Single find-and-replace per shell file; nothing else changes. Confirms drop-in compatibility.
+- [ ] **Default tab bar demo.** A page that uses `FsShell` with no `TabBarItemTemplate` set, showing the library default looks reasonable on every platform.
+- [ ] **Custom `TabBarItemTemplate` demo.** A page (or a separate sample shell) demonstrating a meaningfully different tab look — e.g. pill-shaped selected background, action button not bound to a route, custom selected colour driven by `FsTabContext.IsSelected`.
+- [ ] **Custom bar replacement demo.** A page demonstrating `FsShell.TabBar` set to a consumer-authored `ContentView` that implements `IFsTabBar`. Show that this is < 50 lines including XAML.
+- [ ] **Animator demo.** A page using the reference cross-fade (or equivalent) `ITabTransitionAnimator`.
+- [ ] **Visibility demos.** Pages that exercise `Shell.SetTabBarIsVisible(page, false)`, keyboard avoidance, and modal presentation, so the polish behaviours are visible to anyone running the sample.
+
+### F. Documentation
+
+- [ ] **`docs/controls/FsShell.md`.** Public-facing control doc following the pattern of `docs/controls/FsButton.md` etc. Describes the API, the two extension layers, and the migration story.
+- [ ] **Update `docs/getting-started/quickstart.md`** to mention `FsShell` and the `UseFlagstoneUI()` requirement.
+- [ ] **Update `AGENTS.MD` and `.github/copilot-instructions.md`** with `FsShell` as an available control.
+- [ ] **Move this spec out of `docs/archive/`.** Currently lives in archive; promote to `docs/specs/` or fold the relevant parts into the control doc once V1 ships. Keep the ADR ([adr012-fsshell.md](../decisions/adr012-fsshell.md)) where it is.
+
+### G. Loose ends / nice-to-haves (defer if needed)
+
+- [ ] **Diagnostics.** Replace `System.Diagnostics.Debug.WriteLine` calls in `FsShell` with proper MAUI logger usage.
+- [ ] **`FlagstoneUIBuilder` cleanup.** The `UseDefaultTheme()` no-op method is a leftover from the original builder pattern. Either remove it or make it do something. Out of scope for this spec but adjacent.
+- [ ] **NuGet packaging.** Confirm `FsShell` types are exported from the `FlagstoneUI.Core` NuGet package and that the `UseFlagstoneUI()` extension is discoverable.
+
