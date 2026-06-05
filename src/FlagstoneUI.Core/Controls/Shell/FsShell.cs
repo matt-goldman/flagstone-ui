@@ -31,7 +31,8 @@ namespace FlagstoneUI.Core.Controls;
 /// </remarks>
 public partial class FsShell : Shell
 {
-	private readonly ObservableCollection<FsTabContext> _tabs = new();
+	private readonly ObservableCollection<FsTabContext> _tabs = [];
+	private readonly Dictionary<ShellContent, FsTabContext> _contentContextMap = [];
 	private CancellationTokenSource? _transitionCts;
 	private int _previousIndex = -1;
 
@@ -75,6 +76,7 @@ public partial class FsShell : Shell
 		{
 			defaultBar.ItemTemplate = (DataTemplate?)newValue;
 		}
+
 	}
 
 	#endregion
@@ -106,10 +108,12 @@ public partial class FsShell : Shell
 			return;
 		}
 
+
 		if (oldValue is IFsTabBar oldBar)
 		{
 			oldBar.ItemSelected -= shell.OnBarItemSelected;
 		}
+
 
 		if (newValue is ContentView newView)
 		{
@@ -141,6 +145,28 @@ public partial class FsShell : Shell
 	{
 		get => (ITabTransitionAnimator?)GetValue(TabTransitionAnimatorProperty);
 		set => SetValue(TabTransitionAnimatorProperty, value);
+	}
+
+	#endregion
+
+	#region HideTabBarOnKeyboard
+
+	/// <summary>Bindable property for <see cref="HideTabBarOnKeyboard"/>.</summary>
+	public static readonly BindableProperty HideTabBarOnKeyboardProperty = BindableProperty.Create(
+		nameof(HideTabBarOnKeyboard),
+		typeof(bool),
+		typeof(FsShell),
+		defaultValue: true);
+
+	/// <summary>
+	/// When <see langword="true"/> (the default), the tab bar slides off-screen when the soft
+	/// keyboard is presented and restores when the keyboard dismisses. The per-platform renderer
+	/// reads this property to gate keyboard-avoidance behaviour.
+	/// </summary>
+	public bool HideTabBarOnKeyboard
+	{
+		get => (bool)GetValue(HideTabBarOnKeyboardProperty);
+		set => SetValue(HideTabBarOnKeyboardProperty, value);
 	}
 
 	#endregion
@@ -177,6 +203,7 @@ public partial class FsShell : Shell
 		{
 			AttachBar(TabBar);
 		}
+
 	}
 
 	private void AttachBar(ContentView bar)
@@ -190,31 +217,62 @@ public partial class FsShell : Shell
 		}
 	}
 
-	private void RebuildTabs()
+	/// <summary>
+	/// Rebuilds the <see cref="Tabs"/> collection from the current Shell visual tree. Called
+	/// automatically on child add/remove; subclasses may override to customise tab projection.
+	/// </summary>
+	protected virtual void RebuildTabs()
 	{
-		_tabs.Clear();
-
-		foreach (var item in this.Items)
+		// Enumerate ShellContent leaves, skipping FlyoutItem children — flyout chrome is out of
+		// scope for V1 and FlyoutItem routes do not contribute to the bottom tab bar.
+		var newContents = new List<(ShellContent content, string route)>();
+		foreach (var item in Items)
 		{
+			if (item is FlyoutItem)
+			{
+				continue;
+			}
+
+
 			foreach (var section in item.Items)
 			{
 				foreach (var content in section.Items)
 				{
 					var route = !string.IsNullOrEmpty(content.Route) ? content.Route : item.Route;
-					var ctx = new FsTabContext(route)
-					{
-						Title = Shell.GetTabBarIsVisible(content) ? null : null,
-					};
-
-					ctx.Title = (content.Title ?? section.Title ?? item.Title) ?? route;
-					ctx.Icon = content.Icon ?? section.Icon ?? item.Icon;
-
-					_tabs.Add(ctx);
+					newContents.Add((content, route));
 				}
 			}
 		}
 
-		// Keep bar in sync if attached.
+		// Unsubscribe from ShellContents no longer in the tree.
+		var newContentSet = newContents.Select(t => t.content).ToHashSet();
+		foreach (var removed in _contentContextMap.Keys.Except(newContentSet).ToList())
+		{
+			removed.PropertyChanged -= OnShellContentPropertyChanged;
+			_contentContextMap.Remove(removed);
+		}
+
+		// Create or update an FsTabContext for each current ShellContent.
+		foreach (var (content, route) in newContents)
+		{
+			if (!_contentContextMap.TryGetValue(content, out var ctx))
+			{
+				ctx = new FsTabContext(route);
+				_contentContextMap[content] = ctx;
+				content.PropertyChanged += OnShellContentPropertyChanged;
+			}
+
+			var parentSection = content.Parent as ShellSection;
+			var parentItem = parentSection?.Parent as ShellItem;
+			ctx.Title = content.Title ?? parentSection?.Title ?? parentItem?.Title ?? route;
+			ctx.Icon = content.Icon ?? parentSection?.Icon ?? parentItem?.Icon;
+		}
+
+		// Synchronise the observable collection in-place so that existing FsTabContext instances
+		// are preserved across rebuilds — BindableLayout will not recreate template instances for
+		// contexts that stay at the same position.
+		SyncTabs(newContents.Select(t => _contentContextMap[t.content]).ToList());
+
 		if (TabBar is IFsTabBar bar)
 		{
 			bar.ItemsSource = _tabs;
@@ -224,11 +282,66 @@ public partial class FsShell : Shell
 		UpdateSelectedFlags();
 	}
 
-	private string? CurrentRoute()
+	private void SyncTabs(List<FsTabContext> desired)
 	{
-		var current = CurrentItem?.CurrentItem?.CurrentItem;
-		return current?.Route;
+		for (var i = _tabs.Count - 1; i >= 0; i--)
+		{
+			if (!desired.Contains(_tabs[i]))
+			{
+				_tabs.RemoveAt(i);
+			}
+		}
+
+		for (var i = 0; i < desired.Count; i++)
+		{
+			var ctx = desired[i];
+			var current = _tabs.IndexOf(ctx);
+			if (current < 0)
+			{
+				_tabs.Insert(i, ctx);
+			}
+			else if (current != i)
+			{
+				_tabs.Move(current, i);
+			}
+
+		}
 	}
+
+	private void OnShellContentPropertyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		if (sender is not ShellContent content || !_contentContextMap.TryGetValue(content, out var ctx))
+		{
+			return;
+		}
+
+
+		var parentSection = content.Parent as ShellSection;
+		var parentItem = parentSection?.Parent as ShellItem;
+
+		if (e.PropertyName == nameof(content.Title))
+		{
+			ctx.Title = content.Title ?? parentSection?.Title ?? parentItem?.Title ?? ctx.Route;
+		}
+		else if (e.PropertyName == nameof(content.Icon))
+		{
+			ctx.Icon = content.Icon ?? parentSection?.Icon ?? parentItem?.Icon;
+		}
+
+	}
+
+	private void BridgeTabBarVisibility()
+	{
+		if (TabBar is not ContentView barView || CurrentPage is not { } page)
+		{
+			return;
+		}
+
+
+		barView.IsVisible = Shell.GetTabBarIsVisible(page);
+	}
+
+	private string? CurrentRoute() => CurrentItem?.CurrentItem?.CurrentItem?.Route;
 
 	private void UpdateSelectedFlags()
 	{
@@ -242,6 +355,7 @@ public partial class FsShell : Shell
 			{
 				newIndex = i;
 			}
+
 		}
 
 		if (newIndex >= 0 && newIndex != _previousIndex)
@@ -258,6 +372,7 @@ public partial class FsShell : Shell
 		{
 			return;
 		}
+
 
 		_transitionCts?.Cancel();
 		_transitionCts = new CancellationTokenSource();
@@ -286,6 +401,9 @@ public partial class FsShell : Shell
 		{
 			bar.SelectedRoute = CurrentRoute();
 		}
+
+
+		BridgeTabBarVisibility();
 	}
 
 	private async void OnBarItemSelected(object? sender, FsTabBarSelectionChangedEventArgs e)

@@ -20,9 +20,11 @@ public class FsEditorViewModel : INotifyPropertyChanged
 		set
 		{
 			if (_editorText == value)
-				return;
+            {
+                return;
+            }
 
-			_editorText = value;
+            _editorText = value;
 			OnPropertyChanged();
 			OnPropertyChanged(nameof(CharacterCount));
 		}
@@ -38,9 +40,11 @@ public class FsEditorViewModel : INotifyPropertyChanged
 		set
 		{
 			if (_selectedAutoSize == value)
-				return;
+            {
+                return;
+            }
 
-			_selectedAutoSize = value;
+            _selectedAutoSize = value;
 			AutoSize = value == "TextChanges" ? EditorAutoSizeOption.TextChanges : EditorAutoSizeOption.Disabled;
 			OnPropertyChanged();
 		}
@@ -55,9 +59,11 @@ public class FsEditorViewModel : INotifyPropertyChanged
 		set
 		{
 			if (_autoSize == value)
-				return;
+            {
+                return;
+            }
 
-			_autoSize = value;
+            _autoSize = value;
 			OnPropertyChanged();
 		}
 	}
@@ -70,9 +76,11 @@ public class FsEditorViewModel : INotifyPropertyChanged
 		set
 		{
 			if (_isReadOnly == value)
-				return;
+            {
+                return;
+            }
 
-			_isReadOnly = value;
+            _isReadOnly = value;
 			OnPropertyChanged();
 		}
 	}
@@ -85,9 +93,11 @@ public class FsEditorViewModel : INotifyPropertyChanged
 		set
 		{
 			if (_isSpellCheckEnabled == value)
-				return;
+            {
+                return;
+            }
 
-			_isSpellCheckEnabled = value;
+            _isSpellCheckEnabled = value;
 			OnPropertyChanged();
 		}
 	}
@@ -100,9 +110,11 @@ public class FsEditorViewModel : INotifyPropertyChanged
 		set
 		{
 			if (_isTextPredictionEnabled == value)
-				return;
+            {
+                return;
+            }
 
-			_isTextPredictionEnabled = value;
+            _isTextPredictionEnabled = value;
 			OnPropertyChanged();
 		}
 	}
@@ -115,9 +127,11 @@ public class FsEditorViewModel : INotifyPropertyChanged
 		set
 		{
 			if (_selectedFontAttributes == value)
-				return;
+            {
+                return;
+            }
 
-			_selectedFontAttributes = value;
+            _selectedFontAttributes = value;
 			FontAttributes = value switch
 			{
 				"Bold" => FontAttributes.Bold,
@@ -138,9 +152,11 @@ public class FsEditorViewModel : INotifyPropertyChanged
 		set
 		{
 			if (_fontAttributes == value)
-				return;
+            {
+                return;
+            }
 
-			_fontAttributes = value;
+            _fontAttributes = value;
 			OnPropertyChanged();
 		}
 	}
@@ -153,9 +169,11 @@ public class FsEditorViewModel : INotifyPropertyChanged
 		set
 		{
 			if (_fontAutoScalingEnabled == value)
-				return;
+            {
+                return;
+            }
 
-			_fontAutoScalingEnabled = value;
+            _fontAutoScalingEnabled = value;
 			OnPropertyChanged();
 		}
 	}
@@ -168,9 +186,11 @@ public class FsEditorViewModel : INotifyPropertyChanged
 		set
 		{
 			if (_fontSize == value)
-				return;
+            {
+                return;
+            }
 
-			_fontSize = value;
+            _fontSize = value;
 			OnPropertyChanged();
 			OnPropertyChanged(nameof(FontSizeLabel));
 		}
@@ -186,9 +206,11 @@ public class FsEditorViewModel : INotifyPropertyChanged
 		set
 		{
 			if (_selectedTextTransform == value)
-				return;
+            {
+                return;
+            }
 
-			_selectedTextTransform = value;
+            _selectedTextTransform = value;
 			TextTransform = value switch
 			{
 				"None" => TextTransform.None,
@@ -209,9 +231,11 @@ public class FsEditorViewModel : INotifyPropertyChanged
 		set
 		{
 			if (_textTransform == value)
-				return;
+            {
+                return;
+            }
 
-			_textTransform = value;
+            _textTransform = value;
 			OnPropertyChanged();
 		}
 	}
@@ -224,9 +248,11 @@ public class FsEditorViewModel : INotifyPropertyChanged
 		set
 		{
 			if (_maxLength == value)
-				return;
+            {
+                return;
+            }
 
-			_maxLength = value;
+            _maxLength = value;
 			OnPropertyChanged();
 		}
 	}
@@ -238,9 +264,11 @@ public class FsEditorViewModel : INotifyPropertyChanged
 		set
 		{
 			if (_maxLengthEnabled == value)
-				return;
+            {
+                return;
+            }
 
-			_maxLengthEnabled = value;
+            _maxLengthEnabled = value;
 			MaxLength = value ? 100 : int.MaxValue;
 			OnPropertyChanged();
 		}
@@ -254,9 +282,11 @@ public class FsEditorViewModel : INotifyPropertyChanged
 		set
 		{
 			if (_selectedKeyboard == value)
-				return;
+            {
+                return;
+            }
 
-			_selectedKeyboard = value;
+            _selectedKeyboard = value;
 			Keyboard = value switch
 			{
 				"Chat" => Keyboard.Chat,
@@ -284,9 +314,11 @@ public class FsEditorViewModel : INotifyPropertyChanged
 		set
 		{
 			if (_keyboard == value)
-				return;
+            {
+                return;
+            }
 
-			_keyboard = value;
+            _keyboard = value;
 			OnPropertyChanged();
 		}
 	}

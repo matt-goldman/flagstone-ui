@@ -1,4 +1,12 @@
 <Project>
+  <!-- On Linux, drop iOS and MacCatalyst TFMs — the required Apple SDKs are unavailable.
+       Matches the approach used by the .NET MAUI Community Toolkit. -->
+  <PropertyGroup Condition="!$([MSBuild]::IsOSPlatform('osx')) AND !$([MSBuild]::IsOSPlatform('windows')) AND ($(TargetFrameworks.Contains('-ios')) OR $(TargetFrameworks.Contains('-maccatalyst')))">
+    <TargetFrameworks>$(NetVersion);$(NetVersion)-android</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OutputType)' == 'Exe'">$(NetVersion)-android</TargetFrameworks>
+    <TargetFrameworks Condition="'$(IncludeTizenTargetFrameworks)' == 'true'">$(TargetFrameworks);$(NetVersion)-tizen</TargetFrameworks>
+  </PropertyGroup>
+
   <!-- Common targets hook -->
 
   <!-- Suppress XML docs warning CS1591 only for generated files under obj -->

@@ -137,7 +137,9 @@ public class BootstrapMapper
 		string bootstrapKey, string flagstoneKey, string purpose, ConversionOptions options)
 	{
 		if (!bootstrapColors.TryGetValue(bootstrapKey, out var value))
+		{
 			return;
+		}
 
 		var normalizedValue = NormalizeColorValue(value);
 
@@ -178,7 +180,9 @@ public class BootstrapMapper
 	{
 		// Only handle #RRGGBB for now.
 		if (!color.StartsWith('#') || color.Length != 7)
+		{
 			return null;
+		}
 
 		try
 		{
@@ -415,13 +419,24 @@ public class BootstrapMapper
 
 				// Only create tokens for non-zero widths. Setting values on per-edge borders disables the uniform border.
 				if (topWidthValue > 0)
+				{
 					tokens.BorderTopWidth[$"BorderTopWidth.{suffix}"] = CreateNumericToken($"BorderTopWidth.{suffix}", topWidthValue, $"Top border width for {suffix}");
+				}
+
 				if (rightWidthValue > 0)
+				{
 					tokens.BorderRightWidth[$"BorderRightWidth.{suffix}"] = CreateNumericToken($"BorderRightWidth.{suffix}", rightWidthValue, $"Right border width for {suffix}");
+				}
+
 				if (bottomWidthValue > 0)
+				{
 					tokens.BorderBottomWidth[$"BorderBottomWidth.{suffix}"] = CreateNumericToken($"BorderBottomWidth.{suffix}", bottomWidthValue, $"Bottom border width for {suffix}");
+				}
+
 				if (leftWidthValue > 0)
+				{
 					tokens.BorderLeftWidth[$"BorderLeftWidth.{suffix}"] = CreateNumericToken($"BorderLeftWidth.{suffix}", leftWidthValue, $"Left border width for {suffix}");
+				}
 			}
 		}
 
@@ -462,7 +477,9 @@ public class BootstrapMapper
 			?? shadowProps.GetValueOrDefault("box-shadow");
 
 		if (string.IsNullOrWhiteSpace(boxShadow))
+		{
 			return;
+		}
 
 		var shadow = ParseBoxShadow(boxShadow);
 		if (shadow != null)
@@ -479,7 +496,9 @@ public class BootstrapMapper
 	private ShadowToken? ParseBoxShadow(string boxShadow)
 	{
 		if (string.IsNullOrWhiteSpace(boxShadow) || boxShadow == "none")
+		{
 			return null;
+		}
 
 		try
 		{
@@ -492,11 +511,15 @@ public class BootstrapMapper
 
 				// Skip inset shadows
 				if (trimmedShadow.StartsWith("inset", StringComparison.OrdinalIgnoreCase))
+				{
 					continue;
+				}
 
 				var result = ParseSingleBoxShadow(trimmedShadow);
 				if (result != null)
+				{
 					return result;
+				}
 			}
 
 			return null;
@@ -577,7 +600,9 @@ public class BootstrapMapper
 			// Now parse the numeric values
 			var parts = boxShadow.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 			if (parts.Length < 3)
+			{
 				return null;
+			}
 
 			var offsetX = ConvertToPixels(parts[0], 16.0);
 			var offsetY = ConvertToPixels(parts[1], 16.0);
@@ -617,11 +642,15 @@ public class BootstrapMapper
 
 		// If it's a hex color, ensure it starts with #
 		if (value.StartsWith('#'))
+		{
 			return value.ToUpperInvariant();
+		}
 
 		// Handle rgb/rgba
 		if (value.StartsWith("rgb", StringComparison.OrdinalIgnoreCase))
+		{
 			return value;
+		}
 
 		// Handle named colors (leave as-is for now)
 		return value;
@@ -633,7 +662,9 @@ public class BootstrapMapper
 		// This is a placeholder - could use a color manipulation library for better results
 
 		if (!lightColor.StartsWith('#') || lightColor.Length != 7)
+		{
 			return null; // Only handle hex colors for now
+		}
 
 		try
 		{

@@ -9,7 +9,7 @@ namespace FlagstoneUI.TokenGenerator;
 /// </summary>
 public class ContractValidator
 {
-	private readonly Dictionary<string, JsonElement> _loadedContracts = new();
+	private readonly Dictionary<string, JsonElement> _loadedContracts = [];
 	private readonly string _contractsDirectory;
 
 	public ContractValidator(string? contractsDirectory = null)
@@ -327,7 +327,9 @@ public class ContractValidator
 		// - "FlagstoneUI.Core.Controls.FsButton"
 
 		if (string.IsNullOrEmpty(targetType))
+		{
 			return false;
+		}
 
 		// Check for namespace prefix format
 		if (targetType.Contains(':', StringComparison.Ordinal))

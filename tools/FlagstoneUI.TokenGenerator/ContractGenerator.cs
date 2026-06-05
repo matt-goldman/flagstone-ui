@@ -156,13 +156,15 @@ public class ContractGenerator
 		if (!File.Exists(tokensPath))
 		{
 			Console.WriteLine($"   ⚠️ Tokens.xaml not found at {tokensPath}");
-			return new Dictionary<string, object>();
+			return [];
 		}
 
 		var doc = XDocument.Load(tokensPath);
 		var root = doc.Root;
 		if (root == null)
-			return new Dictionary<string, object>();
+		{
+			return [];
+		}
 
 		var xNs = root.GetNamespaceOfPrefix("x");
 		var mauiNs = root.Name.Namespace;
@@ -244,7 +246,9 @@ public class ContractGenerator
 		var doc = XDocument.Load(themeXamlPath);
 		var root = doc.Root;
 		if (root == null)
-			return new Dictionary<string, List<NamedStyle>>();
+		{
+			return [];
+		}
 
 		var xNs = root.GetNamespaceOfPrefix("x");
 		var mauiNs = root.Name.Namespace;
@@ -258,7 +262,9 @@ public class ContractGenerator
 			var styleKey = styleElement.Attribute(xNs + "Key")?.Value;
 
 			if (string.IsNullOrEmpty(targetType))
+			{
 				continue;
+			}
 
 			// Extract control name from TargetType (e.g., "fs:FsButton" -> "FsButton")
 			var controlName = targetType.Contains(':', StringComparison.Ordinal)
@@ -267,11 +273,13 @@ public class ContractGenerator
 
 			// Only track Fs* controls
 			if (!controlName.StartsWith("Fs", StringComparison.Ordinal))
+			{
 				continue;
+			}
 
 			if (!results.ContainsKey(controlName))
 			{
-				results[controlName] = new List<NamedStyle>();
+				results[controlName] = [];
 			}
 
 			// Named styles have x:Key, implicit styles don't
@@ -296,7 +304,9 @@ public class ContractGenerator
 			{
 				var text = comment.Value.Trim();
 				if (!text.StartsWith("=", StringComparison.Ordinal)) // Skip separator comments
+				{
 					return text;
+				}
 			}
 			else if (previousNode is XElement)
 			{

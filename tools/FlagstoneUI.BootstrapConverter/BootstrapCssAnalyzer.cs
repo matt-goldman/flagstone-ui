@@ -179,16 +179,23 @@ public class BootstrapCssAnalyzer
 	private bool RuleMatchesSelector(IStyleRule rule, string targetSelector)
 	{
 		if (rule.Selector == null)
+		{
 			return false;
+		}
+
 
 		var selectorText = rule.Selector.Text;
 
 		// Exact match
 		if (selectorText.Equals(targetSelector, StringComparison.OrdinalIgnoreCase))
+		{
+
 			return true;
+		}
 
 		// Compound selector match (e.g., ".btn.btn-primary" matches ".btn-primary")
 		// Split by comma for grouped selectors
+
 		var selectors = selectorText.Split(',', StringSplitOptions.TrimEntries);
 
 		// Filter selectors that contain the target selector

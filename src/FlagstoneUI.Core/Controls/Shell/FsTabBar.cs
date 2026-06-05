@@ -1,3 +1,6 @@
+using System.Collections.Specialized;
+using System.ComponentModel;
+
 namespace FlagstoneUI.Core.Controls;
 
 /// <summary>
@@ -49,9 +52,111 @@ public class FsTabBar : ContentView, IFsTabBar
 
 	private static void OnItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
 	{
-		if (bindable is FsTabBar bar)
+		if (bindable is not FsTabBar bar)
 		{
-			BindableLayout.SetItemsSource(bar._layout, (System.Collections.IEnumerable?)newValue);
+			return;
+		}
+
+
+		if (oldValue is INotifyCollectionChanged oldCollection)
+		{
+			oldCollection.CollectionChanged -= bar.OnItemsCollectionChanged;
+		}
+
+
+		if (oldValue is IEnumerable<FsTabContext> oldItems)
+		{
+
+			foreach (var item in oldItems)
+			{
+				item.PropertyChanged -= bar.OnTabContextPropertyChanged;
+			}
+		}
+
+
+		BindableLayout.SetItemsSource(bar._layout, (System.Collections.IEnumerable?)newValue);
+
+		if (newValue is INotifyCollectionChanged newCollection)
+		{
+			newCollection.CollectionChanged += bar.OnItemsCollectionChanged;
+		}
+
+
+		if (newValue is IEnumerable<FsTabContext> newItems)
+		{
+
+			foreach (var item in newItems)
+			{
+				item.PropertyChanged += bar.OnTabContextPropertyChanged;
+			}
+		}
+
+
+		bar.PumpAllVsmStates();
+	}
+
+	private void OnItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+	{
+		if (e.OldItems is not null)
+		{
+
+			foreach (FsTabContext ctx in e.OldItems)
+			{
+				ctx.PropertyChanged -= OnTabContextPropertyChanged;
+			}
+		}
+
+
+		if (e.NewItems is not null)
+		{
+
+			foreach (FsTabContext ctx in e.NewItems)
+			{
+				ctx.PropertyChanged += OnTabContextPropertyChanged;
+			}
+		}
+
+
+		PumpAllVsmStates();
+	}
+
+	private void OnTabContextPropertyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		if (e.PropertyName is not (nameof(FsTabContext.IsSelected) or nameof(FsTabContext.IsEnabled)))
+		{
+			return;
+		}
+
+
+		if (sender is FsTabContext ctx)
+		{
+			PumpVsmState(ctx);
+		}
+
+	}
+
+	private void PumpVsmState(FsTabContext ctx)
+	{
+		foreach (var child in _layout.Children)
+		{
+			if (child is VisualElement ve && ve.BindingContext == ctx)
+			{
+				VisualStateManager.GoToState(ve, ctx.IsSelected ? "Selected" : "Unselected");
+				VisualStateManager.GoToState(ve, ctx.IsEnabled ? "Normal" : "Disabled");
+				break;
+			}
+		}
+	}
+
+	private void PumpAllVsmStates()
+	{
+		foreach (var child in _layout.Children)
+		{
+			if (child is VisualElement ve && ve.BindingContext is FsTabContext ctx)
+			{
+				VisualStateManager.GoToState(ve, ctx.IsSelected ? "Selected" : "Unselected");
+				VisualStateManager.GoToState(ve, ctx.IsEnabled ? "Normal" : "Disabled");
+			}
 		}
 	}
 
@@ -106,12 +211,13 @@ public class FsTabBar : ContentView, IFsTabBar
 	/// Invoked by template instances when the user taps a tab. Subclasses may override to
 	/// customise selection behaviour.
 	/// </summary>
-	protected internal virtual void OnTabTapped(FsTabContext context)
+	protected virtual void OnTabTapped(FsTabContext context)
 	{
 		if (context is null)
 		{
 			return;
 		}
+
 
 		SelectedRoute = context.Route;
 		ItemSelected?.Invoke(this, new FsTabBarSelectionChangedEventArgs(context));
@@ -132,8 +238,10 @@ public class FsTabBar : ContentView, IFsTabBar
 			var inner = _owner.ItemTemplate;
 			if (inner is null)
 			{
+
 				return _wrappedDefault ??= Wrap(BuildDefaultTemplate());
 			}
+
 
 			return Wrap(inner);
 		}
@@ -150,6 +258,7 @@ public class FsTabBar : ContentView, IFsTabBar
 					{
 						_owner.OnTabTapped(ctx);
 					}
+
 				};
 				view.GestureRecognizers.Add(tap);
 				return view;
