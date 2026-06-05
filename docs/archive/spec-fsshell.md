@@ -215,14 +215,15 @@ Each platform follows roughly the same shape: subclass `ShellRenderer`, suppress
 
 - [ ] **MacCatalyst — `FsShellRenderer`.** Mostly identical to iOS, with whatever differences emerge during implementation (safe-area is generally a no-op; modal handling and keyboard avoidance still apply).
 
-- [ ] **Android — `FsShellRenderer`.**
-  - Suppress / hide `BottomNavigationView` in the shell fragment hierarchy.
-  - Host the FlagstoneUI bar as an Android `View` (likely via `ContentViewGroup` or hosting `FsTabBar`'s handler) in the shell's coordinator layout.
-  - Bridge `Shell.SetTabBarIsVisible`.
-  - Respect Android system bars / gesture navigation insets (`WindowInsetsCompat`).
-  - Hide the bar on soft keyboard show; restore on hide. Gated by `HideTabBarOnKeyboard`.
-  - Hide on modal page presentation; restore on dismissal.
-  - Populate `FsTabTransitionContext` and await the animator on tab change.
+- [~] **Android — `FsShellRenderer`.** Core hosting implemented and verified on an emulator (default `FsTabBar`, tab selection → navigation, content swap, bar persistence). Implemented as `FsShellItemRenderer : ShellItemRenderer` (override `CreateShellItemRenderer`), hiding the native bar and appending the bar's `ContentViewGroup` to the shell `ShellItem`'s outer `LinearLayout`.
+  - [x] Suppress / hide `BottomNavigationView` in the shell fragment hierarchy. Done by hiding every outer-layout child that is neither the navigation target nor the hosted bar (re-applied in `UpdateTabBarVisibility`). **Note:** `SuppressNativeBar` must exclude the hosted bar, or it hides our own bar (GONE platform view while MAUI `IsVisible` stays true).
+  - [x] Host the FlagstoneUI bar as an Android `View` via the bar's `ContentViewGroup` (`bar.ToPlatform(mauiContext)`), appended as the bottom sibling in the outer `LinearLayout` (re-parented across `ShellItem` switches).
+  - [x] Respect Android system bars / gesture navigation insets (`WindowInsetsCompat`) — bottom padding from system-bars + IME insets.
+  - [~] Bridge `Shell.SetTabBarIsVisible` — handled at the cross-platform layer (`FsShell.BridgeTabBarVisibility` toggles `TabBar.IsVisible`); not yet verified on-device.
+  - [ ] Hide the bar on soft keyboard show; restore on hide. Gated by `HideTabBarOnKeyboard`.
+  - [ ] Hide on modal page presentation; restore on dismissal.
+  - [ ] Populate `FsTabTransitionContext` and await the animator on tab change.
+  - **Structural requirement:** bottom tabs must be one `ShellItem` (a `<TabBar>`, or a `Tab` with multiple `ShellContent`). Top-level `ShellContent`s become separate `ShellItem`s (flyout structure); navigating those does a full fragment swap and the single hosted bar cannot follow cleanly. The sample's `AppShell` uses `<TabBar>` accordingly.
 
 - [ ] **Windows — `FsShellRenderer`.**
   - Suppress / replace the WinUI `NavigationView` chrome that stock Shell produces.

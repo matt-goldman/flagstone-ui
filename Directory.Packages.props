@@ -11,8 +11,9 @@
     <!-- MAUI -->
     <!-- <PackageVersion Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" /> -->
     <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.1" />
-    <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.11" />
+    <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.20" />
     <PackageVersion Include="CommunityToolkit.Maui" Version="13.0.0" />
+    <PackageVersion Include="Microsoft.Maui.DevFlow.Agent" Version="0.1.0-preview.10.26274.3" />
     <!-- Package reference for FlagstoneUI.Core for dependent libraries in Release builds -->
     <PackageVersion Include="FlagstoneUI.Core" Version="0.0.1-preview1" />
     <!-- Logging -->

@@ -1,47 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell
+<fs:FsShell
     x:Class="FlagstoneUI.SampleApp.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
     xmlns:local="clr-namespace:FlagstoneUI.SampleApp"
     xmlns:page="clr-namespace:FlagstoneUI.SampleApp.Pages"
-    xmlns:converters="clr-namespace:FlagstoneUI.SampleApp.Converters"
-    xmlns:vm="clr-namespace:FlagstoneUI.SampleApp.ViewModels"
     Title="FlagstoneUI.SampleApp">
 
-
-
-    <!-- Default content - Controls Showcase -->
-    <ShellContent
-        Title="Controls Showcase"
-        ContentTemplate="{DataTemplate page:ControlsShowcasePage}"
-        Route="ControlsShowcase" />
-
-    <!-- Hidden routes for future use -->
-    
-    <FlyoutItem Title="Home" Icon="icon_home.png">
+    <!-- Bottom tabs are declared as a single TabBar (one ShellItem with multiple sections) so the
+         FlagstoneUI bar persists while navigating between tabs. The FsTabBar replaces the native
+         BottomNavigationView; no platform code is required of the consumer. -->
+    <TabBar>
         <ShellContent
-            Title="Main"
+            Title="Controls"
+            ContentTemplate="{DataTemplate page:ControlsShowcasePage}"
+            Route="ControlsShowcase" />
+
+        <ShellContent
+            Title="Home"
             ContentTemplate="{DataTemplate local:MainPage}"
             Route="MainPage" />
-    </FlyoutItem>
 
-    <FlyoutItem Title="Auth" Icon="auth_icon.png">
-        <Tab Title="Sign In">
-            <ShellContent
-                Title="SignIn"
-                ContentTemplate="{DataTemplate page:SignInPage}"
-                Route="SignInPage"
-                Icon="signin_icon.png"/>
-        </Tab>
-    </FlyoutItem>
-
-    <FlyoutItem Title="FsEditor" Icon="icon_home.png">
         <ShellContent
-            Title="FsEditor"
+            Title="Sign In"
+            ContentTemplate="{DataTemplate page:SignInPage}"
+            Route="SignInPage" />
+
+        <ShellContent
+            Title="Editor"
             ContentTemplate="{DataTemplate page:FsEditorPage}"
             Route="FsEditorPage" />
-    </FlyoutItem>
-    
+    </TabBar>
 
-</Shell>
+</fs:FsShell>

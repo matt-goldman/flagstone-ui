@@ -1,8 +1,9 @@
-﻿using FlagstoneUI.SampleApp.ViewModels;
+﻿using FlagstoneUI.Core.Controls;
+using FlagstoneUI.SampleApp.ViewModels;
 
 namespace FlagstoneUI.SampleApp;
 
-public partial class AppShell : Shell
+public partial class AppShell : FsShell
 {
 	public AppShell()
 	{

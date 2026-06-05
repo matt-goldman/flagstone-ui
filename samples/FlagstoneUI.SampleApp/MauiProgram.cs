@@ -1,5 +1,9 @@
 ﻿using CommunityToolkit.Maui;
+using FlagstoneUI.Core.Builders;
 using Microsoft.Extensions.Logging;
+#if DEBUG
+using Microsoft.Maui.DevFlow.Agent;
+#endif
 
 namespace FlagstoneUI.SampleApp;
 
@@ -16,11 +20,13 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 				fonts.AddFont("FluentSystemIcons-Filled.ttf", "FluentIcons");
 			})
-			.UseMauiCommunityToolkit();
+			.UseMauiCommunityToolkit()
+			.UseFlagstoneUI();
 
 
 #if DEBUG
 		builder.Logging.AddDebug();
+		builder.AddMauiDevFlowAgent();
 #endif
 
 		return builder.Build();
