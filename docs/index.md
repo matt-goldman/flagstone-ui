@@ -59,6 +59,8 @@ The `decisions/` directory contains Architecture Decision Records (ADRs):
 - [ADR009: Agent Guidance Strategy](decisions/adr009-agent-guidance-strategy.md)
 - [ADR010: Theme Contract System](decisions/adr010-theme-contract-system.md)
 - [ADR011: Token System Repositioning](decisions/adr011-token-system-repositioning.md)
+- [ADR012: FsShell — Stylable Shell Chrome via Subclass](decisions/adr012-fsshell.md)
+- [ADR012 (addendum): Per-ShellItem Tab Bar Scoping](decisions/adr012_1-fsshell-per-item-bar-scoping-addendum.md)
 
 ## Theme Prompts
 

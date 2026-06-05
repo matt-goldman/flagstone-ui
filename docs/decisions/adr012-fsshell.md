@@ -4,6 +4,7 @@
 **Date:** 2026-05-07
 **Deciders:** Matt Goldman
 **Scope:** FlagstoneUI.Core — V1 inclusion
+**Addendum:** [ADR012_1 — Per-`ShellItem` Tab Bar Scoping](./adr012_1-fsshell-per-item-bar-scoping-addendum.md) refines the tab-bar projection model below (the bar is scoped to the active `ShellItem`'s sections, not a flat per-`ShellContent` list).
 
 ## Context
 
