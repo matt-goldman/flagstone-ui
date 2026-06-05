@@ -32,7 +32,8 @@ namespace FlagstoneUI.Core.Controls;
 public partial class FsShell : Shell
 {
 	private readonly ObservableCollection<FsTabContext> _tabs = [];
-	private readonly Dictionary<ShellContent, FsTabContext> _contentContextMap = [];
+	private readonly Dictionary<ShellSection, FsTabContext> _sectionContextMap = [];
+	private readonly Dictionary<FsTabContext, ShellSection> _contextSectionMap = [];
 	private CancellationTokenSource? _transitionCts;
 	private int _previousIndex = -1;
 
@@ -45,9 +46,17 @@ public partial class FsShell : Shell
 	}
 
 	/// <summary>
-	/// Live collection of contexts for every <see cref="ShellContent"/> in this shell. Updated
-	/// as the visual tree changes. Exposed to the bar slot via <see cref="IFsTabBar.ItemsSource"/>.
+	/// Live collection of contexts for the bottom tabs of the current <see cref="ShellItem"/> — one
+	/// per <see cref="ShellSection"/>, mirroring the tabs stock Shell would show on the active item.
+	/// Re-projected when the active item changes (e.g. via the flyout) and exposed to the bar slot
+	/// via <see cref="IFsTabBar.ItemsSource"/>.
 	/// </summary>
+	/// <remarks>
+	/// The tab bar is scoped to a single <see cref="ShellItem"/> exactly as Shell's native bottom bar
+	/// is: a <c>TabBar</c> (or a <c>FlyoutItem</c> with multiple <c>Tab</c>/<c>ShellSection</c> children)
+	/// projects its sections here, while the flyout chrome and top-tab strip continue to be rendered by
+	/// stock Shell. This preserves Shell's full navigation hierarchy unchanged.
+	/// </remarks>
 	public IReadOnlyList<FsTabContext> Tabs => _tabs;
 
 	#region TabBarItemTemplate
@@ -218,60 +227,46 @@ public partial class FsShell : Shell
 	}
 
 	/// <summary>
-	/// Rebuilds the <see cref="Tabs"/> collection from the current Shell visual tree. Called
-	/// automatically on child add/remove; subclasses may override to customise tab projection.
+	/// Rebuilds the <see cref="Tabs"/> collection from the current <see cref="ShellItem"/>'s
+	/// <see cref="ShellSection"/>s — the same set stock Shell renders in its bottom bar for the
+	/// active item. Called when the active item changes and on visual-tree changes; subclasses may
+	/// override to customise tab projection.
 	/// </summary>
 	protected virtual void RebuildTabs()
 	{
-		// Enumerate ShellContent leaves, skipping FlyoutItem children — flyout chrome is out of
-		// scope for V1 and FlyoutItem routes do not contribute to the bottom tab bar.
-		var newContents = new List<(ShellContent content, string route)>();
-		foreach (var item in Items)
+		// The bottom tab bar is scoped to the active ShellItem: its sections are the tabs. This holds
+		// for both a <TabBar> (sections = the ShellContent children) and a <FlyoutItem> with multiple
+		// <Tab>/section children. Switching between items happens through stock flyout chrome.
+		var sections = CurrentItem?.Items?.ToList() ?? [];
+
+		// Unsubscribe from sections no longer in the active item.
+		foreach (var removed in _sectionContextMap.Keys.Except(sections).ToList())
 		{
-			if (item is FlyoutItem)
+			removed.PropertyChanged -= OnShellSectionPropertyChanged;
+			if (_sectionContextMap.Remove(removed, out var removedCtx))
 			{
-				continue;
-			}
-
-
-			foreach (var section in item.Items)
-			{
-				foreach (var content in section.Items)
-				{
-					var route = !string.IsNullOrEmpty(content.Route) ? content.Route : item.Route;
-					newContents.Add((content, route));
-				}
+				_contextSectionMap.Remove(removedCtx);
 			}
 		}
 
-		// Unsubscribe from ShellContents no longer in the tree.
-		var newContentSet = newContents.Select(t => t.content).ToHashSet();
-		foreach (var removed in _contentContextMap.Keys.Except(newContentSet).ToList())
+		// Create or update an FsTabContext for each section in the active item.
+		foreach (var section in sections)
 		{
-			removed.PropertyChanged -= OnShellContentPropertyChanged;
-			_contentContextMap.Remove(removed);
-		}
-
-		// Create or update an FsTabContext for each current ShellContent.
-		foreach (var (content, route) in newContents)
-		{
-			if (!_contentContextMap.TryGetValue(content, out var ctx))
+			if (!_sectionContextMap.TryGetValue(section, out var ctx))
 			{
-				ctx = new FsTabContext(route);
-				_contentContextMap[content] = ctx;
-				content.PropertyChanged += OnShellContentPropertyChanged;
+				ctx = new FsTabContext(!string.IsNullOrEmpty(section.Route) ? section.Route : string.Empty);
+				_sectionContextMap[section] = ctx;
+				_contextSectionMap[ctx] = section;
+				section.PropertyChanged += OnShellSectionPropertyChanged;
 			}
 
-			var parentSection = content.Parent as ShellSection;
-			var parentItem = parentSection?.Parent as ShellItem;
-			ctx.Title = content.Title ?? parentSection?.Title ?? parentItem?.Title ?? route;
-			ctx.Icon = content.Icon ?? parentSection?.Icon ?? parentItem?.Icon;
+			ApplySectionMetadata(section, ctx);
 		}
 
 		// Synchronise the observable collection in-place so that existing FsTabContext instances
 		// are preserved across rebuilds — BindableLayout will not recreate template instances for
 		// contexts that stay at the same position.
-		SyncTabs(newContents.Select(t => _contentContextMap[t.content]).ToList());
+		SyncTabs(sections.Select(s => _sectionContextMap[s]).ToList());
 
 		if (TabBar is IFsTabBar bar)
 		{
@@ -280,6 +275,15 @@ public partial class FsShell : Shell
 		}
 
 		UpdateSelectedFlags();
+		BridgeTabBarVisibility();
+	}
+
+	private static void ApplySectionMetadata(ShellSection section, FsTabContext ctx)
+	{
+		var content = section.CurrentItem ?? section.Items?.FirstOrDefault();
+		var parentItem = section.Parent as ShellItem;
+		ctx.Title = section.Title ?? content?.Title ?? parentItem?.Title ?? ctx.Route;
+		ctx.Icon = section.Icon ?? content?.Icon ?? parentItem?.Icon;
 	}
 
 	private void SyncTabs(List<FsTabContext> desired)
@@ -308,48 +312,49 @@ public partial class FsShell : Shell
 		}
 	}
 
-	private void OnShellContentPropertyChanged(object? sender, PropertyChangedEventArgs e)
+	private void OnShellSectionPropertyChanged(object? sender, PropertyChangedEventArgs e)
 	{
-		if (sender is not ShellContent content || !_contentContextMap.TryGetValue(content, out var ctx))
+		if (sender is not ShellSection section || !_sectionContextMap.TryGetValue(section, out var ctx))
 		{
 			return;
 		}
 
-
-		var parentSection = content.Parent as ShellSection;
-		var parentItem = parentSection?.Parent as ShellItem;
-
-		if (e.PropertyName == nameof(content.Title))
+		// Title/Icon (including the current content's, which feed the fallback) refresh the tab; the
+		// current-item change also updates which content supplies the fallback metadata.
+		if (e.PropertyName is nameof(ShellSection.Title)
+			or nameof(ShellSection.Icon)
+			or nameof(ShellSection.CurrentItem))
 		{
-			ctx.Title = content.Title ?? parentSection?.Title ?? parentItem?.Title ?? ctx.Route;
+			ApplySectionMetadata(section, ctx);
 		}
-		else if (e.PropertyName == nameof(content.Icon))
-		{
-			ctx.Icon = content.Icon ?? parentSection?.Icon ?? parentItem?.Icon;
-		}
-
 	}
 
 	private void BridgeTabBarVisibility()
 	{
-		if (TabBar is not ContentView barView || CurrentPage is not { } page)
+		if (TabBar is not ContentView barView)
 		{
 			return;
 		}
 
-
-		barView.IsVisible = Shell.GetTabBarIsVisible(page);
+		// Match stock Shell: the bottom bar only appears when the active item has more than one
+		// section, and honours per-page Shell.SetTabBarIsVisible.
+		var pageAllowsBar = CurrentPage is not { } page || Shell.GetTabBarIsVisible(page);
+		barView.IsVisible = _tabs.Count > 1 && pageAllowsBar;
 	}
 
-	private string? CurrentRoute() => CurrentItem?.CurrentItem?.CurrentItem?.Route;
+	/// <summary>The route of the active section — the selected bottom tab.</summary>
+	private string? CurrentRoute() => CurrentItem?.CurrentItem?.Route;
 
 	private void UpdateSelectedFlags()
 	{
-		var route = CurrentRoute();
+		// Selection is the active section, matched by identity rather than route so that empty or
+		// duplicate section routes do not confuse the highlight.
+		var selectedSection = CurrentItem?.CurrentItem;
 		var newIndex = -1;
 		for (var i = 0; i < _tabs.Count; i++)
 		{
-			var match = _tabs[i].Route == route;
+			var match = _contextSectionMap.TryGetValue(_tabs[i], out var section)
+				&& ReferenceEquals(section, selectedSection);
 			_tabs[i].IsSelected = match;
 			if (match)
 			{
@@ -395,26 +400,27 @@ public partial class FsShell : Shell
 
 	private void OnShellNavigated(object? sender, ShellNavigatedEventArgs e)
 	{
-		UpdateSelectedFlags();
+		// The active item may have changed (e.g. via the flyout), so re-project its sections before
+		// refreshing selection/visibility. RebuildTabs also calls UpdateSelectedFlags and
+		// BridgeTabBarVisibility, and pushes the current route to the bar.
+		RebuildTabs();
 
 		if (TabBar is IFsTabBar bar)
 		{
 			bar.SelectedRoute = CurrentRoute();
 		}
-
-
-		BridgeTabBarVisibility();
 	}
 
-	private async void OnBarItemSelected(object? sender, FsTabBarSelectionChangedEventArgs e)
+	private void OnBarItemSelected(object? sender, FsTabBarSelectionChangedEventArgs e)
 	{
-		try
+		// Selecting a bottom tab activates its section within the current item — the same effect as
+		// tapping stock Shell's native bottom bar. Direct property assignment keeps OnNavigating /
+		// OnNavigated semantics intact without needing a resolvable absolute route.
+		if (CurrentItem is { } item
+			&& _contextSectionMap.TryGetValue(e.Selected, out var section)
+			&& !ReferenceEquals(item.CurrentItem, section))
 		{
-			await GoToAsync($"//{e.Selected.Route}").ConfigureAwait(false);
-		}
-		catch (Exception ex)
-		{
-			System.Diagnostics.Debug.WriteLine($"[FsShell] Navigation to '{e.Selected.Route}' failed: {ex}");
+			item.CurrentItem = section;
 		}
 	}
 }

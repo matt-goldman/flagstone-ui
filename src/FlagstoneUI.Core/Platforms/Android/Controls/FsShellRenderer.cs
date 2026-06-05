@@ -40,6 +40,7 @@ internal sealed partial class FsShellRenderer : ShellRenderer
 internal sealed class FsShellItemRenderer : ShellItemRenderer
 {
 	private AView? _hostedBar;
+	private LinearLayout? _outerLayout;
 
 	public FsShellItemRenderer(IShellContext shellContext) : base(shellContext)
 	{
@@ -49,16 +50,33 @@ internal sealed class FsShellItemRenderer : ShellItemRenderer
 	{
 		var root = base.OnCreateView(inflater, container, savedInstanceState);
 
-		// Stock Shell returns the outer vertical LinearLayout. Suppress the native bar and host the
-		// FlagstoneUI bar in its place. If the shape is ever something other than a LinearLayout we
-		// fall through and leave stock chrome untouched rather than risk a misplaced bar.
-		if (root is LinearLayout outerLayout)
+		// Only intervene when this item actually has bottom tabs to replace — i.e. more than one
+		// section, exactly the condition under which stock Shell shows a BottomNavigationView. Items
+		// with a single section (e.g. a plain flyout page) are left entirely on stock rendering, so
+		// the FlagstoneUI bar never sits in a fragment that has no bottom bar to begin with.
+		if (root is LinearLayout outerLayout && (ShellItem?.Items?.Count ?? 0) > 1)
 		{
+			_outerLayout = outerLayout;
 			HostFlagstoneBar(outerLayout);
 			SuppressNativeBar(outerLayout);
 		}
 
 		return root;
+	}
+
+	public override void OnDestroyView()
+	{
+		// The bar is a single shared instance hosted into the active item's fragment. Release it
+		// before this fragment is torn down — unless a newer fragment has already re-parented it —
+		// so it survives to be re-hosted by the next item.
+		if (_hostedBar is { } bar && ReferenceEquals(bar.Parent, _outerLayout))
+		{
+			_outerLayout?.RemoveView(bar);
+		}
+
+		_hostedBar = null;
+		_outerLayout = null;
+		base.OnDestroyView();
 	}
 
 	/// <summary>
