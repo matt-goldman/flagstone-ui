@@ -25,7 +25,7 @@ namespace FlagstoneUI.Core.Controls;
 internal sealed partial class FsShellRenderer : ShellRenderer
 {
 	protected override IShellItemRenderer CreateShellItemRenderer(ShellItem item)
-		=> new FsShellItemRenderer(this);
+		=> new FsShellItemRenderer(this) { ShellItem = item };
 }
 
 /// <summary>
@@ -42,6 +42,10 @@ internal sealed class FsShellItemRenderer : ShellItemRenderer
 	private NSObject? _kbHideToken;
 	private nfloat _appliedInset;
 	private bool _keyboardActive;
+	private bool _viewLoaded;
+	private nfloat _cachedBarHeight;
+	private nfloat _cachedForWidth;
+	private bool _inLayout;
 
 	public FsShellItemRenderer(IShellContext shellContext) : base(shellContext)
 	{
@@ -51,6 +55,28 @@ internal sealed class FsShellItemRenderer : ShellItemRenderer
 	public override void ViewDidLoad()
 	{
 		base.ViewDidLoad();
+		_viewLoaded = true;
+		TrySetupBar();
+	}
+
+	protected override void OnShellItemSet(ShellItem shellItem)
+	{
+		base.OnShellItemSet(shellItem);
+
+		// If ViewDidLoad already fired but ShellItem hadn't been assigned yet (UIKit can load the
+		// view between renderer construction and the ShellItem assignment), complete setup now.
+		if (_viewLoaded)
+		{
+			TrySetupBar();
+		}
+	}
+
+	private void TrySetupBar()
+	{
+		if (_hostedBar is not null)
+		{
+			return;
+		}
 
 		// Only intervene when this item actually has bottom tabs to replace — i.e. more than one
 		// section, exactly the condition under which stock Shell shows a UITabBar. Items with a
@@ -82,7 +108,81 @@ internal sealed class FsShellItemRenderer : ShellItemRenderer
 	public override void ViewDidLayoutSubviews()
 	{
 		base.ViewDidLayoutSubviews();
+		LayoutBar();
 		ApplyBarInset();
+	}
+
+	/// <summary>
+	/// Measures the bar against the available width and positions it along the bottom safe area
+	/// edge. Driven imperatively rather than via auto-layout because the platform ContentView
+	/// reports a zero intrinsic size until .NET MAUI has measured its children, which would otherwise
+	/// collapse the bar to zero height. The measured height is cached per width so re-layouts
+	/// triggered by AdditionalSafeAreaInsets changes don't re-enter Measure with the bar's just-
+	/// arranged height as a hint, which would feed back as the new "desired" size on each pass.
+	/// </summary>
+	private void LayoutBar()
+	{
+		if (_hostedBar is not { } bar || _barContentView is not { } cv || View is not { } view)
+		{
+			return;
+		}
+
+		if (_keyboardActive || _inLayout)
+		{
+			return;
+		}
+
+		var width = view.Bounds.Width;
+		if (width <= 0)
+		{
+			return;
+		}
+
+		// Cap measure height so a Fill-defaulting ContentView doesn't return the entire available
+		// space when given an unbounded constraint. 240pt is comfortably above any realistic tab-bar
+		// content height (stock iOS tab bar is ~83pt with home indicator).
+		const double MaxBarHeight = 240;
+
+		if (_cachedBarHeight <= 0 || Math.Abs(_cachedForWidth - width) > 0.5)
+		{
+			_inLayout = true;
+			try
+			{
+				var measured = ((IView)cv).Measure(width, MaxBarHeight);
+				var h = measured.Height;
+				if (h <= 0 || double.IsInfinity(h) || double.IsNaN(h))
+				{
+					return;
+				}
+				_cachedBarHeight = (nfloat)Math.Min(h, MaxBarHeight);
+				_cachedForWidth = (nfloat)width;
+			}
+			finally
+			{
+				_inLayout = false;
+			}
+		}
+
+		var height = _cachedBarHeight;
+		var safeBottom = view.SafeAreaInsets.Bottom - _appliedInset;
+		if (safeBottom < 0)
+		{
+			safeBottom = 0;
+		}
+
+		var y = view.Bounds.Height - safeBottom - height;
+		_inLayout = true;
+		try
+		{
+			// IView.Arrange routes through the handler which sets the platform frame in one shot, so
+			// drive position and size together rather than setting Frame and then having Arrange reset
+			// the origin back to (0, 0).
+			((IView)cv).Arrange(new Rect(0, y, width, height));
+		}
+		finally
+		{
+			_inLayout = false;
+		}
 	}
 
 	protected override void Dispose(bool disposing)
@@ -148,17 +248,13 @@ internal sealed class FsShellItemRenderer : ShellItemRenderer
 
 		if (platformBar.Superview is null)
 		{
-			platformBar.TranslatesAutoresizingMaskIntoConstraints = false;
+			// Manage the frame imperatively in ViewDidLayoutSubviews rather than relying on auto-
+			// layout + intrinsic content size. The platform ContentView's intrinsic size reports
+			// zero until .NET MAUI has measured its children, so an auto-layout-only setup collapses to
+			// zero height. Driving the frame from a .NET MAUI Measure call mirrors the Android renderer's
+			// approach (LinearLayout with WRAP_CONTENT) and stays predictable.
+			platformBar.TranslatesAutoresizingMaskIntoConstraints = true;
 			view.AddSubview(platformBar);
-
-			// Pinning to safeAreaLayoutGuide.bottomAnchor keeps the bar above the home indicator;
-			// consumers writing the item template do not deal with insets.
-			NSLayoutConstraint.ActivateConstraints(new[]
-			{
-				platformBar.LeadingAnchor.ConstraintEqualTo(view.LeadingAnchor),
-				platformBar.TrailingAnchor.ConstraintEqualTo(view.TrailingAnchor),
-				platformBar.BottomAnchor.ConstraintEqualTo(view.SafeAreaLayoutGuide.BottomAnchor),
-			});
 		}
 
 		_hostedBar = platformBar;
@@ -179,7 +275,7 @@ internal sealed class FsShellItemRenderer : ShellItemRenderer
 
 	private void ApplyBarInset()
 	{
-		if (_hostedBar is not { } bar)
+		if (_hostedBar is null)
 		{
 			return;
 		}
@@ -192,7 +288,10 @@ internal sealed class FsShellItemRenderer : ShellItemRenderer
 		}
 
 		var visible = _barContentView?.IsVisible ?? false;
-		var inset = visible ? bar.Bounds.Height : 0;
+		// Drive inset from the cached measured height rather than bar.Bounds.Height, because the
+		// bar's bounds reflect the last Arrange call — using them creates a feedback loop where each
+		// inset change triggers a re-layout that re-arranges the bar with the inset-affected height.
+		var inset = visible ? _cachedBarHeight : 0;
 
 		if (inset == _appliedInset)
 		{
@@ -237,7 +336,7 @@ internal sealed class FsShellItemRenderer : ShellItemRenderer
 
 		var (duration, curve) = ReadAnimationInfo(notification);
 		var safeBottom = View?.SafeAreaInsets.Bottom ?? 0;
-		var translate = bar.Bounds.Height + safeBottom;
+		var translate = _cachedBarHeight + safeBottom;
 
 		_keyboardActive = true;
 		_appliedInset = 0;
@@ -258,7 +357,7 @@ internal sealed class FsShellItemRenderer : ShellItemRenderer
 
 		var (duration, curve) = ReadAnimationInfo(notification);
 		var visible = _barContentView?.IsVisible ?? false;
-		var inset = visible ? bar.Bounds.Height : 0;
+		var inset = visible ? _cachedBarHeight : 0;
 
 		_keyboardActive = false;
 		_appliedInset = inset;

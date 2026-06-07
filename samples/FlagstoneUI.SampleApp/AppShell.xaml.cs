@@ -3,7 +3,7 @@ using FlagstoneUI.SampleApp.ViewModels;
 
 namespace FlagstoneUI.SampleApp;
 
-public partial class AppShell : FsShell
+public partial class AppShell : Shell //FsShell
 {
 	public AppShell()
 	{

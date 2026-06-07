@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<fs:FsShell
+  x:Class="FlagstoneUI.SampleApp.DemoShell"
+  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
+  xmlns:local="clr-namespace:FlagstoneUI.SampleApp"
+  xmlns:page="clr-namespace:FlagstoneUI.SampleApp.Pages"
+  Title="FlagstoneUI.SampleApp">
+
+  <!-- Bottom tabs are declared as a single TabBar (one ShellItem with multiple sections) so the
+         FlagstoneUI bar persists while navigating between tabs. The FsTabBar replaces the native
+         BottomNavigationView; no platform code is required of the consumer. -->
+  <TabBar>
+    <ShellContent
+      Title="Controls"
+      ContentTemplate="{DataTemplate page:ControlsShowcasePage}"
+      Route="ControlsShowcase" />
+
+    <ShellContent
+      Title="Home"
+      ContentTemplate="{DataTemplate local:MainPage}"
+      Route="MainPage" />
+
+    <ShellContent
+      Title="Sign In"
+      ContentTemplate="{DataTemplate page:SignInPage}"
+      Route="SignInPage" />
+
+    <ShellContent
+      Title="Editor"
+      ContentTemplate="{DataTemplate page:FsEditorPage}"
+      Route="FsEditorPage" />
+  </TabBar>
+
+</fs:FsShell>
