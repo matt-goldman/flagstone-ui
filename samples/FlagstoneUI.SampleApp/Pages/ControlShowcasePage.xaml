@@ -9,6 +9,7 @@
              xmlns:int="clr-namespace:FlagstoneUI.Integrations.MCT.Behaviors;assembly=FlagstoneUI.Integrations.MCT"
              Title="Controls Showcase"
              x:DataType="vm:ControlsShowcaseViewModel"
+             fs:FsLayout.BottomChromePadding="{DynamicResource FsBottomChromeHeight}"
              BackgroundColor="{AppThemeBinding Light={DynamicResource Color.Background}, Dark={DynamicResource Color.Background.Dark}}">
   <ContentPage.Resources>
     <Style x:Key="ValidStyle"

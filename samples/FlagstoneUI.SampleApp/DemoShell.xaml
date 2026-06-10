@@ -7,6 +7,14 @@
   xmlns:local="clr-namespace:FlagstoneUI.SampleApp"
   xmlns:page="clr-namespace:FlagstoneUI.SampleApp.Pages"
   Title="FlagstoneUI.SampleApp">
+  <fs:FsShell.TabBarItemTemplate>
+    <DataTemplate>
+        <HorizontalStackLayout Spacing="4" Padding="12,8">
+            <Label Text="🙈" FontSize="14" />
+            <Label Text="{Binding Title}" FontSize="14" />
+        </HorizontalStackLayout>
+    </DataTemplate>
+  </fs:FsShell.TabBarItemTemplate>
 
   <!-- Bottom tabs are declared as a single TabBar (one ShellItem with multiple sections) so the
          FlagstoneUI bar persists while navigating between tabs. The FsTabBar replaces the native

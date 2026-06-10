@@ -31,6 +31,20 @@ namespace FlagstoneUI.Core.Controls;
 /// </remarks>
 public partial class FsShell : Shell
 {
+	/// <summary>
+	/// Resource key under which <see cref="FsShell"/> publishes the measured height of the
+	/// currently hosted bottom chrome (typically <see cref="FsTabBar"/>) into
+	/// <see cref="Application.Resources"/>. Pages can consume it via
+	/// <c>{DynamicResource FsBottomChromeHeight}</c> — most easily through the
+	/// <see cref="FsLayout.BottomChromePaddingProperty"/> attached property — to leave room for
+	/// the chrome without any platform-specific safe-area code.
+	/// </summary>
+	/// <remarks>
+	/// Written as a <see cref="double"/>. Updates whenever the bar's measured size changes or its
+	/// <see cref="VisualElement.IsVisible"/> flips, and drops to 0 when no bar is hosted.
+	/// </remarks>
+	public const string BottomChromeHeightResourceKey = "FsBottomChromeHeight";
+
 	private readonly ObservableCollection<FsTabContext> _tabs = [];
 	private readonly Dictionary<ShellSection, FsTabContext> _sectionContextMap = [];
 	private readonly Dictionary<FsTabContext, ShellSection> _contextSectionMap = [];
@@ -123,16 +137,59 @@ public partial class FsShell : Shell
 			oldBar.ItemSelected -= shell.OnBarItemSelected;
 		}
 
+		if (oldValue is ContentView oldView)
+		{
+			oldView.SizeChanged -= shell.OnBarSizeChanged;
+			oldView.PropertyChanged -= shell.OnBarPropertyChanged;
+		}
+
 
 		if (newValue is ContentView newView)
 		{
+			newView.SizeChanged += shell.OnBarSizeChanged;
+			newView.PropertyChanged += shell.OnBarPropertyChanged;
 			shell.AttachBar(newView);
+			shell.PublishBottomChromeHeight();
 
 			if (shell.TabBarItemTemplate is not null && newValue is not FsTabBar)
 			{
 				System.Diagnostics.Debug.WriteLine(
 					"[FsShell] TabBarItemTemplate is set but a custom TabBar replaces the default bar; the template will be ignored.");
 			}
+		}
+		else
+		{
+			shell.PublishBottomChromeHeight();
+		}
+	}
+
+	private void OnBarSizeChanged(object? sender, EventArgs e) => PublishBottomChromeHeight();
+
+	private void OnBarPropertyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		if (e.PropertyName == nameof(VisualElement.IsVisible))
+		{
+			PublishBottomChromeHeight();
+		}
+	}
+
+	/// <summary>
+	/// Writes the bar's current measured height into <see cref="Application.Resources"/> under
+	/// <see cref="BottomChromeHeightResourceKey"/>. Pages that opt in via
+	/// <see cref="FsLayout.BottomChromePaddingProperty"/> (or read the resource directly) reserve
+	/// room for the bar without touching any platform code.
+	/// </summary>
+	private void PublishBottomChromeHeight()
+	{
+		var height = TabBar is { IsVisible: true } bar ? bar.Height : 0;
+		if (double.IsNaN(height) || double.IsInfinity(height) || height < 0)
+		{
+			height = 0;
+		}
+
+		if (Application.Current is { } app)
+		{
+			app.Resources[BottomChromeHeightResourceKey] = height;
 		}
 	}
 

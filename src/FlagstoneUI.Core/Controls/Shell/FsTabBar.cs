@@ -9,25 +9,63 @@ namespace FlagstoneUI.Core.Controls;
 /// retain the default layout while customising the wrapping container.
 /// </summary>
 /// <remarks>
-/// Internally uses a <see cref="BindableLayout"/>-driven <see cref="HorizontalStackLayout"/> so
-/// that template instances participate in normal MAUI layout and can be styled with the
-/// standard layout, sizing, and visual-state idioms.
+/// Internally uses a <see cref="BindableLayout"/>-driven single-row <see cref="Grid"/> with one
+/// auto-sized column per item, so template instances participate in normal MAUI layout and can
+/// be styled with the standard layout, sizing, and visual-state idioms.
 /// </remarks>
 public class FsTabBar : ContentView, IFsTabBar
 {
-	private readonly HorizontalStackLayout _layout;
+	private readonly Grid _layout;
 
 	/// <summary>Initializes a new <see cref="FsTabBar"/>.</summary>
 	public FsTabBar()
 	{
-		_layout = new HorizontalStackLayout
+		// Items are placed in a single-row Grid with one auto-sized column per item, instead
+		// of a HorizontalStackLayout. The outer-HSL pattern triggered a MAUI iOS layout bug
+		// where item children (especially items whose template root is also a HSL) collapsed
+		// to zero height on layout passes after the first. Grid's CrossPlatformArrange
+		// distributes children from its measured row/column geometry rather than re-reading
+		// each child's DesiredSize directly, so the children stay at their measured size.
+		_layout = new Grid
 		{
-			Spacing = 0,
+			ColumnSpacing = 0,
+			RowSpacing = 0,
 			HorizontalOptions = LayoutOptions.Fill,
+			VerticalOptions = LayoutOptions.Start,
+			RowDefinitions = { new RowDefinition(GridLength.Auto) },
 		};
+
+		// VerticalOptions.Start on the bar itself keeps Measure(W, H) returning the bar's
+		// natural content height instead of expanding to fill the H constraint. The
+		// FsShell renderers position the bar against the bottom edge directly.
+		VerticalOptions = LayoutOptions.Start;
 
 		BindableLayout.SetItemTemplateSelector(_layout, new TabItemTemplateSelector(this));
 		Content = _layout;
+
+		// BindableLayout populates Grid.Children but doesn't assign Grid.Column to each item.
+		// Wire ColumnDefinitions + Grid.Column on the fly so each item lands in its own
+		// auto-sized column.
+		_layout.ChildAdded += OnLayoutChildAdded;
+		_layout.ChildRemoved += OnLayoutChildRemoved;
+	}
+
+	private void OnLayoutChildAdded(object? sender, ElementEventArgs e)
+	{
+		var index = _layout.ColumnDefinitions.Count;
+		_layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+		if (e.Element is View v)
+		{
+			Grid.SetColumn(v, index);
+		}
+	}
+
+	private void OnLayoutChildRemoved(object? sender, ElementEventArgs e)
+	{
+		if (_layout.ColumnDefinitions.Count > 0)
+		{
+			_layout.ColumnDefinitions.RemoveAt(_layout.ColumnDefinitions.Count - 1);
+		}
 	}
 
 	#region ItemsSource
@@ -227,6 +265,8 @@ public class FsTabBar : ContentView, IFsTabBar
 	{
 		private readonly FsTabBar _owner;
 		private DataTemplate? _wrappedDefault;
+		private DataTemplate? _wrappedCustom;
+		private DataTemplate? _wrappedCustomFor;
 
 		public TabItemTemplateSelector(FsTabBar owner)
 		{
@@ -238,12 +278,19 @@ public class FsTabBar : ContentView, IFsTabBar
 			var inner = _owner.ItemTemplate;
 			if (inner is null)
 			{
-
 				return _wrappedDefault ??= Wrap(BuildDefaultTemplate());
 			}
 
+			// Cache one wrapper per inner template instance. BindableLayout reuses the same
+			// DataTemplate reference to instantiate every item, so handing back a freshly-
+			// constructed wrapper per call breaks the items collection on some platforms.
+			if (!ReferenceEquals(_wrappedCustomFor, inner))
+			{
+				_wrappedCustomFor = inner;
+				_wrappedCustom = Wrap(inner);
+			}
 
-			return Wrap(inner);
+			return _wrappedCustom!;
 		}
 
 		private DataTemplate Wrap(DataTemplate inner)
@@ -261,6 +308,7 @@ public class FsTabBar : ContentView, IFsTabBar
 
 				};
 				view.GestureRecognizers.Add(tap);
+
 				return view;
 			});
 		}
