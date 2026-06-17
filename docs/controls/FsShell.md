@@ -1,31 +1,40 @@
 # FsShell Control
 
-> _One-paragraph intro: FsShell is a drop-in `Shell` subclass that lets you bring your own bottom chrome (tab bar, FAB, side rail, whatever) without writing platform code. It preserves Shell's routing, navigation, and lifecycle semantics; you just hand it a `ContentView` and FsShell hosts it._
+FsShell is a `Shell` replacement that gives you full control over the visual appearance and behaviour of the tab bar. It's a `Shell` subclass and works as a drop-in replacement out of the box, meaning it fully preserves `Shell`'s routing, navigation, and lifecycle.
+
+The _functionality_ is separated from the _presentation_, meaning you can provide a `ContentView` and completely replace (rather than just customise) the navigation experience altogether - a new kind of tab bar, FAB with radial menu, side rail, whatever you like.
+
+FsShell includes a default tab bar which allows you to provide a `DataTemplate` for tab bar items (just like you can with menu items), which gives you styling and control over individual tab items (with full `VisualStateManager`) so you can customise tabs out of the box, without having to supply your own.
 
 ## Features
 
-- TODO: drop-in `Shell` subclass — works wherever `Shell` works
-- TODO: default `FsTabBar` with a `TabBarItemTemplate` for per-tab customisation
-- TODO: full bar replacement via `TabBar` slot — any `ContentView`
-- TODO: routing & current-tab binding done for you (when bar implements `IFsTabBar`)
-- TODO: optional tab-change animations via `ITabTransitionAnimator`
-- TODO: optional keyboard-avoidance (`HideTabBarOnKeyboard`)
-- TODO: bottom-chrome height published as a `DynamicResource` for pages to consume
-- TODO: per-page opt-in padding via `FsLayout.BottomChromePadding` attached property
+- **Shell sub-class:** drop-in `Shell` subclass — works wherever `Shell` works, works with existing `ShellItem` and `ShellContent`
+- **Built-in customisable tab bar:** default `FsTabBar` with a `TabBarItemTemplate` for per-tab customisation
+- **Replaceable TabBar:** full bar replacement via `TabBar` slot — use any `ContentView` for full control of the visual navigation experience
+- **Routing and current-tab binding:** the `IFsTabBar` interface exposes `Shell` state, providing access to the underlying routing logic
+- **Tab transitions:** optional tab-change animations via `ITabTransitionAnimator`
+- **Keyboard control:** optional `HideTabBarOnKeyboard` lets you hide the navigation chrome when the keyboard is displayed
+- **Control tab bar page margin:** bottom-chrome height published as a `DynamicResource` for pages to consume (or ignore), or per-page opt-in padding via `FsLayout.BottomChromePadding` attached property
 
-## Architecture: Hosted Chrome, Not Replaced Chrome
+## Architecture: Hosted Chrome, Not Customised Chrome
 
-- TODO: vanilla `Shell` owns its native chrome (`UITabBar` on iOS, `BottomNavigationView` on Android) and only lets you skin it
-- TODO: FsShell hides the native chrome and hosts a MAUI `ContentView` you author in XAML/C#
-- TODO: FsShell stays inside Shell — routing, flyouts, navigation stack, lifecycle all unchanged
-- TODO: platform-specific renderers handle suppression + hosting; the bar itself is plain cross-platform MAUI
-- TODO: chrome _layout_ inside the page is decoupled — pages opt in via the published `DynamicResource`, no platform safe-area juggling
+As with all .NET MAUI controls, Shell is an abstraction over native controls (`UITabBar` on iOS, `BottomNavigationView` on Android); these controls can be customised, but require platform code. Additionally `Shell` uses the legacy renderer architecture which requires a different customisation paradigm to everything else (using the new handler architecture). This is the established approach for `Shell` (and non-shell) tab bar customisation.
+
+> **Note:** I've mentioned iOS and Android here but Windows and MacCatalyst are also fully supported. I just haven't focused on them because tab bar navigation is not a sensible paradigm on desktop. I'm not here to judge though - it's there if you want it.
+
+FsShell takes a different approach. The platform specific renderers suppress the native implementation completely rather than customise it; instead the tab bar is now a fully cross-platform control. The approach is closer to [Sharpnado Tabs](https://github.com/roubachof/Sharpnado.Tabs), which gives you absolute control over the tabs, but also introduces its own navigation paradigm. FsShell offers a combination of both - it hides the native chrome, hosting a `ContentView` in its place, but FsShell remains inside `Shell`, so routing, flyouts, navigation stack, lifecycle are all unchanged.
+
+Note that Sharpnado Tabs is a much more complete implementation; out of the box FsShell gives more control over tab appearance than you get with `Shell`, and you have the freedom to fully customise to the extent that Sharpnado does (or beyond), but you have to provide it.
+
+With the native tab bar, page layout is automatically adjusted to allow space for it, but this is decoupled with FsShell. the chrome height is published to a `DynamicResource`, which you can include in your page layout (recommend a `ControlTemplate`) or an attached property. You could also ignore it (for example, if you want a blur effect on your tab bar, removing it allows page content to scroll behind it and be blurred). This approach gives you the most flexibility without relying on per-platform safe areas.
 
 ### Why not just use `Shell`?
 
-- TODO: explain limits of `Shell.SetTabBarIsVisible`, item templates, theming
-- TODO: explain why we can't just inherit and re-skin
-- TODO: explain the "we don't render the bar anymore; you do" framing
+`Shell` is a powerful .NET MAUI feature but it conflates two concerns: navigation _behaviour_ and navigation _presentation_. It is heavily opinionated on both, and that constraint is helpful but also problematic for apps with a strong design identity and custom navigation aesthetic.
+
+Providing full customisation for the tab bar in Shell is not feasible; while more control surface could be exposed, many apps have design requirements that can't be anticipated. A common one is a central button that provides functionality rather than navigation; but accommodating that is a slippery slope.
+
+Flagstone UI in general acknowledges that .NET MAUI already gives you powerful tools for presenting UI to the user; FsShell lets you use them.
 
 ## Properties
 
@@ -39,32 +48,54 @@
 
 ### Extension points
 
-- TODO: `protected virtual void RebuildTabs()` — override to project tabs differently
-- TODO: subclassing `FsShell` for app-specific shell behaviour
+In addition to customisation through providing a `DataTemplate` for the built-in FsTabBar, or providing your own `IFsShell` implementation, there are two extension points for more advanced (or nuanced) scenarios.
+
+- **Override `RebuildTabs()`:** FsShell has a `protected virtual void RebuildTabs()` which is called whenever the shell context changes. You can override to project tabs differently, allowing you to change order, selection state, etc.
+- **Subclassing `FsShell`:** it's possible to subclass FsShell and replace essentially everything with your own app-specific behaviour. If you find yourself doing this, please raise an issue and let me know, because it means FsShell has failed to meet its core objective.
 
 ## Companion Types
 
 ### `IFsTabBar`
 
-- TODO: contract any bar must honour to participate in routing
-- TODO: `ItemsSource`, `SelectedRoute`, `ItemSelected` event
+The `IFsTabBar` interface makes navigation and routing state and events available to your custom tab bar (or other navigation UI).
+
+It provides the entry point to `Shell`'s navigation infrastructure by exposing the following items:
+- `ItemsSource`: bindable property of type `IReadOnlyList<FsTabContext>`. Provides a live projection of the current navigation hierarchy and state.
+- `SelectedRoute`: a bindable `string`. Two-way binding allows retrieval of current route via `get` and programmatic navigation via `set`.
+- `ItemSelected`: an event handler that exposes the selected `FsTabContext` when tab selection changes.
 
 ### `FsTabBar` (default implementation)
 
-- TODO: reference bar with a `Grid`-driven `BindableLayout`
-- TODO: per-item template via `ItemTemplate`
-- TODO: VSM states (`Selected`/`Unselected`, `Normal`/`Disabled`) pumped automatically
-- TODO: see [FsTabBar.md](FsTabBar.md) for details (or move it inline here if you'd rather have one doc)
+FsShell includes FsTabBar, intended as a reference. It implements the `IFsTabBar` interface, allowing it to participate in `Shell` navigation, but is otherwise a vanilla `ContentView`. It's a simple `Grid`-driven `BindableLayout`.
+
+It is however usable in your apps out of the box; the following provide enhancements over stock `Shell` while also serving as useful references:
+
+- per-item template via `ItemTemplate` (bound to `FsTabContext`, see next sub-heading)
+- VSM states (`Selected`/`Unselected`, `Normal`/`Disabled`) pumped automatically on navigation state change
+ 
+See [FsTabBar.md](FsTabBar.md) for details.
 
 ### `FsTabContext`
 
-- TODO: per-tab data: `Route`, `Title`, `Icon`, `IsSelected`, `IsEnabled`
-- TODO: `INotifyPropertyChanged` — bind freely from item templates
+`FsTabContext` provides per-tab data:
+
+- `Route`
+- `Title`
+- `Icon`
+- `IsSelected`
+- `IsEnabled`
+
+Note that the collection of `FsTabContext` (and these properties) are derived automatically from the provided `ShellContent` items in your `TabBar`.
+
+`INotifyPropertyChanged` is implemented for each of these properties, so you can bind to them in tab bar item templates.
 
 ### `ITabTransitionAnimator` & `FsTabTransitionContext`
 
-- TODO: hook for custom transitions between tab content
-- TODO: receives outgoing/incoming index + cancellation token
+FsShell provides a mechanism for you to provide custom animations for transition between selected tabs.
+
+`TabTransitionAnimator` is a bindable property on FsShell; you can provide your own implementation of the interface and the `AnimateAsync` method, which will be called automatically whenever tab selection changes. The method receives `FsTabTransitionContext`, providing access to the incoming and outgoing views and additional metadata.
+
+The limit of what you can do with these is your imagination, but a couple of examples are provided in the demo application.
 
 ### `FsLayout` (attached properties)
 
