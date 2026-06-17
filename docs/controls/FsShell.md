@@ -26,7 +26,9 @@ FsShell takes a different approach. The platform specific renderers suppress the
 
 Note that Sharpnado Tabs is a much more complete implementation; out of the box FsShell gives more control over tab appearance than you get with `Shell`, and you have the freedom to fully customise to the extent that Sharpnado does (or beyond), but you have to provide it.
 
-With the native tab bar, page layout is automatically adjusted to allow space for it, but this is decoupled with FsShell. the chrome height is published to a `DynamicResource`, which you can include in your page layout (recommend a `ControlTemplate`) or an attached property. You could also ignore it (for example, if you want a blur effect on your tab bar, removing it allows page content to scroll behind it and be blurred). This approach gives you the most flexibility without relying on per-platform safe areas.
+With the native tab bar, page layout is automatically adjusted to allow space for it, but this is decoupled with FsShell. The chrome height is published to a `DynamicResource`, which you can consume from page XAML; the recommended path is to add the `FsLayout.BottomChromePadding` attached property to your apps' `Page` style (see section on `FsLayout` below); you can also bind the resource into a `ControlTemplate`, a `Padding` directly, or any other layout target.
+
+You could also ignore it (for example, if you want a blur effect on your tab bar, removing it allows page content to scroll behind it and be blurred). This approach gives you the most flexibility without relying on per-platform safe areas.
 
 ### Why not just use `Shell`?
 
@@ -48,7 +50,7 @@ Flagstone UI in general acknowledges that .NET MAUI already gives you powerful t
 
 ### Extension points
 
-In addition to customisation through providing a `DataTemplate` for the built-in FsTabBar, or providing your own `IFsShell` implementation, there are two extension points for more advanced (or nuanced) scenarios.
+In addition to customisation through providing a `DataTemplate` for the built-in FsTabBar, or providing your own `IFsTabBar` implementation, there are two extension points for more advanced (or nuanced) scenarios.
 
 - **Override `RebuildTabs()`:** FsShell has a `protected virtual void RebuildTabs()` which is called whenever the shell context changes. You can override to project tabs differently, allowing you to change order, selection state, etc.
 - **Subclassing `FsShell`:** it's possible to subclass FsShell and replace essentially everything with your own app-specific behaviour. If you find yourself doing this, please raise an issue and let me know, because it means FsShell has failed to meet its core objective.
@@ -60,8 +62,8 @@ In addition to customisation through providing a `DataTemplate` for the built-in
 The `IFsTabBar` interface makes navigation and routing state and events available to your custom tab bar (or other navigation UI).
 
 It provides the entry point to `Shell`'s navigation infrastructure by exposing the following items:
-- `ItemsSource`: bindable property of type `IReadOnlyList<FsTabContext>`. Provides a live projection of the current navigation hierarchy and state.
-- `SelectedRoute`: a bindable `string`. Two-way binding allows retrieval of current route via `get` and programmatic navigation via `set`.
+- `ItemsSource`: of type `IReadOnlyList<FsTabContext>`. Provides a live projection of the current navigation hierarchy and state.
+- `SelectedRoute`: a `string`. FsShell sets it on the bar to mirror external navigation (e.g. `GoToAsync`), and the bar sets it when the user taps a tab (alongside raising `ItemSelected`, which is what FsShell actually listens for).
 - `ItemSelected`: an event handler that exposes the selected `FsTabContext` when tab selection changes.
 
 ### `FsTabBar` (default implementation)
@@ -87,9 +89,11 @@ See [FsTabBar.md](FsTabBar.md) for details.
 
 Note that the collection of `FsTabContext` (and these properties) are derived automatically from the provided `ShellContent` items in your `TabBar`.
 
-`INotifyPropertyChanged` is implemented for each of these properties, so you can bind to them in tab bar item templates.
+`INotifyPropertyChanged` is implemented for each of these properties except `Route` (which provides `get` only), so you can bind to them in tab bar item templates.
 
 ### `ITabTransitionAnimator` & `FsTabTransitionContext`
+
+> ⚠️ This feature is not yet fully implemented; `OutgoingView` and `IncomingView` are not currently set and will always be null at this stage.
 
 FsShell provides a mechanism for you to provide custom animations for transition between selected tabs.
 
@@ -99,14 +103,28 @@ The limit of what you can do with these is your imagination, but a couple of exa
 
 ### `FsLayout` (attached properties)
 
-- TODO: `FsLayout.BottomChromePadding` — reflects a `double` into `Page.Padding.Bottom`
-- TODO: designed to be bound to `{DynamicResource FsBottomChromeHeight}`
+`FsLayout` attached properties are provided to allow you to adjust your page layout to accommodate the tab bar. As it is a `ContentView` in FsShell and not part of the OS UI chrome, page height is not automatically adjusted.
+
+`FsLayout.BottomChromePadding` — reflects a `double` into `Page.Padding.Bottom`. It is designed to be bound to `{DynamicResource FsBottomChromeHeight}`, which gets automatically updated by FsShell.
+
+The easiest way to use this is to add it to your app's styles for `Page`. For example:
+
+```xml
+<!-- default from the .NET MAUI template: -->
+<Style TargetType="Page" ApplyToDerivedTypes="True">
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
+
+    <!-- add this: --s>
+    <Setter Property="fs:FsLayout.BottomChromePadding" Value="{DynamicResource FsBottomChromeHeight}" />
+</Style>
+```
 
 ### `FsShell.BottomChromeHeightResourceKey`
 
-- TODO: `const string` resource key under which FsShell publishes the current chrome height
-- TODO: value is a `double` (DIPs); updates whenever the bar's size or visibility changes
-- TODO: drops to 0 when no bar is hosted or the active page suppresses it via `Shell.SetTabBarIsVisible`
+FsShell uses a `const string` to define the resource key used to publish the current chrome height (you can use the value `FsBottomChromeHeight` directly if you like, which is easier in XAML).
+
+The resource itself is of type `double` and is updated whenever the bar's size or visibility changes. Note that it drops to 0 when no bar is hosted or the active page suppresses it via `Shell.SetTabBarIsVisible`
 
 ## Usage Examples
 
@@ -234,10 +252,11 @@ public class FadeAnimator : ITabTransitionAnimator
 
 ## The Bottom Chrome Pattern
 
-- TODO: explain the contract — FsShell writes `FsBottomChromeHeight` (a `double`) into `Application.Resources` whenever the bar size or visibility changes
-- TODO: pages opt in by reading `{DynamicResource FsBottomChromeHeight}` — most simply through `FsLayout.BottomChromePadding`
-- TODO: same pattern generalises to any chrome you mount (side rail → `FsRightChromeWidth`, top app bar → `FsTopChromeHeight`, etc.)
-- TODO: explain why this beats `AdditionalSafeAreaInsets` / per-platform safe-area juggling
+FsShell writes a resource with key `FsBottomChromeHeight` and a value of type `double` into `Application.Resources` whenever the bar size or visibility changes. Pages can opt in by reading `{DynamicResource FsBottomChromeHeight}`; an attached property called `FsLayout.BottomChromePadding` can be bound to this value and attached to your `Page`, which will automatically adjust your page to not overlap with the tab bar.
+
+The same pattern generalises to any chrome you mount (side rail → `FsRightChromeWidth`, top app bar → `FsTopChromeHeight`, etc.). As FsShell brings full UI control up to the cross-platform layer, this pattern doesn't depend on platform-layer integration (e.g. `AdditionalSafeAreaInsets` / per-platform safe-area juggling). FsShell suppresses the native chrome and hosts whatever `View` you want to provide instead; the offset is then also the responsibility of the cross-platform layer.
+
+This is fundamentally the core philosophy of Flagstone UI.
 
 ### Consuming the resource directly
 
@@ -293,17 +312,16 @@ public class MySideRail : ContentView, IFsTabBar
 | `IFsTabBar.ItemSelected` | `EventHandler<FsTabBarSelectionChangedEventArgs>` | Raised by the bar when the user picks a tab; FsShell routes accordingly. |
 | `Shell.Navigated` / `Shell.Navigating` | inherited from `Shell` | Standard Shell navigation events fire as normal. |
 
-- TODO: spell out what subscribers typically do with each
-- TODO: mention `FsTabContext.PropertyChanged` for per-tab state observation
+The `FsTabBar` sample implementation demonstrates how to use these. When the `ItemSelected` event is raised by an `IFsTabBar` implementation, FsShell sets the current selected item.  `FsTabContext.PropertyChanged` will fire for changed items, i.e. if the state transitions to or from selected or unselected; `DataTemplate`s can bind to `FsTabContext` properties to reflect the state accordingly.
 
 ## Best Practices
 
-- TODO: use `TabBarItemTemplate` for simple per-tab styling — replace `TabBar` only when you need a different _shape_ (FAB, side rail, etc.)
-- TODO: keep custom bars cheap to measure — they are part of the page layout pass on every nav
-- TODO: opt into `FsLayout.BottomChromePadding` on every page that scrolls, not just the first one
-- TODO: don't depend on the bar's pixel height — read it from the `DynamicResource`
-- TODO: avoid putting per-page state inside the bar (it's a single hosted instance shared across tabs)
-- TODO: prefer `Shell.SetTabBarIsVisible` per-page over conditional bar rebuilds
+- Use the default `FsTabBar` with `TabBarItemTemplate` for simple per-tab styling — replace `TabBar` only when you need a different _shape_ (FAB, side rail, etc.)
+- Keep custom bars cheap to measure — they are part of the page layout pass on every nav
+- Opt into `FsLayout.BottomChromePadding` on every page that scrolls, not just the first one
+- Don't depend on the bar's pixel height — read it from the `DynamicResource`
+- **DO NOT** putting per-page state inside the bar (it's a single hosted instance shared across tabs)
+- For per-page bar visibility, prefer `Shell.SetTabBarIsVisible` per-page over conditional bar rebuilds
 
 ## Example: A Three-Tab App with Custom Items and Padded Pages
 
