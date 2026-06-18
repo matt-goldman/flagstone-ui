@@ -442,7 +442,9 @@ public partial class FsShell : Shell
 
 		try
 		{
-			var context = new FsTabTransitionContext(this, outgoingView: null, incomingView: null, previousIndex, newIndex);
+			var outgoingPage = TryGetPageForTab(previousIndex);
+			var incomingPage = TryGetPageForTab(newIndex);
+			var context = new FsTabTransitionContext(this, outgoingPage, incomingPage, previousIndex, newIndex);
 			await animator.AnimateAsync(context, token).ConfigureAwait(false);
 		}
 		catch (OperationCanceledException)
@@ -453,6 +455,35 @@ public partial class FsShell : Shell
 		{
 			System.Diagnostics.Debug.WriteLine($"[FsShell] Tab transition animator threw: {ex}");
 		}
+	}
+
+	/// <summary>
+	/// Resolves the materialised <see cref="Page"/> for the tab at <paramref name="tabIndex"/>, or
+	/// returns <see langword="null"/> if the index is out of range, the tab has no mapped
+	/// <see cref="ShellSection"/>, or the section's content has not been materialised yet.
+	/// </summary>
+	/// <remarks>
+	/// Used by <see cref="RunTransitionAsync"/> to populate the outgoing/incoming pages on
+	/// <see cref="FsTabTransitionContext"/>. The lookup goes via the cached section map rather
+	/// than via Shell's navigation graph so it doesn't depend on the current navigation state.
+	/// </remarks>
+	private Page? TryGetPageForTab(int tabIndex)
+	{
+		if (tabIndex < 0 || tabIndex >= _tabs.Count)
+		{
+			return null;
+		}
+
+		if (!_contextSectionMap.TryGetValue(_tabs[tabIndex], out var section))
+		{
+			return null;
+		}
+
+		// ShellContent.Content holds the materialised Page once the tab has been entered. For an
+		// outgoing tab we are guaranteed it has been entered (we are leaving it); for an incoming
+		// tab Shell materialises the content as part of activating it. An unmaterialised content
+		// surfaces here as null and the animator can decide whether to skip or wait.
+		return section.CurrentItem?.Content as Page;
 	}
 
 	private void OnShellNavigated(object? sender, ShellNavigatedEventArgs e)

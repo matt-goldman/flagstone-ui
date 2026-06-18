@@ -9,14 +9,14 @@ public sealed class FsTabTransitionContext
 	/// <summary>Initializes a new <see cref="FsTabTransitionContext"/>.</summary>
 	public FsTabTransitionContext(
 		FsShell shell,
-		View? outgoingView,
-		View? incomingView,
+		Page? outgoingPage,
+		Page? incomingPage,
 		int previousIndex,
 		int newIndex)
 	{
 		Shell = shell ?? throw new ArgumentNullException(nameof(shell));
-		OutgoingView = outgoingView;
-		IncomingView = incomingView;
+		OutgoingPage = outgoingPage;
+		IncomingPage = incomingPage;
 		PreviousIndex = previousIndex;
 		NewIndex = newIndex;
 	}
@@ -24,11 +24,18 @@ public sealed class FsTabTransitionContext
 	/// <summary>The shell driving the transition.</summary>
 	public FsShell Shell { get; }
 
-	/// <summary>The view of the tab being deselected. May be null on the first selection.</summary>
-	public View? OutgoingView { get; }
+	/// <summary>
+	/// The page of the tab being deselected. <see langword="null"/> on the first selection (before
+	/// any tab had been entered) or when the outgoing tab's content has not yet been materialised.
+	/// </summary>
+	public Page? OutgoingPage { get; }
 
-	/// <summary>The view of the tab being selected.</summary>
-	public View? IncomingView { get; }
+	/// <summary>
+	/// The page of the tab being selected. <see langword="null"/> only if the incoming tab's
+	/// content has not yet been materialised by the time the transition runs — uncommon, since
+	/// Shell materialises the content as part of selecting it.
+	/// </summary>
+	public Page? IncomingPage { get; }
 
 	/// <summary>The index of the previously selected tab. Negative on the first selection.</summary>
 	public int PreviousIndex { get; }
