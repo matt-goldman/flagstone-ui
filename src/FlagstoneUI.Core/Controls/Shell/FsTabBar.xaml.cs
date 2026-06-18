@@ -1,105 +1,18 @@
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 
 namespace FlagstoneUI.Core.Controls;
 
-/// <summary>
-/// Reference tab bar implementation used by <see cref="FsShell"/> as the default bar. Public,
-/// documented, and subclassable. Can also be used directly in the bar-replacement slot to
-/// retain the default layout while customising the wrapping container.
-/// </summary>
-/// <remarks>
-/// Internally uses a <see cref="BindableLayout"/>-driven single-row <see cref="Grid"/> with one
-/// auto-sized column per item, so template instances participate in normal MAUI layout and can
-/// be styled with the standard layout, sizing, and visual-state idioms.
-/// </remarks>
-public class FsTabBar : ContentView, IFsTabBar
+public partial class FsTabBar : ContentView, IFsTabBar
 {
-	private readonly Grid _layout;
-	private readonly Grid _backgroundGrid;
-	private readonly BoxView _tabPill = new BoxView
-	{
-		BackgroundColor = Colors.Yellow,
-		Margin = 0,
-		HorizontalOptions = LayoutOptions.Start,
-		VerticalOptions = LayoutOptions.Start
-	};
-
-	/// <summary>Initializes a new <see cref="FsTabBar"/>.</summary>
 	public FsTabBar()
 	{
-		// Background Grid used to place animated background
-		_backgroundGrid = new Grid
-		{
-			ColumnSpacing = 0,
-			RowSpacing = 0,
-			HorizontalOptions = LayoutOptions.Fill,
-			VerticalOptions = LayoutOptions.Start,
-			RowDefinitions = { new RowDefinition(GridLength.Auto) },
-			Padding = new Thickness(0),
-		};
-
-		_backgroundGrid.SizeChanged += SetPillWidth;
-		
-		_backgroundGrid.Add(_tabPill);
-		
-		// Items are placed in a single-row Grid with one auto-sized column per item, instead
-		// of a HorizontalStackLayout. The outer-HSL pattern triggered a MAUI iOS layout bug
-		// where item children (especially items whose template root is also a HSL) collapsed
-		// to zero height on layout passes after the first. Grid's CrossPlatformArrange
-		// distributes children from its measured row/column geometry rather than re-reading
-		// each child's DesiredSize directly, so the children stay at their measured size.
-		_layout = new Grid
-		{
-			ColumnSpacing = 0,
-			RowSpacing = 0,
-			HorizontalOptions = LayoutOptions.Center,
-			VerticalOptions = LayoutOptions.Start,
-			RowDefinitions = { new RowDefinition(GridLength.Auto) },
-			Margin = new Thickness(0),
-		};
-
-		// VerticalOptions.Start on the bar itself keeps Measure(W, H) returning the bar's
-		// natural content height instead of expanding to fill the H constraint. The
-		// FsShell renderers position the bar against the bottom edge directly.
-		VerticalOptions = LayoutOptions.Start;
-
-		BindableLayout.SetItemTemplateSelector(_layout, new TabItemTemplateSelector(this));
-		
-		_backgroundGrid.Add(_layout);
-		Content = _backgroundGrid;
-
-		// BindableLayout populates Grid.Children but doesn't assign Grid.Column to each item.
-		// Wire ColumnDefinitions + Grid.Column on the fly so each item lands in its own
-		// auto-sized column.
-		_layout.ChildAdded += OnLayoutChildAdded;
-		_layout.ChildRemoved += OnLayoutChildRemoved;
+		InitializeComponent();
+		BindableLayout.SetItemTemplateSelector(TabLayout, new TabItemTemplateSelector(this));
+		BarBackground.SizeChanged += SetPillWidth;
 	}
-
-	private void OnLayoutChildAdded(object? sender, ElementEventArgs e)
-	{
-		var index = _layout.ColumnDefinitions.Count;
-		_layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-		if (e.Element is View v)
-		{
-			Grid.SetColumn(v, index);
-		}
-		
-		//SetPillWidth();
-	}
-
-	private void OnLayoutChildRemoved(object? sender, ElementEventArgs e)
-	{
-		var columnCount = _layout.ColumnDefinitions.Count;
-		if (columnCount > 0)
-		{
-			_layout.ColumnDefinitions.RemoveAt(_layout.ColumnDefinitions.Count - 1);
-		}
-		
-		//SetPillWidth();
-	}
-
+	
 	#region ItemsSource
 
 	/// <summary>Bindable property for <see cref="ItemsSource"/>.</summary>
@@ -144,7 +57,7 @@ public class FsTabBar : ContentView, IFsTabBar
 		}
 
 
-		BindableLayout.SetItemsSource(bar._layout, (System.Collections.IEnumerable?)newValue);
+		BindableLayout.SetItemsSource(bar.TabLayout, (System.Collections.IEnumerable?)newValue);
 
 		if (newValue is INotifyCollectionChanged newCollection)
 		{
@@ -185,8 +98,7 @@ public class FsTabBar : ContentView, IFsTabBar
 				ctx.PropertyChanged += OnTabContextPropertyChanged;
 			}
 		}
-
-
+		
 		PumpAllVsmStates();
 	}
 
@@ -207,7 +119,7 @@ public class FsTabBar : ContentView, IFsTabBar
 
 	private void PumpVsmState(FsTabContext ctx)
 	{
-		foreach (var child in _layout.Children)
+		foreach (var child in TabLayout.Children)
 		{
 			if (child is VisualElement ve && ve.BindingContext == ctx)
 			{
@@ -220,7 +132,7 @@ public class FsTabBar : ContentView, IFsTabBar
 
 	private void PumpAllVsmStates()
 	{
-		foreach (var child in _layout.Children)
+		foreach (var child in TabLayout.Children)
 		{
 			if (child is VisualElement ve && ve.BindingContext is FsTabContext ctx)
 			{
@@ -228,6 +140,8 @@ public class FsTabBar : ContentView, IFsTabBar
 				VisualStateManager.GoToState(ve, ctx.IsEnabled ? "Normal" : "Disabled");
 			}
 		}
+		
+		SetPillWidth();
 	}
 
 	#endregion
@@ -293,21 +207,15 @@ public class FsTabBar : ContentView, IFsTabBar
 		AnimateTabs(context);
 	}
 
-	private sealed class TabItemTemplateSelector : DataTemplateSelector
+	public sealed class TabItemTemplateSelector(FsTabBar owner) : DataTemplateSelector
 	{
-		private readonly FsTabBar _owner;
 		private DataTemplate? _wrappedDefault;
 		private DataTemplate? _wrappedCustom;
 		private DataTemplate? _wrappedCustomFor;
 
-		public TabItemTemplateSelector(FsTabBar owner)
-		{
-			_owner = owner;
-		}
-
 		protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
 		{
-			var inner = _owner.ItemTemplate;
+			var inner = owner.ItemTemplate;
 			if (inner is null)
 			{
 				return _wrappedDefault ??= Wrap(BuildDefaultTemplate());
@@ -335,7 +243,7 @@ public class FsTabBar : ContentView, IFsTabBar
 				{
 					if (view.BindingContext is FsTabContext ctx)
 					{
-						_owner.OnTabTapped(ctx);
+						owner.OnTabTapped(ctx);
 					}
 
 				};
@@ -381,13 +289,15 @@ public class FsTabBar : ContentView, IFsTabBar
 
 	private double _pillWidth = 0;
 
-	private void SetPillWidth(object? sender, EventArgs eventArgs)
+	private void SetPillWidth(object? sender, EventArgs eventArgs) => SetPillWidth();
+	private void SetPillWidth()
 	{
-		_pillWidth = _backgroundGrid.Width / ItemsSource.Count;
-		_tabPill.HeightRequest = _backgroundGrid.Height;
+		//TabPill.HeightRequest = BarBackground.Height;
 		if (ItemsSource.Count > 0)
 		{
-			_tabPill.WidthRequest = _pillWidth;
+			var firstItem = TabLayout.Children[0];
+			_pillWidth = BarBackground.Width / ItemsSource.Count;
+			TabPill.WidthRequest = _pillWidth * 1.3;
 			Debug.WriteLine("Has items");
 		}
 		else
@@ -395,23 +305,19 @@ public class FsTabBar : ContentView, IFsTabBar
 			Debug.WriteLine("No items");
 		}
 		
-		Debug.WriteLine($"Tab Pill Width is {_tabPill.Width},  pill Width is {_pillWidth}");
+		Debug.WriteLine($"Tab Pill Width is {TabPill.Width},  pill Width is {_pillWidth}");
 	}
 
 	private void AnimateTabs(FsTabContext context)
 	{
 		var newIndex = ItemsSource.ToList().IndexOf(context);
 
-		/*_ =*/ _tabPill.TranslationX = newIndex * _pillWidth; //.TranslateToAsync(newIndex * _tabPill.Width, 0,  300, Easing.CubicIn);
+		_ = TabPill.TranslateToAsync(newIndex * _pillWidth, -15,  300, Easing.CubicIn);
 		
-		Debug.WriteLine($"New index is {newIndex}, pill translation is {_tabPill.TranslationX},  pill width is {_tabPill.Width}");
-		Debug.WriteLine($"Background grid width: {_backgroundGrid.Width}, layout grid width: {_layout.Width}");
-
-		var pillX = _tabPill.X;
-		var pillY = _tabPill.Y;
-		
-		Debug.WriteLine($"Pill x: {pillX}, Pill y: {pillY}");
+		Debug.WriteLine($"New index is {newIndex}, pill translation is {TabPill.TranslationX},  pill width is {TabPill.Width}");
+		Debug.WriteLine($"Background grid width: {BarBackground.Width}, layout grid width: {TabLayout.Width}");
 	}
 
 	#endregion
 }
+

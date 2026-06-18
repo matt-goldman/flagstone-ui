@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             VerticalOptions="Start"
+             HeightRequest="70"
+             x:Class="FlagstoneUI.Core.Controls.FsTabBar">
+  <Grid x:Name="BarBackground">
+    <BoxView BackgroundColor="DarkOrchid"
+             HorizontalOptions="Start"
+             VerticalOptions="Start"
+             HeightRequest="70"
+             TranslationY="-15"
+             Opacity="0.65"
+             CornerRadius="15"
+             x:Name="TabPill"/>
+    <FlexLayout Direction="Row"
+                JustifyContent="SpaceEvenly"
+                AlignItems="Center"
+                AlignContent="Center"
+                VerticalOptions="Start"
+                HorizontalOptions="Fill"
+                x:Name="TabLayout" />
+  </Grid>
+</ContentView>
