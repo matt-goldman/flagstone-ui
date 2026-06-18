@@ -16,20 +16,20 @@
             <VisualState x:Name="Unselected">
               <VisualState.Setters>
                 <Setter Property="Scale" Value="1" />
-                <Setter Property="BackgroundColor" Value="Transparent" />
+                <!-- <Setter Property="BackgroundColor" Value="Transparent" /> -->
                 <Setter TargetName="IconLabel" Property="Label.Text" Value="🙈"/>
               </VisualState.Setters>
             </VisualState>
             <VisualState x:Name="Selected">
               <VisualState.Setters>
                 <Setter Property="Scale" Value="1.3" />
-                <Setter Property="BackgroundColor" Value="LightBlue" />
+                <!-- <Setter Property="BackgroundColor" Value="LightBlue" /> -->
                 <Setter TargetName="IconLabel" Property="Label.Text" Value="🐵"/>
               </VisualState.Setters>
             </VisualState>
           </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        <HorizontalStackLayout Spacing="4" Padding="12,8">
+        <HorizontalStackLayout Spacing="4" Padding="12,8" HorizontalOptions="Center">
           <Label Text="🙈" FontSize="14" x:Name="IconLabel"/>
           <Label Text="{Binding Title}" FontSize="14" />
         </HorizontalStackLayout>

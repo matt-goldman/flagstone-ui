@@ -1,5 +1,6 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace FlagstoneUI.Core.Controls;
 
@@ -16,10 +17,33 @@ namespace FlagstoneUI.Core.Controls;
 public class FsTabBar : ContentView, IFsTabBar
 {
 	private readonly Grid _layout;
+	private readonly Grid _backgroundGrid;
+	private readonly BoxView _tabPill = new BoxView
+	{
+		BackgroundColor = Colors.Yellow,
+		Margin = 0,
+		HorizontalOptions = LayoutOptions.Start,
+		VerticalOptions = LayoutOptions.Start
+	};
 
 	/// <summary>Initializes a new <see cref="FsTabBar"/>.</summary>
 	public FsTabBar()
 	{
+		// Background Grid used to place animated background
+		_backgroundGrid = new Grid
+		{
+			ColumnSpacing = 0,
+			RowSpacing = 0,
+			HorizontalOptions = LayoutOptions.Fill,
+			VerticalOptions = LayoutOptions.Start,
+			RowDefinitions = { new RowDefinition(GridLength.Auto) },
+			Padding = new Thickness(0),
+		};
+
+		_backgroundGrid.SizeChanged += SetPillWidth;
+		
+		_backgroundGrid.Add(_tabPill);
+		
 		// Items are placed in a single-row Grid with one auto-sized column per item, instead
 		// of a HorizontalStackLayout. The outer-HSL pattern triggered a MAUI iOS layout bug
 		// where item children (especially items whose template root is also a HSL) collapsed
@@ -30,9 +54,10 @@ public class FsTabBar : ContentView, IFsTabBar
 		{
 			ColumnSpacing = 0,
 			RowSpacing = 0,
-			HorizontalOptions = LayoutOptions.Fill,
+			HorizontalOptions = LayoutOptions.Center,
 			VerticalOptions = LayoutOptions.Start,
 			RowDefinitions = { new RowDefinition(GridLength.Auto) },
+			Margin = new Thickness(0),
 		};
 
 		// VerticalOptions.Start on the bar itself keeps Measure(W, H) returning the bar's
@@ -41,7 +66,9 @@ public class FsTabBar : ContentView, IFsTabBar
 		VerticalOptions = LayoutOptions.Start;
 
 		BindableLayout.SetItemTemplateSelector(_layout, new TabItemTemplateSelector(this));
-		Content = _layout;
+		
+		_backgroundGrid.Add(_layout);
+		Content = _backgroundGrid;
 
 		// BindableLayout populates Grid.Children but doesn't assign Grid.Column to each item.
 		// Wire ColumnDefinitions + Grid.Column on the fly so each item lands in its own
@@ -58,14 +85,19 @@ public class FsTabBar : ContentView, IFsTabBar
 		{
 			Grid.SetColumn(v, index);
 		}
+		
+		//SetPillWidth();
 	}
 
 	private void OnLayoutChildRemoved(object? sender, ElementEventArgs e)
 	{
-		if (_layout.ColumnDefinitions.Count > 0)
+		var columnCount = _layout.ColumnDefinitions.Count;
+		if (columnCount > 0)
 		{
 			_layout.ColumnDefinitions.RemoveAt(_layout.ColumnDefinitions.Count - 1);
 		}
+		
+		//SetPillWidth();
 	}
 
 	#region ItemsSource
@@ -256,9 +288,9 @@ public class FsTabBar : ContentView, IFsTabBar
 			return;
 		}
 
-
 		SelectedRoute = context.Route;
 		ItemSelected?.Invoke(this, new FsTabBarSelectionChangedEventArgs(context));
+		AnimateTabs(context);
 	}
 
 	private sealed class TabItemTemplateSelector : DataTemplateSelector
@@ -344,4 +376,42 @@ public class FsTabBar : ContentView, IFsTabBar
 			});
 		}
 	}
+	
+	#region animations
+
+	private double _pillWidth = 0;
+
+	private void SetPillWidth(object? sender, EventArgs eventArgs)
+	{
+		_pillWidth = _backgroundGrid.Width / ItemsSource.Count;
+		_tabPill.HeightRequest = _backgroundGrid.Height;
+		if (ItemsSource.Count > 0)
+		{
+			_tabPill.WidthRequest = _pillWidth;
+			Debug.WriteLine("Has items");
+		}
+		else
+		{
+			Debug.WriteLine("No items");
+		}
+		
+		Debug.WriteLine($"Tab Pill Width is {_tabPill.Width},  pill Width is {_pillWidth}");
+	}
+
+	private void AnimateTabs(FsTabContext context)
+	{
+		var newIndex = ItemsSource.ToList().IndexOf(context);
+
+		/*_ =*/ _tabPill.TranslationX = newIndex * _pillWidth; //.TranslateToAsync(newIndex * _tabPill.Width, 0,  300, Easing.CubicIn);
+		
+		Debug.WriteLine($"New index is {newIndex}, pill translation is {_tabPill.TranslationX},  pill width is {_tabPill.Width}");
+		Debug.WriteLine($"Background grid width: {_backgroundGrid.Width}, layout grid width: {_layout.Width}");
+
+		var pillX = _tabPill.X;
+		var pillY = _tabPill.Y;
+		
+		Debug.WriteLine($"Pill x: {pillX}, Pill y: {pillY}");
+	}
+
+	#endregion
 }
