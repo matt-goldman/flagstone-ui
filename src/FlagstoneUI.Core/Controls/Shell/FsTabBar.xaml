@@ -9,10 +9,10 @@
     <BoxView BackgroundColor="DarkOrchid"
              HorizontalOptions="Start"
              VerticalOptions="Start"
-             HeightRequest="70"
+             HeightRequest="60"
              TranslationY="-15"
              Opacity="0.65"
-             CornerRadius="15"
+             CornerRadius="20"
              x:Name="TabPill"/>
     <FlexLayout Direction="Row"
                 JustifyContent="SpaceEvenly"

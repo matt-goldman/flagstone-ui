@@ -4,13 +4,24 @@
   xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
   xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
+  xmlns:converters="clr-namespace:FlagstoneUI.SampleApp.Converters"
   xmlns:local="clr-namespace:FlagstoneUI.SampleApp"
   xmlns:page="clr-namespace:FlagstoneUI.SampleApp.Pages"
   Title="FlagstoneUI.SampleApp">
+  <fs:FsShell.Resources>
+    <converters:TabSelectedToEmojiConverter SelectedValue="🐵"
+                                            UnselectedValue="🙈"
+                                            x:Key="EmojiConverter"/>
+  </fs:FsShell.Resources>
   <fs:FsShell.TabBarItemTemplate>
     <DataTemplate>
-      <HorizontalStackLayout Spacing="4" Padding="12,8" HorizontalOptions="Center">
-        <Label Text="🙈" FontSize="14" x:Name="IconLabel"/>
+      <HorizontalStackLayout Spacing="4"
+                             Padding="12,8"
+                             HorizontalOptions="Center"
+                             x:DataType="fs:FsTabContext">
+        <Label Text="{Binding IsSelected, Converter={StaticResource EmojiConverter}}"
+               FontSize="14"
+               x:Name="IconLabel"/>
         <Label Text="{Binding Title}" FontSize="14" />
       </HorizontalStackLayout>
     </DataTemplate>

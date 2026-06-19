@@ -289,6 +289,8 @@ public partial class FsTabBar : ContentView, IFsTabBar
 
 	private double _pillWidth = 0;
 
+	private VisualElement? _selectedTab = null;
+
 	private void SetPillWidth(object? sender, EventArgs eventArgs) => SetPillWidth();
 	private void SetPillWidth()
 	{
@@ -311,6 +313,31 @@ public partial class FsTabBar : ContentView, IFsTabBar
 	private void AnimateTabs(FsTabContext context)
 	{
 		var newIndex = ItemsSource.ToList().IndexOf(context);
+		VisualElement? newTab = null;
+		
+		foreach (var child in TabLayout.Children)
+		{
+			if (child is not VisualElement tab)
+			{
+				continue;
+			}
+
+			if (tab == _selectedTab)
+			{
+				_ = tab.ScaleToAsync(1, 300, Easing.CubicOut);
+			}
+
+			if (tab.BindingContext is FsTabContext ctx && ctx == context)
+			{
+				newTab = tab;
+			}
+		}
+
+		if (newTab is not null)
+		{
+			_selectedTab = newTab;
+			_ = _selectedTab.ScaleToAsync(1.3, 300, Easing.CubicIn);
+		}
 
 		_ = TabPill.TranslateToAsync(newIndex * _pillWidth, -15,  300, Easing.CubicIn);
 		
