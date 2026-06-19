@@ -12,8 +12,8 @@
              IsVisible="{Binding ShowPill, Source={x:Reference TabBarRoot}}"
              HorizontalOptions="Start"
              VerticalOptions="Start"
-             HeightRequest="60"
-             TranslationY="-15"
+             HeightRequest="50"
+             TranslationY="-10"
              CornerRadius="20"
              x:Name="TabPill"/>
     <FlexLayout Direction="Row"

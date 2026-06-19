@@ -125,7 +125,7 @@ public partial class FsTabBar : FsTabBarBase
 
 	private const double SelectedScale = 1.3;
 	private const double PillWidthFactor = 1.3;
-	private const double PillOffsetY = -15;
+	private const double PillOffsetY = -5;
 	private const uint AnimationLength = 300;
 
 	private double _pillWidth = 0;
