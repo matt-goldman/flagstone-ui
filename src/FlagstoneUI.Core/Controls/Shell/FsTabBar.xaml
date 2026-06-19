@@ -4,14 +4,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              VerticalOptions="Start"
              HeightRequest="70"
+             x:Name="TabBarRoot"
              x:Class="FlagstoneUI.Core.Controls.FsTabBar">
   <Grid x:Name="BarBackground">
-    <BoxView BackgroundColor="DarkOrchid"
+    <BoxView Background="{Binding PillBackground, Source={x:Reference TabBarRoot}}"
+             IsVisible="{Binding ShowPill, Source={x:Reference TabBarRoot}}"
              HorizontalOptions="Start"
              VerticalOptions="Start"
              HeightRequest="60"
              TranslationY="-15"
-             Opacity="0.65"
              CornerRadius="20"
              x:Name="TabPill"/>
     <FlexLayout Direction="Row"
