@@ -5,8 +5,6 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using WGrid = Microsoft.UI.Xaml.Controls.Grid;
-using WRowDefinition = Microsoft.UI.Xaml.Controls.RowDefinition;
-using WGridLength = Microsoft.UI.Xaml.GridLength;
 using WVisibility = Microsoft.UI.Xaml.Visibility;
 using ContentView = Microsoft.Maui.Controls.ContentView;
 
@@ -15,16 +13,15 @@ namespace FlagstoneUI.Core.Controls;
 // Windows is the only platform where Shell uses the handler architecture (ShellHandler / ShellView)
 // rather than the legacy renderer compatibility layer (ShellRenderer). The ShellItemHandler creates a
 // MauiNavigationView with PaneDisplayMode.Top for tabs. This handler suppresses that top nav area and
-// hosts the FsTabBar at the bottom of the ShellItemHandler's ContentGrid.
+// hosts the FsTabBar as a bottom overlay on the ShellView's root grid.
 internal sealed partial class FsShellRenderer : ShellHandler
 {
 	private FrameworkElement? _hostedBar;
 	private ContentView? _barContentView;
 	private FsShell? _shell;
-	private bool _barSetupComplete;
+	private bool _barHosted;
 	private StackPanel? _topNavArea;
 	private NavigationView? _innerNavigationView;
-	private FrameworkElement? _pendingInnerNav;
 	private long _paneDisplayModeCallbackToken;
 	private long _contentChangedCallbackToken;
 
@@ -36,8 +33,7 @@ internal sealed partial class FsShellRenderer : ShellHandler
 		_contentChangedCallbackToken = platformView.RegisterPropertyChangedCallback(
 			ContentControl.ContentProperty, OnShellContentChanged);
 
-		if (platformView.Content is FrameworkElement existingContent)
-			SubscribeInnerNav(existingContent);
+		platformView.Loaded += OnShellViewLoaded;
 	}
 
 	protected override void DisconnectHandler(ShellView platformView)
@@ -45,57 +41,77 @@ internal sealed partial class FsShellRenderer : ShellHandler
 		platformView.UnregisterPropertyChangedCallback(
 			ContentControl.ContentProperty, _contentChangedCallbackToken);
 
+		platformView.Loaded -= OnShellViewLoaded;
+
 		CleanupBar();
 		_shell = null;
 
 		base.DisconnectHandler(platformView);
 	}
 
+	private void OnShellViewLoaded(object sender, RoutedEventArgs e)
+	{
+		TryHostBar();
+	}
+
 	private void OnShellContentChanged(DependencyObject sender, DependencyProperty dp)
 	{
-		if (_barSetupComplete) return;
 		if (sender is not ShellView sv || sv.Content is not FrameworkElement innerNav) return;
 
-		SubscribeInnerNav(innerNav);
+		SuppressNativeTabs(innerNav);
+		TryHostBar();
 	}
 
-	private void SubscribeInnerNav(FrameworkElement innerNav)
+	private void TryHostBar()
 	{
-		if (_barSetupComplete) return;
-
-		if (innerNav.IsLoaded)
-		{
-			SetupBar(innerNav);
-		}
-		else
-		{
-			_pendingInnerNav = innerNav;
-			innerNav.Loaded += OnInnerNavLoaded;
-		}
-	}
-
-	private void OnInnerNavLoaded(object sender, RoutedEventArgs e)
-	{
-		if (sender is FrameworkElement innerNav)
-		{
-			innerNav.Loaded -= OnInnerNavLoaded;
-			_pendingInnerNav = null;
-			SetupBar(innerNav);
-		}
-	}
-
-	private void SetupBar(FrameworkElement innerNav)
-	{
-		if (_barSetupComplete || _shell?.TabBar is not { } bar) return;
+		if (_barHosted || _shell?.TabBar is not { } bar) return;
 
 		var mauiContext = MauiContext;
 		if (mauiContext is null) return;
 
-		SuppressNativeTabs(innerNav);
-		HostBar(innerNav, bar, mauiContext);
+		var rootGrid = FindRootGrid(PlatformView);
+		if (rootGrid is null) return;
+
+		var platformBar = bar.ToPlatform(mauiContext);
+
+		if (platformBar.Parent is Panel oldParent)
+			oldParent.Children.Remove(platformBar);
+
+		platformBar.VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Bottom;
+		rootGrid.Children.Add(platformBar);
+
+		_hostedBar = platformBar;
+		_barContentView = bar;
+		_barHosted = true;
 	}
 
 	private void SuppressNativeTabs(FrameworkElement innerNav)
+	{
+		if (_innerNavigationView is not null && ReferenceEquals(_innerNavigationView, innerNav))
+			return;
+
+		if (_innerNavigationView is not null)
+		{
+			_innerNavigationView.UnregisterPropertyChangedCallback(
+				NavigationView.PaneDisplayModeProperty, _paneDisplayModeCallbackToken);
+		}
+
+		if (innerNav.IsLoaded)
+			CollapseTopNav(innerNav);
+		else
+			innerNav.Loaded += OnInnerNavLoaded;
+	}
+
+	private void OnInnerNavLoaded(object sender, RoutedEventArgs e)
+	{
+		if (sender is FrameworkElement fe)
+		{
+			fe.Loaded -= OnInnerNavLoaded;
+			CollapseTopNav(fe);
+		}
+	}
+
+	private void CollapseTopNav(FrameworkElement innerNav)
 	{
 		_topNavArea = FindByName<StackPanel>(innerNav, "TopNavArea");
 		if (_topNavArea is not null)
@@ -115,38 +131,8 @@ internal sealed partial class FsShellRenderer : ShellHandler
 			_topNavArea.Visibility = WVisibility.Collapsed;
 	}
 
-	private void HostBar(FrameworkElement innerNav, ContentView bar, IMauiContext mauiContext)
-	{
-		var contentGrid = FindByName<WGrid>(innerNav, "ContentGrid");
-		if (contentGrid is null) return;
-
-		var platformBar = bar.ToPlatform(mauiContext);
-
-		if (platformBar.Parent is Panel oldParent)
-			oldParent.Children.Remove(platformBar);
-
-		contentGrid.RowDefinitions.Add(new WRowDefinition { Height = WGridLength.Auto });
-		var newRow = contentGrid.RowDefinitions.Count - 1;
-		WGrid.SetRow(platformBar, newRow);
-
-		if (contentGrid.ColumnDefinitions.Count > 1)
-			WGrid.SetColumnSpan(platformBar, contentGrid.ColumnDefinitions.Count);
-
-		contentGrid.Children.Add(platformBar);
-
-		_hostedBar = platformBar;
-		_barContentView = bar;
-		_barSetupComplete = true;
-	}
-
 	private void CleanupBar()
 	{
-		if (_pendingInnerNav is not null)
-		{
-			_pendingInnerNav.Loaded -= OnInnerNavLoaded;
-			_pendingInnerNav = null;
-		}
-
 		if (_innerNavigationView is not null)
 		{
 			_innerNavigationView.UnregisterPropertyChangedCallback(
@@ -162,7 +148,18 @@ internal sealed partial class FsShellRenderer : ShellHandler
 		_hostedBar = null;
 		_barContentView = null;
 		_topNavArea = null;
-		_barSetupComplete = false;
+		_barHosted = false;
+	}
+
+	private static WGrid? FindRootGrid(FrameworkElement element)
+	{
+		var count = VisualTreeHelper.GetChildrenCount(element);
+		for (int i = 0; i < count; i++)
+		{
+			if (VisualTreeHelper.GetChild(element, i) is WGrid grid)
+				return grid;
+		}
+		return null;
 	}
 
 	private static T? FindByName<T>(DependencyObject root, string name) where T : FrameworkElement
