@@ -1,6 +1,5 @@
 ﻿using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
 
 namespace FlagstoneUI.Core.Controls;
 
@@ -300,14 +299,7 @@ public partial class FsTabBar : ContentView, IFsTabBar
 			var firstItem = TabLayout.Children[0];
 			_pillWidth = BarBackground.Width / ItemsSource.Count;
 			TabPill.WidthRequest = _pillWidth * 1.3;
-			Debug.WriteLine("Has items");
 		}
-		else
-		{
-			Debug.WriteLine("No items");
-		}
-		
-		Debug.WriteLine($"Tab Pill Width is {TabPill.Width},  pill Width is {_pillWidth}");
 	}
 
 	private void AnimateTabs(FsTabContext context)
@@ -340,9 +332,6 @@ public partial class FsTabBar : ContentView, IFsTabBar
 		}
 
 		_ = TabPill.TranslateToAsync(newIndex * _pillWidth, -15,  300, Easing.CubicIn);
-		
-		Debug.WriteLine($"New index is {newIndex}, pill translation is {TabPill.TranslationX},  pill width is {TabPill.Width}");
-		Debug.WriteLine($"Background grid width: {BarBackground.Width}, layout grid width: {TabLayout.Width}");
 	}
 
 	#endregion
