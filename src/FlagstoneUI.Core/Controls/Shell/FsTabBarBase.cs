@@ -199,6 +199,30 @@ public abstract class FsTabBarBase : ContentView, IFsTabBar
 
 	#endregion
 
+	#region AnimateTransitions
+
+	/// <summary>Bindable property for <see cref="AnimateTransitions"/>.</summary>
+	public static readonly BindableProperty AnimateTransitionsProperty = BindableProperty.Create(
+		nameof(AnimateTransitions),
+		typeof(bool),
+		typeof(FsTabBarBase),
+		true);
+
+	/// <summary>
+	/// Consumer-facing switch for selection transition animations. It is the single API for turning
+	/// tab transitions on or off: when <c>true</c>, <see cref="OnSelectionChanged"/> is invoked with
+	/// <c>animated: true</c>; when <c>false</c>, with <c>animated: false</c>. Whether (and how) a
+	/// transition is actually animated is left to the subclass — this property only expresses the
+	/// consumer's intent, so a bar that implements no animation may simply ignore the flag.
+	/// </summary>
+	public bool AnimateTransitions
+	{
+		get => (bool)GetValue(AnimateTransitionsProperty);
+		set => SetValue(AnimateTransitionsProperty, value);
+	}
+
+	#endregion
+
 	/// <inheritdoc />
 	public event EventHandler<FsTabBarSelectionChangedEventArgs>? ItemSelected;
 
@@ -216,7 +240,7 @@ public abstract class FsTabBarBase : ContentView, IFsTabBar
 
 		SelectedRoute = context.Route;
 		ItemSelected?.Invoke(this, new FsTabBarSelectionChangedEventArgs(context));
-		OnSelectionChanged(context, animated: true);
+		OnSelectionChanged(context, animated: AnimateTransitions);
 	}
 
 	/// <summary>

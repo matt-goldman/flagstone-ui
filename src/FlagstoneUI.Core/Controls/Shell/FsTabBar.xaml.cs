@@ -18,7 +18,7 @@ public partial class FsTabBar : FsTabBarBase
 	protected override Layout TabContainer => TabLayout;
 
 	/// <inheritdoc />
-	protected override void OnSelectionChanged(FsTabContext context, bool animated) => AnimateTabs(context);
+	protected override void OnSelectionChanged(FsTabContext context, bool animated) => AnimateTabs(context, animated);
 
 	/// <inheritdoc />
 	protected override void OnSelectionInitialized() => ApplyInitialSelection();
@@ -186,22 +186,29 @@ public partial class FsTabBar : FsTabBarBase
 		}
 	}
 
-	private void AnimateTabs(FsTabContext context)
+	private void AnimateTabs(FsTabContext context, bool animated)
 	{
 		if (ScaleSelectedTab)
 		{
 			if (_selectedTab is not null)
 			{
-				_ = _selectedTab.ScaleToAsync(1, AnimationLength, Easing.CubicOut);
+				if (animated)
+				{
+					_ = _selectedTab.ScaleToAsync(1, AnimationLength, Easing.CubicOut);
+				}
+				else
+				{
+					_selectedTab.Scale = 1;
+				}
 			}
 
 			_selectedTab = FindTab(ctx => ReferenceEquals(ctx, context));
-			ApplySelectedScale(animated: true);
+			ApplySelectedScale(animated);
 		}
 
 		if (ShowPill)
 		{
-			MovePill(ItemsSource.ToList().IndexOf(context), animated: true);
+			MovePill(ItemsSource.ToList().IndexOf(context), animated);
 		}
 	}
 

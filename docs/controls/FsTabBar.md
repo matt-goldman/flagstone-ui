@@ -1,46 +1,83 @@
 # FsTabBar Control
 
-> _One-paragraph intro: FsTabBar is the reference bottom bar that ships with FsShell. It renders a horizontal row of tabs, drives selection via a two-way `SelectedRoute` binding, and is designed to be customised through `ItemTemplate` first and subclassing second. It implements `IFsTabBar` so it can be dropped into the `FsShell.TabBar` slot directly or wrapped inside a custom container._
+> _One-paragraph intro: `FsTabBar` is the reference bottom bar that ships with `FsShell`. It renders a horizontal row of tabs, drives selection via a two-way `SelectedRoute` binding, and ships with built-in selection animation — a rounded pill that slides behind the active tab and a scale bump on the selected tab. It is split into an abstract `FsTabBarBase` (the reusable bar contract, item plumbing, and visual-state pumping) and the concrete `FsTabBar` (the pill/scale visual layer). It implements `IFsTabBar` so it can be dropped into the `FsShell.TabBar` slot directly or wrapped inside a custom container, and it is designed to be customised through `ItemTemplate` first, subclassing `FsTabBar` second, and subclassing `FsTabBarBase` for an entirely different bar third._
 
 ## Features
 
-- TODO: ships as the default bar inside `FsShell` — no extra setup
-- TODO: per-tab `DataTemplate` via `ItemTemplate` (forwarded from `FsShell.TabBarItemTemplate`)
-- TODO: default template (icon + label) for the zero-config case
-- TODO: implements `IFsTabBar` — routing/selection wired up automatically
-- TODO: visual-state pumping for `Selected`/`Unselected` and `Normal`/`Disabled`
-- TODO: subclassable — override `OnTabTapped` to customise selection behaviour
-- TODO: also usable standalone (outside `FsShell`) via the `IFsTabBar` API
+- Ships as the default bar inside `FsShell` — no extra setup
+- Per-tab `DataTemplate` via `ItemTemplate` (forwarded from `FsShell.TabBarItemTemplate`)
+- Default template (icon + label) for the zero-config case
+- Implements `IFsTabBar` — routing/selection wired up automatically
+- Visual-state pumping for `Selected`/`Unselected` and `Normal`/`Disabled`
+- Built-in selection animation: a sliding pill (`ShowPill`) and a scaling selected tab (`ScaleSelectedTab`), toggleable independently
+- Single consumer switch — `AnimateTransitions` — to enable/disable selection transition animation
+- Subclassable at two levels — override hooks on `FsTabBar` to tweak the pill/scale, or subclass `FsTabBarBase` to build a different-looking bar without re-implementing the routing/plumbing
+- Also usable standalone (outside `FsShell`) via the `IFsTabBar` API
 
-## Architecture: Grid-Based Item Layout
+## Architecture: Base/Derived Split
 
-- TODO: items are placed in a single-row `Grid` with one auto-sized column per item
-- TODO: rationale — earlier `HorizontalStackLayout`-of-items hit a MAUI iOS layout bug where item children with nested `HorizontalStackLayout` roots collapsed to height 0 on layout passes after the first
-- TODO: `Grid.CrossPlatformArrange` distributes children from measured row/column geometry rather than re-reading each child's `DesiredSize`, so children stay at their measured size across passes
-- TODO: outer `VerticalOptions.Start` keeps the bar at its natural content height so the FsShell renderers can position the bar deterministically against the bottom edge
+The control is two types:
+
+- **`FsTabBarBase` (abstract, no XAML)** owns the reusable, look-agnostic concerns: the `IFsTabBar` contract (`ItemsSource`, `SelectedRoute`, `ItemSelected`), item materialisation and `INotifyCollectionChanged`/per-item `PropertyChanged` subscription bookkeeping, tap routing through `OnTabTapped`, visual-state pumping, the default item template, and the `AnimateTransitions` consumer switch.
+- **`FsTabBar` (concrete, XAML)** is the reference visual layer: it supplies the layout, the sliding pill, the scaling selected tab, and the bindable properties that style them.
+
+The base reaches the hosted item views only through an abstract `TabContainer` property that the derived bar supplies from its own XAML. This is what lets a subclass present a completely different layout without touching the items/selection/VSM machinery.
+
+### `FsTabBar` layout
+
+`FsTabBar.xaml` layers two children in a `Grid` (`BarBackground`):
+
+- a rounded `BoxView` pill (`TabPill`) painted with `PillBackground`, sized and translated in code to track the selected tab;
+- a `FlexLayout` (`TabLayout`, `Direction="Row"`, `JustifyContent="SpaceEvenly"`) that hosts the instantiated tab views and is returned as the base's `TabContainer`.
+
+The outer `VerticalOptions="Start"` keeps the bar at its natural content height so the `FsShell` renderers can position it deterministically against the bottom edge.
 
 ### Item wrapping
 
-- TODO: every instantiated item is wrapped with a `TapGestureRecognizer` that calls `OnTabTapped`
-- TODO: the wrapper template is cached per inner `ItemTemplate` instance to keep `BindableLayout`'s template-recycling logic happy
+- Every instantiated item is wrapped (by `FsTabBarBase.TabItemTemplateSelector`) with a `TapGestureRecognizer` that calls `OnTabTapped`
+- The wrapper template is cached per inner `ItemTemplate` instance to keep `BindableLayout`'s template-recycling logic happy
 
 ## Properties
+
+### Declared on `FsTabBarBase` (inherited by every bar)
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `ItemsSource` | `IReadOnlyList<FsTabContext>` | empty | The collection of tabs to render. Auto-populated by `FsShell`. |
 | `ItemTemplate` | `DataTemplate?` | `null` | Template applied to each tab. When unset, the built-in icon+label template is used. |
 | `SelectedRoute` | `string?` | `null` | Two-way: the current selection's route. Setting it requests navigation; FsShell mirrors external navigation back into it. |
+| `AnimateTransitions` | `bool` | `true` | Single consumer switch for selection transition animation. Flows to subclasses as the `animated` argument of `OnSelectionChanged`; a subclass may honour or ignore it. |
+
+### Declared on `FsTabBar` (the reference visual layer)
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `PillBackground` | `Brush` | `SolidColorBrush(DarkOrchid @ 0.65α)` | Brush painted behind the selected tab. Opacity travels through the brush's colour — no separate opacity knob. |
+| `ShowPill` | `bool` | `true` | Whether the sliding pill is shown. When `false` the pill is hidden and its sizing/translation work is skipped entirely. |
+| `ScaleSelectedTab` | `bool` | `true` | Whether the selected tab is scaled up to emphasise it. When `false` no scale work runs and tabs stay at natural size. |
+
+> `ShowPill`/`ScaleSelectedTab` toggle whether each effect exists at all; `AnimateTransitions` toggles whether the (still-present) effects transition smoothly or snap into place.
 
 ### Inherited from `ContentView`
 
-- TODO: usual `BackgroundColor`, `Padding`, `Margin`, `IsVisible`, etc. apply
-- TODO: bar's `BackgroundColor` is the most common style customisation
+- Usual `BackgroundColor`, `Padding`, `Margin`, `IsVisible`, etc. apply
+- The bar's `BackgroundColor` is the most common style customisation
 
 ### Extension points
 
-- TODO: `protected virtual void OnTabTapped(FsTabContext context)` — override to customise what happens on a tap
-- TODO: subclass `FsTabBar` to add bindable properties (e.g. badge counts) without re-implementing the routing wiring
+On `FsTabBarBase` (override these to build a custom bar):
+
+- `protected abstract Layout TabContainer { get; }` — return the layout that hosts the item views; the base binds items and pumps VSM against it
+- `protected void InitializeTabContainer()` — call once from the subclass constructor *after* the container exists (e.g. after `InitializeComponent`) to install the tap-wrapping template selector
+- `protected virtual void OnSelectionChanged(FsTabContext context, bool animated)` — called on a user tap; override to animate/restyle selection
+- `protected virtual void OnSelectionInitialized()` — called after items (re)materialise; override to apply visuals for the already-selected tab before any tap
+- `protected virtual DataTemplate BuildDefaultItemTemplate()` — override to change the zero-config default tab content
+- `protected virtual void OnTabTapped(FsTabContext context)` — override to customise routing on a tap (call `base` to keep `SelectedRoute`/`ItemSelected`/`OnSelectionChanged` in sync)
+- `protected VisualElement? FindTab(Func<FsTabContext,bool>)` / `protected int SelectedIndex()` — selection helpers for use inside overrides
+
+On `FsTabBar` specifically:
+
+- Subclass `FsTabBar` to tweak the pill/scale behaviour or add bindable properties (e.g. badge counts) without re-implementing the routing wiring
 
 ## Companion Type: `FsTabContext`
 
@@ -155,7 +192,21 @@ The default icon+label template is used; `FsShell` instantiates an `FsTabBar` au
 </fs:FsShell>
 ```
 
-> Setting `TabBar` explicitly lets you reach properties on `FsTabBar` that have no XAML shorthand on `FsShell`. The default template is still used unless you also set `ItemTemplate`.
+> Setting `TabBar` explicitly lets you reach properties on `FsTabBar` that have no XAML shorthand on `FsShell` — including `PillBackground`, `ShowPill`, `ScaleSelectedTab`, and `AnimateTransitions`. The default template is still used unless you also set `ItemTemplate`.
+
+### Tuning the built-in animation
+
+```xaml
+<fs:FsShell.TabBar>
+    <fs:FsTabBar
+        PillBackground="{DynamicResource Brush.SecondaryContainer}"
+        ShowPill="True"
+        ScaleSelectedTab="False"
+        AnimateTransitions="True" />
+</fs:FsShell.TabBar>
+```
+
+Set `AnimateTransitions="False"` to make selection changes snap instead of slide while keeping the pill and/or scale visible. Set `ShowPill="False"`/`ScaleSelectedTab="False"` to drop an effect entirely (and skip its work).
 
 ### Subclassing `FsTabBar`
 
@@ -186,6 +237,43 @@ public class BadgeAwareTabBar : FsTabBar
     </fs:FsShell.TabBar>
     ...
 </fs:FsShell>
+```
+
+### Building a different bar on `FsTabBarBase`
+
+When the pill/scale look doesn't fit, subclass `FsTabBarBase` instead of `FsTabBar`: supply your own XAML and layout, return it as `TabContainer`, and implement the selection hooks. All the items/selection/VSM plumbing is inherited.
+
+```csharp
+public partial class UnderlineTabBar : FsTabBarBase
+{
+    public UnderlineTabBar()
+    {
+        InitializeComponent();
+        InitializeTabContainer();   // after the container element exists
+    }
+
+    // The named FlexLayout/Grid from UnderlineTabBar.xaml that hosts the items.
+    protected override Layout TabContainer => Items;
+
+    protected override void OnSelectionChanged(FsTabContext context, bool animated)
+    {
+        // Honour the consumer's AnimateTransitions choice via `animated`.
+        MoveUnderlineTo(SelectedIndex(), animated);
+    }
+
+    protected override void OnSelectionInitialized() => MoveUnderlineTo(SelectedIndex(), animated: false);
+}
+```
+
+The XAML root must name the base type (because XAML's root tag is the partial's base class):
+
+```xaml
+<controls:FsTabBarBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:controls="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
+                       x:Class="MyApp.UnderlineTabBar">
+    <!-- pill/underline decoration + the named item host returned by TabContainer -->
+</controls:FsTabBarBase>
 ```
 
 ### Standalone use (outside `FsShell`)
@@ -228,28 +316,34 @@ bar.ItemSelected += (s, e) => Console.WriteLine($"Picked {e.Selected.Route}");
 
 ## Technical Implementation
 
-### Item lifecycle
+### Item lifecycle (`FsTabBarBase`)
 
-- TODO: `BindableLayout.SetItemTemplateSelector` drives item instantiation
-- TODO: `ChildAdded` adds a new `ColumnDefinition(GridLength.Star)` and assigns `Grid.Column` to the new item
-- TODO: `ChildRemoved` trims a column off the end
-- TODO: `OnItemsSourceChanged` hooks `INotifyCollectionChanged` and per-item `PropertyChanged` so VSM stays in sync
+- `BindableLayout.SetItemsSource` on `TabContainer` drives item instantiation; the `FlexLayout` distributes the resulting children evenly (`JustifyContent="SpaceEvenly"`)
+- `OnItemsSourceChanged` hooks `INotifyCollectionChanged` and per-item `PropertyChanged` (and unhooks the old collection/items) so VSM stays in sync, then pumps all states and calls `OnSelectionInitialized`
 
-### Template wrapping
+### Template wrapping (`FsTabBarBase`)
 
-- TODO: every template is wrapped to attach a `TapGestureRecognizer`
-- TODO: wrappers are cached by inner-template identity — on some platforms, handing back a freshly-constructed `DataTemplate` per `OnSelectTemplate` call breaks `BindableLayout`'s items collection
+- Every template is wrapped (by `TabItemTemplateSelector`) to attach a `TapGestureRecognizer` that routes through `OnTabTapped`
+- Wrappers are cached by inner-template identity — on some platforms, handing back a freshly-constructed `DataTemplate` per `OnSelectTemplate` call breaks `BindableLayout`'s items collection
 
-### VSM pumping
+### VSM pumping (`FsTabBarBase`)
 
-- TODO: `PumpAllVsmStates` runs on items-source change
-- TODO: `PumpVsmState(ctx)` runs on individual `IsSelected`/`IsEnabled` changes
-- TODO: states are pushed to the item's root `VisualElement` (its `BindingContext` is the `FsTabContext`)
+- `PumpAllVsmStates` runs on items-source change (and on collection changes)
+- `PumpVsmState(ctx)` runs on individual `IsSelected`/`IsEnabled` changes
+- States are pushed to the item's root `VisualElement` (its `BindingContext` is the `FsTabContext`)
+
+### Selection animation (`FsTabBar`)
+
+- On tap, the base calls `OnSelectionChanged(context, animated)` where `animated == AnimateTransitions`; `FsTabBar` runs the pill translate and scale bump (smoothly when `animated`, instantly otherwise)
+- On `OnSelectionInitialized` (after items materialise) the already-selected tab is scaled and the pill parked under it instantly — so the default selection looks correct before any tap
+- The pill's width and position depend on the bar's measured width, so placement also re-runs from `BarBackground.SizeChanged`
+- All pill/scale work early-returns when `ShowPill`/`ScaleSelectedTab` are `false`, so disabled effects cost nothing
 
 ## See Also
 
 - [FsShell Control](FsShell.md) — the host
 - [ADR012 — FsShell: Stylable Shell Chrome via Subclass](../decisions/adr012-fsshell.md)
+- [ADR013 — Shell Animations](../decisions/adr013-shell-animations.md) — context for the "bring your own bar" animation story this control now partly fulfils
 - [ADR012_1 — Per-`ShellItem` Tab Bar Scoping](../decisions/adr012_1-fsshell-per-item-bar-scoping-addendum.md)
 - [ADR012_2 — FsShell Renderer Scope Narrowing](../decisions/adr012_2-fsshell-renderer-scope-narrowing-addendum.md)
 - [ADR012_3 — Bottom Chrome Height Resource Contract](../decisions/adr012_3-fsshell-bottom-chrome-resource-contract-addendum.md)
