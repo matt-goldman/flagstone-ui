@@ -27,7 +27,7 @@ The base reaches the hosted item views only through an abstract `TabContainer` p
 
 `FsTabBar.xaml` layers two children in a `Grid` (`BarBackground`):
 
-- a rounded `BoxView` pill (`TabPill`) painted with `PillBackground`, sized and translated in code to track the selected tab;
+- a `Border` pill (`TabPill`) painted with `PillBackground` and shaped by `PillShape` (any `IShape`), sized and translated in code to track the selected tab;
 - a `FlexLayout` (`TabLayout`, `Direction="Row"`, `JustifyContent="SpaceEvenly"`) that hosts the instantiated tab views and is returned as the base's `TabContainer`.
 
 The outer `VerticalOptions="Start"` keeps the bar at its natural content height so the `FsShell` renderers can position it deterministically against the bottom edge.
@@ -52,7 +52,8 @@ The outer `VerticalOptions="Start"` keeps the bar at its natural content height 
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `PillBackground` | `Brush` | `SolidColorBrush(DarkOrchid @ 0.65α)` | Brush painted behind the selected tab. Opacity travels through the brush's colour — no separate opacity knob. |
+| `PillBackground` | `Brush` | `SolidColorBrush(DarkOrchid @ 0.65α)` | Brush filling the pill (its `Border.Background`). Opacity travels through the brush's colour — no separate opacity knob. |
+| `PillShape` | `IShape` | `RoundRectangle` (corner 20) | Pill geometry, applied as the pill `Border`'s `StrokeShape`. Use any `IShape` — `RoundRectangle`, `Ellipse`, or a custom `Path`/`Geometry`. |
 | `ShowPill` | `bool` | `true` | Whether the sliding pill is shown. When `false` the pill is hidden and its sizing/translation work is skipped entirely. |
 | `ScaleSelectedTab` | `bool` | `true` | Whether the selected tab is scaled up to emphasise it. When `false` no scale work runs and tabs stay at natural size. |
 
@@ -200,6 +201,7 @@ The default icon+label template is used; `FsShell` instantiates an `FsTabBar` au
 <fs:FsShell.TabBar>
     <fs:FsTabBar
         PillBackground="{DynamicResource Brush.SecondaryContainer}"
+        PillShape="RoundRectangle 24"
         ShowPill="True"
         ScaleSelectedTab="False"
         AnimateTransitions="True" />

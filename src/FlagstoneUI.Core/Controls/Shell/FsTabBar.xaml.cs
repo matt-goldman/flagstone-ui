@@ -1,9 +1,12 @@
+using Microsoft.Maui.Controls.Shapes;
+
 namespace FlagstoneUI.Core.Controls;
 
 /// <summary>
-/// Reference <see cref="FsTabBarBase"/> implementation: a horizontal bar that slides a rounded pill
-/// behind the selected tab and scales the selected tab up to emphasise it. Both effects are
-/// independently toggleable via <see cref="ShowPill"/> and <see cref="ScaleSelectedTab"/>.
+/// Reference <see cref="FsTabBarBase"/> implementation: a horizontal bar that slides a pill behind
+/// the selected tab and scales the selected tab up to emphasise it. The pill's fill, shape, and
+/// presence are configurable via <see cref="PillBackground"/>, <see cref="PillShape"/>, and
+/// <see cref="ShowPill"/>; the scale is toggleable via <see cref="ScaleSelectedTab"/>.
 /// </summary>
 public partial class FsTabBar : FsTabBarBase
 {
@@ -39,6 +42,30 @@ public partial class FsTabBar : FsTabBarBase
 	{
 		get => (Brush)GetValue(PillBackgroundProperty);
 		set => SetValue(PillBackgroundProperty, value);
+	}
+
+	#endregion
+
+	#region PillShape
+
+	/// <summary>Bindable property for <see cref="PillShape"/>.</summary>
+	public static readonly BindableProperty PillShapeProperty = BindableProperty.Create(
+		nameof(PillShape),
+		typeof(IShape),
+		typeof(FsTabBar),
+		// A Shape is a View, so each bar needs its own instance rather than a shared default
+		// that would be parented to multiple pill Borders.
+		defaultValueCreator: static _ => new RoundRectangle { CornerRadius = new CornerRadius(20) });
+
+	/// <summary>
+	/// The geometry of the selection pill, applied as the pill <c>Border</c>'s stroke shape. Any
+	/// <see cref="IShape"/> works (e.g. <c>RoundRectangle</c>, <c>Ellipse</c>, or a custom
+	/// <c>Path</c>/<c>Geometry</c>). Defaults to a rounded rectangle.
+	/// </summary>
+	public IShape PillShape
+	{
+		get => (IShape)GetValue(PillShapeProperty);
+		set => SetValue(PillShapeProperty, value);
 	}
 
 	#endregion

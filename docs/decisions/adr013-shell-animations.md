@@ -1,5 +1,7 @@
 # ADR013: Shell Animations — Deferred to Consumer Implementations
 
+**update: the tab-item disposition below was later revised — see [ADR013_1 — FsTabBar Built-in Selection Animation](./adr013_1-fstabbar-built-in-selection-animation-addendum.md). The reference `FsTabBar` now ships with built-in selection animation (without resurrecting the FsTransition primitive), and "bring your own bar" is now the abstract `FsTabBarBase`. The two structural decisions here — no general VSM animation primitive, and page transitions deferred — still stand.**
+
 **Status:** Accepted
 **Date:** 2026-06-12
 **Deciders:** Matt Goldman

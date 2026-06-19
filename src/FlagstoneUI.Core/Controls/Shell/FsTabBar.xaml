@@ -8,14 +8,15 @@
              x:Name="TabBarRoot"
              x:Class="FlagstoneUI.Core.Controls.FsTabBar">
   <Grid x:Name="BarBackground">
-    <BoxView Background="{Binding PillBackground, Source={x:Reference TabBarRoot}}"
-             IsVisible="{Binding ShowPill, Source={x:Reference TabBarRoot}}"
-             HorizontalOptions="Start"
-             VerticalOptions="Start"
-             HeightRequest="50"
-             TranslationY="-10"
-             CornerRadius="20"
-             x:Name="TabPill"/>
+    <Border Background="{Binding PillBackground, Source={x:Reference TabBarRoot}}"
+            StrokeShape="{Binding PillShape, Source={x:Reference TabBarRoot}}"
+            StrokeThickness="0"
+            IsVisible="{Binding ShowPill, Source={x:Reference TabBarRoot}}"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            HeightRequest="50"
+            TranslationY="-10"
+            x:Name="TabPill"/>
     <FlexLayout Direction="Row"
                 JustifyContent="SpaceEvenly"
                 AlignItems="Center"

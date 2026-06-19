@@ -61,6 +61,10 @@ The `decisions/` directory contains Architecture Decision Records (ADRs):
 - [ADR011: Token System Repositioning](decisions/adr011-token-system-repositioning.md)
 - [ADR012: FsShell — Stylable Shell Chrome via Subclass](decisions/adr012-fsshell.md)
 - [ADR012 (addendum): Per-ShellItem Tab Bar Scoping](decisions/adr012_1-fsshell-per-item-bar-scoping-addendum.md)
+- [ADR012 (addendum): FsShell Renderer Scope Narrowing](decisions/adr012_2-fsshell-renderer-scope-narrowing-addendum.md)
+- [ADR012 (addendum): Bottom Chrome Height Resource Contract](decisions/adr012_3-fsshell-bottom-chrome-resource-contract-addendum.md)
+- [ADR013: Shell Animations — Deferred to Consumer Implementations](decisions/adr013-shell-animations.md)
+- [ADR013 (addendum): FsTabBar Built-in Selection Animation](decisions/adr013_1-fstabbar-built-in-selection-animation-addendum.md)
 
 ## Theme Prompts
 
