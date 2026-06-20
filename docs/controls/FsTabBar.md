@@ -30,7 +30,7 @@ The base reaches the hosted item views only through an abstract `TabContainer` p
 - a `Border` pill (`TabPill`) painted with `PillBackground` and shaped by `PillShape` (any `IShape`), sized and translated in code to track the selected tab;
 - a `FlexLayout` (`TabLayout`, `Direction="Row"`, `JustifyContent="SpaceEvenly"`) that hosts the instantiated tab views and is returned as the base's `TabContainer`.
 
-The outer `VerticalOptions="Start"` keeps the bar at its natural content height so the `FsShell` renderers can position it deterministically against the docked edge.
+The outer `VerticalOptions="Start"` keeps the bar at its natural content height so the `FsShell` renderers can position it deterministically when docked.
 
 ### Item wrapping
 
@@ -323,7 +323,7 @@ bar.ItemSelected += (s, e) => Console.WriteLine($"Picked {e.Selected.Route}");
 
 `FsTabBar` is a pure cross-platform MAUI `ContentView` — it contains no per-platform code. All platform-specific hosting and positioning is handled by the `FsShell` renderers/handler. Supported on Android, iOS, Mac Catalyst, and Windows.
 
-Note: on iOS, content that scales beyond the bar's bounds (e.g. the pill animation) is not clipped. On Android and Windows, the bar's platform container clips overflow. Use `TabBarDock.None` for designs that need to break out of the bar's bounds on those platforms.
+Note: on iOS, content that scales beyond the bar's bounds (e.g. the pill animation) is not clipped. On Android and Windows, the bar's platform container clips overflow. Use `TabBarIsDocked = false` for designs that need to break out of the bar's bounds on those platforms.
 
 ## Technical Implementation
 

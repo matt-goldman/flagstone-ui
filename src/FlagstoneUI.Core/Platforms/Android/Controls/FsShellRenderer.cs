@@ -54,17 +54,11 @@ internal sealed class FsShellItemRenderer : ShellItemRenderer
 		{
 			SuppressNativeBar(outerLayout);
 
-			var dock = (ShellContext.Shell as FsShell)?.TabBarDock ?? TabBarDock.Bottom;
+			var isDocked = (ShellContext.Shell as FsShell)?.TabBarIsDocked ?? true;
 
-			if (dock == TabBarDock.None)
+			if (!isDocked)
 			{
 				return HostFlagstoneBarAsOverlay(outerLayout) ?? root;
-			}
-
-			if (dock is TabBarDock.Top or TabBarDock.Left or TabBarDock.Right)
-			{
-				System.Diagnostics.Debug.WriteLine(
-					$"[FsShell] TabBarDock.{dock} is not yet supported on Android; falling back to Bottom.");
 			}
 
 			_barParent = outerLayout;
