@@ -31,19 +31,17 @@ namespace FlagstoneUI.Core.Controls;
 /// </remarks>
 public partial class FsShell : Shell
 {
-	/// <summary>
-	/// Resource key under which <see cref="FsShell"/> publishes the measured height of the
-	/// currently hosted bottom chrome (typically <see cref="FsTabBar"/>) into
-	/// <see cref="Application.Resources"/>. Pages can consume it via
-	/// <c>{DynamicResource FsBottomChromeHeight}</c> — most easily through the
-	/// <see cref="FsLayout.BottomChromePaddingProperty"/> attached property — to leave room for
-	/// the chrome without any platform-specific safe-area code.
-	/// </summary>
-	/// <remarks>
-	/// Written as a <see cref="double"/>. Updates whenever the bar's measured size changes or its
-	/// <see cref="VisualElement.IsVisible"/> flips, and drops to 0 when no bar is hosted.
-	/// </remarks>
+	/// <summary>Resource key for the bottom chrome height. Published when <see cref="TabBarDock"/> is <see cref="TabBarDock.Bottom"/>.</summary>
 	public const string BottomChromeHeightResourceKey = "FsBottomChromeHeight";
+
+	/// <summary>Resource key for the top chrome height. Published when <see cref="TabBarDock"/> is <see cref="TabBarDock.Top"/>.</summary>
+	public const string TopChromeHeightResourceKey = "FsTopChromeHeight";
+
+	/// <summary>Resource key for the left chrome width. Published when <see cref="TabBarDock"/> is <see cref="TabBarDock.Left"/>.</summary>
+	public const string LeftChromeWidthResourceKey = "FsLeftChromeWidth";
+
+	/// <summary>Resource key for the right chrome width. Published when <see cref="TabBarDock"/> is <see cref="TabBarDock.Right"/>.</summary>
+	public const string RightChromeWidthResourceKey = "FsRightChromeWidth";
 
 	private readonly ObservableCollection<FsTabContext> _tabs = [];
 	private readonly Dictionary<ShellSection, FsTabContext> _sectionContextMap = [];
@@ -173,24 +171,28 @@ public partial class FsShell : Shell
 		}
 	}
 
-	/// <summary>
-	/// Writes the bar's current measured height into <see cref="Application.Resources"/> under
-	/// <see cref="BottomChromeHeightResourceKey"/>. Pages that opt in via
-	/// <see cref="FsLayout.BottomChromePaddingProperty"/> (or read the resource directly) reserve
-	/// room for the bar without touching any platform code.
-	/// </summary>
-	private void PublishBottomChromeHeight()
+	internal void PublishBottomChromeHeight() => PublishChromeDimensions();
+
+	private void PublishChromeDimensions()
 	{
-		var height = TabBar is { IsVisible: true } bar ? bar.Height : 0;
-		if (double.IsNaN(height) || double.IsInfinity(height) || height < 0)
+		var dock = TabBarDock;
+		double height = 0, width = 0;
+
+		if (TabBar is { IsVisible: true } bar && dock != TabBarDock.None)
 		{
-			height = 0;
+			height = bar.Height;
+			width = bar.Width;
 		}
 
-		if (Application.Current is { } app)
-		{
-			app.Resources[BottomChromeHeightResourceKey] = height;
-		}
+		if (double.IsNaN(height) || double.IsInfinity(height) || height < 0) height = 0;
+		if (double.IsNaN(width) || double.IsInfinity(width) || width < 0) width = 0;
+
+		if (Application.Current is not { } app) return;
+
+		app.Resources[BottomChromeHeightResourceKey] = dock == TabBarDock.Bottom ? height : 0.0;
+		app.Resources[TopChromeHeightResourceKey] = dock == TabBarDock.Top ? height : 0.0;
+		app.Resources[LeftChromeWidthResourceKey] = dock == TabBarDock.Left ? width : 0.0;
+		app.Resources[RightChromeWidthResourceKey] = dock == TabBarDock.Right ? width : 0.0;
 	}
 
 	#endregion
@@ -233,6 +235,37 @@ public partial class FsShell : Shell
 	{
 		get => (bool)GetValue(HideTabBarOnKeyboardProperty);
 		set => SetValue(HideTabBarOnKeyboardProperty, value);
+	}
+
+	#endregion
+
+	#region TabBarDock
+
+	/// <summary>Bindable property for <see cref="TabBarDock"/>.</summary>
+	public static readonly BindableProperty TabBarDockProperty = BindableProperty.Create(
+		nameof(TabBarDock),
+		typeof(TabBarDock),
+		typeof(FsShell),
+		TabBarDock.Bottom,
+		propertyChanged: OnTabBarDockChanged);
+
+	/// <summary>
+	/// Controls where the per-platform renderer anchors the hosted bar relative to the shell's
+	/// content area. Defaults to <see cref="TabBarDock.Bottom"/>. Set to
+	/// <see cref="TabBarDock.None"/> when the consumer manages bar placement (e.g. a floating FAB).
+	/// </summary>
+	public TabBarDock TabBarDock
+	{
+		get => (TabBarDock)GetValue(TabBarDockProperty);
+		set => SetValue(TabBarDockProperty, value);
+	}
+
+	private static void OnTabBarDockChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is FsShell shell)
+		{
+			shell.PublishChromeDimensions();
+		}
 	}
 
 	#endregion

@@ -42,7 +42,8 @@ Flagstone UI in general acknowledges that .NET MAUI already gives you powerful t
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `TabBar` | `ContentView?` | auto-instantiated `FsTabBar` | The bar to host at the bottom. Auto-set to a new `FsTabBar` if left null. |
+| `TabBar` | `ContentView?` | auto-instantiated `FsTabBar` | The bar to host. Auto-set to a new `FsTabBar` if left null. |
+| `TabBarDock` | `TabBarDock` | `Bottom` | Where the renderer anchors the bar: `Bottom`, `Top`, `Left`, `Right`, or `None` (consumer manages placement). |
 | `TabBarItemTemplate` | `DataTemplate?` | `null` | Template applied to each item in the default `FsTabBar`. Ignored if `TabBar` is replaced with a non-`FsTabBar`. |
 | `TabTransitionAnimator` | `ITabTransitionAnimator?` | `null` | Invoked on tab selection changes to drive a transition. |
 | `HideTabBarOnKeyboard` | `bool` | `true` | When true, slides the bar off-screen while the soft keyboard is open. |
@@ -103,28 +104,41 @@ The limit of what you can do with these is your imagination, but a couple of exa
 
 ### `FsLayout` (attached properties)
 
-`FsLayout` attached properties are provided to allow you to adjust your page layout to accommodate the tab bar. As it is a `ContentView` in FsShell and not part of the OS UI chrome, page height is not automatically adjusted.
+`FsLayout` attached properties are provided to allow you to adjust your page layout to accommodate the tab bar. As it is a `ContentView` in FsShell and not part of the OS UI chrome, page layout is not automatically adjusted.
 
-`FsLayout.BottomChromePadding` — reflects a `double` into `Page.Padding.Bottom`. It is designed to be bound to `{DynamicResource FsBottomChromeHeight}`, which gets automatically updated by FsShell.
+Each property owns one edge of `Page.Padding`:
+
+| Attached property | Padding edge | Bind to |
+|---|---|---|
+| `FsLayout.BottomChromePadding` | Bottom | `{DynamicResource FsBottomChromeHeight}` |
+| `FsLayout.TopChromePadding` | Top | `{DynamicResource FsTopChromeHeight}` |
+| `FsLayout.LeftChromePadding` | Left | `{DynamicResource FsLeftChromeWidth}` |
+| `FsLayout.RightChromePadding` | Right | `{DynamicResource FsRightChromeWidth}` |
 
 The easiest way to use this is to add it to your app's styles for `Page`. For example:
 
 ```xml
-<!-- default from the .NET MAUI template: -->
 <Style TargetType="Page" ApplyToDerivedTypes="True">
     <Setter Property="Padding" Value="0"/>
     <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
 
-    <!-- add this: --s>
+    <!-- add whichever edges your app uses: -->
     <Setter Property="fs:FsLayout.BottomChromePadding" Value="{DynamicResource FsBottomChromeHeight}" />
 </Style>
 ```
 
-### `FsShell.BottomChromeHeightResourceKey`
+### Chrome resource keys
 
-FsShell uses a `const string` to define the resource key used to publish the current chrome height (you can use the value `FsBottomChromeHeight` directly if you like, which is easier in XAML).
+FsShell exposes `const string` fields for each resource key. You can reference them from C# or use the string values directly in XAML:
 
-The resource itself is of type `double` and is updated whenever the bar's size or visibility changes. Note that it drops to 0 when no bar is hosted or the active page suppresses it via `Shell.SetTabBarIsVisible`
+| Constant | Value | Published when |
+|---|---|---|
+| `BottomChromeHeightResourceKey` | `"FsBottomChromeHeight"` | `TabBarDock.Bottom` |
+| `TopChromeHeightResourceKey` | `"FsTopChromeHeight"` | `TabBarDock.Top` |
+| `LeftChromeWidthResourceKey` | `"FsLeftChromeWidth"` | `TabBarDock.Left` |
+| `RightChromeWidthResourceKey` | `"FsRightChromeWidth"` | `TabBarDock.Right` |
+
+Each resource is a `double`, updated whenever the bar's size, visibility, or dock position changes. Non-active dock keys are set to 0. All keys drop to 0 when no bar is hosted or the active page suppresses it via `Shell.SetTabBarIsVisible`.
 
 ## Usage Examples
 
@@ -250,11 +264,31 @@ public class FadeAnimator : ITabTransitionAnimator
 </ContentPage>
 ```
 
-## The Bottom Chrome Pattern
+## The Chrome Pattern
 
-FsShell writes a resource with key `FsBottomChromeHeight` and a value of type `double` into `Application.Resources` whenever the bar size or visibility changes. Pages can opt in by reading `{DynamicResource FsBottomChromeHeight}`; an attached property called `FsLayout.BottomChromePadding` can be bound to this value and attached to your `Page`, which will automatically adjust your page to not overlap with the tab bar.
+FsShell publishes the bar's measured dimension into `Application.Resources` whenever the bar's size, visibility, or dock position changes. The resource key depends on `TabBarDock`:
 
-The same pattern generalises to any chrome you mount (side rail → `FsRightChromeWidth`, top app bar → `FsTopChromeHeight`, etc.). As FsShell brings full UI control up to the cross-platform layer, this pattern doesn't depend on platform-layer integration (e.g. `AdditionalSafeAreaInsets` / per-platform safe-area juggling). FsShell suppresses the native chrome and hosts whatever `View` you want to provide instead; the offset is then also the responsibility of the cross-platform layer.
+| `TabBarDock` | Resource key | Dimension |
+|---|---|---|
+| `Bottom` | `FsBottomChromeHeight` | `bar.Height` |
+| `Top` | `FsTopChromeHeight` | `bar.Height` |
+| `Left` | `FsLeftChromeWidth` | `bar.Width` |
+| `Right` | `FsRightChromeWidth` | `bar.Width` |
+| `None` | (none) | All keys set to 0 |
+
+Only the active dock's key has a non-zero value; the other three are zeroed so pages bound to them adjust automatically when the dock changes.
+
+Pages opt in via `FsLayout` attached properties — one per edge, each owning that edge of `Page.Padding`:
+
+```xml
+<Style TargetType="Page" ApplyToDerivedTypes="True">
+    <Setter Property="fs:FsLayout.BottomChromePadding" Value="{DynamicResource FsBottomChromeHeight}" />
+    <Setter Property="fs:FsLayout.TopChromePadding" Value="{DynamicResource FsTopChromeHeight}" />
+    <!-- Add LeftChromePadding / RightChromePadding for side-rail layouts -->
+</Style>
+```
+
+Multiple attached properties coexist: each owns one edge and leaves the others untouched. This is how FsShell brings full UI control up to the cross-platform layer without depending on platform-layer integration (e.g. `AdditionalSafeAreaInsets` / per-platform safe-area juggling). FsShell suppresses the native chrome and hosts whatever `View` you want to provide instead; the offset is then also the responsibility of the cross-platform layer.
 
 This is fundamentally the core philosophy of Flagstone UI.
 
@@ -286,22 +320,30 @@ if (Application.Current?.Resources.TryGetValue(
 
 ### Custom chrome publishing its own dimensions
 
-- TODO: pattern for a side rail / top bar / FAB to publish a different key
-- TODO: example sketch:
+When `TabBarDock` is set to `Left` or `Right`, FsShell automatically publishes the bar's width (not height) to the corresponding resource key. A custom side rail just needs to set the dock:
+
+```xml
+<fs:FsShell TabBarDock="Right">
+    <fs:FsShell.TabBar>
+        <local:MySideRail WidthRequest="80" />
+    </fs:FsShell.TabBar>
+    ...
+</fs:FsShell>
+```
+
+For `TabBarDock="None"` (floating FAB, radial menu), FsShell suppresses native chrome but does not host the bar. The consumer places it manually and can publish their own resource keys:
 
 ```csharp
-public class MySideRail : ContentView, IFsTabBar
+public class MyFloatingBar : ContentView, IFsTabBar
 {
-    public const string WidthResourceKey = "FsRightChromeWidth";
-
     protected override void OnSizeAllocated(double width, double height)
     {
         base.OnSizeAllocated(width, height);
         if (Application.Current is { } app)
-        {
-            app.Resources[WidthResourceKey] = IsVisible ? width : 0;
-        }
+            app.Resources["MyCustomChromeHeight"] = IsVisible ? height : 0;
     }
+
+    // ... IFsTabBar implementation
 }
 ```
 
@@ -369,10 +411,24 @@ The `FsTabBar` sample implementation demonstrates how to use these. When the `It
 
 ## Platform Support
 
-- TODO: Android — bar hosted in the same `LinearLayout` as the navigation area, native `BottomNavigationView` suppressed
-- TODO: iOS — bar hosted as a subview of the `UITabBarController`'s view, native `UITabBar` hidden, frame pinned to bottom safe-area
-- TODO: macOS — TODO
-- TODO: Windows — TODO
+### TabBarDock support matrix
+
+| Dock | Windows | iOS | Android | Mac Catalyst |
+|---|---|---|---|---|
+| `Bottom` | Full | Full | Full | Full (shares iOS renderer) |
+| `Top` | Full | Fallback to Bottom | Fallback to Bottom | Fallback to Bottom |
+| `Left` | Full | Fallback to Bottom | Fallback to Bottom | Fallback to Bottom |
+| `Right` | Full | Fallback to Bottom | Fallback to Bottom | Fallback to Bottom |
+| `None` | Full | Full | Full | Full |
+
+"Fallback to Bottom" means the bar is positioned at the bottom and a debug warning is logged. The cross-platform resource publishing (`FsTopChromeHeight`, etc.) works correctly for all dock values on all platforms — only the renderer positioning is limited.
+
+### Platform architecture
+
+- **Android** — bar hosted in the same `LinearLayout` as the navigation area, native `BottomNavigationView` suppressed
+- **iOS** — bar hosted as a subview of the `UITabBarController`'s view, native `UITabBar` hidden, frame pinned to bottom safe-area
+- **Mac Catalyst** — shares the iOS renderer
+- **Windows** — bar overlaid on the `ShellView`'s root grid via `VerticalAlignment`/`HorizontalAlignment`. Uses the handler architecture (`ShellHandler`), not the legacy renderer compatibility layer used by other platforms
 
 ## Technical Implementation
 

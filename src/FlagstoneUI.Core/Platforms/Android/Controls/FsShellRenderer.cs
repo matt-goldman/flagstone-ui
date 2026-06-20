@@ -50,15 +50,27 @@ internal sealed class FsShellItemRenderer : ShellItemRenderer
 	{
 		var root = base.OnCreateView(inflater, container, savedInstanceState);
 
-		// Only intervene when this item actually has bottom tabs to replace — i.e. more than one
-		// section, exactly the condition under which stock Shell shows a BottomNavigationView. Items
-		// with a single section (e.g. a plain flyout page) are left entirely on stock rendering, so
-		// the FlagstoneUI bar never sits in a fragment that has no bottom bar to begin with.
 		if (root is LinearLayout outerLayout && (ShellItem?.Items?.Count ?? 0) > 1)
 		{
 			_outerLayout = outerLayout;
-			HostFlagstoneBar(outerLayout);
 			SuppressNativeBar(outerLayout);
+
+			var dock = (ShellContext.Shell as FsShell)?.TabBarDock ?? TabBarDock.Bottom;
+
+			if (dock == TabBarDock.None)
+			{
+				// Native chrome suppressed; consumer manages bar placement.
+			}
+			else
+			{
+				if (dock is TabBarDock.Top or TabBarDock.Left or TabBarDock.Right)
+				{
+					System.Diagnostics.Debug.WriteLine(
+						$"[FsShell] TabBarDock.{dock} is not yet supported on Android; falling back to Bottom.");
+				}
+
+				HostFlagstoneBar(outerLayout);
+			}
 		}
 
 		return root;

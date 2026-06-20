@@ -6,6 +6,8 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using WGrid = Microsoft.UI.Xaml.Controls.Grid;
 using WVisibility = Microsoft.UI.Xaml.Visibility;
+using WVerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment;
+using WHorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment;
 using ContentView = Microsoft.Maui.Controls.ContentView;
 
 namespace FlagstoneUI.Core.Controls;
@@ -13,7 +15,7 @@ namespace FlagstoneUI.Core.Controls;
 // Windows is the only platform where Shell uses the handler architecture (ShellHandler / ShellView)
 // rather than the legacy renderer compatibility layer (ShellRenderer). The ShellItemHandler creates a
 // MauiNavigationView with PaneDisplayMode.Top for tabs. This handler suppresses that top nav area and
-// hosts the FsTabBar as a bottom overlay on the ShellView's root grid.
+// hosts the FsTabBar as an overlay on the ShellView's root grid, positioned per TabBarDock.
 internal sealed partial class FsShellRenderer : ShellHandler
 {
 	private FrameworkElement? _hostedBar;
@@ -34,6 +36,9 @@ internal sealed partial class FsShellRenderer : ShellHandler
 			ContentControl.ContentProperty, OnShellContentChanged);
 
 		platformView.Loaded += OnShellViewLoaded;
+
+		if (_shell is not null)
+			_shell.PropertyChanged += OnShellPropertyChanged;
 	}
 
 	protected override void DisconnectHandler(ShellView platformView)
@@ -42,6 +47,9 @@ internal sealed partial class FsShellRenderer : ShellHandler
 			ContentControl.ContentProperty, _contentChangedCallbackToken);
 
 		platformView.Loaded -= OnShellViewLoaded;
+
+		if (_shell is not null)
+			_shell.PropertyChanged -= OnShellPropertyChanged;
 
 		CleanupBar();
 		_shell = null;
@@ -62,9 +70,21 @@ internal sealed partial class FsShellRenderer : ShellHandler
 		TryHostBar();
 	}
 
+	private void OnShellPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+	{
+		if (e.PropertyName == nameof(FsShell.TabBarDock))
+		{
+			CleanupBar();
+			TryHostBar();
+		}
+	}
+
 	private void TryHostBar()
 	{
 		if (_barHosted || _shell?.TabBar is not { } bar) return;
+
+		var dock = _shell.TabBarDock;
+		if (dock == TabBarDock.None) return;
 
 		var mauiContext = MauiContext;
 		if (mauiContext is null) return;
@@ -77,7 +97,26 @@ internal sealed partial class FsShellRenderer : ShellHandler
 		if (platformBar.Parent is Panel oldParent)
 			oldParent.Children.Remove(platformBar);
 
-		platformBar.VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Bottom;
+		switch (dock)
+		{
+			case TabBarDock.Bottom:
+				platformBar.VerticalAlignment = WVerticalAlignment.Bottom;
+				platformBar.HorizontalAlignment = WHorizontalAlignment.Stretch;
+				break;
+			case TabBarDock.Top:
+				platformBar.VerticalAlignment = WVerticalAlignment.Top;
+				platformBar.HorizontalAlignment = WHorizontalAlignment.Stretch;
+				break;
+			case TabBarDock.Left:
+				platformBar.VerticalAlignment = WVerticalAlignment.Stretch;
+				platformBar.HorizontalAlignment = WHorizontalAlignment.Left;
+				break;
+			case TabBarDock.Right:
+				platformBar.VerticalAlignment = WVerticalAlignment.Stretch;
+				platformBar.HorizontalAlignment = WHorizontalAlignment.Right;
+				break;
+		}
+
 		rootGrid.Children.Add(platformBar);
 
 		_hostedBar = platformBar;

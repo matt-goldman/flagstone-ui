@@ -75,16 +75,26 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 			return;
 		}
 
-		// Only intervene when this item actually has bottom tabs to replace — i.e. more than one
-		// section, exactly the condition under which stock Shell shows a UITabBar. Items with a
-		// single section (e.g. a plain flyout page) are left entirely on stock rendering, so the
-		// FlagstoneUI bar never sits in a controller that has no bottom bar to begin with.
 		if ((ShellItem?.Items?.Count ?? 0) <= 1)
 		{
 			return;
 		}
 
 		SuppressNativeBar();
+
+		var dock = _shell?.TabBarDock ?? TabBarDock.Bottom;
+
+		if (dock == TabBarDock.None)
+		{
+			return;
+		}
+
+		if (dock is TabBarDock.Top or TabBarDock.Left or TabBarDock.Right)
+		{
+			System.Diagnostics.Debug.WriteLine(
+				$"[FsShell] TabBarDock.{dock} is not yet supported on iOS; falling back to Bottom.");
+		}
+
 		HostFlagstoneBar();
 		HookKeyboard();
 	}
@@ -129,6 +139,11 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 	private void LayoutBar()
 	{
 		if (_hostedBar is not { } bar || _barContentView is not { } cv || View is not { } view)
+		{
+			return;
+		}
+
+		if (_shell?.TabBarDock == TabBarDock.None)
 		{
 			return;
 		}
@@ -180,10 +195,9 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 			bar.Frame = newFrame;
 		}
 
-		// Publish the chrome height (bar content + safe-area cap) into the shared resource.
-		// FsShell's cross-platform publication only knows the bar's MAUI-reported Height — i.e.
-		// the content height — and would leave the page short by the safe-area inset.
-		if (Application.Current is { } app)
+		// Publish the safe-area-inclusive chrome height. The cross-platform publication only
+		// knows the bar's MAUI-reported Height (content only) and would leave the page short.
+		if (_shell?.TabBarDock is null or TabBarDock.Bottom && Application.Current is { } app)
 		{
 			app.Resources[FsShell.BottomChromeHeightResourceKey] = (double)height;
 		}

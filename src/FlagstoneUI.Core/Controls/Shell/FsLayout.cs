@@ -6,24 +6,22 @@ namespace FlagstoneUI.Core.Controls;
 /// platform-specific code.
 /// </summary>
 /// <remarks>
-/// The intended consumption pattern is to bind the attached property to the well-known
-/// resource keys via <c>{DynamicResource}</c>. For example, a page that wants to leave room
-/// for the bottom bar hosted by <see cref="FsShell"/>:
+/// Each property owns one edge of <see cref="Page.Padding"/> and leaves the other three
+/// untouched, so multiple properties can coexist on the same page. Bind each to the
+/// corresponding <c>{DynamicResource}</c> key published by <see cref="FsShell"/>:
 /// <code>
 /// &lt;ContentPage xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
-///              fs:FsLayout.BottomChromePadding="{DynamicResource FsBottomChromeHeight}" /&gt;
+///              fs:FsLayout.BottomChromePadding="{DynamicResource FsBottomChromeHeight}"
+///              fs:FsLayout.TopChromePadding="{DynamicResource FsTopChromeHeight}" /&gt;
 /// </code>
-/// FsShell writes the current bar height into <see cref="Application.Resources"/> under
-/// <see cref="FsShell.BottomChromeHeightResourceKey"/>; the attached property reflects that
-/// value into <see cref="Page.Padding"/>.Bottom so page content stays above the bar.
 /// </remarks>
 public static class FsLayout
 {
+	#region BottomChromePadding
+
 	/// <summary>
-	/// Attached <see cref="double"/> property that mirrors its value into the target
-	/// <see cref="Page.Padding"/>.Bottom. Designed to be bound to
-	/// <c>{DynamicResource FsBottomChromeHeight}</c> on pages that should reserve room for
-	/// the bottom bar <see cref="FsShell"/> hosts.
+	/// Mirrors its value into <see cref="Page.Padding"/>.Bottom. Bind to
+	/// <c>{DynamicResource FsBottomChromeHeight}</c>.
 	/// </summary>
 	public static readonly BindableProperty BottomChromePaddingProperty =
 		BindableProperty.CreateAttached(
@@ -33,30 +31,112 @@ public static class FsLayout
 			defaultValue: 0.0,
 			propertyChanged: OnBottomChromePaddingChanged);
 
-	/// <summary>Gets the current <see cref="BottomChromePaddingProperty"/> value.</summary>
 	public static double GetBottomChromePadding(BindableObject bindable) =>
 		(double)bindable.GetValue(BottomChromePaddingProperty);
 
-	/// <summary>Sets the <see cref="BottomChromePaddingProperty"/> value.</summary>
 	public static void SetBottomChromePadding(BindableObject bindable, double value) =>
 		bindable.SetValue(BottomChromePaddingProperty, value);
 
 	private static void OnBottomChromePaddingChanged(BindableObject bindable, object oldValue, object newValue)
 	{
-		// The attached property owns the page's Padding.Bottom while it is set; left/top/right
-		// are left untouched so callers can still control the other edges declaratively. Pages
-		// that need different behaviour should not opt in and instead read the resource by hand.
-		if (bindable is not Page page || newValue is not double height)
-		{
-			return;
-		}
-
-		if (double.IsNaN(height) || double.IsInfinity(height) || height < 0)
-		{
-			height = 0;
-		}
-
-		var padding = page.Padding;
-		page.Padding = new Thickness(padding.Left, padding.Top, padding.Right, height);
+		if (bindable is not Page page || newValue is not double val) return;
+		val = Sanitize(val);
+		var p = page.Padding;
+		page.Padding = new Thickness(p.Left, p.Top, p.Right, val);
 	}
+
+	#endregion
+
+	#region TopChromePadding
+
+	/// <summary>
+	/// Mirrors its value into <see cref="Page.Padding"/>.Top. Bind to
+	/// <c>{DynamicResource FsTopChromeHeight}</c>.
+	/// </summary>
+	public static readonly BindableProperty TopChromePaddingProperty =
+		BindableProperty.CreateAttached(
+			"TopChromePadding",
+			typeof(double),
+			typeof(FsLayout),
+			defaultValue: 0.0,
+			propertyChanged: OnTopChromePaddingChanged);
+
+	public static double GetTopChromePadding(BindableObject bindable) =>
+		(double)bindable.GetValue(TopChromePaddingProperty);
+
+	public static void SetTopChromePadding(BindableObject bindable, double value) =>
+		bindable.SetValue(TopChromePaddingProperty, value);
+
+	private static void OnTopChromePaddingChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is not Page page || newValue is not double val) return;
+		val = Sanitize(val);
+		var p = page.Padding;
+		page.Padding = new Thickness(p.Left, val, p.Right, p.Bottom);
+	}
+
+	#endregion
+
+	#region LeftChromePadding
+
+	/// <summary>
+	/// Mirrors its value into <see cref="Page.Padding"/>.Left. Bind to
+	/// <c>{DynamicResource FsLeftChromeWidth}</c>.
+	/// </summary>
+	public static readonly BindableProperty LeftChromePaddingProperty =
+		BindableProperty.CreateAttached(
+			"LeftChromePadding",
+			typeof(double),
+			typeof(FsLayout),
+			defaultValue: 0.0,
+			propertyChanged: OnLeftChromePaddingChanged);
+
+	public static double GetLeftChromePadding(BindableObject bindable) =>
+		(double)bindable.GetValue(LeftChromePaddingProperty);
+
+	public static void SetLeftChromePadding(BindableObject bindable, double value) =>
+		bindable.SetValue(LeftChromePaddingProperty, value);
+
+	private static void OnLeftChromePaddingChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is not Page page || newValue is not double val) return;
+		val = Sanitize(val);
+		var p = page.Padding;
+		page.Padding = new Thickness(val, p.Top, p.Right, p.Bottom);
+	}
+
+	#endregion
+
+	#region RightChromePadding
+
+	/// <summary>
+	/// Mirrors its value into <see cref="Page.Padding"/>.Right. Bind to
+	/// <c>{DynamicResource FsRightChromeWidth}</c>.
+	/// </summary>
+	public static readonly BindableProperty RightChromePaddingProperty =
+		BindableProperty.CreateAttached(
+			"RightChromePadding",
+			typeof(double),
+			typeof(FsLayout),
+			defaultValue: 0.0,
+			propertyChanged: OnRightChromePaddingChanged);
+
+	public static double GetRightChromePadding(BindableObject bindable) =>
+		(double)bindable.GetValue(RightChromePaddingProperty);
+
+	public static void SetRightChromePadding(BindableObject bindable, double value) =>
+		bindable.SetValue(RightChromePaddingProperty, value);
+
+	private static void OnRightChromePaddingChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is not Page page || newValue is not double val) return;
+		val = Sanitize(val);
+		var p = page.Padding;
+		page.Padding = new Thickness(p.Left, p.Top, val, p.Bottom);
+	}
+
+	#endregion
+
+	private static double Sanitize(double value) =>
+		double.IsNaN(value) || double.IsInfinity(value) || value < 0 ? 0 : value;
 }
