@@ -50,13 +50,6 @@ Flagstone UI in general acknowledges that .NET MAUI already gives you powerful t
 | `HideTabBarOnKeyboard` | `bool` | `true` | When true, slides the bar off-screen while the soft keyboard is open. |
 | `Tabs` | `IReadOnlyList<FsTabContext>` | live | Live projection of the active item's sections; bound to the bar's `ItemsSource`. |
 
-### Extension points
-
-In addition to customisation through providing a `DataTemplate` for the built-in FsTabBar, or providing your own `IFsTabBar` implementation, there are two extension points for more advanced (or nuanced) scenarios.
-
-- **Override `RebuildTabs()`:** FsShell has a `protected virtual void RebuildTabs()` which is called whenever the shell context changes. You can override to project tabs differently, allowing you to change order, selection state, etc.
-- **Subclassing `FsShell`:** it's possible to subclass FsShell and replace essentially everything with your own app-specific behaviour. If you find yourself doing this, please raise an issue and let me know, because it means FsShell has failed to meet its core objective.
-
 ## Companion Types
 
 ### `IFsTabBar`
