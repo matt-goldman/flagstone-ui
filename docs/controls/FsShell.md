@@ -44,7 +44,7 @@ Flagstone UI in general acknowledges that .NET MAUI already gives you powerful t
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `TabBar` | `ContentView?` | auto-instantiated `FsTabBar` | The bar to host. Auto-set to a new `FsTabBar` if left null. |
-| `TabBarDock` | `TabBarDock` | `Bottom` | Where the renderer anchors the bar: `Bottom`, `Top`, `Left`, `Right`, or `None` (consumer manages placement). |
+| `TabBarDock` | `TabBarDock` | `Bottom` | Where the renderer anchors the bar: `Bottom`, `Top`, `Left`, `Right`, or `None` (bar hosted as full-bounds overlay, consumer controls placement via MAUI layout properties). |
 | `TabBarItemTemplate` | `DataTemplate?` | `null` | Template applied to each item in the default `FsTabBar`. Ignored if `TabBar` is replaced with a non-`FsTabBar`. |
 | `TabTransitionAnimator` | `ITabTransitionAnimator?` | `null` | Invoked on tab selection changes to drive a transition. |
 | `HideTabBarOnKeyboard` | `bool` | `true` | When true, slides the bar off-screen while the soft keyboard is open. |
@@ -332,7 +332,7 @@ When `TabBarDock` is set to `Left` or `Right`, FsShell automatically publishes t
 </fs:FsShell>
 ```
 
-For `TabBarDock="None"` (floating FAB, radial menu), FsShell suppresses native chrome but does not host the bar. The consumer places it manually and can publish their own resource keys:
+For `TabBarDock="None"` (floating FAB, radial menu), the bar is hosted as a full-bounds overlay with no renderer-imposed positioning. The consumer controls where it appears via standard MAUI layout properties (`HorizontalOptions`, `VerticalOptions`, `Margin`, `WidthRequest`, etc.):
 
 ```csharp
 public class MyFloatingBar : ContentView, IFsTabBar

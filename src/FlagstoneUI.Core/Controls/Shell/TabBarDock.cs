@@ -20,9 +20,10 @@ public enum TabBarDock
 	Right,
 
 	/// <summary>
-	/// Native chrome is suppressed but the bar is not hosted by the renderer. The consumer is
-	/// responsible for placing the bar in their own layout (e.g. a floating FAB, radial menu, or
-	/// any non-edge-anchored design).
+	/// Native chrome is suppressed and the bar is hosted as a full-bounds overlay with no
+	/// renderer-imposed positioning. The consumer controls placement via standard MAUI layout
+	/// properties on the bar (<c>HorizontalOptions</c>, <c>VerticalOptions</c>, <c>Margin</c>,
+	/// etc.) — suitable for floating FABs, radial menus, or any non-edge-anchored design.
 	/// </summary>
 	None
 }

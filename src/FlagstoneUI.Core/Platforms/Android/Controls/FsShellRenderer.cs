@@ -40,7 +40,7 @@ internal sealed partial class FsShellRenderer : ShellRenderer
 internal sealed class FsShellItemRenderer : ShellItemRenderer
 {
 	private AView? _hostedBar;
-	private LinearLayout? _outerLayout;
+	private ViewGroup? _barParent;
 
 	public FsShellItemRenderer(IShellContext shellContext) : base(shellContext)
 	{
@@ -52,25 +52,23 @@ internal sealed class FsShellItemRenderer : ShellItemRenderer
 
 		if (root is LinearLayout outerLayout && (ShellItem?.Items?.Count ?? 0) > 1)
 		{
-			_outerLayout = outerLayout;
 			SuppressNativeBar(outerLayout);
 
 			var dock = (ShellContext.Shell as FsShell)?.TabBarDock ?? TabBarDock.Bottom;
 
 			if (dock == TabBarDock.None)
 			{
-				// Native chrome suppressed; consumer manages bar placement.
+				return HostFlagstoneBarAsOverlay(outerLayout) ?? root;
 			}
-			else
-			{
-				if (dock is TabBarDock.Top or TabBarDock.Left or TabBarDock.Right)
-				{
-					System.Diagnostics.Debug.WriteLine(
-						$"[FsShell] TabBarDock.{dock} is not yet supported on Android; falling back to Bottom.");
-				}
 
-				HostFlagstoneBar(outerLayout);
+			if (dock is TabBarDock.Top or TabBarDock.Left or TabBarDock.Right)
+			{
+				System.Diagnostics.Debug.WriteLine(
+					$"[FsShell] TabBarDock.{dock} is not yet supported on Android; falling back to Bottom.");
 			}
+
+			_barParent = outerLayout;
+			HostFlagstoneBar(outerLayout);
 		}
 
 		return root;
@@ -78,16 +76,13 @@ internal sealed class FsShellItemRenderer : ShellItemRenderer
 
 	public override void OnDestroyView()
 	{
-		// The bar is a single shared instance hosted into the active item's fragment. Release it
-		// before this fragment is torn down — unless a newer fragment has already re-parented it —
-		// so it survives to be re-hosted by the next item.
-		if (_hostedBar is { } bar && ReferenceEquals(bar.Parent, _outerLayout))
+		if (_hostedBar is { } bar && ReferenceEquals(bar.Parent, _barParent))
 		{
-			_outerLayout?.RemoveView(bar);
+			_barParent?.RemoveView(bar);
 		}
 
 		_hostedBar = null;
-		_outerLayout = null;
+		_barParent = null;
 		base.OnDestroyView();
 	}
 
@@ -110,6 +105,40 @@ internal sealed class FsShellItemRenderer : ShellItemRenderer
 
 			child.Visibility = ViewStates.Gone;
 		}
+	}
+
+	private FrameLayout? HostFlagstoneBarAsOverlay(LinearLayout outerLayout)
+	{
+		if (ShellContext.Shell is not FsShell shell || shell.TabBar is not { } bar)
+		{
+			return null;
+		}
+
+		var mauiContext = shell.Handler?.MauiContext;
+		if (mauiContext is null)
+		{
+			return null;
+		}
+
+		var platformBar = bar.ToPlatform(mauiContext);
+		(platformBar.Parent as ViewGroup)?.RemoveView(platformBar);
+
+		var wrapper = new FrameLayout(outerLayout.Context!);
+		wrapper.LayoutParameters = new LP(LP.MatchParent, LP.MatchParent);
+
+		outerLayout.LayoutParameters = new FrameLayout.LayoutParams(
+			ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
+
+		wrapper.AddView(outerLayout);
+
+		platformBar.LayoutParameters = new FrameLayout.LayoutParams(
+			ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
+		wrapper.AddView(platformBar);
+
+		_hostedBar = platformBar;
+		_barParent = wrapper;
+
+		return wrapper;
 	}
 
 	private void HostFlagstoneBar(LinearLayout outerLayout)
@@ -164,6 +193,17 @@ internal sealed class FsShellItemRenderer : ShellItemRenderer
 		if (_hostedBar?.Parent is LinearLayout outerLayout)
 		{
 			SuppressNativeBar(outerLayout);
+		}
+		else if (_barParent is FrameLayout wrapper)
+		{
+			for (var i = 0; i < wrapper.ChildCount; i++)
+			{
+				if (wrapper.GetChildAt(i) is LinearLayout ll)
+				{
+					SuppressNativeBar(ll);
+					break;
+				}
+			}
 		}
 	}
 

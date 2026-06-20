@@ -84,11 +84,6 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 
 		var dock = _shell?.TabBarDock ?? TabBarDock.Bottom;
 
-		if (dock == TabBarDock.None)
-		{
-			return;
-		}
-
 		if (dock is TabBarDock.Top or TabBarDock.Left or TabBarDock.Right)
 		{
 			System.Diagnostics.Debug.WriteLine(
@@ -96,7 +91,11 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 		}
 
 		HostFlagstoneBar();
-		HookKeyboard();
+
+		if (dock != TabBarDock.None)
+		{
+			HookKeyboard();
+		}
 	}
 
 	public override void ViewWillLayoutSubviews()
@@ -143,8 +142,19 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 			return;
 		}
 
+		var width = view.Bounds.Width;
+		if (width <= 0)
+		{
+			return;
+		}
+
 		if (_shell?.TabBarDock == TabBarDock.None)
 		{
+			var fullFrame = view.Bounds;
+			if (bar.Frame != fullFrame)
+			{
+				bar.Frame = fullFrame;
+			}
 			return;
 		}
 
@@ -153,21 +163,8 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 			return;
 		}
 
-		var width = view.Bounds.Width;
-		if (width <= 0)
-		{
-			return;
-		}
-
-		// Cap the measure height so a Fill-defaulting ContentView doesn't return the entire
-		// available space when given an unbounded constraint. 240pt is comfortably above any
-		// realistic tab-bar content height (stock iOS tab bar is ~83pt with home indicator).
 		const double MaxBarHeight = 240;
 
-		// Measure once to discover the bar's natural content height, then drive only the
-		// platform frame on subsequent passes. Going back through IView.Measure/Arrange every
-		// layout pass causes MAUI's iOS handler to either expand the bar to the loose-constraint
-		// cap or collapse child items to height 0 on the second pass — neither stable.
 		if (_cachedBarHeight <= 0)
 		{
 			var measured = ((IView)cv).Measure(width, MaxBarHeight);
@@ -178,10 +175,6 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 			}
 			contentHeight = Math.Min(contentHeight, MaxBarHeight);
 
-			// Expand the arranged height to include the bottom safe area so the bar's background
-			// extends behind the home indicator. The bar's inner layout uses VerticalOptions.Start,
-			// so its content stays pinned to the top of the chrome area while the extra space at
-			// the bottom is left as background.
 			var safeBottom = view.SafeAreaInsets.Bottom;
 			_cachedBarHeight = (nfloat)(contentHeight + safeBottom);
 			((IView)cv).Arrange(new Rect(0, 0, width, _cachedBarHeight));
@@ -195,8 +188,6 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 			bar.Frame = newFrame;
 		}
 
-		// Publish the safe-area-inclusive chrome height. The cross-platform publication only
-		// knows the bar's MAUI-reported Height (content only) and would leave the page short.
 		if (_shell?.TabBarDock is null or TabBarDock.Bottom && Application.Current is { } app)
 		{
 			app.Resources[FsShell.BottomChromeHeightResourceKey] = (double)height;

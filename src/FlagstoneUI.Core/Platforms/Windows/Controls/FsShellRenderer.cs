@@ -83,9 +83,6 @@ internal sealed partial class FsShellRenderer : ShellHandler
 	{
 		if (_barHosted || _shell?.TabBar is not { } bar) return;
 
-		var dock = _shell.TabBarDock;
-		if (dock == TabBarDock.None) return;
-
 		var mauiContext = MauiContext;
 		if (mauiContext is null) return;
 
@@ -97,7 +94,7 @@ internal sealed partial class FsShellRenderer : ShellHandler
 		if (platformBar.Parent is Panel oldParent)
 			oldParent.Children.Remove(platformBar);
 
-		switch (dock)
+		switch (_shell.TabBarDock)
 		{
 			case TabBarDock.Bottom:
 				platformBar.VerticalAlignment = WVerticalAlignment.Bottom;
@@ -114,6 +111,8 @@ internal sealed partial class FsShellRenderer : ShellHandler
 			case TabBarDock.Right:
 				platformBar.VerticalAlignment = WVerticalAlignment.Stretch;
 				platformBar.HorizontalAlignment = WHorizontalAlignment.Right;
+				break;
+			case TabBarDock.None:
 				break;
 		}
 
