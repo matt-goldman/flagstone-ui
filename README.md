@@ -18,7 +18,8 @@ It gives you enhanced, neutral controls designed for full visual control from sh
 
 ## What’s Available Now
 
-* Core controls: `FsButton`, `FsEntry`, `FsCard`, `FsEditor`
+* Core controls: `FsButton`, `FsEntry`, `FsCard`, `FsEditor`, `FsShell`
+* `FsShell` — drop-in `Shell` subclass with replaceable tab bar, configurable dock position (`Bottom`, `Top`, `Left`, `Right`, `None`), and full Shell routing preservation
 * Token‑based theming system (colour, spacing, shapes, typography)
 * Material theme (NuGet) + example themes in the sample app
 * Community Toolkit integrations:
@@ -163,7 +164,7 @@ If not using implicit/global namespaces, prefix controls as:
 
 ### Available
 
-* `FsButton`, `FsEntry`, `FsCard`, `FsEditor`
+* `FsButton`, `FsEntry`, `FsCard`, `FsEditor`, `FsShell`
 * Unified styling plane for .NET MAUI
 * Material theme (example implementation)
 * Sample app with multiple theme examples
@@ -172,7 +173,7 @@ If not using implicit/global namespaces, prefix controls as:
 
 ### Coming Soon
 
-* Additional controls (labels, lists, navigation)
+* Additional controls (labels, lists)
 * More theme examples
 * Theme conversion tools
 

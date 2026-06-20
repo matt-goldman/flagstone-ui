@@ -81,18 +81,9 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 		}
 
 		SuppressNativeBar();
-
-		var dock = _shell?.TabBarDock ?? TabBarDock.Bottom;
-
-		if (dock is TabBarDock.Top or TabBarDock.Left or TabBarDock.Right)
-		{
-			System.Diagnostics.Debug.WriteLine(
-				$"[FsShell] TabBarDock.{dock} is not yet supported on iOS; falling back to Bottom.");
-		}
-
 		HostFlagstoneBar();
 
-		if (dock != TabBarDock.None)
+		if (_shell?.TabBarIsDocked ?? true)
 		{
 			HookKeyboard();
 		}
@@ -148,7 +139,7 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 			return;
 		}
 
-		if (_shell?.TabBarDock == TabBarDock.None)
+		if (_shell is { TabBarIsDocked: false })
 		{
 			var fullFrame = view.Bounds;
 			if (bar.Frame != fullFrame)
@@ -188,7 +179,7 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 			bar.Frame = newFrame;
 		}
 
-		if (_shell?.TabBarDock is null or TabBarDock.Bottom && Application.Current is { } app)
+		if (_shell?.TabBarIsDocked is null or true && Application.Current is { } app)
 		{
 			app.Resources[FsShell.BottomChromeHeightResourceKey] = (double)height;
 		}

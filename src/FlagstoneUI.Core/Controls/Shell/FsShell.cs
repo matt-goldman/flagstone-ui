@@ -31,22 +31,16 @@ namespace FlagstoneUI.Core.Controls;
 /// </remarks>
 public partial class FsShell : Shell
 {
-	/// <summary>Resource key for the bottom chrome height. Published when <see cref="TabBarDock"/> is <see cref="TabBarDock.Bottom"/>.</summary>
+	/// <summary>
+	/// Resource key under which <see cref="FsShell"/> publishes the measured height of the
+	/// bottom chrome into <see cref="Application.Resources"/>. Published when
+	/// <see cref="TabBarIsDocked"/> is <see langword="true"/>; set to 0 when undocked.
+	/// </summary>
 	public const string BottomChromeHeightResourceKey = "FsBottomChromeHeight";
-
-	/// <summary>Resource key for the top chrome height. Published when <see cref="TabBarDock"/> is <see cref="TabBarDock.Top"/>.</summary>
-	public const string TopChromeHeightResourceKey = "FsTopChromeHeight";
-
-	/// <summary>Resource key for the left chrome width. Published when <see cref="TabBarDock"/> is <see cref="TabBarDock.Left"/>.</summary>
-	public const string LeftChromeWidthResourceKey = "FsLeftChromeWidth";
-
-	/// <summary>Resource key for the right chrome width. Published when <see cref="TabBarDock"/> is <see cref="TabBarDock.Right"/>.</summary>
-	public const string RightChromeWidthResourceKey = "FsRightChromeWidth";
 
 	private readonly ObservableCollection<FsTabContext> _tabs = [];
 	private readonly Dictionary<ShellSection, FsTabContext> _sectionContextMap = [];
 	private readonly Dictionary<FsTabContext, ShellSection> _contextSectionMap = [];
-	private CancellationTokenSource? _transitionCts;
 	private int _previousIndex = -1;
 
 	/// <summary>
@@ -175,44 +169,18 @@ public partial class FsShell : Shell
 
 	private void PublishChromeDimensions()
 	{
-		var dock = TabBarDock;
-		double height = 0, width = 0;
+		double height = 0;
 
-		if (TabBar is { IsVisible: true } bar && dock != TabBarDock.None)
+		if (TabBarIsDocked && TabBar is { IsVisible: true } bar)
 		{
 			height = bar.Height;
-			width = bar.Width;
 		}
 
 		if (double.IsNaN(height) || double.IsInfinity(height) || height < 0) height = 0;
-		if (double.IsNaN(width) || double.IsInfinity(width) || width < 0) width = 0;
 
 		if (Application.Current is not { } app) return;
 
-		app.Resources[BottomChromeHeightResourceKey] = dock == TabBarDock.Bottom ? height : 0.0;
-		app.Resources[TopChromeHeightResourceKey] = dock == TabBarDock.Top ? height : 0.0;
-		app.Resources[LeftChromeWidthResourceKey] = dock == TabBarDock.Left ? width : 0.0;
-		app.Resources[RightChromeWidthResourceKey] = dock == TabBarDock.Right ? width : 0.0;
-	}
-
-	#endregion
-
-	#region TabTransitionAnimator
-
-	/// <summary>Bindable property for <see cref="TabTransitionAnimator"/>.</summary>
-	public static readonly BindableProperty TabTransitionAnimatorProperty = BindableProperty.Create(
-		nameof(TabTransitionAnimator),
-		typeof(ITabTransitionAnimator),
-		typeof(FsShell));
-
-	/// <summary>
-	/// Optional. Invoked on tab selection changes to drive a transition between the outgoing and
-	/// incoming tab content. If null, content swaps instantly (current Shell behaviour).
-	/// </summary>
-	public ITabTransitionAnimator? TabTransitionAnimator
-	{
-		get => (ITabTransitionAnimator?)GetValue(TabTransitionAnimatorProperty);
-		set => SetValue(TabTransitionAnimatorProperty, value);
+		app.Resources[BottomChromeHeightResourceKey] = height;
 	}
 
 	#endregion
@@ -239,28 +207,30 @@ public partial class FsShell : Shell
 
 	#endregion
 
-	#region TabBarDock
+	#region TabBarIsDocked
 
-	/// <summary>Bindable property for <see cref="TabBarDock"/>.</summary>
-	public static readonly BindableProperty TabBarDockProperty = BindableProperty.Create(
-		nameof(TabBarDock),
-		typeof(TabBarDock),
+	/// <summary>Bindable property for <see cref="TabBarIsDocked"/>.</summary>
+	public static readonly BindableProperty TabBarIsDockedProperty = BindableProperty.Create(
+		nameof(TabBarIsDocked),
+		typeof(bool),
 		typeof(FsShell),
-		TabBarDock.Bottom,
-		propertyChanged: OnTabBarDockChanged);
+		defaultValue: true,
+		propertyChanged: OnTabBarIsDockedChanged);
 
 	/// <summary>
-	/// Controls where the per-platform renderer anchors the hosted bar relative to the shell's
-	/// content area. Defaults to <see cref="TabBarDock.Bottom"/>. Set to
-	/// <see cref="TabBarDock.None"/> when the consumer manages bar placement (e.g. a floating FAB).
+	/// When <see langword="true"/> (the default), the per-platform renderer pins the bar to
+	/// the bottom edge, handles safe-area insets, and publishes chrome height to
+	/// <see cref="BottomChromeHeightResourceKey"/>. When <see langword="false"/>, the bar is
+	/// hosted as a full-bounds overlay with no renderer-imposed positioning — the consumer
+	/// controls placement via standard MAUI layout properties on the bar.
 	/// </summary>
-	public TabBarDock TabBarDock
+	public bool TabBarIsDocked
 	{
-		get => (TabBarDock)GetValue(TabBarDockProperty);
-		set => SetValue(TabBarDockProperty, value);
+		get => (bool)GetValue(TabBarIsDockedProperty);
+		set => SetValue(TabBarIsDockedProperty, value);
 	}
 
-	private static void OnTabBarDockChanged(BindableObject bindable, object oldValue, object newValue)
+	private static void OnTabBarIsDockedChanged(BindableObject bindable, object oldValue, object newValue)
 	{
 		if (bindable is FsShell shell)
 		{
@@ -455,68 +425,8 @@ public partial class FsShell : Shell
 
 		if (newIndex >= 0 && newIndex != _previousIndex)
 		{
-			_ = RunTransitionAsync(_previousIndex, newIndex);
 			_previousIndex = newIndex;
 		}
-	}
-
-	private async Task RunTransitionAsync(int previousIndex, int newIndex)
-	{
-		var animator = TabTransitionAnimator;
-		if (animator is null)
-		{
-			return;
-		}
-
-
-		_transitionCts?.Cancel();
-		_transitionCts = new CancellationTokenSource();
-		var token = _transitionCts.Token;
-
-		try
-		{
-			var outgoingPage = TryGetPageForTab(previousIndex);
-			var incomingPage = TryGetPageForTab(newIndex);
-			var context = new FsTabTransitionContext(this, outgoingPage, incomingPage, previousIndex, newIndex);
-			await animator.AnimateAsync(context, token).ConfigureAwait(false);
-		}
-		catch (OperationCanceledException)
-		{
-			// Superseded by a newer transition; nothing to do.
-		}
-		catch (Exception ex)
-		{
-			System.Diagnostics.Debug.WriteLine($"[FsShell] Tab transition animator threw: {ex}");
-		}
-	}
-
-	/// <summary>
-	/// Resolves the materialised <see cref="Page"/> for the tab at <paramref name="tabIndex"/>, or
-	/// returns <see langword="null"/> if the index is out of range, the tab has no mapped
-	/// <see cref="ShellSection"/>, or the section's content has not been materialised yet.
-	/// </summary>
-	/// <remarks>
-	/// Used by <see cref="RunTransitionAsync"/> to populate the outgoing/incoming pages on
-	/// <see cref="FsTabTransitionContext"/>. The lookup goes via the cached section map rather
-	/// than via Shell's navigation graph so it doesn't depend on the current navigation state.
-	/// </remarks>
-	private Page? TryGetPageForTab(int tabIndex)
-	{
-		if (tabIndex < 0 || tabIndex >= _tabs.Count)
-		{
-			return null;
-		}
-
-		if (!_contextSectionMap.TryGetValue(_tabs[tabIndex], out var section))
-		{
-			return null;
-		}
-
-		// ShellContent.Content holds the materialised Page once the tab has been entered. For an
-		// outgoing tab we are guaranteed it has been entered (we are leaving it); for an incoming
-		// tab Shell materialises the content as part of activating it. An unmaterialised content
-		// surfaces here as null and the animator can decide whether to skip or wait.
-		return section.CurrentItem?.Content as Page;
 	}
 
 	private void OnShellNavigated(object? sender, ShellNavigatedEventArgs e)

@@ -15,7 +15,7 @@ namespace FlagstoneUI.Core.Controls;
 // Windows is the only platform where Shell uses the handler architecture (ShellHandler / ShellView)
 // rather than the legacy renderer compatibility layer (ShellRenderer). The ShellItemHandler creates a
 // MauiNavigationView with PaneDisplayMode.Top for tabs. This handler suppresses that top nav area and
-// hosts the FsTabBar as an overlay on the ShellView's root grid, positioned per TabBarDock.
+// hosts the FsTabBar as an overlay on the ShellView's root grid.
 internal sealed partial class FsShellRenderer : ShellHandler
 {
 	private FrameworkElement? _hostedBar;
@@ -72,7 +72,7 @@ internal sealed partial class FsShellRenderer : ShellHandler
 
 	private void OnShellPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
 	{
-		if (e.PropertyName == nameof(FsShell.TabBarDock))
+		if (e.PropertyName == nameof(FsShell.TabBarIsDocked))
 		{
 			CleanupBar();
 			TryHostBar();
@@ -94,26 +94,10 @@ internal sealed partial class FsShellRenderer : ShellHandler
 		if (platformBar.Parent is Panel oldParent)
 			oldParent.Children.Remove(platformBar);
 
-		switch (_shell.TabBarDock)
+		if (_shell.TabBarIsDocked)
 		{
-			case TabBarDock.Bottom:
-				platformBar.VerticalAlignment = WVerticalAlignment.Bottom;
-				platformBar.HorizontalAlignment = WHorizontalAlignment.Stretch;
-				break;
-			case TabBarDock.Top:
-				platformBar.VerticalAlignment = WVerticalAlignment.Top;
-				platformBar.HorizontalAlignment = WHorizontalAlignment.Stretch;
-				break;
-			case TabBarDock.Left:
-				platformBar.VerticalAlignment = WVerticalAlignment.Stretch;
-				platformBar.HorizontalAlignment = WHorizontalAlignment.Left;
-				break;
-			case TabBarDock.Right:
-				platformBar.VerticalAlignment = WVerticalAlignment.Stretch;
-				platformBar.HorizontalAlignment = WHorizontalAlignment.Right;
-				break;
-			case TabBarDock.None:
-				break;
+			platformBar.VerticalAlignment = WVerticalAlignment.Bottom;
+			platformBar.HorizontalAlignment = WHorizontalAlignment.Stretch;
 		}
 
 		rootGrid.Children.Add(platformBar);

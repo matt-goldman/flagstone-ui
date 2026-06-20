@@ -24,6 +24,8 @@ Welcome to the FlagstoneUI documentation. This directory contains guides, refere
 - **[FsEntry](controls/FsEntry.md)** — Single-line text entry control
 - **[FsEditor](controls/FsEditor.md)** — Multi-line text editor control
 - **[FsBorder](controls/FsBorder.md)** — Per-edge border support
+- **[FsShell](controls/FsShell.md)** — Shell subclass with replaceable tab bar, configurable dock position, and full routing preservation
+- **[FsTabBar](controls/FsTabBar.md)** — Default tab bar for FsShell with sliding pill animation and per-tab templates
 
 ## Reference
 

@@ -30,7 +30,7 @@ The base reaches the hosted item views only through an abstract `TabContainer` p
 - a `Border` pill (`TabPill`) painted with `PillBackground` and shaped by `PillShape` (any `IShape`), sized and translated in code to track the selected tab;
 - a `FlexLayout` (`TabLayout`, `Direction="Row"`, `JustifyContent="SpaceEvenly"`) that hosts the instantiated tab views and is returned as the base's `TabContainer`.
 
-The outer `VerticalOptions="Start"` keeps the bar at its natural content height so the `FsShell` renderers can position it deterministically against the bottom edge.
+The outer `VerticalOptions="Start"` keeps the bar at its natural content height so the `FsShell` renderers can position it deterministically when docked.
 
 ### Item wrapping
 
@@ -82,19 +82,27 @@ On `FsTabBar` specifically:
 
 ## Companion Type: `FsTabContext`
 
-- TODO: per-tab binding context handed to item templates
-- TODO: `Route` — the Shell route this tab represents (immutable)
-- TODO: `Title` — sourced from `Shell.Title` on the underlying `ShellContent`
-- TODO: `Icon` — sourced from `Shell.Icon`
-- TODO: `IsSelected` — true for the active tab; drives the VSM `Selected` state
-- TODO: `IsEnabled` — reserved for future disabled-tab support; drives `Normal`/`Disabled` VSM
-- TODO: `INotifyPropertyChanged` — bind freely with two-way semantics on the observable fields
+Per-tab binding context handed to item templates. Properties are derived automatically from the `ShellContent` items in your `TabBar`.
+
+| Property | Type | Notes |
+|---|---|---|
+| `Route` | `string` | The Shell route this tab represents (read-only, set at construction) |
+| `Title` | `string?` | Sourced from `ShellSection.Title`, falling back to `ShellContent.Title` |
+| `Icon` | `ImageSource?` | Sourced from `ShellSection.Icon`, falling back to `ShellContent.Icon` |
+| `IsSelected` | `bool` | `true` for the active tab; drives the VSM `Selected` state |
+| `IsEnabled` | `bool` | Drives the `Normal`/`Disabled` VSM states |
+
+`INotifyPropertyChanged` is implemented for all properties except `Route` (immutable), so you can bind freely in item templates.
 
 ## Default Item Template
 
-- TODO: vertical stack of icon (24×24, centred) and label (12pt, centred), 8pt padding, 4pt spacing
-- TODO: bindings: `Image.Source` → `Icon`, `Label.Text` → `Title`
-- TODO: not styled with visual states — replace via `ItemTemplate` to add selected-state visuals
+When no `ItemTemplate` is set, `FsTabBarBase.BuildDefaultItemTemplate` provides a simple icon + label layout:
+
+- `VerticalStackLayout` with 8pt padding, 4pt spacing, `HorizontalOptions="Fill"`
+- `Image` bound to `Icon` (24×24, centred)
+- `Label` bound to `Title` (12pt, centred)
+
+The default template does not include visual state setters — replace it via `ItemTemplate` to add selected-state visuals (colours, bold, scale, etc.).
 
 ## Visual States
 
@@ -304,17 +312,18 @@ bar.ItemSelected += (s, e) => Console.WriteLine($"Picked {e.Selected.Route}");
 
 ## Best Practices
 
-- TODO: prefer `ItemTemplate` over subclassing for visual changes — most polish lives there
-- TODO: use VSM `Selected`/`Unselected` for selection visuals rather than triggers on `IsSelected` directly (the pump runs on `PropertyChanged`)
-- TODO: keep templates cheap to instantiate — the bar instantiates one per tab on each `ItemsSource` change
-- TODO: set `BackgroundColor` (or `Background`) on the bar — it shows behind item content and, on iOS, extends behind the home indicator
-- TODO: don't put per-page state inside the bar; the bar is a single shared instance across `ShellItem` switches
-- TODO: when subclassing, route selection through `base.OnTabTapped(context)` so `SelectedRoute` and `ItemSelected` stay in sync
+- Prefer `ItemTemplate` over subclassing for visual changes — most polish lives there
+- Use VSM `Selected`/`Unselected` for selection visuals rather than triggers on `IsSelected` directly (the VSM pump runs on `PropertyChanged`)
+- Keep templates cheap to instantiate — the bar instantiates one per tab on each `ItemsSource` change
+- Set `BackgroundColor` (or `Background`) on the bar — it shows behind item content and, on iOS, extends behind the home indicator
+- Don't put per-page state inside the bar; the bar is a single shared instance across `ShellItem` switches
+- When subclassing, route selection through `base.OnTabTapped(context)` so `SelectedRoute` and `ItemSelected` stay in sync
 
 ## Platform Support
 
-- TODO: Android, iOS, MacCatalyst, Windows
-- TODO: pure cross-platform MAUI — no per-platform code in `FsTabBar` itself; `FsShell` renderers handle the host-and-pin work
+`FsTabBar` is a pure cross-platform MAUI `ContentView` — it contains no per-platform code. All platform-specific hosting and positioning is handled by the `FsShell` renderers/handler. Supported on Android, iOS, Mac Catalyst, and Windows.
+
+Note: on iOS, content that scales beyond the bar's bounds (e.g. the pill animation) is not clipped. On Android and Windows, the bar's platform container clips overflow. Use `TabBarIsDocked = false` for designs that need to break out of the bar's bounds on those platforms.
 
 ## Technical Implementation
 

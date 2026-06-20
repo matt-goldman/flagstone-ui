@@ -37,6 +37,7 @@
 - `FsCard` - Container with elevation (shadows), borders, corner radius
 - `FsEntry` - Single-line text input with full visual control
 - `FsEditor` - Multi-line text input with full visual control
+- `FsShell` - Drop-in replacement for Shell that allows full customisation
 
 **Available Themes:**
 - Material Design 3 (`FlagstoneUI.Themes.Material`)
@@ -1023,12 +1024,12 @@ Per ADR009, FlagstoneUI may add:
 
 - **Figma Converter**: Import design tokens from Figma
 - **Additional Themes**: Community-contributed themes
-- **More Controls**: Navigation, pickers, lists, dialogs
+- **More Controls**: Pickers, lists, dialogs
 - **FlagstoneUI.Blocks**: Pre-built screens (sign-in, CRUD, settings)
 - **Project Templates**: .NET templates with FlagstoneUI pre-configured
 
 ---
 
-**Last Updated**: January 2026  
-**Version**: 0.0.1-preview (POC phase)  
-**Status**: Experimental, evolving toward MVP
+**Last Updated**: June 2026  
+**Version**: 2.2
+**Status**: V1 complete
