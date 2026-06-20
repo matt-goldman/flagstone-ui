@@ -334,8 +334,11 @@ generateContractCommand.SetHandler(async (sourceDir, outputFile, name, themeFile
     Console.WriteLine($"   Output:   {outputFile.FullName}");
     Console.WriteLine($"   Contract: {name}");
     if (themeFile != null)
-        Console.WriteLine($"   Theme:    {themeFile.FullName}");
-    Console.WriteLine();
+	{
+		Console.WriteLine($"   Theme:    {themeFile.FullName}");
+	}
+
+	Console.WriteLine();
 
     try
     {

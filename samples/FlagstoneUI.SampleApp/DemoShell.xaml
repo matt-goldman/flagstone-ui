@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<fs:FsShell
+  x:Class="FlagstoneUI.SampleApp.DemoShell"
+  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
+  xmlns:local="clr-namespace:FlagstoneUI.SampleApp"
+  xmlns:page="clr-namespace:FlagstoneUI.SampleApp.Pages"
+  Title="FlagstoneUI.SampleApp">
+  <fs:FsShell.TabBarItemTemplate>
+    <DataTemplate>
+      <HorizontalStackLayout Spacing="4"
+                             Padding="12,8"
+                             HorizontalOptions="Center"
+                             x:DataType="fs:FsTabContext">
+        <VisualStateManager.VisualStateGroups>
+          <VisualStateGroup x:Name="CommonStates">
+            <VisualState x:Name="Unselected">
+              <VisualState.Setters>
+                <Setter Property="Scale" Value="1" />
+                <Setter TargetName="IconLabel" Property="Label.Text" Value="🙈"/>
+                <Setter TargetName="TabLabel" Property="Label.FontAttributes" Value="None"/>
+              </VisualState.Setters>
+            </VisualState>
+            <VisualState x:Name="Selected">
+              <VisualState.Setters>
+                <Setter Property="Scale" Value="1.3" />
+                <Setter TargetName="IconLabel" Property="Label.Text" Value="🐵"/>
+                <Setter TargetName="TabLabel" Property="Label.FontAttributes" Value="Bold"/>
+              </VisualState.Setters>
+            </VisualState>
+          </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Label Text="🙈"
+               FontSize="14"
+               x:Name="IconLabel"/>
+        <Label Text="{Binding Title}" FontSize="14"
+                x:Name="TabLabel"/>
+      </HorizontalStackLayout>
+    </DataTemplate>
+  </fs:FsShell.TabBarItemTemplate>
+
+  <!-- Bottom tabs are declared as a single TabBar (one ShellItem with multiple sections) so the
+         FlagstoneUI bar persists while navigating between tabs. The FsTabBar replaces the native
+         BottomNavigationView; no platform code is required of the consumer. -->
+  <TabBar>
+    <ShellContent
+      Title="Controls"
+      Route="ControlsShowcase">
+      <page:ControlsShowcasePage/>
+    </ShellContent>
+
+    <ShellContent
+      Title="Home"
+      Content="{local:MainPage}"
+      Route="MainPage" />
+
+    <ShellContent
+      Title="Sign In"
+      Content="{page:SignInPage}"
+      Route="SignInPage" />
+
+    <ShellContent
+      Title="Editor"
+      Content="{page:FsEditorPage}"
+      Route="FsEditorPage" />
+  </TabBar>
+
+</fs:FsShell>

@@ -59,10 +59,13 @@ public class TokenCatalogGenerator
     {
         var doc = XDocument.Load(xamlPath);
         var root = doc.Root;
-        if (root == null) throw new InvalidOperationException("XAML root element not found");
+        if (root == null)
+		{
+			throw new InvalidOperationException("XAML root element not found");
+		}
 
-        // MAUI uses the standard XAML namespace for x:
-        var xNs = root.GetNamespaceOfPrefix("x");
+		// MAUI uses the standard XAML namespace for x:
+		var xNs = root.GetNamespaceOfPrefix("x");
         var mauiNs = root.Name.Namespace;
 
         var baseTokens = new Dictionary<string, Dictionary<string, object>>
@@ -97,9 +100,12 @@ public class TokenCatalogGenerator
             var key = element.Attribute(xNs + "Key")?.Value;
             var value = element.Value;
 
-            if (key == null) continue;
+            if (key == null)
+			{
+				continue;
+			}
 
-            if (double.TryParse(value, out var numericValue))
+			if (double.TryParse(value, out var numericValue))
             {
                 if (key.StartsWith("Space."))
                 {

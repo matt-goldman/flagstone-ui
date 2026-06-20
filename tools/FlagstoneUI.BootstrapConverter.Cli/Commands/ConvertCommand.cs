@@ -355,7 +355,11 @@ internal static class ConvertCommand
 	private static string SanitizeThemeName(string themeName)
 	{
 		if (string.IsNullOrWhiteSpace(themeName))
+		{
+
 			return "Theme";
+		}
+
 
 		var sanitized = new System.Text.StringBuilder();
 		var needsCapital = true;
@@ -383,7 +387,11 @@ internal static class ConvertCommand
 
 		// Ensure it starts with a letter or underscore
 		if (result.Length > 0 && char.IsDigit(result[0]))
+		{
+
 			result = "_" + result;
+		}
+
 
 		return string.IsNullOrEmpty(result) ? "Theme" : result;
 	}

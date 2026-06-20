@@ -797,9 +797,11 @@ public class XamlThemeGenerator
     private void AddButtonFilledVariantStyle(XElement root, FlagstoneTokens tokens, string keySuffix, string backgroundTokenKey, string? onTokenKey, ConversionOptions options)
     {
         if (!tokens.Colors.ContainsKey(backgroundTokenKey))
-            return;
+		{
+			return;
+		}
 
-        var mauiNs = root.Name.Namespace;
+		var mauiNs = root.Name.Namespace;
         var xNs = root.GetNamespaceOfPrefix("x") ?? XNamespace.Get(XamlNamespace);
 
         var style = new XElement(mauiNs + "Style",
@@ -832,9 +834,11 @@ public class XamlThemeGenerator
     private void AddButtonOutlineVariantStyle(XElement root, FlagstoneTokens tokens, string keySuffix, string tokenKey, ConversionOptions options)
     {
         if (!tokens.Colors.ContainsKey(tokenKey))
-            return;
+		{
+			return;
+		}
 
-        var mauiNs = root.Name.Namespace;
+		var mauiNs = root.Name.Namespace;
         var xNs = root.GetNamespaceOfPrefix("x") ?? XNamespace.Get(XamlNamespace);
 
         var style = new XElement(mauiNs + "Style",
@@ -904,18 +908,22 @@ public class XamlThemeGenerator
     private static string? TryGetPaddingFromButtonSize(ComputedStyle? style)
     {
         if (style == null)
-            return null;
+		{
+			return null;
+		}
 
-        // Bootstrap often expresses padding via CSS custom properties for buttons.
-        var py = style.GetProperty("--bs-btn-padding-y");
+		// Bootstrap often expresses padding via CSS custom properties for buttons.
+		var py = style.GetProperty("--bs-btn-padding-y");
         var px = style.GetProperty("--bs-btn-padding-x");
         if (!string.IsNullOrWhiteSpace(px) && !string.IsNullOrWhiteSpace(py))
         {
             var x = CssLengthToPixels(px);
             var y = CssLengthToPixels(py);
             if (x > 0 && y > 0)
-                return $"{x.ToString(CultureInfo.InvariantCulture)},{y.ToString(CultureInfo.InvariantCulture)}";
-        }
+			{
+				return $"{x.ToString(CultureInfo.InvariantCulture)},{y.ToString(CultureInfo.InvariantCulture)}";
+			}
+		}
 
         var padding = style.GetProperty("padding");
         return TryParseCssPaddingToThickness(padding);
@@ -949,10 +957,16 @@ public class XamlThemeGenerator
     private static string GetPreferredBorderWidth(FlagstoneTokens tokens)
     {
         if (tokens.BorderWidth.ContainsKey("BorderWidth.Button"))
-            return "{DynamicResource BorderWidth.Button}";
-        if (tokens.BorderWidth.ContainsKey("BorderWidth.Default"))
-            return "{DynamicResource BorderWidth.Default}";
-        return "1";
+		{
+			return "{DynamicResource BorderWidth.Button}";
+		}
+
+		if (tokens.BorderWidth.ContainsKey("BorderWidth.Default"))
+		{
+			return "{DynamicResource BorderWidth.Default}";
+		}
+
+		return "1";
     }
 
     private static string? GetPreferredRadiusKey(FlagstoneTokens tokens)
@@ -971,8 +985,10 @@ public class XamlThemeGenerator
             // Check if a corresponding non-button radius exists and return button version
             var baseKey = key.Replace("Radius.Button.", "Radius.", StringComparison.Ordinal);
             if (tokens.BorderRadius.ContainsKey(baseKey))
-                return key;
-        }
+			{
+				return key;
+			}
+		}
 
         // Fallback: if we have any border radius, use the button version of the first one
         if (tokens.BorderRadius.Count > 0)
@@ -1011,10 +1027,12 @@ public class XamlThemeGenerator
     private static string? TryParseCssPaddingToThickness(string? cssPadding)
     {
         if (string.IsNullOrWhiteSpace(cssPadding))
-            return null;
+		{
+			return null;
+		}
 
-        // Expect "vertical horizontal" or "top right bottom left".
-        var parts = cssPadding.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+		// Expect "vertical horizontal" or "top right bottom left".
+		var parts = cssPadding.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         if (parts.Length == 1)
         {
             var v = CssLengthToPixels(parts[0]);
@@ -1166,9 +1184,11 @@ public class XamlThemeGenerator
     private static void AddValidationStyle(XElement root, XNamespace mauiNs, XNamespace xNs, FlagstoneTokens tokens, string targetType, string key, string borderToken)
     {
         if (!tokens.Colors.ContainsKey(borderToken))
-            return;
+		{
+			return;
+		}
 
-        var style = new XElement(mauiNs + "Style",
+		var style = new XElement(mauiNs + "Style",
             new XAttribute(xNs + "Key", key),
             new XAttribute("TargetType", targetType)
         );

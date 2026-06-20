@@ -163,11 +163,10 @@ public class FsCardTests : MauiTestBase
 	public void Card_background_brush_can_be_set_directly()
 	{
 		var brush = new LinearGradientBrush(
-			new GradientStopCollection
-			{
+			[
 				new GradientStop(Colors.Red, 0.0f),
 				new GradientStop(Colors.Blue, 1.0f)
-			},
+			],
 			new Point(0, 0),
 			new Point(1, 1));
 

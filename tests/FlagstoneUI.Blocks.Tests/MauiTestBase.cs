@@ -31,12 +31,18 @@ public abstract class MauiTestBase : IDisposable
 	private static void InitializeMauiApp()
 	{
 		if (_mauiApp is not null)
+		{
 			return;
+		}
+
 
 		lock (_lock)
 		{
 			if (_mauiApp is not null)
+			{
 				return;
+			}
+
 
 			_mauiApp = MauiTestApplicationBuilder.CreateMauiApp();
 			_application = _mauiApp.Services.GetRequiredService<IApplication>() as Application;

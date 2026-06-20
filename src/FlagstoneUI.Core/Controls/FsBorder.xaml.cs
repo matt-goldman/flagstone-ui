@@ -48,7 +48,11 @@ public partial class FsBorder : ContentView
 
 	private void UpdateBorderLines(double width, double height)
 	{
-		if (_layoutRoot == null) return;
+		if (_layoutRoot == null)
+		{
+			return;
+		}
+
 
 		var strokeCap = BorderStrokeCap;
 
@@ -612,10 +616,14 @@ public partial class FsBorder : ContentView
 			// The bindings will handle this automatically, so just ensure per-edge lines are hidden
 			if (Width > 0 && Height > 0)
 			{
-				if (_topLine != null) _topLine.IsVisible = false;
-				if (_rightLine != null) _rightLine.IsVisible = false;
-				if (_bottomLine != null) _bottomLine.IsVisible = false;
-				if (_leftLine != null) _leftLine.IsVisible = false;
+				_topLine?.IsVisible = false;
+
+				_rightLine?.IsVisible = false;
+
+				_bottomLine?.IsVisible = false;
+
+				_leftLine?.IsVisible = false;
+
 			}
 		}
 

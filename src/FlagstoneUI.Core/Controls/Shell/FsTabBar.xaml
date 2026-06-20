@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<controls:FsTabBarBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:FlagstoneUI.Core.Controls"
+             VerticalOptions="Start"
+             HeightRequest="70"
+             x:Name="TabBarRoot"
+             x:Class="FlagstoneUI.Core.Controls.FsTabBar">
+  <Grid x:Name="BarBackground">
+    <Border Background="{Binding PillBackground, Source={x:Reference TabBarRoot}}"
+            StrokeShape="{Binding PillShape, Source={x:Reference TabBarRoot}}"
+            StrokeThickness="0"
+            IsVisible="{Binding ShowPill, Source={x:Reference TabBarRoot}}"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            HeightRequest="50"
+            TranslationY="-10"
+            x:Name="TabPill"/>
+    <FlexLayout Direction="Row"
+                JustifyContent="SpaceEvenly"
+                AlignItems="Center"
+                AlignContent="Center"
+                VerticalOptions="Start"
+                HorizontalOptions="Fill"
+                x:Name="TabLayout" />
+  </Grid>
+</controls:FsTabBarBase>

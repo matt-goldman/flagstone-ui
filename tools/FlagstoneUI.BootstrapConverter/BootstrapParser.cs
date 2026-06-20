@@ -157,16 +157,23 @@ public partial class BootstrapParser
     {
         // Check file extension if source is a file path
         if (source.EndsWith(".scss", StringComparison.OrdinalIgnoreCase))
-            return BootstrapFormat.Scss;
-        if (source.EndsWith(".css", StringComparison.OrdinalIgnoreCase))
-            return BootstrapFormat.Css;
+		{
+			return BootstrapFormat.Scss;
+		}
 
-        // Check content for SCSS variables
-        if (ScssVariableRegex().IsMatch(content))
-            return BootstrapFormat.Scss;
+		if (source.EndsWith(".css", StringComparison.OrdinalIgnoreCase))
+		{
+			return BootstrapFormat.Css;
+		}
 
-        // Default to CSS
-        return BootstrapFormat.Css;
+		// Check content for SCSS variables
+		if (ScssVariableRegex().IsMatch(content))
+		{
+			return BootstrapFormat.Scss;
+		}
+
+		// Default to CSS
+		return BootstrapFormat.Css;
     }
 
     private void CategorizeVariable(BootstrapVariables variables, string name, string value)

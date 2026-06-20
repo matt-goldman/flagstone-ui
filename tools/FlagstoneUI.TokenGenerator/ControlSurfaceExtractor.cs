@@ -157,7 +157,9 @@ public class ControlSurfaceExtractor
 	public ControlSurface? ExtractFromFile(string filePath)
 	{
 		if (!File.Exists(filePath))
+		{
 			return null;
+		}
 
 		var content = File.ReadAllText(filePath);
 		return ExtractFromSource(content, Path.GetFileNameWithoutExtension(filePath));
@@ -171,14 +173,18 @@ public class ControlSurfaceExtractor
 		// Extract class declaration
 		var classMatch = ClassDeclarationRegex.Match(sourceCode);
 		if (!classMatch.Success)
+		{
 			return null;
+		}
 
 		var controlName = classMatch.Groups[1].Value;
 		var baseClass = classMatch.Groups[2].Value;
 
 		// Skip non-Fs controls and helper classes
 		if (!controlName.StartsWith("Fs", StringComparison.Ordinal))
+		{
 			return null;
+		}
 
 		// Determine architecture
 		var architecture = baseClass switch
@@ -212,7 +218,9 @@ public class ControlSurfaceExtractor
 
 			// Filter to styling-relevant properties only
 			if (!StylingProperties.Contains(propertyName))
+			{
 				continue;
+			}
 
 			// Map type
 			var mappedType = MapType(propertyType);
@@ -259,7 +267,9 @@ public class ControlSurfaceExtractor
 		var results = new Dictionary<string, ControlSurface>();
 
 		if (!Directory.Exists(controlsPath))
+		{
 			return results;
+		}
 
 		// Get all Fs*.cs files (including .xaml.cs)
 		var controlFiles = Directory.GetFiles(controlsPath, "Fs*.cs", SearchOption.TopDirectoryOnly)
@@ -296,7 +306,9 @@ public class ControlSurfaceExtractor
 
 		// Handle generic types like Brush?
 		if (TypeMap.TryGetValue(cleanType, out var mapped))
+		{
 			return mapped;
+		}
 
 		return "string"; // Default fallback
 	}
@@ -304,16 +316,22 @@ public class ControlSurfaceExtractor
 	private static string? CleanDefaultValue(string? defaultValue)
 	{
 		if (string.IsNullOrWhiteSpace(defaultValue))
+		{
 			return null;
+		}
 
 		// Remove common patterns
 		defaultValue = defaultValue.Trim();
 
 		if (defaultValue.StartsWith("new ", StringComparison.Ordinal))
+		{
 			return null; // Complex default, skip
+		}
 
 		if (defaultValue.Contains("Colors.", StringComparison.Ordinal))
+		{
 			return defaultValue.Replace("Colors.", "", StringComparison.Ordinal);
+		}
 
 		return defaultValue;
 	}
@@ -332,7 +350,10 @@ public class ControlSurfaceExtractor
 			summary = summary.Replace("Gets or sets ", "", StringComparison.Ordinal);
 			summary = summary.Replace("Identifies the ", "", StringComparison.Ordinal);
 			if (summary.Length > 100)
+			{
 				summary = summary[..100] + "...";
+			}
+
 			return summary;
 		}
 

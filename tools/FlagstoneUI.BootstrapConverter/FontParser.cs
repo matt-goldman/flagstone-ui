@@ -88,7 +88,11 @@ public partial class FontParser
 		{
 			// Extract font-family name
 			var familyMatch = FontFamilyInFontFaceRegex().Match(fontFaceContent);
-			if (!familyMatch.Success) continue;
+			if (!familyMatch.Success)
+			{
+				continue;
+			}
+
 
 			var familyName = familyMatch.Groups[1].Value.Trim('\'', '"');
 
@@ -166,9 +170,12 @@ public partial class FontParser
 			{
 				// Skip generic font families
 				if (IsGenericFontFamily(trimmedFont))
+				{
 					continue;
+				}
 
 				// Skip system UI aliases (we'll map these to "System")
+
 				if (IsSystemUiAlias(trimmedFont))
 				{
 					EnsureSystemFontFamily(fontInfo);

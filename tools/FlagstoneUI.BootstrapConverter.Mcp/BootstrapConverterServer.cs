@@ -26,15 +26,19 @@ public class BootstrapConverterServer
         {
             var line = await reader.ReadLineAsync();
             if (string.IsNullOrWhiteSpace(line))
-                continue;
+			{
+				continue;
+			}
 
-            try
+			try
             {
                 var request = JsonSerializer.Deserialize<JsonRpcRequest>(line, _jsonOptions);
                 if (request == null)
-                    continue;
+				{
+					continue;
+				}
 
-                var response = await HandleRequestAsync(request);
+				var response = await HandleRequestAsync(request);
                 var responseJson = JsonSerializer.Serialize(response, _jsonOptions);
                 await writer.WriteLineAsync(responseJson);
             }

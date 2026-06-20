@@ -289,7 +289,10 @@ public partial class MainViewModel(
 	public async Task SaveOutputAsync()
 	{
 		if (_lastConversionResult == null)
+		{
 			return;
+		}
+
 
 		try
 		{
@@ -480,7 +483,11 @@ public partial class MainViewModel(
 	private static string SanitizeThemeName(string themeName)
 	{
 		if (string.IsNullOrWhiteSpace(themeName))
+		{
+
 			return "Theme";
+		}
+
 
 		var sanitized = new System.Text.StringBuilder();
 		var needsCapital = true;
@@ -506,7 +513,10 @@ public partial class MainViewModel(
 		var result = sanitized.ToString();
 		
 		if (result.Length > 0 && char.IsDigit(result[0]))
+		{
 			result = "_" + result;
+		}
+
 
 		return string.IsNullOrEmpty(result) ? "Theme" : result;
 	}
