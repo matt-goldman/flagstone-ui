@@ -86,16 +86,6 @@ Note that the collection of `FsTabContext` (and these properties) are derived au
 
 `INotifyPropertyChanged` is implemented for each of these properties except `Route` (which provides `get` only), so you can bind to them in tab bar item templates.
 
-### `ITabTransitionAnimator` & `FsTabTransitionContext`
-
-> ⚠️ This feature is not yet fully implemented; `OutgoingView` and `IncomingView` are not currently set and will always be null at this stage.
-
-FsShell provides a mechanism for you to provide custom animations for transition between selected tabs.
-
-`TabTransitionAnimator` is a bindable property on FsShell; you can provide your own implementation of the interface and the `AnimateAsync` method, which will be called automatically whenever tab selection changes. The method receives `FsTabTransitionContext`, providing access to the incoming and outgoing views and additional metadata.
-
-The limit of what you can do with these is your imagination, but a couple of examples are provided in the demo application.
-
 ### `FsLayout` (attached properties)
 
 `FsLayout` provides an attached property to adjust your page layout to accommodate the tab bar. As it is a `ContentView` in FsShell and not part of the OS UI chrome, page layout is not automatically adjusted.
