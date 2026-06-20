@@ -14,19 +14,20 @@ FsShell includes a default tab bar which allows you to provide a `DataTemplate` 
 - **Routing and current-tab binding:** the `IFsTabBar` interface exposes `Shell` state, providing access to the underlying routing logic
 - **Tab transitions:** optional tab-change animations via `ITabTransitionAnimator`
 - **Keyboard control:** optional `HideTabBarOnKeyboard` lets you hide the navigation chrome when the keyboard is displayed
-- **Control tab bar page margin:** bottom-chrome height published as a `DynamicResource` for pages to consume (or ignore), or per-page opt-in padding via `FsLayout.BottomChromePadding` attached property
+- **Configurable dock position:** `TabBarDock` property pins the bar to any edge (`Bottom`, `Top`, `Left`, `Right`) or `None` for consumer-managed placement (e.g. a floating FAB)
+- **Control tab bar page margin:** chrome dimension published as a `DynamicResource` for pages to consume (or ignore), with per-edge opt-in padding via `FsLayout` attached properties (`BottomChromePadding`, `TopChromePadding`, `LeftChromePadding`, `RightChromePadding`)
 
 ## Architecture: Hosted Chrome, Not Customised Chrome
 
-As with all .NET MAUI controls, Shell is an abstraction over native controls (`UITabBar` on iOS, `BottomNavigationView` on Android); these controls can be customised, but require platform code. Additionally `Shell` uses the legacy renderer architecture which requires a different customisation paradigm to everything else (using the new handler architecture). This is the established approach for `Shell` (and non-shell) tab bar customisation.
+As with all .NET MAUI controls, Shell is an abstraction over native controls (`UITabBar` on iOS, `BottomNavigationView` on Android, `NavigationView` on Windows); these controls can be customised, but require platform code. On iOS, Android, and Mac Catalyst, `Shell` uses the legacy renderer architecture, while on Windows it uses the handler architecture — either way, customisation requires a different paradigm to normal MAUI controls. This is the established approach for `Shell` tab bar customisation.
 
-> **Note:** I've mentioned iOS and Android here but Windows and MacCatalyst are also fully supported. I just haven't focused on them because tab bar navigation is not a sensible paradigm on desktop. I'm not here to judge though - it's there if you want it.
+> **Note:** iOS, Android, Windows, and Mac Catalyst are all fully supported. Tab bar navigation is not a sensible paradigm on desktop, but it's there if you want it — and with `TabBarDock`, you can use FsShell for side rails or other chrome that makes more sense on larger screens.
 
 FsShell takes a different approach. The platform specific renderers suppress the native implementation completely rather than customise it; instead the tab bar is now a fully cross-platform control. The approach is closer to [Sharpnado Tabs](https://github.com/roubachof/Sharpnado.Tabs), which gives you absolute control over the tabs, but also introduces its own navigation paradigm. FsShell offers a combination of both - it hides the native chrome, hosting a `ContentView` in its place, but FsShell remains inside `Shell`, so routing, flyouts, navigation stack, lifecycle are all unchanged.
 
 Note that Sharpnado Tabs is a much more complete implementation; out of the box FsShell gives more control over tab appearance than you get with `Shell`, and you have the freedom to fully customise to the extent that Sharpnado does (or beyond), but you have to provide it.
 
-With the native tab bar, page layout is automatically adjusted to allow space for it, but this is decoupled with FsShell. The chrome height is published to a `DynamicResource`, which you can consume from page XAML; the recommended path is to add the `FsLayout.BottomChromePadding` attached property to your apps' `Page` style (see section on `FsLayout` below); you can also bind the resource into a `ControlTemplate`, a `Padding` directly, or any other layout target.
+With the native tab bar, page layout is automatically adjusted to allow space for it, but this is decoupled with FsShell. The chrome dimension is published to a `DynamicResource` (keyed by the current `TabBarDock` position), which you can consume from page XAML; the recommended path is to add the appropriate `FsLayout` attached property to your apps' `Page` style (see section on `FsLayout` below); you can also bind the resource into a `ControlTemplate`, a `Padding` directly, or any other layout target.
 
 You could also ignore it (for example, if you want a blur effect on your tab bar, removing it allows page content to scroll behind it and be blurred). This approach gives you the most flexibility without relying on per-platform safe areas.
 
@@ -260,7 +261,7 @@ public class FadeAnimator : ITabTransitionAnimator
 
 ```xaml
 <ContentPage Shell.TabBarIsVisible="False">
-    <!-- bar drops out; FsBottomChromeHeight resource goes to 0 -->
+    <!-- bar drops out; all chrome dimension resources go to 0 -->
 </ContentPage>
 ```
 
@@ -360,9 +361,9 @@ The `FsTabBar` sample implementation demonstrates how to use these. When the `It
 
 - Use the default `FsTabBar` with `TabBarItemTemplate` for simple per-tab styling — replace `TabBar` only when you need a different _shape_ (FAB, side rail, etc.)
 - Keep custom bars cheap to measure — they are part of the page layout pass on every nav
-- Opt into `FsLayout.BottomChromePadding` on every page that scrolls, not just the first one
+- Opt into the appropriate `FsLayout` chrome padding on every page that scrolls, not just the first one
 - Don't depend on the bar's pixel height — read it from the `DynamicResource`
-- **DO NOT** putting per-page state inside the bar (it's a single hosted instance shared across tabs)
+- **DO NOT** put per-page state inside the bar (it's a single hosted instance shared across tabs)
 - For per-page bar visibility, prefer `Shell.SetTabBarIsVisible` per-page over conditional bar rebuilds
 
 ## Example: A Three-Tab App with Custom Items and Padded Pages
@@ -432,24 +433,26 @@ The `FsTabBar` sample implementation demonstrates how to use these. When the `It
 
 ## Technical Implementation
 
-### Renderer responsibilities
+### Renderer/handler responsibilities
 
-- TODO: suppress the native chrome
-- TODO: host the user's `ContentView` from the `TabBar` slot
-- TODO: keep it pinned to the bottom edge (including safe-area cap on iOS)
-- TODO: slide it on keyboard if `HideTabBarOnKeyboard` is set
+Each platform suppresses the native tab chrome and hosts the consumer's `ContentView` from the `TabBar` slot, positioned according to `TabBarDock`:
 
-### What the renderer no longer does
+- **Suppress native chrome:** iOS hides `UITabBar`, Android hides `BottomNavigationView`, Windows collapses the `TopNavArea` in the `ShellItemHandler`'s `MauiNavigationView`. On iOS/Android this is re-applied on layout passes to counter stock Shell re-enabling its own visibility logic.
+- **Host the bar:** the bar's platform view (via `ToPlatform`) is added to the platform shell hierarchy — as a subview (iOS), a `LinearLayout` child (Android), or a root-grid overlay (Windows).
+- **Position per dock:** the renderer reads `FsShell.TabBarDock` to determine edge anchoring. On iOS, the bar frame is calculated imperatively and includes the bottom safe-area inset. On Android, the bar is appended as the last `LinearLayout` child. On Windows, `VerticalAlignment`/`HorizontalAlignment` on the root grid overlay handles all four edges.
+- **Keyboard avoidance:** on iOS, the bar slides off-screen on `UIKeyboard.WillShow` and restores on `UIKeyboard.WillHide`, gated by `HideTabBarOnKeyboard`. Keyboard avoidance on Android and Windows is not yet implemented.
 
-- TODO: it does _not_ try to reserve page-content space — that's the page's job via the `DynamicResource`
-- TODO: it does _not_ touch `AdditionalSafeAreaInsets` on child VCs / fragments
-- TODO: it does _not_ size or arrange the bar's content — that's MAUI's normal cross-platform layout
+### What the renderer does NOT do
+
+- It does _not_ reserve page-content space — that's the page's job via the `DynamicResource` and `FsLayout` attached properties.
+- It does _not_ touch `AdditionalSafeAreaInsets` on child view controllers or fragments.
+- It does _not_ size or arrange the bar's content — that's MAUI's normal cross-platform layout.
 
 ### Bar lifecycle
 
-- TODO: a single bar instance is shared across `ShellItem` switches
-- TODO: re-parented from one item's host to the next as the active item changes
-- TODO: released only when no FsShellItemRenderer references it anymore
+- A single bar instance is shared across `ShellItem` switches.
+- On iOS/Android, it is re-parented from one item's host to the next as the active item changes. On Windows, the `ShellItemHandler` is reused so the bar stays in the outer `ShellView`'s root grid.
+- On disconnect, the bar is detached from its current parent (guarded against a newer host having already re-parented it) so it survives to be re-hosted.
 
 ## See Also
 
