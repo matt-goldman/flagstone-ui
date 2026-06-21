@@ -91,6 +91,9 @@
 	  <MauiXaml Update="Resources\Styles\Minty.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="FloatingShell.xaml">
+	    <SubType>Designer</SubType>
+	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -99,6 +102,13 @@
 
 	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
 	  <PackageReference Include="Microsoft.Maui.DevFlow.Agent" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="FloatingShell.xaml.cs">
+	    <DependentUpon>FloatingShell.xaml</DependentUpon>
+	    <SubType>Code</SubType>
+	  </Compile>
 	</ItemGroup>
 
 </Project>
