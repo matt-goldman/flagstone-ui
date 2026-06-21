@@ -23,7 +23,7 @@
     </DataTemplate>
   </fs:FsTabBarBase.ItemTemplate>
   <Grid>
-        <Border BackgroundColor="{DynamicResource Amber100}"
+        <Border BackgroundColor="{DynamicResource GoldGradientMiddle}"
                 HorizontalOptions="Fill"
                 VerticalOptions="End"
                 StrokeShape="RoundRectangle 20">
