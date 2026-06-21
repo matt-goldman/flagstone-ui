@@ -7,7 +7,8 @@
   xmlns:controls="clr-namespace:FlagstoneUI.SampleApp.Controls"
   xmlns:local="clr-namespace:FlagstoneUI.SampleApp"
   xmlns:page="clr-namespace:FlagstoneUI.SampleApp.Pages"
-  Title="FlagstoneUI.SampleApp">
+  Title="FlagstoneUI.SampleApp"
+  TabBarIsDocked="False">
   <fs:FsShell.TabBar>
     <!-- The tab item template lives on FloatingTabBar itself; FsShell.TabBarItemTemplate is only
          forwarded to the default FsTabBar, so it would be ignored here. -->

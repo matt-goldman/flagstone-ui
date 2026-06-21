@@ -397,23 +397,19 @@ internal sealed class PassthroughBarHost : UIView
 			return hit;
 		}
 
-		if (ReferenceEquals(hit, this))
-		{
-			return null;
-		}
-
 		var barView = Subviews.Length > 0 ? Subviews[0] : null;
-		if (ReferenceEquals(hit, barView))
-		{
-			return null;
-		}
-
 		var contentRoot = barView is not null && barView.Subviews.Length > 0 ? barView.Subviews[0] : null;
-		if (ReferenceEquals(hit, contentRoot))
+
+		var isScaffolding =
+			ReferenceEquals(hit, this) ||
+			ReferenceEquals(hit, barView) ||
+			ReferenceEquals(hit, contentRoot);
+
+		if (!isScaffolding)
 		{
-			return null;
+			return hit;
 		}
 
-		return hit;
+		return null;
 	}
 }
