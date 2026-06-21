@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fs:FsTabBarBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="FlagstoneUI.SampleApp.Controls.FloatingTabBar">
+  <!-- The tab template is set on the bar itself (not as BindableLayout.ItemTemplate) so the
+       FsTabBarBase template selector can wrap each item in the tap gesture that drives navigation.
+       FsShell.TabBarItemTemplate is only forwarded to the default FsTabBar, not to a custom bar. -->
+  <fs:FsTabBarBase.ItemTemplate>
+    <DataTemplate x:DataType="fs:FsTabContext">
+      <HorizontalStackLayout HorizontalOptions="End"
+                             Spacing="5">
+        <Label Text="{Binding Title}"
+               HorizontalOptions="End"
+               HorizontalTextAlignment="End"
+               VerticalOptions="Center"
+               VerticalTextAlignment="Center"/>
+        <Image VerticalOptions="Center"
+               HorizontalOptions="Center"
+               Source="{Binding Icon}"/>
+      </HorizontalStackLayout>
+    </DataTemplate>
+  </fs:FsTabBarBase.ItemTemplate>
+  <Grid>
+        <Border BackgroundColor="{DynamicResource Amber100}"
+                HorizontalOptions="Fill"
+                VerticalOptions="End"
+                StrokeShape="RoundRectangle 20">
+            <FlexLayout VerticalOptions="End"
+                        Direction="Row"
+                        JustifyContent="SpaceBetween"
+                        AlignContent="Center"
+                        AlignItems="Center"
+                        HorizontalOptions="Fill"
+                        HeightRequest="60"
+                        Margin="0,0,60,0">
+                <Image HeightRequest="55"
+                       WidthRequest="55"
+                       x:Name="EpisodeThumbnail"
+                       Source="{FontImageSource FontFamily=FluentIcons,
+                                                Size=12,
+                                                Glyph={StaticResource IconBot}}"/>
+                
+                <VerticalStackLayout WidthRequest="150"
+                                     x:Name="EpisodeTitleMarquee">
+                    <Label FontAttributes="Bold"
+                           Text="Episode 59: Things"/>
+                    <Label FontSize="Small"
+                           Text="00:15 / 52:43"/>
+                </VerticalStackLayout>
+            </FlexLayout>
+        </Border>
+            
+        <toolkit:Expander VerticalOptions="End"
+                          HorizontalOptions="End"
+                          Direction="Up"
+                          Margin="5"
+                          ExpandedChanged="Expander_OnExpandedChanged">
+            <toolkit:Expander.Header>
+                <Border HeightRequest="50"
+                        WidthRequest="50"
+                        StrokeShape="Ellipse"
+                        Background="{StaticResource GoldGradientBrush}"
+                        HorizontalOptions="End">
+                             <Label Text="{StaticResource IconSparkle}"
+                                    FontFamily="FluentIcons"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    FontSize="24"
+                                    x:Name="SparkleLabel"/>
+                </Border>
+            </toolkit:Expander.Header>
+            <VerticalStackLayout x:Name="TabBar" Spacing="5"/>
+        </toolkit:Expander>
+    </Grid>
+</fs:FsTabBarBase>

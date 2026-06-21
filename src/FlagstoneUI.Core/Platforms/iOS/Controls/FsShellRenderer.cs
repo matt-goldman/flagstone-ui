@@ -41,6 +41,7 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 {
 	private readonly IShellContext _shellContext = shellContext;
 	private UIView? _hostedBar;
+	private UIView? _platformBar;
 	private ContentView? _barContentView;
 	private FsShell? _shell;
 	private NSObject? _kbShowToken;
@@ -139,13 +140,22 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 			return;
 		}
 
-		if (_shell is { TabBarIsDocked: false })
+		var undocked = _shell is { TabBarIsDocked: false };
+		if (bar is PassthroughBarHost host)
+		{
+			// Pass-through is only needed for the full-bounds undocked overlay; a docked bar occupies
+			// just its own bottom strip and should capture touches across it normally.
+			host.PassthroughEnabled = undocked;
+		}
+
+		if (undocked)
 		{
 			var fullFrame = view.Bounds;
 			if (bar.Frame != fullFrame)
 			{
 				bar.Frame = fullFrame;
 			}
+			SyncPlatformBarFrame(bar.Bounds);
 			return;
 		}
 
@@ -178,10 +188,20 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 		{
 			bar.Frame = newFrame;
 		}
+		SyncPlatformBarFrame(bar.Bounds);
 
 		if (_shell?.TabBarIsDocked is null or true && Application.Current is { } app)
 		{
 			app.Resources[FsShell.BottomChromeHeightResourceKey] = (double)height;
+		}
+	}
+
+	/// <summary>Keeps the hosted bar's platform view filling the pass-through host.</summary>
+	private void SyncPlatformBarFrame(CGRect hostBounds)
+	{
+		if (_platformBar is { } platformBar && platformBar.Frame != hostBounds)
+		{
+			platformBar.Frame = hostBounds;
 		}
 	}
 
@@ -200,6 +220,7 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 			}
 
 			_hostedBar = null;
+			_platformBar = null;
 			_barContentView = null;
 			_shell = null;
 		}
@@ -226,31 +247,39 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 			return;
 		}
 
-		var platformBar = bar.ToPlatform(mauiContext);
-
-		// The same bar instance is shared across ShellItem switches; detach it from any previous
-		// host before re-parenting. A UIView may only belong to one superview.
 		var view = View;
 		if (view is null)
 		{
 			return;
 		}
 
-		if (platformBar.Superview is { } prev && !ReferenceEquals(prev, view))
+		var platformBar = bar.ToPlatform(mauiContext);
+
+		// The same bar instance is shared across ShellItem switches; detach it from any previous
+		// host before re-parenting. A UIView may only belong to one superview.
+		if (platformBar.Superview is not null)
 		{
 			platformBar.RemoveFromSuperview();
 		}
 
-		if (platformBar.Superview is null)
+		// Host the bar inside a pass-through container rather than adding it to the view directly.
+		// When undocked the bar spans the whole view (so an overflowing expander has room to draw,
+		// matching Android, which clips to bounds); a plain full-bounds UIView would then swallow
+		// every touch via UIKit hit-testing. The host forwards touches that land on real chrome and
+		// lets taps over the bar's transparent backing fall through to the page beneath. The frame is
+		// set imperatively in LayoutBar; autoresizing-mask coordinates keep the bar in lockstep with
+		// our explicit frame writes without auto-layout fighting for control.
+		var host = new PassthroughBarHost
 		{
-			// The frame is set imperatively in LayoutBar; using autoresizing-mask coordinates
-			// keeps the bar in lockstep with our explicit frame writes without auto-layout fighting
-			// for control.
-			platformBar.TranslatesAutoresizingMaskIntoConstraints = true;
-			view.AddSubview(platformBar);
-		}
+			TranslatesAutoresizingMaskIntoConstraints = true,
+		};
+		platformBar.TranslatesAutoresizingMaskIntoConstraints = true;
+		platformBar.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
+		host.AddSubview(platformBar);
+		view.AddSubview(host);
 
-		_hostedBar = platformBar;
+		_hostedBar = host;
+		_platformBar = platformBar;
 		_barContentView = bar;
 	}
 
@@ -338,5 +367,53 @@ internal sealed class FsShellItemRenderer(IShellContext shellContext) : ShellIte
 		}
 
 		return (duration, curve);
+	}
+}
+
+/// <summary>
+/// Hosts the undocked <see cref="FsShell"/> bar as a full-bounds overlay while letting touches that
+/// miss the bar's actual chrome fall through to the page beneath.
+/// </summary>
+/// <remarks>
+/// UIKit's <c>hitTest</c> returns the deepest view containing a point, so a full-bounds interactive
+/// view would swallow every touch on screen — and disabling interaction (<c>InputTransparent</c>)
+/// would instead make the whole bar, including its real controls, untappable. This host resolves the
+/// natural hit and passes through (returns <see langword="null"/>) only when it lands on the bar's
+/// own scaffolding: the host itself, the bar's platform view, or its screen-filling content backing
+/// (the consumer's root layout, which exists to give Android room to draw an overflowing expander).
+/// Real chrome — including the expander's tab list while open — resolves to a deeper view and is
+/// captured normally, so the touchable region tracks the live view tree rather than a static frame.
+/// </remarks>
+internal sealed class PassthroughBarHost : UIView
+{
+	/// <summary>Whether transparent regions pass touches through to views beneath (undocked only).</summary>
+	internal bool PassthroughEnabled { get; set; }
+
+	public override UIView? HitTest(CGPoint point, UIEvent? uievent)
+	{
+		var hit = base.HitTest(point, uievent);
+		if (hit is null || !PassthroughEnabled)
+		{
+			return hit;
+		}
+
+		if (ReferenceEquals(hit, this))
+		{
+			return null;
+		}
+
+		var barView = Subviews.Length > 0 ? Subviews[0] : null;
+		if (ReferenceEquals(hit, barView))
+		{
+			return null;
+		}
+
+		var contentRoot = barView is not null && barView.Subviews.Length > 0 ? barView.Subviews[0] : null;
+		if (ReferenceEquals(hit, contentRoot))
+		{
+			return null;
+		}
+
+		return hit;
 	}
 }

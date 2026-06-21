@@ -352,6 +352,7 @@ Note: on iOS, content that scales beyond the bar's bounds (e.g. the pill animati
 
 ## See Also
 
+- [Floating tab bar — iOS pass-through WIP notes](floating-tabbar-ios-passthrough-notes.md) — hand-off notes for the undocked-bar navigation + iOS hit-testing work (delete once verified)
 - [FsShell Control](FsShell.md) — the host
 - [ADR012 — FsShell: Stylable Shell Chrome via Subclass](../decisions/adr012-fsshell.md)
 - [ADR013 — Shell Animations](../decisions/adr013-shell-animations.md) — context for the "bring your own bar" animation story this control now partly fulfils
