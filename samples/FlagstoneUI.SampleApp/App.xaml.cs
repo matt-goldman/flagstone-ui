@@ -12,7 +12,7 @@ public partial class App : Application
 
 	protected override Window CreateWindow(IActivationState? activationState)
 	{
-		return new Window(new FloatingShell()); //DemoShell());
+		return new Window(new /*FloatingShell()); */DemoShell());
 	}
 
 	public static void SwitchTheme(string theme)
