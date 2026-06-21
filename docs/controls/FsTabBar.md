@@ -1,6 +1,6 @@
 # FsTabBar Control
 
-> _One-paragraph intro: `FsTabBar` is the reference bottom bar that ships with `FsShell`. It renders a horizontal row of tabs, drives selection via a two-way `SelectedRoute` binding, and ships with built-in selection animation — a rounded pill that slides behind the active tab and a scale bump on the selected tab. It is split into an abstract `FsTabBarBase` (the reusable bar contract, item plumbing, and visual-state pumping) and the concrete `FsTabBar` (the pill/scale visual layer). It implements `IFsTabBar` so it can be dropped into the `FsShell.TabBar` slot directly or wrapped inside a custom container, and it is designed to be customised through `ItemTemplate` first, subclassing `FsTabBar` second, and subclassing `FsTabBarBase` for an entirely different bar third._
+`FsTabBar` is the reference bottom bar that ships with `FsShell`. It renders a horizontal row of tabs, drives selection via a two-way `SelectedRoute` binding, and ships with built-in selection animation — a rounded pill that slides behind the active tab and a scale bump on the selected tab. It is split into an abstract `FsTabBarBase` (the reusable bar contract, item plumbing, and visual-state pumping) and the concrete `FsTabBar` (the pill/scale visual layer). It implements `IFsTabBar` so it can be dropped into the `FsShell.TabBar` slot directly or wrapped inside a custom container, and it is designed to be customised through `ItemTemplate` first, subclassing `FsTabBar` second, and subclassing `FsTabBarBase` for an entirely different bar third.
 
 ## Features
 
