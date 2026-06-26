@@ -13,15 +13,15 @@ FlagstoneUI removes the last barrier to building visually consistent .NET MAUI a
 **FlagstoneUI closes those gaps.**
 It gives you enhanced, neutral controls designed for full visual control from shared code. No renderers. No handlers. No platform quirks. Just the UI your app is meant to have, working the same on every device.
 
-> **⚠️ Early experimental project.**
-> Functional and ready for testing, but evolving quickly.
+> **✅ Stable — v2.0, on NuGet.**
+> Out of preview and ready for production use. The current release is `2.0.4`.
 
 ## What’s Available Now
 
-* Core controls: `FsButton`, `FsEntry`, `FsCard`, `FsEditor`, `FsShell`
-* `FsShell` — drop-in `Shell` subclass with replaceable tab bar, configurable dock position (`Bottom`, `Top`, `Left`, `Right`, `None`), and full Shell routing preservation
+* Core controls: `FsButton`, `FsEntry`, `FsCard`, `FsEditor`, `FsBorder`
+* `FsShell` — drop-in `Shell` subclass with a replaceable tab bar, configurable dock position (`Bottom`, `Top`, `Left`, `Right`, `None`, or floating), and full Shell routing preservation
+* `FsTabBar` — default tab bar for `FsShell`, with a sliding pill animation and per-tab templates
 * Token‑based theming system (colour, spacing, shapes, typography)
-* Material theme (NuGet) + example themes in the sample app
 * Community Toolkit integrations:
 
   * `ValidationBehaviorAdapter` for reuse of existing validators
@@ -82,29 +82,27 @@ This is the layer that makes .NET MAUI feel complete: define your visual system 
 
 **📚 [Documentation](docs/index.md)** | **🚀 [Quickstart](docs/getting-started/quickstart.md)**
 
+### Install from NuGet
+
+```bash
+# Required
+dotnet add package FlagstoneUI.Core
+
+# Optional — Community Toolkit integrations (validation adapter, animated editor border)
+dotnet add package FlagstoneUI.Integrations.MCT
+```
+
+That's all you need to start using the controls. Themes are optional and standard MAUI resource dictionaries — bring your own, or pull in an example theme package.
+
 ### Build from Source
 
 ```bash
-# Clone and explore
 git clone https://github.com/matt-goldman/flagstone-ui.git
 cd flagstone-ui
-
 dotnet build
 
-# Run sample app
+# Run the sample app
 dotnet run --project samples/FlagstoneUI.SampleApp
-```
-
-Or reference `FlagstoneUI.Core` in your MAUI project.
-
-### Install via NuGet (Preview)
-
-```bash
-dotnet add package FlagstoneUI.Core --version 0.0.1-preview1
-
-dotnet add package FlagstoneUI.Integrations.MCT --version 0.0.1-preview1
-
-dotnet add package FlagstoneUI.Themes.Material --version 0.0.1-preview1
 ```
 
 ## What Does It Look Like?
@@ -160,24 +158,23 @@ If not using implicit/global namespaces, prefix controls as:
 4. **Flexibility**
    Use direct values for simple cases, app resources for reusability, or design tokens for consistency — choose what fits your project.
 
-## Development Status
+## Status
+
+FlagstoneUI is **stable and published on NuGet** (current release `2.0.4`).
 
 ### Available
 
-* `FsButton`, `FsEntry`, `FsCard`, `FsEditor`, `FsShell`
+* `FsButton`, `FsEntry`, `FsCard`, `FsEditor`, `FsBorder`
+* `FsShell` + `FsTabBar` — stylable Shell navigation with a replaceable, dockable/floating tab bar
 * Unified styling plane for .NET MAUI
-* Material theme (example implementation)
-* Sample app with multiple theme examples
+* Token‑based theming system
 * Community Toolkit integration
-* Full documentation
+* Full documentation and [example apps](docs/examples.md)
 
-### Coming Soon
+### Coming Next
 
-* Additional controls (labels, lists)
-* More theme examples
-* Theme conversion tools
-
-See the [roadmap](docs/project/roadmap.md).
+* Additional controls
+* `FlagstoneUI.Blocks` — prebuilt forms, layouts, and workflows
 
 ## Project Structure
 
@@ -190,15 +187,14 @@ flagstone-ui/
 ├── samples/
 │   ├── FlagstoneUI.SampleApp/         # Showcase
 │   └── FlagstoneUI.ThemePlayground/   # Theme experimentation
-├── docs/                              # Documentation
-└── tools/                             # Theme converters and utilities
+└── docs/                              # Documentation
 ```
 
 The **Blocks** project (planned) will offer prebuilt forms, layouts, and workflows — optional extensions built on FlagstoneUI controls.
 
 ## Contributing
 
-This project is still early — **your feedback genuinely shapes its direction**.
+**Your feedback genuinely shapes this project's direction.**
 
 Most important of all:
 **Tell me whether this is useful, or if you think the entire idea is misguided.**
@@ -216,5 +212,5 @@ Honest critique is just as valuable as enthusiasm.
 Open a [Discussion](../../discussions) or reach out to [@matt-goldman](https://github.com/matt-goldman).
 
 **License:** MIT
-**Status:** Experimental
+**Status:** Stable (v2.0.4, on NuGet)
 **Compatibility:** .NET 10 + MAUI

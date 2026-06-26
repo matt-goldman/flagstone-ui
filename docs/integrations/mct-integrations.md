@@ -13,7 +13,7 @@ The `FlagstoneUI.Integrations.MCT` package is an **optional dependency** that pr
 
 ```bash
 # Install the MCT integration package
-dotnet add package FlagstoneUI.Integrations.MCT --version 0.0.1-preview1
+dotnet add package FlagstoneUI.Integrations.MCT
 
 # This will automatically install CommunityToolkit.Maui as a dependency
 ```

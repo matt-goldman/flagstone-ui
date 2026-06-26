@@ -300,4 +300,4 @@ Shadow rendering may vary slightly by platform but maintains consistent visual h
 - [FsButton Control](FsButton.md) - Button control
 - [FsEntry Control](FsEntry.md) - Text input control
 - [Theme Tokens](../reference/tokens.md) - Available design tokens for styling
-- [Control Implementation Guide](../guides/control-implementation-guide.md) - For contributors: how to implement new controls
+- [Control Implementation Guide](../contributing/control-implementation-guide.md) - For contributors: how to implement new controls

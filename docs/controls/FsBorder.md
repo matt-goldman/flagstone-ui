@@ -256,4 +256,4 @@ Potential future additions (currently out of scope):
 
 - [FsCard Control](FsCard.md)
 - [FsEntry Control](FsEntry.md)
-- [Control Implementation Guide](../guides/control-implementation-guide.md)
+- [Control Implementation Guide](../contributing/control-implementation-guide.md)

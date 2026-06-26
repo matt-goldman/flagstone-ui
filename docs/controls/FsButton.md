@@ -148,7 +148,7 @@ Buttons can be styled globally through themes:
 </Style>
 ```
 
-> **⚠️ Important**: Always use `Radius.Button.*` tokens (Int32 type) for button CornerRadius. Using standard `Radius.*` tokens (Double type) will cause silent binding failure. See [ADR003](../decisions/adr003-button-corner-radius-type.md) for details.
+> **⚠️ Important**: Always use `Radius.Button.*` tokens (Int32 type) for button CornerRadius. Using standard `Radius.*` tokens (Double type) will cause silent binding failure. See [ADR003](../archive/decisions/adr003-button-corner-radius-type.md) for details.
 
 ### Material Design Button Variants
 
@@ -275,4 +275,4 @@ All styling properties work consistently across platforms with minor rendering v
 - [FsEntry Control](FsEntry.md) - For contrast, see why Entry requires a wrapper approach
 - [FsCard Control](FsCard.md) - Container control for grouping UI elements
 - [Theme Tokens](../reference/tokens.md) - Available design tokens for styling
-- [Control Implementation Guide](../guides/control-implementation-guide.md) - For contributors: how to implement new controls
+- [Control Implementation Guide](../contributing/control-implementation-guide.md) - For contributors: how to implement new controls

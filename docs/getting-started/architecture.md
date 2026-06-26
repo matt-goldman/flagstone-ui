@@ -241,7 +241,7 @@ Tokens enable:
 
 **Status**: ✅ Fully resolved and working
 
-Cross-assembly ResourceDictionary referencing is implemented using typed references in MergedDictionaries. See [ADR004: Cross-Assembly ResourceDictionary Loading](../decisions/adr004-cross-assembly-resource-loading.md) for detailed technical decisions and implementation.
+Cross-assembly ResourceDictionary referencing is implemented using typed references in MergedDictionaries. See [ADR004: Cross-Assembly ResourceDictionary Loading](../archive/decisions/adr004-cross-assembly-resource-loading.md) for detailed technical decisions and implementation.
 
 **Quick Reference for Consumers**:
 ```xml
@@ -303,6 +303,6 @@ Cross-assembly ResourceDictionary referencing is implemented using typed referen
 - **Icon Libraries**: Material Design Icons or similar
 - **Animation Libraries**: For motion system implementation
 
-**Note**: For current implementation status and completion tracking, see [implementation-status.md](../project/implementation-status.md).
+**Note**: For current implementation status and completion tracking, see [implementation-status.md](../archive/project/implementation-status.md).
 
 *Last Updated: November 2025*

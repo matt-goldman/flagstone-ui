@@ -289,7 +289,7 @@ Corner radius values for different component sizes:
 - `Radius.Button.ExtraLarge` = 28
 - `Radius.Button.Full` = 9999 ← Pill-shaped buttons
 
-> **⚠️ Important**: Use `Radius.Button.*` tokens when styling `FsButton` or standard `Button` controls. The Button.CornerRadius property requires Int32 type, while other controls use Double. Using the wrong token type will result in silent binding failure and square corners. See [ADR003](../decisions/adr003-button-corner-radius-type.md) for technical details.
+> **⚠️ Important**: Use `Radius.Button.*` tokens when styling `FsButton` or standard `Button` controls. The Button.CornerRadius property requires Int32 type, while other controls use Double. Using the wrong token type will result in silent binding failure and square corners. See [ADR003](../archive/decisions/adr003-button-corner-radius-type.md) for technical details.
 
 #### 5. Other Tokens
 
@@ -895,7 +895,7 @@ By following this guide, you can create beautiful, consistent, accessible themes
 **Next Steps:**
 
 - [View the Token Reference](../reference/tokens.md) for complete token documentation
-- [Token Catalog System](../reference/token-catalog-system.md) - For AI-assisted theme generation
+- [Token Catalog System](../archive/token-tooling/token-catalog-system.md) - For AI-assisted theme generation
 - [See Control Documentation](../controls/) for detailed control properties
 - [Check the Quickstart Guide](../getting-started/quickstart.md) to understand the developer perspective
 - [Explore Sample Apps](../../samples/) to see themes in action

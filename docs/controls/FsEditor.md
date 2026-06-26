@@ -425,4 +425,4 @@ Platform handlers ensure consistent borderless rendering across all platforms, w
 - [FsCard Control](FsCard.md) - Container control for grouping UI elements
 - [MCT Integrations](../integrations/mct-integrations.md) - MAUI Community Toolkit integration features
 - [Theme Tokens](../reference/tokens.md) - Available design tokens for styling
-- [Control Implementation Guide](../guides/control-implementation-guide.md) - For contributors: how to implement new controls
+- [Control Implementation Guide](../contributing/control-implementation-guide.md) - For contributors: how to implement new controls

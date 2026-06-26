@@ -59,22 +59,25 @@ Before you begin, ensure you have:
 
 ## Installation
 
-> **Note**: FlagstoneUI is currently in development. NuGet packages will be available in future releases.
-
-For now, clone the repository and reference the projects directly:
+FlagstoneUI is available on NuGet. Add it to your MAUI project:
 
 ```bash
-git clone https://github.com/matt-goldman/flagstone-ui.git
+# Required — the core controls and styling surface
+dotnet add package FlagstoneUI.Core
+
+# Optional — Community Toolkit integrations (validation adapter, animated editor border)
+dotnet add package FlagstoneUI.Integrations.MCT
 ```
 
-Then add project references to your `.csproj` file:
+Or add the package reference directly to your `.csproj`:
 
 ```xml
 <ItemGroup>
-  <ProjectReference Include="..\flagstone-ui\src\FlagstoneUI.Core\FlagstoneUI.Core.csproj" />
-  <ProjectReference Include="..\flagstone-ui\src\FlagstoneUI.Themes.Material\FlagstoneUI.Themes.Material.csproj" />
+  <PackageReference Include="FlagstoneUI.Core" Version="2.0.4" />
 </ItemGroup>
 ```
+
+That's everything you need to start using the controls — themes are optional (covered below).
 
 ## Basic Setup
 
@@ -423,7 +426,7 @@ builder.UseMauiApp<App>()
 - Converters for advanced binding scenarios
 - Additional UI enhancements and animations
 
-See [ADR001](../decisions/adr001-fsentry-behavior.md) for more details on the FlagstoneUI + MCT integration approach.
+See [ADR001](../archive/decisions/adr001-fsentry-behavior.md) for more details on the FlagstoneUI + MCT integration approach.
 
 ## Troubleshooting
 
@@ -471,9 +474,8 @@ If you're starting a new project:
 dotnet new maui -n MyFlagstoneApp
 cd MyFlagstoneApp
 
-# Add project references (adjust paths as needed)
-dotnet add reference ../flagstone-ui/src/FlagstoneUI.Core/FlagstoneUI.Core.csproj
-dotnet add reference ../flagstone-ui/src/FlagstoneUI.Themes.Material/FlagstoneUI.Themes.Material.csproj
+# Add FlagstoneUI from NuGet
+dotnet add package FlagstoneUI.Core
 
 # Build and run
 dotnet build

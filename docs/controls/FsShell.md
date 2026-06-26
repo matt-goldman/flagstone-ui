@@ -405,8 +405,8 @@ Each platform suppresses the native tab chrome and hosts the consumer's `Content
 ## See Also
 
 - [FsTabBar Control](FsTabBar.md) — default bar implementation
-- [ADR012 — FsShell: Stylable Shell Chrome via Subclass](../decisions/adr012-fsshell.md)
-- [ADR012_1 — Per-`ShellItem` Tab Bar Scoping](../decisions/adr012_1-fsshell-per-item-bar-scoping-addendum.md)
-- [ADR012_2 — FsShell Renderer Scope Narrowing](../decisions/adr012_2-fsshell-renderer-scope-narrowing-addendum.md)
-- [ADR012_3 — Bottom Chrome Height Resource Contract](../decisions/adr012_3-fsshell-bottom-chrome-resource-contract-addendum.md)
-- [Control Implementation Guide](../guides/control-implementation-guide.md) — for contributors
+- [ADR012 — FsShell: Stylable Shell Chrome via Subclass](../archive/decisions/adr012-fsshell.md)
+- [ADR012_1 — Per-`ShellItem` Tab Bar Scoping](../archive/decisions/adr012_1-fsshell-per-item-bar-scoping-addendum.md)
+- [ADR012_2 — FsShell Renderer Scope Narrowing](../archive/decisions/adr012_2-fsshell-renderer-scope-narrowing-addendum.md)
+- [ADR012_3 — Bottom Chrome Height Resource Contract](../archive/decisions/adr012_3-fsshell-bottom-chrome-resource-contract-addendum.md)
+- [Control Implementation Guide](../contributing/control-implementation-guide.md) — for contributors

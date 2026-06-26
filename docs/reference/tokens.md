@@ -53,7 +53,7 @@ Contracts are JSON files that formally specify requirements at each layer. They 
 - **Compliance checking**: Ensure design systems provide required variants
 - **Tooling integration**: CI/CD pipelines, code generation, AI assistance
 
-See [ADR010: Theme Contract System](../decisions/adr010-theme-contract-system.md) for the full architectural decision.
+See [ADR010: Theme Contract System](../archive/decisions/adr010-theme-contract-system.md) for the full architectural decision.
 
 **Contract Files:**
 - `docs/contracts/minimal.json` - Base theme requirements

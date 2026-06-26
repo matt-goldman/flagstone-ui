@@ -353,8 +353,8 @@ Note: on iOS, content that scales beyond the bar's bounds (e.g. the pill animati
 ## See Also
 
 - [FsShell Control](FsShell.md) — the host
-- [ADR012 — FsShell: Stylable Shell Chrome via Subclass](../decisions/adr012-fsshell.md)
-- [ADR013 — Shell Animations](../decisions/adr013-shell-animations.md) — context for the "bring your own bar" animation story this control now partly fulfils
-- [ADR012_1 — Per-`ShellItem` Tab Bar Scoping](../decisions/adr012_1-fsshell-per-item-bar-scoping-addendum.md)
-- [ADR012_2 — FsShell Renderer Scope Narrowing](../decisions/adr012_2-fsshell-renderer-scope-narrowing-addendum.md)
-- [ADR012_3 — Bottom Chrome Height Resource Contract](../decisions/adr012_3-fsshell-bottom-chrome-resource-contract-addendum.md)
+- [ADR012 — FsShell: Stylable Shell Chrome via Subclass](../archive/decisions/adr012-fsshell.md)
+- [ADR013 — Shell Animations](../archive/decisions/adr013-shell-animations.md) — context for the "bring your own bar" animation story this control now partly fulfils
+- [ADR012_1 — Per-`ShellItem` Tab Bar Scoping](../archive/decisions/adr012_1-fsshell-per-item-bar-scoping-addendum.md)
+- [ADR012_2 — FsShell Renderer Scope Narrowing](../archive/decisions/adr012_2-fsshell-renderer-scope-narrowing-addendum.md)
+- [ADR012_3 — Bottom Chrome Height Resource Contract](../archive/decisions/adr012_3-fsshell-bottom-chrome-resource-contract-addendum.md)

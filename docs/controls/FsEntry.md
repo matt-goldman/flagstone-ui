@@ -321,7 +321,7 @@ private void OnSearchCompleted(object sender, EventArgs e)
 
 ## Validation and Behaviors
 
-As documented in [ADR001](../decisions/adr001-fsentry-behavior.md), `FsEntry` does not include built-in validation logic. Instead, it supports attaching behaviors directly:
+As documented in [ADR001](../archive/decisions/adr001-fsentry-behavior.md), `FsEntry` does not include built-in validation logic. Instead, it supports attaching behaviors directly:
 
 ### Using CommunityToolkit.Maui Validation (Optional)
 
@@ -438,6 +438,6 @@ Platform handlers ensure consistent borderless rendering across all platforms, w
 - [FsBorder Control](FsBorder.md) - Per-edge border control documentation
 - [FsButton Control](FsButton.md) - Simpler subclass approach for comparison
 - [FsCard Control](FsCard.md) - Container control for grouping UI elements
-- [ADR001: FsEntry Behavior](../decisions/adr001-fsentry-behavior.md) - Design decisions and validation strategy
+- [ADR001: FsEntry Behavior](../archive/decisions/adr001-fsentry-behavior.md) - Design decisions and validation strategy
 - [Theme Tokens](../reference/tokens.md) - Available design tokens for styling
-- [Control Implementation Guide](../guides/control-implementation-guide.md) - For contributors: how to implement new controls
+- [Control Implementation Guide](../contributing/control-implementation-guide.md) - For contributors: how to implement new controls
