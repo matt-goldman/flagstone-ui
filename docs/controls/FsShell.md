@@ -404,6 +404,7 @@ Each platform suppresses the native tab chrome and hosts the consumer's `Content
 
 ## See Also
 
+- [Your First Shell App](../getting-started/your-first-shell-app.md) — step-by-step tutorial, from the built-in bar to a custom floating bar
 - [FsTabBar Control](FsTabBar.md) — default bar implementation
 - [ADR012 — FsShell: Stylable Shell Chrome via Subclass](../archive/decisions/adr012-fsshell.md)
 - [ADR012_1 — Per-`ShellItem` Tab Bar Scoping](../archive/decisions/adr012_1-fsshell-per-item-bar-scoping-addendum.md)

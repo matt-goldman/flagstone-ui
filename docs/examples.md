@@ -1,6 +1,6 @@
 # Example Apps
 
-Real apps built with FlagstoneUI. Each lives in its own repository — clone, build, and explore.
+Real apps built with FlagstoneUI. Each lives in its own repository — clone, build, and explore. New to `FsShell`? Walk through the [Your First Shell App](getting-started/your-first-shell-app.md) tutorial first — it's built from the same patterns these apps use.
 
 ## MyContoso — building a real app with FlagstoneUI
 
