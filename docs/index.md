@@ -7,7 +7,7 @@ FlagstoneUI is a unified styling plane for .NET MAUI — enhanced, neutral contr
 ## Get Started
 
 - **[Quickstart](getting-started/quickstart.md)** ⭐ — Install from NuGet, add your first controls, apply a theme.
-- **[Your First Shell App](getting-started/your-first-shell-app.md)** 🧭 — Build a tabbed app with `FsShell`, from the built-in bar to a fully custom floating navigation bar.
+- **[Your First Shell App](getting-started/your-first-shell-app.md)** 🧭 — Build a tabbed app with `FsShell`, from the built-in bar to a fully custom navigation bar.
 - **[Architecture Overview](getting-started/architecture.md)** — How the controls, styling, and themes fit together.
 
 ## Controls

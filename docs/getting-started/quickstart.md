@@ -170,94 +170,40 @@ Define implicit styles in a theme for consistent styling:
 <fs:FsButton Text="Submit" />
 ```
 
-### Optional: Using a Pre-Built Theme
+### Bundling styles as a theme
 
-You can also use pre-built themes like Material. In your `App.xaml`:
+Once you have more than a handful of styles, group them into a `ResourceDictionary` — your "theme" — and merge it in `App.xaml` so it applies app-wide:
 
 ```xml
-<?xml version="1.0" encoding="UTF-8" ?>
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:material="clr-namespace:FlagstoneUI.Themes.Material;assembly=FlagstoneUI.Themes.Material"
+             xmlns:local="clr-namespace:YourApp.Resources"
              x:Class="YourApp.App">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- Your existing styles -->
-                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
-                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
-
-                <!-- Add Material theme (optional) -->
-                <material:Theme />
+                <local:MyTheme />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
 ```
 
-> **Note**: The Material theme is an example that uses design tokens internally. Themes are optional—you can style FlagstoneUI controls directly or create your own theme.
-
-> **Important Requirements**:
-> - You must add a **project reference** to `FlagstoneUI.Themes.Material` in your `.csproj`
-> - You must declare the **XAML namespace** (the `xmlns:material=...` line shown above)
-> - The theme will take advantage of .NET 10's global XAML namespaces and implicit usings in future updates
-
-> **Note**: The Material theme is provided to showcase FlagstoneUI's capabilities. The themes demonstrate the concept and are value-add components. The core value of FlagstoneUI is the token-based theming framework itself, which allows you to create or use any theme that fits your needs.
+A theme is just a `ResourceDictionary` of styles — there's nothing FlagstoneUI-specific about wiring one up. See the [Theming Guide](../guides/theming-guide.md) to build one, optionally on top of [design tokens](../reference/tokens.md).
 
 ## Using Control Variants
 
-Themes typically provide several style variants for each control. For example, the Material theme includes these button variants:
-
-### Button Variants (from Material Theme)
+A theme typically defines named (explicit) styles as **variants** of a control. The default look comes from the implicit style; opt into a variant with `Style="{StaticResource ...}"`:
 
 ```xml
-<!-- Filled Button (default) -->
-<fs:FsButton Text="Filled Button" />
+<!-- default look (implicit style) -->
+<fs:FsButton Text="Save" />
 
-<!-- Outlined Button -->
-<fs:FsButton Text="Outlined Button"
-             Style="{StaticResource OutlinedButton}" />
-
-<!-- Text Button -->
-<fs:FsButton Text="Text Button"
-             Style="{StaticResource TextButton}" />
-
-<!-- Tonal Button -->
-<fs:FsButton Text="Tonal Button"
-             Style="{StaticResource TonalButton}" />
+<!-- a named variant defined by your theme -->
+<fs:FsButton Text="Cancel" Style="{StaticResource OutlinedButton}" />
 ```
 
-### Card Variants (from Material Theme)
-
-```xml
-<!-- Filled Card (default) -->
-<fs:FsCard>
-    <Label Text="Default filled card" />
-</fs:FsCard>
-
-<!-- Outlined Card -->
-<fs:FsCard Style="{StaticResource OutlinedCard}">
-    <Label Text="Card with border" />
-</fs:FsCard>
-
-<!-- Elevated Card -->
-<fs:FsCard Style="{StaticResource ElevatedCard}">
-    <Label Text="Card with shadow" />
-</fs:FsCard>
-```
-
-### Entry Variants (from Material Theme)
-
-```xml
-<!-- Filled Entry (default) -->
-<fs:FsEntry Placeholder="Filled Entry" />
-
-<!-- Outlined Entry -->
-<fs:FsEntry Placeholder="Outlined Entry"
-            Style="{StaticResource OutlinedEntry}" />
-```
-
-> **Note**: These variants are defined by the Material theme. Your custom theme can define its own variants with different names and styling.
+The variant names are entirely up to whoever authored the theme — define whatever your design system needs (`OutlinedButton`, `DeleteButton`, `ElevatedCard`, and so on).
 
 ## Using Design Tokens
 
@@ -285,33 +231,19 @@ For a complete list of available tokens, see the [Token Reference Documentation]
 
 ## Bonus: Runtime Theme Switching
 
-Here's something cool - you can even switch themes at runtime if your app needs it! While the primary use case for FlagstoneUI is theming an app according to your desired look and feel, the token-based architecture enables dynamic theme switching:
+Because styles live in merged `ResourceDictionaries`, you can swap them at runtime — handy for multi-tenant apps, light/dark variants, or letting users pick a look:
 
 ```csharp
 // In your App.xaml.cs
-public static void SwitchTheme(string themeName)
+public static void SwitchTheme(ResourceDictionary theme)
 {
-    // Clear existing themes
-    Current!.Resources.MergedDictionaries.Clear();
-
-    // Add your base styles
-    Current.Resources.MergedDictionaries.Add(new YourApp.Resources.Styles.Colors());
-    Current.Resources.MergedDictionaries.Add(new YourApp.Resources.Styles.Styles());
-
-    // Add the new theme
-    switch (themeName)
-    {
-        case "Material":
-            Current.Resources.MergedDictionaries.Add(new Themes.Material.Theme());
-            break;
-        case "YourCustomTheme":
-            Current.Resources.MergedDictionaries.Add(new YourCustomTheme());
-            break;
-    }
+    var dictionaries = Current!.Resources.MergedDictionaries;
+    dictionaries.Clear();
+    dictionaries.Add(theme);
 }
 ```
 
-This can be useful for multi-tenant applications, A/B testing different designs, or providing theme options to users.
+Call it with whichever theme you want active — `SwitchTheme(new MyDarkTheme())`. If your styles reference design tokens via `DynamicResource`, live controls update automatically.
 
 ## Creating Custom Variants
 
@@ -395,14 +327,15 @@ Here's a complete example showing various FlagstoneUI controls working together:
 
 Now that you have the basics:
 
-1. **Explore Controls**: Check out the [sample app](../../samples/FlagstoneUI.SampleApp/) to see all available controls and styles
-2. **Learn About Tokens**: Read the [Token Reference](../reference/tokens.md) to understand the complete token system
-3. **Create Custom Themes**: See the [Theming Guide](../guides/theming-guide.md) for designers and theme creators
-4. **View Control Documentation**:
+1. **Build a navigation shell**: Follow [Your First Shell App](your-first-shell-app.md) to set up `FsShell` and a custom tab bar
+2. **Explore Controls**: Check out the [sample app](../../samples/FlagstoneUI.SampleApp/) to see all available controls and styles
+3. **Learn About Tokens**: Read the [Token Reference](../reference/tokens.md) to understand the token system
+4. **Create a Theme**: See the [Theming Guide](../guides/theming-guide.md)
+5. **View Control Documentation**:
    - [FsButton](../controls/FsButton.md)
    - [FsCard](../controls/FsCard.md)
    - [FsEntry](../controls/FsEntry.md)
-5. **Architecture Details**: Read the [Architecture Documentation](architecture.md) for deeper technical insights
+6. **How it works**: Read [How FlagstoneUI Works](architecture.md) for the model behind the controls
 
 ## Optional: MAUI Community Toolkit Integration
 
@@ -434,10 +367,9 @@ See [ADR001](../archive/decisions/adr001-fsentry-behavior.md) for more details o
 
 If your controls don't have the expected styling:
 
-1. Verify the theme ResourceDictionary is in your `App.xaml` MergedDictionaries
-2. Ensure you have the correct XAML namespace declaration (e.g., `xmlns:material=...`)
-3. Check that you've added the project reference to the theme library
-4. Clean and rebuild your solution
+1. Verify your theme `ResourceDictionary` is listed in your `App.xaml` `MergedDictionaries`
+2. Check that any XAML namespace your theme uses is declared
+3. Clean and rebuild your solution
 
 ### Controls Not Found
 
@@ -448,7 +380,7 @@ If you get "Type not found" errors:
    xmlns:fs="clr-namespace:FlagstoneUI.Core.Controls;assembly=FlagstoneUI.Core"
    ```
 2. Ensure you have a project reference to FlagstoneUI.Core
-3. Check that the control name is spelled correctly (e.g., `FsButton` not `FsButton`)
+3. Check the control name is spelled correctly (e.g., `FsButton`, not `Button`)
 
 ### Build Errors
 

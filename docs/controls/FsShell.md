@@ -170,7 +170,28 @@ The resource is a `double`, updated whenever the bar's size or visibility change
 </fs:FsShell>
 ```
 
-### A custom bar implementing `IFsTabBar`
+### A custom bar with `FsTabBarBase` (recommended)
+
+The easiest way to build a custom bar is to subclass `FsTabBarBase` (the base of the built-in `FsTabBar`). It implements `IFsTabBar` for you and handles item materialisation, per-tab tap routing, and `Selected`/`Unselected`/`Normal`/`Disabled` visual-state pumping. You supply a layout to host the tabs and (optionally) an `ItemTemplate`; override `OnSelectionChanged` to animate, or `OnTabTapped` to intercept taps.
+
+```csharp
+public partial class MyBar : FsTabBarBase
+{
+    public MyBar()
+    {
+        InitializeComponent();
+        InitializeTabContainer();          // wire tap routing into your layout
+    }
+
+    protected override Layout TabContainer => Tabs;   // a named layout from your XAML
+}
+```
+
+See [Your First Shell App](../getting-started/your-first-shell-app.md#step-5--replace-the-bar-entirely) for a complete `FsTabBarBase` walkthrough.
+
+### A custom bar implementing `IFsTabBar` directly
+
+For full control you can implement `IFsTabBar` on a bare `ContentView` and drive the contract yourself:
 
 ```csharp
 public class MyCenterFabBar : ContentView, IFsTabBar
@@ -404,7 +425,7 @@ Each platform suppresses the native tab chrome and hosts the consumer's `Content
 
 ## See Also
 
-- [Your First Shell App](../getting-started/your-first-shell-app.md) — step-by-step tutorial, from the built-in bar to a custom floating bar
+- [Your First Shell App](../getting-started/your-first-shell-app.md) — step-by-step tutorial, from the built-in bar to a custom navigation bar
 - [FsTabBar Control](FsTabBar.md) — default bar implementation
 - [ADR012 — FsShell: Stylable Shell Chrome via Subclass](../archive/decisions/adr012-fsshell.md)
 - [ADR012_1 — Per-`ShellItem` Tab Bar Scoping](../archive/decisions/adr012_1-fsshell-per-item-bar-scoping-addendum.md)
