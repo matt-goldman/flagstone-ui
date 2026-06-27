@@ -6,6 +6,10 @@
   <h3>True cross‑platform UI for .NET MAUI — one control surface, consistent behaviour everywhere, no platform code.</h3>
 </div>
 
+[![NuGet Version](https://img.shields.io/nuget/v/FlagstoneUI.Core)](https://www.nuget.org/packages/FlagstoneUI.Core)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/FlagstoneUI.Core)](https://www.nuget.org/packages/FlagstoneUI.Core)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 FlagstoneUI removes the last barrier to building visually consistent .NET MAUI apps.    
 
 .NET MAUI gets you most of the way there, but as soon as you need a custom border, corner radius, or background on a text input, you fall through a gap, and end up in platform handlers for iOS, Android, and Windows.
@@ -13,8 +17,6 @@ FlagstoneUI removes the last barrier to building visually consistent .NET MAUI a
 **FlagstoneUI closes those gaps.**
 It gives you enhanced, neutral controls designed for full visual control from shared code. No renderers. No handlers. No platform quirks. Just the UI your app is meant to have, working the same on every device.
 
-> **✅ Stable — v2.0, on NuGet.**
-> Out of preview and ready for production use. The current release is `2.0.4`.
 
 ## What’s Available Now
 

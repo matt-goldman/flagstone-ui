@@ -16,6 +16,14 @@ A Halloween-themed social photos app built around `FsShell`. The shell uses an u
 
 **What it demonstrates:** `FsShell` with a replaceable tab bar, a floating/undocked bar, and a custom centre action button.
 
+<table>
+    <tr>
+        <td><img src="https://github.com/matt-goldman/instagrim/assets/feed.png" width=400></td>
+        <td><img src="https://github.com/matt-goldman/instagrim/assets/discover.png" width=400></td>
+        <td><img src="https://github.com/matt-goldman/instagrim/assets/hauntings.png" width=400></td>
+    </tr>
+</table>
+
 🔗 **[github.com/matt-goldman/instagrim](https://github.com/matt-goldman/instagrim)**
 
 ## Beer Driven Devs — FsShell in a media app
@@ -23,6 +31,14 @@ A Halloween-themed social photos app built around `FsShell`. The shell uses an u
 The (very unofficial) companion app for the [Beer Driven Devs](https://www.beerdriven.dev) podcast. Built on `FsShell`, with episode browsing, offline downloads, and a series of progressive download UX microinteractions explored across branches (`level-0` through `main`).
 
 **What it demonstrates:** `FsShell` navigation in a content/media app, plus custom microinteractions. Companion to a [MAUI UI July](https://goforgoldman.com/posts/bdd-app-downloads/) blog post.
+
+<table>
+    <tr>
+        <td><img src="https://github.com/matt-goldman/BeerDrivenDevsApp/assets/nav-open.png" width=400></td>
+        <td><img src="https://github.com/matt-goldman/BeerDrivenDevsApp/assets/nav-closed.png" width=400></td>
+        <td><img src="https://github.com/matt-goldman/BeerDrivenDevsApp/assets/community-nav-open.png" width=400></td>
+    </tr>
+</table>
 
 🔗 **[github.com/matt-goldman/BeerDrivenDevsApp](https://github.com/matt-goldman/BeerDrivenDevsApp)**
 
