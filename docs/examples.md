@@ -18,9 +18,9 @@ A Halloween-themed social photos app built around `FsShell`. The shell uses an u
 
 <table>
     <tr>
-        <td><img src="https://github.com/matt-goldman/instagrim/assets/feed.png" width=400></td>
-        <td><img src="https://github.com/matt-goldman/instagrim/assets/discover.png" width=400></td>
-        <td><img src="https://github.com/matt-goldman/instagrim/assets/hauntings.png" width=400></td>
+        <td><img src="https://raw.githubusercontent.com/matt-goldman/instagrim/refs/heads/main/assets/feed.png" width=400></td>
+        <td><img src="https://raw.githubusercontent.com/matt-goldman/instagrim/refs/heads/main/assets/discover.png" width=400></td>
+        <td><img src="https://raw.githubusercontent.com/matt-goldman/instagrim/refs/heads/main/assets/hauntings.png" width=400></td>
     </tr>
 </table>
 
@@ -34,9 +34,9 @@ The (very unofficial) companion app for the [Beer Driven Devs](https://www.beerd
 
 <table>
     <tr>
-        <td><img src="https://github.com/matt-goldman/BeerDrivenDevsApp/assets/nav-open.png" width=400></td>
-        <td><img src="https://github.com/matt-goldman/BeerDrivenDevsApp/assets/nav-closed.png" width=400></td>
-        <td><img src="https://github.com/matt-goldman/BeerDrivenDevsApp/assets/community-nav-open.png" width=400></td>
+        <td><img src="https://raw.githubusercontent.com/matt-goldman/BeerDrivenDevsApp/refs/heads/main/assets/nav-open.png" width=400></td>
+        <td><img src="https://raw.githubusercontent.com/matt-goldman/BeerDrivenDevsApp/refs/heads/main/assets/nav-closed.png" width=400></td>
+        <td><img src="https://raw.githubusercontent.com/matt-goldman/BeerDrivenDevsApp/refs/heads/main/assets/community-nav-open.png" width=400></td>
     </tr>
 </table>
 
