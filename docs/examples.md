@@ -34,8 +34,8 @@ The (very unofficial) companion app for the [Beer Driven Devs](https://www.beerd
 
 <table>
     <tr>
-        <td><img src="https://raw.githubusercontent.com/matt-goldman/BeerDrivenDevsApp/refs/heads/main/assets/nav-open.png" width=400></td>
         <td><img src="https://raw.githubusercontent.com/matt-goldman/BeerDrivenDevsApp/refs/heads/main/assets/nav-closed.png" width=400></td>
+        <td><img src="https://raw.githubusercontent.com/matt-goldman/BeerDrivenDevsApp/refs/heads/main/assets/nav-open.png" width=400></td>
         <td><img src="https://raw.githubusercontent.com/matt-goldman/BeerDrivenDevsApp/refs/heads/main/assets/community-nav-open.png" width=400></td>
     </tr>
 </table>
